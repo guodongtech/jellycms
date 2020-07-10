@@ -12,10 +12,10 @@ class Config
 {
 	public $database = [
 		'DSN'      => '',
-		'hostname' => 'localhost', //数据库地址 本机为localhost 或127.0.0.1
-		'username' => 'root',	//数据库用户名
-		'password' => 'root',	//数据库密码
-		'database' => 'gdcms',	//数据库名
+		'hostname' => '123.56.224.1', //数据库地址 本机为localhost 或127.0.0.1
+		'username' => 'cms_demo_guodong',	//数据库用户名
+		'password' => 'dAxfStNwWsm828Dt',	//数据库密码
+		'database' => 'cms_demo_guodong',	//数据库名
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => 'gd_',	//表前缀
 		'pConnect' => false,
@@ -30,8 +30,6 @@ class Config
 		'failover' => [],
 		'port'     => 3306,
 	];
-	public $rewriteRule = 'url';//url:普通模式?urlname/id.html ?urlname/;path：伪静态开启伪静态后路由由config/routes.php配置控制/urlname/id.html
-	public $suffix = 'html';
 	public $appTimezone = 'Asia/Shanghai';
 	public $theme = 'default'; //前台模板目录在/template中
 	public $adminTheme = 'admin'; //后台模板目录在app/admin/view中
