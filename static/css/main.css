@@ -262,12 +262,14 @@ body#console header{
 	left:90%;
 	top:15px;
 	width:100%;
-	padding:3px 8px;
+	padding:0px 8px;
 	background:#353e42;
 	color:#fff;
 	border-radius:2px;
 	transition:all 0.2s ease-in-out;
 	opacity:0;
+	height:26px;
+	line-height:26px;
 }
 .middle-nav ul li:hover .n-tip {
     display:flex;

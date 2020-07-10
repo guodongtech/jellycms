@@ -82,3 +82,9 @@ CRITICAL - 2020-07-10 22:47:32 --> ÓÉÓÚÁ¬½Ó·½ÔÚÒ»¶ÎÊ±¼äºóÃ»ÓĞÕıÈ·´ğ¸´»òÁ¬½ÓµÄÖ÷»
 #7 F:\jellycms\system\CodeIgniter.php(308): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
 #8 F:\jellycms\index.php(20): CodeIgniter\CodeIgniter->run()
 #9 {main}
+CRITICAL - 2020-07-10 23:19:21 --> Too few arguments to function App\Controllers\Content::contentEdit(), 0 passed in F:\jellycms\system\CodeIgniter.php on line 914 and exactly 2 expected
+#0 F:\jellycms\system\CodeIgniter.php(914): App\Controllers\Content->contentEdit()
+#1 F:\jellycms\system\CodeIgniter.php(400): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Content))
+#2 F:\jellycms\system\CodeIgniter.php(308): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#3 F:\jellycms\admin.php(18): CodeIgniter\CodeIgniter->run()
+#4 {main}

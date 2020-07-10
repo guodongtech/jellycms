@@ -23,7 +23,6 @@ class Company extends BaseController
     public function edit()
     {
 		$post = post();
-		print_r($post);
 		if(!$post['name']){
 			error("操作失败", '/'.ADMINNAME.'/company/index/');
 			exit;
