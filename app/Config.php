@@ -12,10 +12,10 @@ class Config
 {
 	public $database = [
 		'DSN'      => '',
-		'hostname' => '123.56.224.1', //数据库地址 本机为localhost 或127.0.0.1
-		'username' => 'cms_demo_guodong',	//数据库用户名
-		'password' => 'dAxfStNwWsm828Dt',	//数据库密码
-		'database' => 'cms_demo_guodong',	//数据库名
+		'hostname' => 'localhost', //数据库地址 本机为localhost 或127.0.0.1
+		'username' => 'root',	//数据库用户名
+		'password' => 'root',	//数据库密码
+		'database' => 'gdcms',	//数据库名
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => 'gd_',	//表前缀
 		'pConnect' => false,
