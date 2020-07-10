@@ -1,0 +1,177 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="gd-body">
+        <div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">权限列表</li>
+	    <li  lay-id="t2">新建/编辑权限</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">					
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="toolbarDemo">
+					<div class="layui-btn-container">
+						<button class="layui-btn layui-btn-sm" lay-event="add">新建权限</button>
+					</div>
+				</script>
+				<script type="text/html" id="barDemo">
+					<a class="layui-btn layui-btn-xs" {data-id} lay-event="edit">编辑</a>
+					<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+				</script>
+			</div>
+			<div class="layui-tab-item">
+				<form action="{url:/auth/edit}" method="post" class="layui-form" id="form">
+					<input type="hidden" name="id" value=""> 
+					<div class="layui-form-item">
+						<label class="layui-form-label">权限分组</label>
+						<div class="layui-input-inline">
+						<select name="pid" lay-verify="required">
+							<option value="0">顶级分组</option>
+							{foreach:items = $List key=$k item=$v}
+								{if:$v['pid']==0}
+								<option value="{$v['id']}">{$v['name']}</option>
+								{foreach:items = $List key=$k1 item=$v1}
+									{if:$v['id'] == $v1['pid']}
+									<option value="{$v1['id']}">----{$v1['name']}</option>
+									{/if}
+								{/foreach}
+								{/if}
+							{/foreach}
+						</select>
+						</div>
+					</div>
+					 <div class="layui-form-item">
+						 <label class="layui-form-label">权限名称</label>
+						 <div class="layui-input-inline">
+							<input type="text" name="name" lay-verify="required" placeholder="菜单名" class="layui-input">
+						 </div>
+						 <div class="layui-form-mid layui-word-aux">*</div>
+					</div>
+
+					 <div class="layui-form-item">
+						 <label class="layui-form-label">控制器</label>
+						 <div class="layui-input-inline">
+							<input type="text" name="controller" lay-verify="required" placeholder="CONTROLLER" class="layui-input">
+						 </div>
+						  <div class="layui-form-mid layui-word-aux">*</div>
+					</div>
+					 <div class="layui-form-item">
+						 <label class="layui-form-label">方法</label>
+						 <div class="layui-input-inline">
+							<input type="text" name="action" lay-verify="required" placeholder="ACTION" class="layui-input">
+						 </div>
+						 <div class="layui-form-mid layui-word-aux">*</div>
+					</div>
+					<div class="layui-form-item">
+						 <label class="layui-form-label">排序</label>
+						 <div class="layui-input-inline">
+							<input type="text" name="sorting" placeholder="菜单排序" value="255" class="layui-input">
+						 </div>
+						 <div class="layui-form-mid layui-word-aux">越大越靠前</div>
+					</div>                                
+				   <div class="layui-form-item">
+						 <div class="layui-input-block">
+							<button lay-submit lay-filter="submit" class="layui-btn">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+					</div>
+				</form>
+			</div>
+	  	   
+		   
+	  </div>
+	</div>
+    
+     
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+    layui.config({
+        base: '/static/layui/'
+    }).extend({
+        treetable: 'treetable-lay/treetable'
+    }).use(['layer', 'table', 'treetable', 'form', 'jquery', 'element'], function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var $ = layui.jquery;
+	var treetable = layui.treetable;
+	treetable.render({
+		treeColIndex: 1,//树形图标显示在第几列
+		treeSpid: 0,//最上级的父级id
+		treeIdName: 'id',//id字段的名称
+		treePidName: 'pid',//pid字段的名称
+		treeDefaultClose: true,//是否默认折叠
+		treeLinkage: true,//父级展开时是否自动展开所有子级
+		elem: '#table',url:'{url:/auth/getList?page=1}',
+		toolbar: '#toolbarDemo',
+		title: '管理员列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'权限名', width:180},
+			{field:'controller', title:'控制器', width:120},
+			{field:'action', title:'方法', width:120},
+			{field:'sorting', title:'排序'},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+		]],
+		page: true
+	});
+
+	//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/auth/del}',{id:obj.data.id},function(data){
+				if(data.code == 1){
+					layer.alert(data.msg)
+					obj.del();
+				}else{
+					layer.alert(data.msg)
+				}
+			}, 'json');
+		});
+	}else if(obj.event === 'edit'){
+		$('#form')[0].reset(); //重置表单
+		loadData(obj.data, '#form')
+		form.render();
+		element.tabChange('tab', 't2');
+	}
+});
+
+//头工具栏事件
+table.on('toolbar(test)', function(obj){
+	var checkStatus = table.checkStatus(obj.config.id);
+	switch(obj.event){
+		case 'add':
+			element.tabChange('tab', 't2');
+			$('#form')[0].reset();
+			$('#form input[name="id"]').val('');
+		break;
+	};
+	form.render();
+});
+
+
+});
+</script>
+</body>
+</html>

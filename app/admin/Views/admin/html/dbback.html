@@ -1,0 +1,109 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+{set:$dataSize=0}
+{set:$DataFreeSize=0}
+<div class="gd-body">
+<div class="layui-tab layui-tab-brief" lay-filter="tab">
+		  <ul class="layui-tab-title">
+		    <li class="layui-this" lay-id="t1">数据库管理</li>
+		  </ul>
+		  <div class="layui-tab-content">
+		  	   <div class="layui-tab-item layui-show">
+		  	   		<form action="{url./admin/Database/mod}" method="post">
+		  	   			<input type="hidden" name="formcheck" value="" > 
+		  	   		{if:$db=='mysql'}
+				  	   	<table class="layui-table">
+				  	   		<thead>
+		                        <tr>
+		                            <th>选择</th>
+		                            <th>表名称</th>
+		                            <th>表引擎</th>
+		                            <th>编码</th>
+		                            <th>版本</th>
+		                            <th>行数</th>
+		                            <th>表创建时间</th>
+		                            <th>最后更新时间</th>
+		                            <th>大小</th>
+		                            <th>多余</th>
+		                            
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+						{foreach:items = $tables key=$k item=$v}
+		                        <tr>
+		                            <td><input type="checkbox" class="checkbox checkitem" name="list[]" value="{$v['Name']}"></td>
+		                            <td>{$v['Name']}</td>
+		                            <td>{$v['Engine']}</td>
+		                            <td>{$v['Collation']}</td>
+		                            <td>{$v['Version']}</td>
+		                            <td>{$v['Rows']}</td>
+		                            <td>{$v['Create_time']}</td>
+		                            <td>{$v['Update_time']}</td>
+		                            {set:$size = round(($v['Data_length'] + $v['Index_length'])/1024,2)}
+									{set:$dataSize+=$size}
+		                            <td>{echo:$size} KB</td>
+		                            <td>
+		                            {if:$v['Data_free']}
+										{set:$FreeSize = round($v['Data_free']/1024,2)}
+										{set:$DataFreeSize += $FreeSize}
+		                                {echo:$FreeSize} KB
+		                            {else:}
+		                                -
+		                            {/if}
+		                            </td>
+		                        </tr>
+		                    {/foreach}
+		                        <tr>
+		                            <td><input type="checkbox" class="checkbox" id="checkall" title="全选"></td>
+		                            <td>共有：{echo: count($tables)} 张表</td>
+		                            <td></td>
+		                            <td></td>
+		                            <td></td>
+		                            <td></td>
+		                            <td></td>
+		                            <td></td>
+		                            <td>共{echo:$dataSize} KB</td>
+		                            <td>共{echo:$DataFreeSize} KB</td>
+		                        </tr>
+		                    </tbody>
+				  	   	</table>
+				  	   	{if:1==1}
+			                <button class="layui-btn" lay-submit type="submit" name="submit" value="yh">优化</button>
+			                <button class="layui-btn" lay-submit type="submit" name="submit" value="xf">修复</button>
+			                <button class="layui-btn" lay-submit type="submit" name="submit" value="bf">备份表</button>
+			                <button class="layui-btn" lay-submit type="submit" name="submit" value="bfdb">备份数据库</button>
+			            {/if}
+			  	   	{/if}
+			  	   	{if:$db=='sqlite'}
+		            	<button class="layui-btn" lay-submit type="submit" name="submit" value="bfsqlite" >备份</button>
+		            	<p class="layui-text"></p>
+		            {/if}
+			  	   	</form>
+			  	</div>
+		  </div>
+	  </div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script>
+!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  
+  //layer.msg('Hello World');
+}();
+</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="gd-body">
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">站点信息</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	<div class="layui-tab-item layui-show">
+	  		<form action="{url:/site/edit}" method="post" id="form" class="layui-form">
+				<input type="hidden" name="id" value="{$site.id}">
+	  			<div class="layui-form-item">
+                     <label class="layui-form-label">标题</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" name="title" value="{$site.title}" placeholder="请输入站点标题" class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">副标题</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="subtitle" value="{$site.subtitle}" placeholder="请输入站点副标题" class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">域名</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" name="domain" value="{$site.domain}" placeholder="请输入站点域名" class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">LOGO</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" name="logo" id="logo" value="{$site.logo}" placeholder="请上传站点LOGO图" class="layui-input">
+                     </div>
+                     <button type="button" class="layui-btn upload" id="upload">
+					 	 <i class="layui-icon"></i>上传图片
+					 </button> 
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">关键字</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="keywords" value="{$site.keywords}" placeholder="请输入站点关键字" class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">描述</label>
+                     <div class="layui-input-block">
+                     	<textarea name="description" placeholder="请输入站点描述" class="layui-textarea">{$site.description}</textarea>
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">备案</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" name="icp" value="{$site.icp}" placeholder="请输入站点备案" class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+				    <label class="layui-form-label">PC模板</label>
+				    <div class="layui-input-inline">
+						<select name="pctheme">
+							<option value="default" selected="selected">default</option> 
+							<option value="default">default</option> 
+						</select>
+				    </div>
+				 </div>    
+                <div class="layui-form-item">
+				    <label class="layui-form-label">手机模板</label>
+				    <div class="layui-input-inline">
+						<select name="mobiletheme">
+							<option value="default" selected="selected">default</option> 
+							<option value="default">default</option> 
+						</select>
+				    </div>
+				 </div>
+				 
+				 <div class="layui-form-item">
+                     <label class="layui-form-label">统计代码</label>
+                     <div class="layui-input-block">
+                     	<textarea name="statistics" placeholder="请输入统计代码" class="layui-textarea">{$site.statistics}</textarea>
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">尾部信息</label>
+                     <div class="layui-input-block">
+                     	<textarea name="copyright" placeholder="请输入尾部信息" class="layui-textarea">{$site.copyright}</textarea>
+                     </div>
+                </div>
+				
+				<div class="layui-form-item">
+					 <div class="layui-input-block">
+					    <button class="layui-btn" id="submit" type="submit">立即提交</button>
+					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					 </div>
+				</div>
+				 
+	  		</form>
+	  	</div>
+	  </div>
+	</div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script>
+!function(){
+	var layer = layui.layer,form = layui.form;
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var upload = layui.upload;
+	var $ = layui.jquery;
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#upload',
+		url: '{url:/upload/uploadFile}',
+		before: function(obj){
+ 
+		},
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="logo"]').val(res.data.path);
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
+}();
+</script>
+</body>
+</html>

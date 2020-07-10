@@ -1,0 +1,233 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS登录</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+	
+<div id="dialog">
+	<div class="modal-dialog">
+		<div class="dialog-left"></div>
+		<div class="dialog-right">
+			<div class="modal-header">
+						<h4 class="modal-title" id="loginModalLabel" style="font-size: 18px;">登录</h4>
+						<!-- <button type="button" id="login_close" class="close" data-dismiss="modal"><span aria-hidden="true">返回首页</span></button> -->
+			</div>
+			<div class="modal-body">
+				<section class="box-login" id="box-login">
+					<form id="login_form" action="" method="post">
+						<ul>
+							<li><input name="name" placeholder="用户名" type="text"></li>
+							<li><input name="password" placeholder="密码" type="password"></li>
+							<li class="code"><input name="code" placeholder="验证码" type="text"><img src="/static/images/code.png" /></li>
+						</ul>
+					</form>
+					<div class="good-tips">
+						<div class="btn-tips-left"><span>还没有账号？</span><a href="javascript:;" target="_blank">立即注册</a></div>
+						<a class="btn-tips-right" href="/">返回首页</a>
+					</div>
+					<div class="login-box">
+						<button id="login_btn" type="button" class="btn-login">登录</button>
+						<div id="login-form-tips" class="tips-error bg-danger" style="display: none;">错误提示</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+<footer>
+	<p>© 2017-2020 <a href="http://www.guodong.tech/" target="_blank">guodong.tech</a></p>
+	<p><span><a href="http://demo.guodong.tech" target="_blank">在线演示</a></span><span><a href="http://www.guodong.tech" target="_blank">前往官网</a></span> </p>
+</footer>
+<style>
+#dialog{padding-top:120px}
+.modal-dialog{
+	width:540px;
+	-webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+	margin:0 auto;
+}
+.dialog-left {
+    width: 225px;
+    height: 319px;
+    background: url(/static/images/login.png) no-repeat;
+}
+.modal-dialog{
+	display:flex;
+
+}
+ 
+@media (min-width: 768px)
+..modal-dialog {
+    -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+}
+..modal-dialog{
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}
+.dialog-right {
+    width: 313px;
+    height: 319px;
+    color: #b2b2b2;
+	background:#fff;
+
+}
+.modal-header {
+	display:flex;
+    color: #5ecfba;
+    min-height: 16.43px;
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+	justify-content:space-between;
+}
+.close {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+.close:focus, .close:hover {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    filter: alpha(opacity=50);
+    opacity: .5;
+}
+.modal-body {
+    height: 263px;
+    position: relative;
+    padding: 15px;
+}
+.box-login {
+    padding: 0 15px 10px;
+}
+.box-login ul li {
+    margin-bottom: 10px;
+}
+.box-login ul li input {
+    height: 42px;
+    line-height: normal;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.box-login ul li input:focus {
+    border-color: #1bbc9b;
+    outline: 0;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(27, 188, 155, 0.6);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(27, 188, 155, 0.6);
+}
+
+.good-tips{
+	display:flex;
+	justify-content:space-between;
+	margin-top:8px;
+	margin-bottom:8px;
+}
+.btn-login {
+    height: 47px;
+    background: #01c26f;
+    color: #fff;
+    font-size: 14px;
+    background: -webkit-linear-gradient(#1fd783,#1fd06b);
+    background: -o-linear-gradient(#1fd783,#1fd06b);
+    background: -moz-linear-gradient(#1fd783,#1fd06b);
+    background: linear-gradient(#1fd783,#1fd06b);
+	display: block;
+    width: 100%;
+	padding:8px 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btn-tips-left a {
+    color: #ff9600;
+}
+a {
+	color: #5ecfba;
+	text-decoration: none;
+}
+.code{
+	display:flex;
+	justify-content:space-between;
+}
+.code img{
+	margin-left:8px;
+	height:42px;
+}
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    line-height: 1.5;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    color: rgba(0,0,0,.5);
+}
+footer a{
+    color: rgba(0,0,0,.5);
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+<script src="/static/layui/layui.all.js"></script>
+<script>
+ 
+</script> 
+</body>
+</html>

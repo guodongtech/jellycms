@@ -1,0 +1,135 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link href="/favicon.ico" rel="icon">
+
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body id="console">
+	<!-- <header>header</header> -->
+	<div class="main-content">
+		<aside class="main-left">
+			<div class="top-nav layui-nav">
+				<div class="layui-nav-item">
+				 <a href="javascript:;"><img src="/static/layui/images/icon.jpg" class="layui-nav-img"></a>
+				    <dl class="layui-nav-child">
+					  <dd><a href="javascript:;">修改信息</a></dd>
+					  <dd><a href="javascript:;">安全管理</a></dd>
+					  <dd><a href="javascript:;">清理缓存</a></dd>
+					  <dd><a href="{url:/login/logout/}">退出登录</a></dd>
+					</dl>
+				
+				</div>
+				<span class="nav-dot"></span>
+			</div>
+
+			<div class="middle-nav">
+				<ul>	                     
+					{foreach:items=$list key=$k item=$v}
+					<li class="menu{$v['id']}" {if:$v['url'] != ''}data-url="/{echo:ADMINNAME}{$v.url}"{/if}><i class="fa {$v['icon']}" title="{$v.name}"></i><div class="n-tip">{$v.name}</div></li>
+					{/foreach}
+				</ul>
+			</div>
+			<div class="bottom-nav">
+				<ul>
+					<li><i class="fa fa-th" title="应用市场"></i></li>
+				</ul>
+			</div>
+		</aside>
+		<div class="main-nav">
+			<div class="gd-logo">
+				<a href="/admin.php/home"><img src="/static/images/logo.png" height="30">GuoDongCMS <span class="layui-badge layui-bg-gray">V3.0.8</span>	</a>
+			</div> 
+		{foreach:items = $list key=$k1 item=$v1}
+			<ul id="menu{$v1['id']}">
+			{foreach:items = $mlist key=$k2 item=$v2}
+			{if:$v2['pid'] == $v1['id']}
+				<li data-url="/{echo:ADMINNAME}{$v2['url']}"><i class="fa {$v2['icon']}"></i>{$v2['name']}</li>
+			{/if}
+			{/foreach}
+			</ul>
+		{/foreach}
+		</div>
+
+		<div class="main-body">
+			<iframe src ="/admin.php?/home/welcome" id="win-body" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0″ scrolling="auto" allowtransparency="yes">
+				<p>你的浏览器不支持iframes。</p>
+			</iframe>
+		</div>
+	</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/jquery.cookie.min.js"></script>
+<script>
+!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  var element = layui.element;
+  //监听导航点击
+  element.on('nav(demo)', function(elem){
+    //console.log(elem)
+    layer.msg(elem.text());
+  });
+}();
+
+
+$(document).ready(function(){
+	$(".main-nav li").click(function(){
+		var data_url = $(this).attr('data-url');
+		$('.main-body iframe').removeClass('active');		
+		$('#win-body').attr('src', data_url);
+		$(".main-nav li").removeClass("active");
+		$(this).addClass("active");
+		//存储当子菜单EQ
+		$.cookie('currentChild', $(".main-nav li").index($(this)));
+		setTimeout(function(){
+			$('.main-body iframe').addClass('active');
+		},50);
+	});
+	
+	
+	
+	$(".middle-nav li").click(function(){
+		if($(this).hasClass('active')) return;
+		//存储当前父类菜单CLASS
+		$.cookie('currentMain', $(this).attr('class'));
+		if($(this).data('url') != undefined){ //直接链接 
+			var data_url = $(this).attr('data-url');
+			$('#win-body').attr('src', data_url);
+			//删除currentChild
+			$.removeCookie('currentChild');
+			$(".main-nav").hide('slow');
+		}else{
+			$(".main-nav ul li").removeClass('action');
+			//添加动画
+			$.each($(".main-nav ul#"+ $(this).attr('class') +" li"), function(i,ele) {
+				var that = $(this);
+				setTimeout(function(){
+					that.addClass('action');
+				},50*i);
+			});		
+
+			$(".main-nav ul").removeClass("active");
+			$(".main-nav ul#"+ $(this).attr('class')).addClass("active");
+			
+			$(".main-nav").show('slow');			
+		}
+		$(".middle-nav li").removeClass('active');
+		$(this).addClass('active');
+	});
+	//刷新页面恢复控制台 浏览器关闭失效
+	if($.cookie('currentMain'))$("."+$.cookie('currentMain')).trigger('click');
+	if($.cookie('currentChild'))$(".main-nav li").eq($.cookie('currentChild')).trigger('click');
+});
+</script>
+</body>
+</html>

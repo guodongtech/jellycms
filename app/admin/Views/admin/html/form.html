@@ -1,0 +1,185 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="gd-body">
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+		<ul class="layui-tab-title">
+			<li class="layui-this" lay-id="t1"><a href = "{url:/form/index}">表单列表</a></li>
+			<li lay-id="t2"><a href = "{url:/formfield/}">表单字段管理</a></li>
+		</ul>
+	  <div class="layui-tab-content">
+			<div class="layui-tab-item layui-show">
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="toolbarDemo">
+					<div class="layui-btn-container">
+						<button class="layui-btn layui-btn-sm" lay-event="add">新建表单</button>
+					</div>
+				</script>
+				<script type="text/html" id="barDemo">
+					<a class="layui-btn layui-btn-xs" {data-id} lay-event="edit">编辑</a>
+					<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+				</script>
+			   
+			</div>
+	  	    <script type="text/html" id="gd-form">
+	   			<form action="" method="post" id="form" class="layui-form">
+	   				<input type="hidden" name="id" value=""> 
+	   				<div class="layui-form-item">
+	                     <label class="layui-form-label">表单名称</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="name" maxlength="20" required="" lay-verify="required" placeholder="表单名称" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">表名称</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="table_name" maxlength="30" required="" lay-verify="required" placeholder="表名称,必须为英文" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	   			</form>
+	   	 	</script>
+	   </div>
+	 </div>
+	 
+	
+	  	  
+	
+	 
+	
+	
+	 
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var $ = layui.jquery;
+	table.render({
+		elem: '#table',url:'{url:/form/getList}',
+		toolbar: '#toolbarDemo',
+		title: '表单列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'表单名', width:120},
+			{field:'table_name', title:'数据表名'},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:120}
+		]],
+		page: true
+	});
+
+	//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/form/del}',{id:obj.data.id},function(data){
+				if(data.code == 1){
+					layer.alert(data.msg)
+					obj.del();
+				}
+				else{
+					layer.alert(data.msg)
+				}
+			}, 'json');
+			layer.close(index);
+		});
+	}else if(obj.event === 'edit'){
+		var index = layer.open({
+			type: 1,
+			skin: 'layui-layer-rim',
+			area: ['330px', '216px'],
+			anim: 1,
+			title :'编辑表单',
+			btn: ['提交', '取消'],
+			btn1: function(index, layero){
+				$.post('{url:/form/edit}',$("#form").serialize(),function(data){
+					if(data.code == 1){
+						layer.alert(data.msg);
+						setTimeout(function (){
+							window.location.reload();
+						}, 1000);
+					}
+					else{
+						layer.alert(data.msg)
+					}
+				}, 'json');
+		},
+		btn2: function(index, layero){
+			layer.close(index);
+		},
+			content: $('#gd-form').html()
+		});
+		loadData(obj.data, '#form');
+		form.render();
+		
+	}
+});
+
+	//头工具栏事件
+	table.on('toolbar(test)', function(obj){
+		var checkStatus = table.checkStatus(obj.config.id);
+		switch(obj.event){
+			case 'add':
+				layer.open({
+					type: 1,
+					skin: 'layui-layer-rim',
+					area: ['330px', '216px'],
+					anim: 1,
+					title :'添加表单',
+					btn: ['提交', '取消'],
+					btn1: function(index, layero){
+						$.post('{url:/form/edit}',$("#form").serialize(),function(data){
+							if(data.code == 1){
+								layer.alert(data.msg);
+								setTimeout(function (){
+									window.location.reload();
+								}, 1000);
+							}
+							else{
+								layer.alert(data.msg)
+							}
+						}, 'json');
+					},
+					btn2: function(index, layero){
+						layer.close(index);
+					},
+					content: $('#gd-form').html()
+				});
+			break;
+
+		};
+		form.render();
+	});
+
+
+
+
+
+
+
+
+
+}();
+</script>
+</body>
+</html>

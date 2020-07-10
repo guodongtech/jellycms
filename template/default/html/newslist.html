@@ -1,0 +1,20 @@
+这是列表页<br>
+{$company.name}<br>
+{$sort.name}<br>
+{$content.name}<br>
+{include:/simple/seller}
+//指定内容页<br>
+{content:id=1}
+{$val.title}<br>
+{/content}
+
+//当前列表页<br>
+<!-- {list:id=2 limit=0,10 order=content.id desc,content.sorting desc where=content.id>0,content.status>0 }
+{$val.title}<br>
+{/list} -->
+
+//指定列表页<br>
+{list:id=2}
+<a href="{$val.link}">{$val.title}</a><br>
+{/list}
+

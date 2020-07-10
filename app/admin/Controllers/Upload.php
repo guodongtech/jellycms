@@ -1,0 +1,32 @@
+<?php 
+namespace App\Controllers;
+class Upload extends BaseController
+{
+	public function uploadFile()
+	{
+		$file = $this->request->getFile('file');
+		if (! $file->isValid())
+		{
+			$data = [
+				"code" => 0,
+				"msg" => $file->getError(),
+			];
+			echo json_encode($data);
+		}else{ //移动文件
+			$newDateFolder = date('Ymd', time());
+			$newName = $file->getRandomName(); 
+			$uploadPath = ROOTPATH.'/static/upload/'.$newDateFolder;
+			//创建目录并设置权限
+			$file->move($uploadPath, $newName);
+			$name = $file->getName();
+			$data = [
+				"code" => 1,
+				"msg" => "上传成功",
+				"data" => [
+					'path' => '/static/upload/'.$newDateFolder.'/'.$name,
+				],
+			];
+			echo json_encode($data);
+		}
+	}
+}

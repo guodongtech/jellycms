@@ -1,0 +1,265 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="gd-body">
+        <div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">权限分组列表</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">					
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="toolbarDemo">
+					<div class="layui-btn-container">
+						<button class="layui-btn layui-btn-sm" lay-event="add">新建权限分组</button>
+					</div>
+				</script>
+				<script type="text/html" id="barDemo">
+					<a class="layui-btn layui-btn-xs" {data-id} lay-event="edit">编辑</a>
+					<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+				</script>
+			</div>
+	  	   	
+	  	   	<script type="text/html" id="gd-form">
+				<form action="" method="post" id="form" class="layui-form">
+					<input type="hidden" name="id" value=""> 
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							用户名
+						</label>
+						<div class="layui-input-block">
+							<input type="text" name="name" required="" lay-verify="required" placeholder="请输入用户账号" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							真实姓名
+						</label>
+						<div class="layui-input-block">
+							<input type="text" name="realname" placeholder="请输入真实姓名" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							用户密码
+						</label>
+						<div class="layui-input-block">
+							<input type="password" name="password" required="" lay-verify="required"
+							placeholder="请输入用户密码" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							确认密码
+						</label>
+						<div class="layui-input-block">
+							<input type="password" name="repassword" required="" lay-verify="required"
+							placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							账号状态
+						</label>
+						<div class="layui-input-block">
+							<input type="radio" name="status" value="1" title="启用" checked="">
+							<input type="radio" name="status" value="0" title="禁用">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">用户角色</label>
+						<div class="layui-input-block">
+							<select name="role">
+								<option value="R101">系统管理员</option>
+								<option value="R102">内容管理员</option>
+							</select>
+						</div>
+					</div>
+				</form>
+	  	   	</script>
+	  </div>
+	</div>
+    
+     
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script>
+!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var $ = layui.jquery;
+	table.render({
+		elem: '#table',url:'{url:/auth/getGroupList?page=1}',
+		toolbar: '#toolbarDemo',
+		title: '管理员列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'用户名', width:120},
+			{field:'realname', title:'真实名字', width:120},
+			{field:'status', title:'状态', width:120},
+			{field:'role', title:'角色', width:120},
+			{field:'count', title:'登录次数', width:120},
+			{field:'last_login_ip', title:'最后登录IP', width:120},
+			{field:'create_user', title:'添加用户', width:100},
+			{field:'create_time', title:'添加时间'},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+		]],
+		page: true
+	});
+
+	//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	//console.log(obj)
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.ajax({
+				url:'/index.php/user/del',
+				type:'post',
+				data:{
+					id:obj.data.id,
+				},
+				dataType:"json",
+				success:function(data){
+					console.log(data);
+					if(data.code == 1){
+						layer.alert(data.msg)
+						layer.close(index);
+						obj.del();
+					}
+					else{
+						layer.alert(data.msg)
+					}
+				},
+				error:function(e){
+					layer.alert("删除失败！")
+				},
+			});
+			layer.close(index);
+		});
+	}else if(obj.event === 'edit'){
+		layer.open({
+			type: 1,
+			skin: 'layui-layer-rim',
+			area: ['530px', '356px'],
+			title :'添加标签',
+			btn: ['提交', '取消'],
+			btn1: function(index, layero){
+				$.ajax({
+					url:'/index.php/user/edit',
+					type:'post',
+					data:{
+						id:$('#form input[name="id"]').val(),
+						name:$('#form input[name="name"]').val(),
+						description:$('#form input[name="description"]').val(),
+						type:$('#form select[name="type"]').val(),
+					},
+					dataType:"json",
+					success:function(data){
+					console.log(data);
+					if(data.code == 1){
+							layer.alert(data.msg)
+							layer.close(index);
+						}
+						else{
+							layer.alert(data.msg)
+						}
+					},
+					error:function(e){
+						layer.alert("操作失败！")
+					},
+				});
+		},
+		btn2: function(index, layero){
+			layer.close(index);
+		},
+			content: $('#gd-form').html()
+		});
+		
+		$('#form input[name="name"]').val(obj.data.name);
+		$('#form input[name="realname"]').val(obj.data.realname);
+		$('#form input[name="id"]').val(obj.data.id);
+		$('#form input:radio[value='+obj.data.status+']').attr({'selected':'selected'});
+		$('#form option[value='+obj.data.role+']').attr({'selected':'selected'});
+		form.render();
+		
+	}
+});
+
+	//头工具栏事件
+	table.on('toolbar(test)', function(obj){
+		var checkStatus = table.checkStatus(obj.config.id);
+		switch(obj.event){
+			case 'add':
+				layer.open({
+					type: 1,
+					skin: 'layui-layer-rim',
+					area: ['530px', '356px'],
+					title :'添加标签',
+					btn: ['提交', '取消'],
+					btn1: function(index, layero){
+						$.ajax({
+							url:'/index.php/user/add',
+							type:'post',
+							data:{
+								id:$('#form input[name="id"]').val(),
+								name:$('#form input[name="name"]').val(),
+								password:$('#form input[name="password"]').val(),
+								repassword:$('#form input[name="repassword"]').val(),
+								status:$('#form input[name="status"]').val(),
+								role:$('#form select[name="role"]').val(),
+							},
+							dataType:"json",
+							success:function(data){
+								console.log(data);
+								if(data.code == 1){
+									layer.alert(data.msg)
+									layer.close(index);
+								}
+								else{
+									layer.alert(data.msg)
+								}
+							},
+							error:function(e){
+								layer.alert("操作失败！")
+							},
+						});
+					},
+					btn2: function(index, layero){
+						layer.close(index);
+					},
+					content: $('#gd-form').html()
+				});
+			break;
+
+		};
+		form.render();
+	});
+
+
+
+
+
+
+
+
+
+}();
+</script>
+</body>
+</html>

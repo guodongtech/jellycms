@@ -1,0 +1,245 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="gd-body">
+		<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li lay-id="t1"><a href="{url:/Content/Index/}{$model_id}">{$model_name}列表</a></li>
+	    <li  class="layui-this" lay-id="t2">添加/编辑{$model_name}</li>
+	  </ul>
+	  <div class="layui-tab-content">
+ 
+	  	   <div class="layui-tab-item layui-show">
+	  	  		<form action="{url:/content/saveContent}" method="post" class="layui-form" lay-filter="content" id="form">
+		  	     	<input type="hidden" name="id" value="{$id}"> 
+		  	     	<div class="layui-tab">
+					  <ul class="layui-tab-title">
+					    <li class="layui-this">基本内容</li>
+					    <li>高级内容</li>
+					  </ul>
+					  <div class="layui-tab-content">
+					    <div class="layui-tab-item layui-show">
+					    	<div class="layui-form-item">
+			                     <label class="layui-form-label">栏目名称   <span class="layui-text-red">*</span></label>
+			                     <div class="layui-input-inline">
+			                     	<select name="sorts_id" lay-verify="required">
+				                        <option value="">请选择栏目名称</option>
+										{foreach:items = $sorts key=$k item=$v}
+										<option {if:$content['sorts_id']==$v['id']}selected{/if} value="{$v.id}">{$v.name}</option>
+											{foreach:items = $v['child'] key=$k1 item=$v1}
+											<option {if:$content['sorts_id']==$v1['id']}selected{/if} value="{$v1.id}">&nbsp;&nbsp;&nbsp;&nbsp;{$v1.name}</option>
+											{/foreach}
+										{/foreach}
+									</select>
+								</div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">内容标题   <span class="layui-text-red">*</span></label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="title" lay-verify="required" placeholder="内容标题" value="" class="layui-input">
+			                     </div>
+			                </div>
+ 		                	
+			                			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">内容</label>
+			                     <div class="layui-input-block">
+									<textarea id="container" name="content"></textarea>
+								 </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">tags</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="tags" value="" placeholder="请输入文章tag，英文逗号隔开" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">作者</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="author" placeholder="请输入作者" value="" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">来源</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="source" placeholder="请输入来源" value="" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">缩略图</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="pic" id="pic" value="" placeholder="请上传缩略图" class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn upload watermark" data-des="pic">
+								 	 <i class="layui-icon"></i>上传图片
+								 </button> 
+								 <div id="ico_box" class="pic addedit"></div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">轮播多图</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="pics" id="pics" value=""  placeholder="请上传轮播多图" class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn uploads watermark" data-des="pics">
+								 	 <i class="layui-icon"></i>上传多图
+								 </button> 
+								 <div id="pics_box" class="pic addedit" data-listidx="0"><dl style="cursor: pointer;"></dl></div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">参数</label>
+			                     <div class="layui-input-block">
+									<input type="checkbox" name="istop" value="1" title="置顶">
+			                    	<input type="checkbox" name="isrecommend" value="1" title="推荐">
+			                    	<input type="checkbox" name="isheadline" value="1" title="头条">
+			                     </div>
+			                </div>
+					    </div>
+					    
+					    <div class="layui-tab-item ">
+					    	<div class="layui-form-item">
+			                     <label class="layui-form-label">内容副栏目</label>
+			                     <div class="layui-input-block">
+			                     	<select name="subsort_id">
+										{foreach:items = $sorts key=$k item=$v}
+										<option {if:$content['sorts_id']==$v['id']}selected{/if} value="{$v.id}">{$v.name}</option>
+											{foreach:items = $v['child'] key=$k1 item=$v1}
+											<option {if:$content['sorts_id']==$v1['id']}selected{/if} value="{$v1.id}">&nbsp;&nbsp;&nbsp;&nbsp;{$v1.name}</option>
+											{/foreach}
+										{/foreach}
+									</select>
+								</div>
+			                </div>
+			                
+					   		 <div class="layui-form-item">
+			                     <label class="layui-form-label">标题颜色</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="color" placeholder="请选择标题颜色" value="" class="layui-input" autocomplete="off" >
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">副标题</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="subtitle" placeholder="请输入副标题" value="" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                  <div class="layui-form-item">
+			                     <label class="layui-form-label">跳转外链接</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="link" placeholder="请输入跳转外链接" value="" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">发布时间</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="date" value="" readonly="" placeholder="请选择发布时间" class="layui-input datetime" lay-key="1">
+			                     </div>
+			                     <div class="layui-form-mid layui-word-aux">温馨提示：设置未来时间可定时发布！</div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+		                		<label class="layui-form-label">附件</label>
+		                		<div class="layui-input-inline">
+			                     	<input type="text" name="enclosure" id="enclosure" placeholder="请上传附件" class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn file" data-des="enclosure">
+								 	 <i class="layui-icon"></i>上传附件
+								 </button>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">SEO关键字</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="keywords" value="" placeholder="请输入详情页SEO关键字" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">SEO描述</label>
+			                     <div class="layui-input-block">
+			                     	<textarea name="description" placeholder="请输入详情页SEO描述" class="layui-textarea"></textarea>
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">状态</label>
+			                     <div class="layui-input-block">
+			                     	<input type="radio" name="status" value="1" title="显示" checked="">
+									<input type="radio" name="status" value="0" title="隐藏">
+			                     </div>
+			                </div>
+					    </div>
+					  </div>
+					</div>
+					<div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit="">立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+					</div>
+			   </form>
+	  	   </div>
+	  </div>
+	 </div>
+	 
+	
+	 
+
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+
+!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var $ = layui.jquery;
+	{if:$id}
+	$.post('{url:/content/getContent}',{id:{$id}},function(data){
+		if(data.code == 1){
+			loadData(data.content, '#form')
+			form.render();
+			var ue = UE.getEditor('container');
+		}
+		else{
+			layer.alert(data.msg)
+		}
+	},'json');
+	
+	{else:}
+	var ue = UE.getEditor('container');
+	{/if}
+}();
+	
+
+</script>
+</body>
+</html>

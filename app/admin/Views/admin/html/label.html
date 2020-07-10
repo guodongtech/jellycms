@@ -1,0 +1,225 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+
+<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	<ul class="layui-tab-title">
+		<li class="layui-this" lay-id="t1">标签列表</li>
+	</ul>
+	  <div class="layui-tab-content">
+	  	<div class="layui-tab-item layui-show">
+			<table class="layui-hide" id="test" lay-filter="test"></table>
+			<script type="text/html" id="toolbarDemo">
+			  <div class="layui-btn-container">
+				<button class="layui-btn layui-btn-sm" id="btn-add">新建标签</button>
+			  </div>
+			</script>
+			<script type="text/html" id="barDemo">
+				<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			</script>
+	  	</div>
+	  	
+	  	<script type="text/html" id="gd-form">
+			<div style="padding-right:30px;">
+				 <form action="" method="post" class="layui-form" id="form">
+					<input type="hidden" name="id" value="">
+					<div class="layui-form-item">
+						 <label class="layui-form-label">类型</label>
+						 <div class="layui-input-block">
+							<select name="type" lay-verify="required">
+								<option  value="1">单行文本</option>
+								<option value="7">多行文本</option>
+								<option value="2">时间</option>
+								<option value="3">图片</option>
+								<option value="4">附件</option>
+								<option value="5">编辑器</option>
+								<option value="6">开关</option>
+							</select>
+						 </div>
+					</div>
+					<div class="layui-form-item">
+						 <label class="layui-form-label">名称</label>
+						 <div class="layui-input-block">
+							<input type="text" name="name" required="" lay-verify="required" placeholder="请输入标签名称" class="layui-input">
+							<div class="layui-form-mid layui-word-aux">只能含有字母、数字、下划线</div>
+						 </div>
+						 
+					</div>
+					
+					<div class="layui-form-item">
+						 <label class="layui-form-label">描述</label>
+						 <div class="layui-input-block">
+							<input type="text" name="description" required="" lay-verify="required" placeholder="请输入标签描述" class="layui-input">
+						 </div>
+					</div>
+					
+
+				 </form>
+			</div>
+	  	</script>
+	  	
+	  </div>
+	</div>
+
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+!function(){
+	var layer = layui.layer,form = layui.form;
+	var table = layui.table;
+	var $ = layui.jquery;
+	table.render({
+		elem: '#test',url:'{url:/label/getList}',
+		toolbar: '#toolbarDemo',
+		title: '提示',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'名称', width:120},
+			{field:'lebel_name', title:'调用标签', width:220, templet: function(res){
+				return '{label:'+ res.name +'}'
+			}},
+			{field:'description', title:'描述', templet: function(res){
+				return '<em>'+ res.description +'</em>'
+			}},
+			{field:'typetext', title:'类型', width:100, sort: true,templet: function(res){
+				var typetext;
+				switch(res.type) {
+					case '1':
+						typetext = "单行文本";
+					break;
+					case '2':
+						typetext = "时间";
+					break;
+					case '3':
+						typetext = "图片";
+					break;
+					case '4':
+						typetext = "附件";
+					break;
+					case '5':
+						typetext = "编辑器";
+					break;
+					case '6':
+						typetext = "开关";
+					break;
+					case '7':
+						typetext = "多行文本";
+					break;
+					default:
+						typetext = "错误类型";
+				}
+				return typetext;
+			}},
+			{field:'type', title:'类型', width:80, sort: true, hide:true},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+		]],
+		page: true
+	});
+
+
+
+	//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	//console.log(obj)
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/label/del}',{id:obj.data.id},function(data){
+				if(data.code == 1){
+					layer.alert(data.msg)
+					obj.del();
+				}
+				else{
+					layer.alert(data.msg)
+				}
+			}, 'json');
+			layer.close(index);
+		});
+	} else if(obj.event === 'edit'){
+		layer.open({
+			type: 1,
+			skin: 'layui-layer-rim',
+			area: ['375px', '290px'],
+			title :'添加标签',
+			btn: ['提交', '取消'],
+			btn1: function(index, layero){
+				$.post('{url:/label/edit}',$("#form").serialize(),function(data){
+					if(data.code == 1){
+						layer.alert(data.msg);
+						setTimeout(function (){
+							window.location.reload();
+						}, 1000);
+					}
+					else{
+						layer.alert(data.msg)
+					}
+				}, 'json');
+		},
+		btn2: function(index, layero){
+			layer.close(index);
+		},
+			content: $('#gd-form').html()
+		});
+		loadData(obj.data, '#form');
+		form.render();
+	}
+});
+
+$('#btn-add').click(function(){
+	layer.open({
+		type: 1,
+		skin: 'layui-layer-rim',
+		area: ['375px', '290px'],
+		title :'添加标签',
+		btn: ['添加', '取消'],
+		btn1: function(index, layero){
+			$.post('{url:/label/edit}',$("#form").serialize(),function(data){
+				if(data.code == 1){
+					layer.alert(data.msg);
+					setTimeout(function (){
+						window.location.reload();
+					}, 1000);
+				}
+				else{
+					layer.alert(data.msg)
+				}
+			}, 'json');
+	},
+	btn2: function(index, layero){
+		layer.close(index);
+	},
+		content: $('#gd-form').html()
+	});
+	form.render();
+})
+
+
+
+
+
+
+
+}();
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div>
+  <div class="layui-tab layui-tab-brief" lay-filter="tab">
+    <ul class="layui-tab-title">
+      <li class="layui-this" lay-id="t1">扩展字段列表</li>
+	</ul>
+    <div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<table class="layui-hide" id="table" lay-filter="test"></table>
+			<script type="text/html" id="toolbarDemo">
+				<div class="layui-btn-container">
+					<button class="layui-btn layui-btn-sm" lay-event="add">新建字段</button>
+				</div>
+			</script>
+			<script type="text/html" id="barDemo">
+				<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			</script>
+		</div>
+
+
+		<script type="text/html" id="gd-form">
+			<form action="" method="post" id="form" class="layui-form">
+				<input type="hidden" name="id" value=""> 
+				<div class="layui-form-item">
+					<label class="layui-form-label">关联模型</label>
+					<div class="layui-input-inline">
+						<select name="model_id" lay-verify="required">
+							<option value="">选择内容模型</option>
+							{foreach:items = $modelList key=$k item=$v}
+							<option value="{$v['id']}">{$v['name']}</option>
+						{/foreach}
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">字段说明</label>
+					<div class="layui-input-inline">
+						<input type="text" name="description" lay-verify="required" placeholder="中文描述" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">英文名称</label>
+					<div class="layui-input-inline">
+						<input type="text" name="name" lay-verify="required" placeholder="必须为英文" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">字段类型</label>
+					<div class="layui-input-inline">
+						<select name="type" lay-verify="required">
+							<option value="1">单行文本</option>
+							<option value="2">多行文本</option>
+							<option value="3">单选按钮</option>
+							<option value="4">多选按钮</option>
+							<option value="5">图片上传</option>
+							<option value="6">附件上传</option>
+							<option value="7">日期选择</option>
+							<option value="8">编辑器</option>
+							<option value="9">下拉选择</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">字段值</label>
+					<div class="layui-input-inline">
+						<textarea name="value" placeholder="多个选项用逗号隔开或者回车" class="layui-textarea"></textarea>
+						<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效。</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">排序</label>
+					<div class="layui-input-inline">
+						<input type="text" name="sorting" required="" lay-verify="required" value="255" placeholder="请输入排序" class="layui-input">
+					</div>
+				</div>
+			</form>
+		</script>
+    </div>
+  </div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+!function(){
+var layer = layui.layer,form = layui.form;
+	var table = layui.table;
+	var $ = layui.jquery;
+	var upload = layui.upload;
+
+	table.render({
+		elem: '#table',url:'{url:/modelfield/getList}',
+		toolbar: '#toolbarDemo',
+		title: '字段列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'英文名称', width:120},
+			{field:'description', title:'字段说明', width:120},
+			{field:'type', title:'类型', width:120,hide:true},
+			{field:'type_text', title:'类型', width:90, templet: function(res){
+				switch(parseInt(res.type)){
+					case 1:
+						return '单行文本';
+					break;
+					case 2:
+						return '多行文本';
+					break;
+					case 3:
+						return '单选按钮';
+					break;
+					case 4:
+						return '多选按钮';
+					break;
+					case 5:
+						return '图片上传';
+					break;
+					case 6:
+						return '附件上传';
+					break;
+					case 7:
+						return '日期选择';
+					break;
+					case 8:
+						return '编辑器';
+					break;
+					case 9:
+						return '下拉选择';
+					break;
+					default:
+						return '错误！';
+					
+				}
+			}},
+			{field:'model_id', title:'关联模型', width:120,hide:true},
+			{field:'model_name', title:'关联模型', width:120},
+			{field:'value', title:'字段值'},
+			{field:'sorting', title:'排序'},
+			{field:'value', title:'字段值', hide:true},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+		]],
+		page: true
+	});
+//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/modelfield/del}',{id:obj.data.id},function(data){
+				if(data.code == 1){
+					layer.alert(data.msg)
+					obj.del();
+				}
+				else{
+					layer.alert(data.msg)
+				}
+			}, 'json');
+			layer.close(index);
+		});
+	}else if(obj.event === 'edit'){
+		layer.open({
+			type: 1,
+			skin: 'layui-layer-rim',
+			area: ['350px', '456px'],
+			title :'编辑字段',
+			btn: ['提交', '取消'],
+			btn1: function(index, layero){
+				$.post('{url:/modelfield/edit}',$("#form").serialize(),function(data){
+					if(data.code == 1){
+						layer.alert(data.msg);
+						setTimeout(function (){
+							window.location.reload();
+						}, 1000);
+					}
+					else{
+						layer.alert(data.msg)
+					}
+				}, 'json');
+		},
+		btn2: function(index, layero){
+			layer.close(index);
+		},
+			content: $('#gd-form').html()
+		});
+		loadData(obj.data, '#form');
+		form.render();
+		
+	}
+});
+	//头工具栏事件
+	table.on('toolbar(test)', function(obj){
+		var checkStatus = table.checkStatus(obj.config.id);
+		switch(obj.event){
+			case 'add':
+				layer.open({
+					type: 1,
+					skin: 'layui-layer-rim',
+					area: ['350px', '456px'],
+					title :'添加字段',
+					btn: ['提交', '取消'],
+					btn1: function(index, layero){
+						$.post('{url:/modelfield/edit}',$("#form").serialize(),function(data){
+							if(data.code == 1){
+								layer.alert(data.msg);
+								setTimeout(function (){
+									window.location.reload();
+								}, 1000);
+							}
+							else{
+								layer.alert(data.msg);
+							}
+						}, 'json');
+					},
+					btn2: function(index, layero){
+						layer.close(index);
+					},
+					content: $('#gd-form').html()
+				});
+			break;
+		};
+		form.render();
+	});
+}();
+</script>
+</body>
+</html>

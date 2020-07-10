@@ -1,0 +1,198 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="gd-body">
+        <div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">用户列表</li>
+	    <li lay-id="t2">新建/编辑列表</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">					
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="toolbarDemo">
+					<div class="layui-btn-container">
+						<button class="layui-btn layui-btn-sm" lay-event="add">新建管理员</button>
+					</div>
+				</script>
+				<script type="text/html" id="barDemo">
+					<a class="layui-btn layui-btn-xs" {data-id} lay-event="edit">编辑</a>
+					<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+				</script>
+			</div>
+	  	   	
+	  	   <div class="layui-tab-item">
+	  	   		<form action="{url:/sysuser/edit}" method="post" id="form" class="layui-form">
+					<input type="hidden" name="id" value=""> 
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							用户名
+						</label>
+						<div class="layui-input-inline">
+							<input type="text" name="name" required="" lay-verify="required" placeholder="请输入用户账号" class="layui-input">
+						</div>
+						<div class="layui-form-mid layui-word-aux">*</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							真实姓名
+						</label>
+						<div class="layui-input-inline">
+							<input type="text" name="realname" placeholder="请输入真实姓名" class="layui-input">
+						</div>
+						<div class="layui-form-mid layui-word-aux">*</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							用户密码
+						</label>
+						<div class="layui-input-inline">
+							<input type="password" name="password" required="" lay-verify="required"
+							placeholder="请输入用户密码" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							确认密码
+						</label>
+						<div class="layui-input-inline">
+							<input type="password" name="repassword" required="" lay-verify="required"
+							placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							账号状态
+						</label>
+						<div class="layui-input-inline">
+							<input type="radio" name="status" value="1" title="启用" checked="">
+							<input type="radio" name="status" value="0" title="禁用">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">用户角色</label>
+						<div class="layui-input-inline">
+							<select name="role_id">
+							{foreach:items = $roleList key=$k item=$v}
+							<option value="{$v['id']}">{$v['name']}</option>
+							{/foreach}	
+							</select>
+						</div>
+					</div>
+		  	   		 <div class="layui-form-item">
+						 <div class="layui-input-inline">
+							<button class="layui-btn" lay-submit="">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+				    </div>
+				</form>
+	  	   	</div>
+	  </div>
+	</div>
+    
+     
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var $ = layui.jquery;
+	table.render({
+		elem: '#table',url:'{url:/SysUser/getList}',
+		toolbar: '#toolbarDemo',
+		title: '管理员列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'用户名', width:120},
+			{field:'realname', title:'真实名字', width:120},
+			{field:'role_name', title:'角色名', width:120},
+			{field:'role_id', title:'角色', width:120,hide:true},
+			{field:'count', title:'登录次数', width:120},
+			{field:'last_login_ip', title:'最后登录IP', width:120},
+			{field:'create_user', title:'添加用户', width:100},
+			{field:'create_time', title:'添加时间'},
+			{field:'status', title:'状态', width:90, event: 'switch',templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
+				}
+			}},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+		]],
+		page: true
+	});
+
+	//监听行工具事件
+table.on('tool(test)', function(obj){
+	var data = obj.data;
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/sysuser/del}',{id:obj.data.id},function(data){
+				if(data.code == 1){
+					layer.alert(data.msg)
+					obj.del();
+				}
+				else{
+					layer.alert(data.msg)
+				}
+			}, 'json');
+		});
+	}else if(obj.event === 'edit'){
+			$('#form')[0].reset(); //重置表单
+			loadData(obj.data, '#form')
+			form.render();
+			element.tabChange('tab', 't2');
+		
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/sysuser/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+			if(data.code == 1){
+				//layer.alert(data.msg)
+			}
+			else{
+				layer.alert(data.msg)
+			}
+		}, 'json');
+		form.render();
+	}
+});
+
+//头工具栏事件
+table.on('toolbar(test)', function(obj){
+	var checkStatus = table.checkStatus(obj.config.id);
+	switch(obj.event){
+		case 'add':
+			element.tabChange('tab', 't2');
+			$('#form')[0].reset();
+			$('#form input[name="id"]').val('');
+		break;
+	};
+	form.render();
+});
+
+}();
+</script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<style>
+.label-level1{
+	text-align:left;
+}
+
+.label-level2{
+	text-align:left;
+	text-indent:1em;
+}
+
+
+</style>
+<div class="gd-body">
+		<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">角色列表</li>
+	    <li lay-id="t2">角色新增</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="toolbarDemo">
+				  <div class="layui-btn-container">
+					<button class="layui-btn layui-btn-sm" lay-event="add">新建角色</button>
+				  </div>
+				</script>
+				 
+				<script type="text/html" id="barDemo">
+				  <a class="layui-btn layui-btn-xs" {data-id} lay-event="edit">编辑</a>
+				  <a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+				</script>
+			</div>
+	  	   
+	  	   <div class="layui-tab-item">
+	  	   		<form action="{url:/role/edit}" method="post" id="form" class="layui-form">
+	  	   			<input type="hidden" name="id" value=""> 
+	  	   			<div class="layui-form-item">
+	                     <label class="layui-form-label">角色名称</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="name" lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux">*</div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">角色描述</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="description" placeholder="请输入角色描述" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+					    <label class="layui-form-label">管辖区域</label>
+						<div class="layui-input-block">
+						{foreach:items = $areaList key=$k item=$v}
+							<input type="checkbox" name="areas_id[]" value="{$v['id']}" title="{$v['name']}">
+						{/foreach}	
+						</div>
+					 </div>
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">状态</label>
+                     <div class="layui-input-block">
+                     	<input type="radio" name="status" value="1" title="启用" checked="">
+						<input type="radio" name="status" value="0" title="禁用">
+                     </div>
+                </div> 
+					<div class="layui-form-item">
+						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+						  <legend>权限列表</legend>
+						</fieldset>   
+ 
+						<div class="layui-input-line">
+							{foreach:items = $authList key=$k item=$v}
+								{if:$v['pid']==0}
+								<div class="layui-form-item">
+									<label class="layui-form-label label-level1" style="width:168px;"><i class="fa fa-folder-open-o"></i>{$v['name']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<div class="layui-input-block">
+										<input type="checkbox" name="rules_id[]" value="{$v['id']}" title="浏览">
+									</div>
+								</div>
+									{foreach:items = $authList key=$k1 item=$v1}
+										{if:$v['id'] == $v1['pid']}
+											<div class="layui-form-item">
+												<label class="layui-form-label label-level2" style="width:168px;"><i class="fa fa fa-folder-o"></i>{$v1['name']}</label>
+												<div class="layui-input-block">
+													<input type="checkbox" name="rules_id[]" value="{$v1['id']}" title="浏览">
+													{foreach:items = $authList key=$k2 item=$v2}
+														{if:$v1['id'] == $v2['pid']}
+															<input type="checkbox" value="{$v2['id']}" name="rules_id[]" title="{$v2['name']}">
+														{/if}
+													{/foreach}
+												</div>
+											</div>
+										{/if}
+									{/foreach}
+								{/if}
+							{/foreach}
+
+						</div>
+					</div>
+		  	   		 <div class="layui-form-item">
+						 <div class="layui-input-inline">
+							<button class="layui-btn" lay-submit="">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+				    </div>
+	  	   		</form>
+	  	   </div>
+	  </div>
+	</div>
+	 
+
+	 
+
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+!function(){
+var layer = layui.layer,
+form = layui.form;
+var table = layui.table;
+var element = layui.element;
+var $ = layui.jquery;
+table.render({
+	elem: '#table',url:'{url:/role/getList}',
+	toolbar: '#toolbarDemo',
+	title: '提示',
+	layEvent: 'LAYTABLE_TIPS',
+	icon: 'layui-icon-tips',
+	cols: [[
+		{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+		{field:'name', title:'名称', width:120,},
+		{field:'description', title:'描述'},
+		{field:'create_user', title:'添加用户', width:100},
+		{field:'create_time', title:'添加时间', width:180},
+		{field:'create_time', title:'添加时间', width:180},
+		{field:'status', title:'状态', width:90, event: 'switch',templet: function(res){
+			if(res.status == 1){
+				return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+			}else{
+				return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
+			}
+		}},
+		{field:'areas_id', title:'区域列表', hide:true},
+		{field:'rules_id', title:'权限列表', hide:true},
+		{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+	]],
+	page: true
+});
+	//监听行工具事件
+table.on('tool(test)', function(obj){
+	var data = obj.data;
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/role/del}',{id:obj.data.id},function(data){
+				if(data.code == 1){
+					layer.alert(data.msg)
+					obj.del();
+				}
+				else{
+					layer.alert(data.msg)
+				}
+			}, 'json');
+		});
+	}else if(obj.event === 'edit'){
+			$('#form')[0].reset(); //重置表单
+			loadData(obj.data, '#form');
+			form.render();
+			element.tabChange('tab', 't2');
+		
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/role/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+			if(data.code == 1){
+				//layer.alert(data.msg)
+			}
+			else{
+				layer.alert(data.msg)
+			}
+		}, 'json');
+		form.render();
+	}
+});
+
+//头工具栏事件
+table.on('toolbar(test)', function(obj){
+	var checkStatus = table.checkStatus(obj.config.id);
+	switch(obj.event){
+		case 'add':
+			element.tabChange('tab', 't2');
+			$('#form')[0].reset();
+			$('#form input[name="id"]').val('');
+		break;
+	};
+	form.render();
+});
+
+}();
+</script>
+</body>
+</html>
