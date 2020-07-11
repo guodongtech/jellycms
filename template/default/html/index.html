@@ -16,29 +16,28 @@
 <body>
 <header>
 	<div class="header-container">
-		<div class="header-left">logo</div>
+		<div class="header-left"><img src="{$site.logo}"></div>
 		<ul>
+			<li><a href='/'>首页</a></li>
 			{sort:}
-			<li><a href='{$item.link}'>{$item.name}</a></li>
+			<li><a href='{$sort.link}'>{$sort.name}</a></li>
 			{/sort}
 		</ul>
-		<div class="header-right">right</div>
+		<div class="header-right"><a href="/">登录</a><a href="/" class="reg">免费使用</a></div>
 	</div>
 </header>
 
 <div class="swiper-container">
     <div class="swiper-wrapper">
-		<div class="swiper-slide" style="background:#f00">
-			<p class="ani" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">内容</p>
+	{slide:}
+		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
+			<div class="swiper-slide-content">
+				{$slide.name}
+			</div>
 		</div>
-		<div class="swiper-slide">
-			<p class="ani" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">内容</p>
-		</div>
+	{/slide}
     </div>
-    <!-- 如果需要分页器 -->
     <div class="swiper-pagination"></div>
-    
-    <!-- 如果需要导航按钮 -->
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
 </div>
@@ -48,8 +47,29 @@
 
 
 
+<footer>
+	 <div class="footer-top">
+		2222
+	 </div>
+	 <div class="footer-bottom">
+		<div>
+			<span>© 2008-2020 {$site.domain}</span>
+			<a href="http://www.miitbeian.gov.cn" target="_blank">粤ICP备09049701号</a>
+			<a rel="noreferrer" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={$site.icp}" target="_blank">{$site.icp}</a>
+			<a href="" target="_blank">《gd软件许可及服务协议》</a>
+			<a href="" target="_blank">《gd用户协议》</a>
+		</div>
+		<div>
+			<span>{$company.name}</span>
+			<span>增值电信业务经营许可证：<a target="_blank" href="">DDDDDDD</a>&nbsp;
+			<a target="_blank" href="">CCCCCCC</a></span>
+		</div>
+	 </div>
 
 
+
+
+</footer>
 
 <script src="{theme:js/jquery-1.11.3.min.js}"></script>
 <script src="{theme:js/swiper.min.js}"></script>
@@ -86,7 +106,27 @@
       } 
     }
   }) 
+  
+  
+$(document).ready(function (){
+$(window).scroll(function(){
+	//获取当前鼠标滑动的高度
+	var currentTop = $(window).scrollTop();
+	if(currentTop>=32){
+		$('header').addClass('active');
+	}
+	if(currentTop<32){
+		$('header').removeClass('active');
+	}
+});
+});  
+  
+  
+  
+  
   </script>
+
+
 </body>
 </html> 
 <p>Page rendered in {elapsed_time} seconds</p>

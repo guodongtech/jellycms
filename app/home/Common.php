@@ -23,3 +23,23 @@
 	 $config = new \Config\Config();
 	 return $themePath = '/'.$config->homeViewName.'/'.$config->theme.'/';
  }
+ function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
+{
+	if (is_null($url) && !is_null($_SERVER['HTTP_REFERER'])) {
+		$url = $_SERVER['HTTP_REFERER'];
+	} elseif ('' !== $url && !strpos($url, '://') && 0 !== strpos($url, '/')) {
+		$url =$url;
+	}
+	$data = [
+		'code' => 0,
+		'msg'  => $msg,
+		'data' => $data,
+		'url'  => $url,
+		'wait' => $wait,
+	];
+	echo view('/html/dispatch_jump.html', $data);exit;
+
+}
+ 
+ 
+ 

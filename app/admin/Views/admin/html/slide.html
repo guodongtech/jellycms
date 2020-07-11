@@ -82,7 +82,7 @@
                 <div class="layui-form-item">
                      <label class="layui-form-label">背景色</label>
                      <div class="layui-input-inline">
-                     	<input type="text"  name="bgcolor" id="bgcolor-input" placeholder="背景色" class="layui-input">
+                     	<input type="text"  name="bgcolor" id="bgcolor-input" placeholder="背景色" disabled class="layui-input">
                      </div>
 					 <span id="bgcolor"></span>
                 </div>
@@ -178,11 +178,11 @@
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/slide/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 					obj.del();
 				}
 				else{
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 				}
 			}, 'json');
 			layer.close(index);

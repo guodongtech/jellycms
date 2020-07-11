@@ -301,7 +301,7 @@ class View implements RendererInterface
 			$str = ' <?php use  \App\Models\ParseModel; $this->model = new ParseModel();?>'.$str;
 		}
 		
-		return preg_replace_callback('/{(\/?)(\$|theme|webroot|url|echo|query|widget|foreach|set|include|require|if|elseif|else|while|for|js|content|list|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|theme|webroot|url|echo|query|widget|foreach|set|include|require|if|elseif|else|while|for|js|content|list|sort|slide)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -461,7 +461,7 @@ class View implements RendererInterface
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['id'])) $id = $attr['id'];
 					$content = '$content_=$this->model->getContent('.$id.');';
-					return '<?php '.$content.' foreach(array($content_) as $key=>$val){?>';
+					return '<?php '.$content.' foreach(array($content_) as $key=>$content){?>';
 				}
 				
 				
@@ -473,7 +473,7 @@ class View implements RendererInterface
 					unset($attr['id']);
 					//重新组装参数 模板绑定参数只能按变量名传以便在模板里完成变量转换，其它查询条件参数为一组
 					$params = json_encode($attr);
-					return '<?php  foreach($this->model->getList($id='.$id.',$param ='."'".(string)$params."'".') as $key=>$val){?>';
+					return '<?php  foreach($this->model->getList($id='.$id.',$param ='."'".(string)$params."'".') as $key=>$list){?>';
 				}
 				
 				//无限嵌套
@@ -484,19 +484,17 @@ class View implements RendererInterface
 					else $pid = 0;
 					if(!isset($attr['key'])) $attr['key'] = '$key';
 					else $attr['key'] = $attr['key'];
-					if(!isset($attr['item'])) $attr['item'] = '$item';
-					else $attr['item'] = $attr['item'];
-					return '<?php   foreach($this->model->getSortByPid('.$pid.') as '.$attr['key'].' => '.$attr['item'].'){?>';
+					if(!isset($attr['sort'])) $attr['sort'] = '$sort';
+					else $attr['sort'] = $attr['sort'];
+					return '<?php   foreach($this->model->getSortByPid('.$pid.') as '.$attr['key'].' => '.$attr['sort'].'){?>';
 					 
 				}
-				
-				
 				case 'slide:':
 				{
 					$attr = $this->getAttrs($matches[4]);
-					if(isset($attr['pid'])) $pid = $attr['pid'];
-					else $pid = 0;
-					return '<?php foreach($this->model->getSortByPid('.$pid.') as $key=>$val){?>';
+					if(isset($attr['gid'])) $gid = $attr['gid'];
+					else $gid = 0; //不设置分组ID,则读当前区域第一个可用分组
+					return '<?php foreach($this->model->getSlide('.$gid.') as $key=>$slide){?>';
 				}
 				default:
 				{

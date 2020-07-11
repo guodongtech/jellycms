@@ -96,7 +96,25 @@ class ParseModel extends Model
 		return $result;
 	}
 	
-	
+    public function getSlide($gid)
+    {
+		
+		if(!$gid){
+			$builder = $this->db->table('slide_group');
+			$result   = $builder->select('*')
+								->where(['deleted'=>0,'status'=>1,'area_id'=>session('area_id')])
+								->get()
+								->getRowArray();
+			$gid = $result['id'];
+			if(!$gid) error('幻灯片分组不存在');
+		}
+		$builder = $this->db->table('slide');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0,'group_id'=>$gid])
+							->get()
+							->getResultArray();					
+        return $result;
+    }
 	
 	
 	

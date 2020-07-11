@@ -2,6 +2,8 @@
 	margin:0;
 	padding:0;
 	list-style:none;
+	box-sizing:border-box;
+	text-decoration:none;
 }
 html {
   box-sizing: border-box;
@@ -32,12 +34,7 @@ body.is-content-fixed .ContentRoot {
   position: fixed;
   width: 100vw;
 }
-a:link,
-a:visited {
-  text-decoration: none;
-  color: #298df8;
-  transition: all 0.15s ease-out;
-}
+ 
 a:hover {
   color: #1a70d8;
 }
@@ -70,6 +67,10 @@ header{
 	position:fixed;
 	top:0;
 	z-index:2;
+	transition:all 0.2s ease-in-out;
+}
+header.active {
+    background-color: rgba(0,0,0,.5);
 }
 header:hover {
     background-color: rgba(0,0,0,.3);
@@ -84,12 +85,39 @@ header:hover {
 }
 .header-left{
 	width:150px;
+	height:100%;
+	display:flex;
+	justify-content:flex-start;
+	align-items:center;
+	padding-top:10px;
+	padding-bottom:10px;
+	box-sizing:border-box;
+}
+.header-left img{
+	height:100%;
+	display:flex;
+
 }
 .header-right{
 	width:200px;
 	display:flex;
 	justify-content:flex-end;
+	align-items:center;
 }
+.header-right a {
+    color: #fff;
+	line-height:30px;
+	text-align:center;
+}
+.header-right .reg {
+    color: #fff;
+    background: #52c018;
+    border-radius: 15px;
+    width: 80px;
+    height: 30px;
+	margin-left:20px;
+}
+
 .header-container ul{
 	display:flex;
 	justify-content:flex-start;
@@ -104,7 +132,22 @@ header:hover {
 .swiper-container {
     width: 100%;
     height: 450px;
+	position:relative;
+	
 }  
+.swiper-wrapper{}
+.swiper-wrapper .swiper-slide {
+    //background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+ 
+}
+.swiper-slide-content{
+	width:1200px;
+	margin:0px auto;
+	padding-top:60px;
+}
 
 
 
@@ -117,11 +160,36 @@ header:hover {
 
 
 
-
-
-
-
-
+footer {
+	background: #2d2d2d;
+	color: #5e5e5e;
+	overflow: hidden;
+	width: 100%;
+	height: 249px;
+}
+.footer-top{
+    width: 100%;
+    height: 133px;
+}
+.footer-bottom{
+    width: 100%;
+    height: 116px;
+    background: #242424;
+	text-align:center;
+	display:flex;
+	align-items:center;
+	flex-direction:column;
+	text-align: center;
+    color: #777676;
+    font-size: 12px;
+    margin: 0 auto;
+    line-height: 40px;
+	padding-top:20px;
+}
+footer a {
+    color: #777676;
+    transition: all .3s;
+}
 
 
 
