@@ -147,10 +147,29 @@ header:hover {
 	width:1200px;
 	margin:0px auto;
 	padding-top:60px;
+	position:relative;
+	height:100%;
+	color:#fff;
+}
+.slider-pic{
+	position:absolute;
+	bottom:0;
+	right:0;
+	width:500px;
+}
+.slider-pic img{
+	width:100%;
 }
 
-
-
+.slider-text{
+	padding-top:60px;
+	width:40%;
+	line-height:28px;
+}
+.slider-text p{
+	padding-top:20px;
+	font-size:14px;
+}
 
 
 
@@ -190,7 +209,39 @@ footer a {
     color: #777676;
     transition: all .3s;
 }
-
+.footer-top-container{
+	width:688px;
+	margin:0px auto;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+.footer-top-container ul{
+	display:flex;
+	align-items:center;
+	width:50%;
+	margin-right:56px;
+}
+.footer-top-container ul li{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	margin-right:58px;
+}
+.footer-top-container ul li a{
+	 display:flex;
+	 padding-top:22px;
+	 color:#888;
+	 transition:all 0.2s ease-in-out;
+}
+.footer-top-container div{
+	border-left: 1px solid #242424;
+    padding: 10px 0 10px 70px;
+    text-align: left;
+    margin-right: 7px;
+    margin-top: 36px;
+}
+}
 
 
 

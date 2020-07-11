@@ -32,7 +32,12 @@
 	{slide:}
 		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
 			<div class="swiper-slide-content">
-				{$slide.name}
+				<div class="slider-text">
+					<h1>{$slide.name}</h1>
+					<p>{$slide.description}</p>
+				
+				</div>
+				<div class="slider-pic"><img src="{$slide.pic}"></div>
 			</div>
 		</div>
 	{/slide}
@@ -42,14 +47,59 @@
     <div class="swiper-button-next"></div>
 </div>
  
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 
 
 <footer>
 	 <div class="footer-top">
-		2222
+		<div class="footer-top-container">
+			<ul>
+				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
+				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
+				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
+
+			</ul>
+			<div>
+				联系我们
+			</div>
+		</div>
 	 </div>
 	 <div class="footer-bottom">
 		<div>
@@ -62,8 +112,9 @@
 		<div>
 			<span>{$company.name}</span>
 			<span>增值电信业务经营许可证：<a target="_blank" href="">DDDDDDD</a>&nbsp;
-			<a target="_blank" href="">CCCCCCC</a></span>
+			<a target="_blank" href="">CCCCCCC</a>Page rendered in {elapsed_time} seconds</span>
 		</div>
+
 	 </div>
 
 
@@ -129,4 +180,3 @@ $(window).scroll(function(){
 
 </body>
 </html> 
-<p>Page rendered in {elapsed_time} seconds</p>
