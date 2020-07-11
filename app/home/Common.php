@@ -18,3 +18,8 @@
 		return $url;
 	}
  }
+ 
+ function getWebThemePath(){
+	 $config = new \Config\Config();
+	 return $themePath = '/'.$config->homeViewName.'/'.$config->theme.'/';
+ }

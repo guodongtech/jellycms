@@ -301,7 +301,7 @@ class View implements RendererInterface
 			$str = ' <?php use  \App\Models\ParseModel; $this->model = new ParseModel();?>'.$str;
 		}
 		
-		return preg_replace_callback('/{(\/?)(\$|url|echo|query|widget|foreach|set|include|require|if|elseif|else|while|for|js|content|list|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|theme|webroot|url|echo|query|widget|foreach|set|include|require|if|elseif|else|while|for|js|content|list|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -341,6 +341,11 @@ class View implements RendererInterface
 					$matches[4] = $this->varReplace($matches[4]);
 					return $this->Url($matches[4]);
 				}
+                case 'webroot:':
+                {
+                	return '<?php echo "/'.$matches[4].'";?>';
+                }
+				case 'theme:': return '<?php echo getWebThemePath()."'.$matches[4].'";?>';
 				case 'if:': return '<?php if('.$matches[4].'){?>';
 				case 'elseif:': return '<?php }elseif('.$matches[4].'){?>';
 				case 'else:': return '<?php }else{'.$matches[4].'?>';
