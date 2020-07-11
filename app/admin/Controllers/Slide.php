@@ -46,9 +46,11 @@ class Slide extends BaseController
 		}
 		$data = $post;
 		if(!$post['id']){
+			unset($data['id']);
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
+			$data['deleted'] = 0;
 		}else{
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());

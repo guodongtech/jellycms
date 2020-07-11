@@ -79,29 +79,32 @@
                      	<input type="text" name="description" placeholder="请输入副标题" class="layui-input">
                      </div>
                 </div>
+                <div class="layui-form-item">
+                     <label class="layui-form-label">背景色</label>
+                     <div class="layui-input-inline">
+                     	<input type="text"  name="bgcolor" id="bgcolor-input" placeholder="背景色" class="layui-input">
+                     </div>
+					 <span id="bgcolor"></span>
+                </div>
 
                 
                 <div class="layui-form-item">
-                     <label class="layui-form-label">图片</label>
-                     <div class="layui-input-inline">
-                     	<input type="text" name="pic" required="" lay-verify="required" placeholder="上传图片" class="layui-input">
-                     </div>
-							<button type="button" class="layui-btn" id="upload">
-							  <i class="layui-icon">&#xe67c;</i>上传图片
-							</button>
-<!--  							<div class="preview">
-								<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-									预览图：
-									<div class="layui-upload-list preview">
-										<dl>
-											<dt>
-												<img src="">
-											</dt>
-											<dd><i class="fa fa-times" aria-hidden="true"></i></dd>
-										</dl>
-									</div>
-								</blockquote>
-							</div> -->
+					<label class="layui-form-label">背景图片</label>
+					<div class="layui-input-inline">
+						<input type="text" name="bgpic" required="" lay-verify="required" placeholder="上传图片" class="layui-input">
+					</div>
+					<button type="button" class="layui-btn" id="uploadbgpic">
+					  <i class="layui-icon">&#xe67c;</i>上传图片
+					</button>
+                </div>
+                <div class="layui-form-item">
+					<label class="layui-form-label">图片</label>
+					<div class="layui-input-inline">
+						<input type="text" name="pic" required="" lay-verify="required" placeholder="上传图片" class="layui-input">
+					</div>
+					<button type="button" class="layui-btn" id="upload">
+					  <i class="layui-icon">&#xe67c;</i>上传图片
+					</button>
                 </div>
                 
                 <div class="layui-form-item">
@@ -138,6 +141,8 @@
 	var table = layui.table;
 	var upload = layui.upload;
 	var $ = layui.jquery;
+	var colorpicker = layui.colorpicker;
+
 	table.render({
 		elem: '#table',url:'{url:/slide/getList}',
 		toolbar: '#toolbarDemo',
@@ -159,6 +164,8 @@
 			{field:'name', title:'标题', width:120},
 			{field:'description', title:'描述'},
 			{field:'sorting', title:'排序', width:120},
+			{field:'bgpic', title:'bgpic',hide:true},
+			{field:'bgcolor', title:'bgcolor', hide:true},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
 		]],
 		page: true
@@ -190,13 +197,13 @@
 			btn1: function(index, layero){
 				$.post('{url:/slide/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
-						layer.alert(data.msg);
+						layer.msg(data.msg);
 						setTimeout(function (){
 							window.location.reload();
 						}, 1000);
 					}
 					else{
-						layer.alert(data.msg)
+						layer.msg(data.msg)
 					}
 				}, 'json');
 		},
@@ -223,10 +230,38 @@
 				//请求异常回调
 			}
 		})
+		//执行实例
+		var uploadInst = upload.render({
+			elem: '#uploadbgpic',
+			url: '{url:/upload/uploadFile}',
+			before: function(obj){
+			  //预读本地文件示例，不支持ie8
+			  obj.preview(function(index, file, result){
+				$('.preview img').attr('src', result); //图片链接（base64）
+			  });
+			},
+			done: function(res){
+				//上传完毕回调
+				$('#form input[name="bgpic"]').val(res.data.path);
+			},
+			error: function(){
+				//请求异常回调
+			}
+		})
 		loadData(obj.data, '#form');
 
+
 		form.render();
-		
+		colorpicker.render({
+			elem: '#bgcolor'
+			,predefine: true // 开启预定义颜色
+			,color: $('#form input[name="bgcolor"]').val()
+			,alpha: true
+			,format: 'rgb'
+			,done: function(color){
+			  $('#bgcolor-input').val(color);
+			}
+		});		
 	}else if(obj.event === 'preview'){
 		layer.open({
 			type: 1, 
@@ -254,13 +289,13 @@
 					btn1: function(index, layero){
 						$.post('{url:/slide/edit}',$("#form").serialize(),function(data){
 							if(data.code == 1){
-								layer.alert(data.msg);
+								layer.msg(data.msg);
 								setTimeout(function (){
 									window.location.reload();
 								}, 1000);
 							}
 							else{
-								layer.alert(data.msg)
+								layer.msg(data.msg)
 							}
 						}, 'json');
 					},
@@ -287,9 +322,37 @@
 						//请求异常回调
 					}
 				})
+				//执行实例
+				var uploadInst = upload.render({
+					elem: '#uploadbgpic',
+					url: '{url:/upload/uploadFile}',
+					before: function(obj){
+					  //预读本地文件示例，不支持ie8
+					  obj.preview(function(index, file, result){
+						$('.preview img').attr('src', result); //图片链接（base64）
+					  });
+					},
+					done: function(res){
+						//上传完毕回调
+						$('#form input[name="bgpic"]').val(res.data.path);
+					},
+					error: function(){
+						//请求异常回调
+					}
+				})
 			break;
 
 		};
+		colorpicker.render({
+			elem: '#bgcolor'
+			,predefine: true // 开启预定义颜色
+			,color: 'rgba(7, 155, 140, 1)'
+			,alpha: true
+			,format: 'rgb'
+			,done: function(color){
+			  $('#bgcolor-input').val(color);
+			}
+		});	
 		form.render();
 	});
 }();

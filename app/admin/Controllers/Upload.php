@@ -15,7 +15,7 @@ class Upload extends BaseController
 		}else{ //移动文件
 			$newDateFolder = date('Ymd', time());
 			$newName = $file->getRandomName(); 
-			$uploadPath = ROOTPATH.'/static/upload/'.$newDateFolder;
+			$uploadPath = FCPATH.'/static/upload/'.$newDateFolder;
 			//创建目录并设置权限
 			$file->move($uploadPath, $newName);
 			$name = $file->getName();
