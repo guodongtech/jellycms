@@ -82,7 +82,7 @@
                 <div class="layui-form-item">
                      <label class="layui-form-label">背景色</label>
                      <div class="layui-input-inline">
-                     	<input type="text"  name="bgcolor" id="bgcolor-input" placeholder="背景色" disabled class="layui-input">
+                     	<input type="text"  name="bgcolor" id="bgcolor-input" placeholder="背景色"  class="layui-input">
                      </div>
 					 <span id="bgcolor"></span>
                 </div>
@@ -225,6 +225,7 @@
 			done: function(res){
 				//上传完毕回调
 				$('#form input[name="pic"]').val(res.data.path);
+				layer.msg('上传完成');
 			},
 			error: function(){
 				//请求异常回调
@@ -243,6 +244,7 @@
 			done: function(res){
 				//上传完毕回调
 				$('#form input[name="bgpic"]').val(res.data.path);
+				layer.msg('上传完成');
 			},
 			error: function(){
 				//请求异常回调
@@ -251,7 +253,7 @@
 		loadData(obj.data, '#form');
 
 
-		form.render();
+		
 		colorpicker.render({
 			elem: '#bgcolor'
 			,predefine: true // 开启预定义颜色
@@ -260,8 +262,10 @@
 			,format: 'rgb'
 			,done: function(color){
 			  $('#bgcolor-input').val(color);
+			  form.render();
 			}
-		});		
+		});	
+	form.render();		
 	}else if(obj.event === 'preview'){
 		layer.open({
 			type: 1, 
@@ -317,6 +321,7 @@
 					done: function(res){
 						//上传完毕回调
 						$('#form input[name="pic"]').val(res.data.path);
+						layer.msg('上传完成');
 					},
 					error: function(){
 						//请求异常回调
@@ -335,6 +340,7 @@
 					done: function(res){
 						//上传完毕回调
 						$('#form input[name="bgpic"]').val(res.data.path);
+						layer.msg('上传完成');
 					},
 					error: function(){
 						//请求异常回调
