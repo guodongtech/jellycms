@@ -33,11 +33,11 @@
 		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
 			<div class="swiper-slide-content">
 				<div class="slider-text">
-					<h1>{$slide.name}</h1>
-					<p>{$slide.description}</p>
+					<h1 class="ani" swiper-animate-effect="bounceInLeft" swiper-animate-duration="0.3s" swiper-animate-delay="0.1s">{$slide.name}</h1>
+					<p class="ani" swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s">{$slide.description}</p>
 				
 				</div>
-				<div class="slider-pic"><img src="{$slide.pic}"></div>
+				<div class="slider-pic ani" swiper-animate-effect="zoomInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s"><img src="{$slide.pic}"></div>
 			</div>
 		</div>
 	{/slide}
