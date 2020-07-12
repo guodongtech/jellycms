@@ -38,7 +38,8 @@ class Index extends BaseController
 		if(!$sort) exit('栏目不可用');
 		$this->data['sort'] = $sort;
 		$this->data['page'] = $params[2];
-		//$this->data['list'] = $list;
+		//生成分页
+		
 		echo view('html/'.$sort['listtpl'],$this->data);
 		exit;
 	}

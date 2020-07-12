@@ -43,7 +43,7 @@ class ParseModel extends Model
     public function getSortByPid($pid)
     {
 		$builder = $this->db->table('sorts');
-		$result   = $builder->select('sorts.*,model.urlname as m_urlname')
+		$result   = $builder->select('sorts.*,model.urlname as m_urlname, model.id as model_id')
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->where(['sorts.deleted'=>0, 'sorts.pid'=>$pid])
 							->get()
@@ -79,18 +79,33 @@ class ParseModel extends Model
 							->getRowArray();
         return $result;
 	}
-	
+	public function getModelId($sort_id){
+		$builder = $this->db->table('sorts');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'status'=>1, 'id'=>$sort_id])
+							->get()
+							->getRowArray();	
+		return $result['model_id'];					
+	}
 	public function getList($id,$params,$page){
-		$children = array_column($this->getSortByPid($id), 'id');
+		$model_id = $this->getModelId($id);
+		$children = $this->getSortByPid($id);
+		foreach($children as $key=>$val){
+			if($val['model_id'] != $model_id){
+				unset($children[$key]);
+			}
+		}
+		$children = array_column($children, 'id');
 		$children[] = $id;
 		$ids = implode(',', $children);
 		$params = json_decode($params,true);
+		$model_id = $this->getModelId($id);
 		//拼接SQL
 		$page = $page>0?$page:1;
 		$num = isset($params['num'])?$params['num']:5;
 		$limit = " limit  ".($page-1)*$num.",".$num;
 		$order = isset($params['order'])?'order by '.$params['order']:'';
-		$where = isset($params['where'])?' where '.str_replace(',',' and ',$params['where'])." and content.deleted=0 and sorts.id in ($ids)":" where content.deleted=0 and sorts.id in ($ids)";
+		$where = isset($params['where'])?" where  ".str_replace(',',' and ',$params['where'])." and content.deleted=0 and sorts.id in ($ids) ":" where content.deleted=0 and sorts.id in ($ids)";
 		$sql = "select content.*,sorts.urlname, model.urlname as m_urlname,sorts.id as sorts_id,sorts.name as  sortname  from ".$this->db->prefixTable('content')." as content left join ".$this->db->prefixTable('sorts')." as sorts on content.sorts_id=sorts.id left join ".$this->db->prefixTable('model')." as model on model.id=sorts.model_id $where $order $limit";
 		$result = $this->db->query($sql)->getResultArray();
 		foreach($result as $key=>$value){
@@ -99,6 +114,14 @@ class ParseModel extends Model
 		}
 		return $result;
 	}
+	//分页条
+	public function getPageBar($id, $current_page){
+		//数据总条数
+		
+	}
+	
+	
+	
 	
     public function getSlide($gid)
     {
