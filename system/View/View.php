@@ -294,14 +294,13 @@ class View implements RendererInterface
      */
 	public function resolve($str)
 	{
-		//如果有query|content|list|sort标签，插入连接数据库代码 只插入一次
-		$queryCount = preg_match ('/{(\/?)(\query|content|list|sort)\s*(:?)([^}]*)}/i', $str);
+		//前台标签插入parsemodel
+		$queryCount = preg_match ('/{(\/?)(\include|query|content|list|nav|slide|position)\s*(:?)([^}]*)}/i', $str);
 		if($queryCount){
-			$a = ' <?php use  \App\Models\IndexModel;$this->db = \Config\Database::connect(); ?>'.$a;
 			$str = ' <?php use  \App\Models\ParseModel; $this->model = new ParseModel();?>'.$str;
 		}
-		
-		return preg_replace_callback('/{(\/?)(\$|theme|webroot|url|echo|query|widget|foreach|set|include|require|if|elseif|else|while|for|js|content|list|sort|slide)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		$str = preg_replace_callback('/{(\/?)(include)\s*(:?)([^}]*)}/i', array($this,'translate'), $str); //优先处理include标签
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|query|widget|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -334,6 +333,19 @@ class View implements RendererInterface
 					}
                     else return $matches[0];
                 }
+				case 'require:':
+				case 'include:':
+				{
+					$fileName = trim($matches[4],"/ ");
+					if (!is_file($this->viewPath.$fileName))
+					{
+						exit('模板不存在：'.$fileName);
+					}
+					$file = file_get_contents($this->viewPath.$fileName);
+					
+					return $file;
+
+				}
 				case 'echo:': return '<?php echo '.rtrim($matches[4],';/').';?>';
 
 				case 'url:':
@@ -449,13 +461,7 @@ class View implements RendererInterface
 						return '<?php '.$tem.' foreach('.$items.' as '.$attrs['key'].' => '.$attrs['item'].'){?>';
 					}
 				}
-				case 'require:':
-				case 'include:':
-				{
-					$fileName = trim($matches[4],"/ ");
-					return '<?php //require("'.$fileName.'");?>';
 
-				}
 				case 'content:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
@@ -463,8 +469,13 @@ class View implements RendererInterface
 					$content = '$content_=$this->model->getContent('.$id.');';
 					return '<?php '.$content.' foreach(array($content_) as $key=>$content){?>';
 				}
+				case 'position:': 
+				{
+					$position = '$position_=$this->model->getPosition($sort["id"]);';
+					return '<?php '.$position.' foreach(array($position_) as $key=>$position){?>';
+				}
 				
-				
+				/* 
 				//无限嵌套
 				case 'list:':
 				{
@@ -474,19 +485,29 @@ class View implements RendererInterface
 					//重新组装参数 模板绑定参数只能按变量名传以便在模板里完成变量转换，其它查询条件参数为一组
 					$params = json_encode($attr);
 					return '<?php  foreach($this->model->getList($id='.$id.',$param ='."'".(string)$params."'".') as $key=>$list){?>';
+				} */
+				//无限嵌套
+				case 'list:':
+				{
+					$attr = $this->getAttrs($matches[4]);
+					isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
+					unset($attr['id']);
+					//重新组装参数 模板绑定参数只能按变量名传以便在模板里完成变量转换，其它查询条件参数为一组
+					$params = json_encode($attr);
+					return '<?php  foreach($this->model->getList($id='.$id.',$param ='."'".(string)$params."'".',$page) as $key=>$list){?>';
 				}
 				
 				//无限嵌套
-				case 'sort:':
+				case 'nav:':
 				{
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['pid'])) $pid = $attr['pid'];
 					else $pid = 0;
 					if(!isset($attr['key'])) $attr['key'] = '$key';
 					else $attr['key'] = $attr['key'];
-					if(!isset($attr['sort'])) $attr['sort'] = '$sort';
-					else $attr['sort'] = $attr['sort'];
-					return '<?php   foreach($this->model->getSortByPid('.$pid.') as '.$attr['key'].' => '.$attr['sort'].'){?>';
+					if(!isset($attr['nav'])) $attr['nav'] = '$nav';
+					else $attr['nav'] = $attr['nav'];
+					return '<?php   foreach($this->model->getSortByPid('.$pid.') as '.$attr['key'].' => '.$attr['nav'].'){?>';
 					 
 				}
 				case 'slide:':

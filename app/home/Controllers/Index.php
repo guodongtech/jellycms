@@ -23,7 +23,8 @@ class Index extends BaseController
 		$this->route($_SERVER["QUERY_STRING"]);
 	}
 	public function index()
-	{
+	{	
+		$this->data['home'] = 1;//首页标记
 		echo view('html/index.html',$this->data);
 	}
 	
@@ -36,6 +37,7 @@ class Index extends BaseController
 		}
 		if(!$sort) exit('栏目不可用');
 		$this->data['sort'] = $sort;
+		$this->data['page'] = $params[2];
 		//$this->data['list'] = $list;
 		echo view('html/'.$sort['listtpl'],$this->data);
 		exit;

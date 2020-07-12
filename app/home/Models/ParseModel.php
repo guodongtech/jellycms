@@ -80,18 +80,22 @@ class ParseModel extends Model
         return $result;
 	}
 	
-	public function getList($id,$params){
+	public function getList($id,$params,$page){
+		$children = array_column($this->getSortByPid($id), 'id');
+		$children[] = $id;
+		$ids = implode(',', $children);
 		$params = json_decode($params,true);
 		//拼接SQL
-		$limit = isset($params['limit'])?'limit '.$params['limit']:'limit 5';
+		$page = $page>0?$page:1;
+		$num = isset($params['num'])?$params['num']:5;
+		$limit = " limit  ".($page-1)*$num.",".$num;
 		$order = isset($params['order'])?'order by '.$params['order']:'';
-		$where = isset($params['where'])?' where '.str_replace(',',' and ',$params['where'])." and content.deleted=0 and sorts.id=$id":" where content.deleted=0 and sorts.id=$id";
-		$sql = "select content.*,sorts.urlname, model.urlname as m_urlname  from ".$this->db->prefixTable('content')." as content left join ".$this->db->prefixTable('sorts')." as sorts on content.sorts_id=sorts.id left join ".$this->db->prefixTable('model')." as model on model.id=sorts.model_id $where $order $limit";
+		$where = isset($params['where'])?' where '.str_replace(',',' and ',$params['where'])." and content.deleted=0 and sorts.id in ($ids)":" where content.deleted=0 and sorts.id in ($ids)";
+		$sql = "select content.*,sorts.urlname, model.urlname as m_urlname,sorts.id as sorts_id,sorts.name as  sortname  from ".$this->db->prefixTable('content')." as content left join ".$this->db->prefixTable('sorts')." as sorts on content.sorts_id=sorts.id left join ".$this->db->prefixTable('model')." as model on model.id=sorts.model_id $where $order $limit";
 		$result = $this->db->query($sql)->getResultArray();
 		foreach($result as $key=>$value){
 			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
 			$result[$key]['link'] = url(array($urlName, $value['id']));
-	
 		}
 		return $result;
 	}
@@ -115,7 +119,24 @@ class ParseModel extends Model
 							->getResultArray();					
         return $result;
     }
-	
+	public function getPosition($sortId){
+		//if(!$sortId)
+		$builder = $this->db->table('sorts');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'id'=>$sortId])
+							->get()
+							->getRowArray();
+		if(!$result['pid']) return $result;
+		$builder = $this->db->table('sorts');
+		$resultP   = $builder->select('*')
+							->where(['deleted'=>0, 'pid'=>$result['pid']])
+							->get()
+							->getRowArray();
+		
+		
+		$result = array_merge($resultP, $result);
+        return $result;
+	}
 	
 	
 	

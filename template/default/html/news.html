@@ -1,4 +1,23 @@
-这是内容页<br>
-{$company.name}<br>
-{$sort.name}<br>
-{$content.name}<br>
+ <!DOCTYPE html>
+<html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='ie=edge' http-equiv='x-ua-compatible'>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
+<meta content='webkit' name='renderer'>
+<title>{$site.title}</title>
+<meta content='{$site.keywords}' name='keywords'>
+<meta content='{$site.description}' name='description'>
+<link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
+<link rel="stylesheet" href="{theme:css/swiper.min.css}">
+<link rel="stylesheet" href="{theme:css/animate.min.css}">
+<link rel="stylesheet" href="{webroot:static/font-awesome-4.7.0/css/font-awesome.min.css}">
+</head>
+<body>
+{include:html/head.html}
+<div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
+	<div class="sort-banner-content">
+		<span class="animated bounceInDown">{$sort.name}</span>
+		<p class="animated fadeInDown">{$sort.description}</p>
+	</div>
+</div>

@@ -1,20 +1,67 @@
-这是列表页<br>
-{$company.name}<br>
-{$sort.name}<br>
-{$content.name}<br>
-{include:/simple/seller}
-//指定内容页<br>
-{content:id=1}
-{$val.title}<br>
-{/content}
+ <!DOCTYPE html>
+<html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='ie=edge' http-equiv='x-ua-compatible'>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
+<meta content='webkit' name='renderer'>
+<title>{$site.title}</title>
+<meta content='{$site.keywords}' name='keywords'>
+<meta content='{$site.description}' name='description'>
+<link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
+<link rel="stylesheet" href="{theme:css/swiper.min.css}">
+<link rel="stylesheet" href="{theme:css/animate.min.css}">
+<link rel="stylesheet" href="{webroot:static/font-awesome-4.7.0/css/font-awesome.min.css}">
+</head>
+<body>
+{include:html/head.html}
+<div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
+	<div class="sort-banner-content">
+		<span class="animated bounceInDown">{$sort.name}</span>
+		<p class="animated fadeInDown">{$sort.description}</p>
+	</div>
+</div>
 
-//当前列表页<br>
-<!-- {list:id=2 limit=0,10 order=content.id desc,content.sorting desc where=content.id>0,content.status>0 }
-{$val.title}<br>
-{/list} -->
 
-//指定列表页<br>
-{list:id=2}
-<a href="{$val.link}">{$val.title}</a><br>
-{/list}
+<div class="content-wrap">
+ 
+	{$sort['pid']}
+	<div class="content">
+		<ul class="sub-navs">
+			{nav:pid=2}
+			<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
+			{/nav}
+		</ul>
+		
+		<div class="lnews">
+			<ul class="news">
+			{list:limit=3}
+			<li>
+				<a href="{$list.link}">
+					<div class="img" style="background-image:url({$list.pic})"></div>
+					<div class="details">
+						<h3 class="s">{$list.title}</h3>
+						<p>2019年11月18-20日SFCHINA第三十二届中国国际表面处理展以及CHINACOAT第二十四届中国国际涂料展于上海新国际博览中心隆重举办。2019「涂料展」及「表面处理」* 3天展期，与全球参展商见面：共有来自30多个国家/地区超过1,600家参展商展出；* 展览会规模胜2018广州展：总展出 ...</p>
+						<span>{$list.sortname}</span>
+						<h4>2019-11-28</h4>
+					</div>
+				</a>
+			</li>
+			{/list}
+			<ul>
+		</div>
+		
+	</div>
+</div>
 
+
+
+
+
+
+
+
+
+{include:html/foot.html}
+</body>
+</html>

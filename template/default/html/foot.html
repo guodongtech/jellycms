@@ -1,0 +1,90 @@
+<footer>
+	 <div class="footer-top">
+		<div class="footer-top-container">
+			<ul>
+				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
+				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
+				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
+
+			</ul>
+			<div>
+				联系我们
+			</div>
+		</div>
+	 </div>
+	 <div class="footer-bottom">
+		<div>
+			<span>© 2008-2020 {$site.domain}</span>
+			<a href="http://www.miitbeian.gov.cn" target="_blank">粤ICP备09049701号</a>
+			<a rel="noreferrer" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={$site.icp}" target="_blank">{$site.icp}</a>
+			<a href="" target="_blank">《gd软件许可及服务协议》</a>
+			<a href="" target="_blank">《gd用户协议》</a>
+		</div>
+		<div>
+			<span>{$company.name}</span>
+			<span>增值电信业务经营许可证：<a target="_blank" href="">DDDDDDD</a>&nbsp;
+			<a target="_blank" href="">CCCCCCC</a></span>
+		</div>
+
+	 </div>
+
+
+
+
+</footer>
+
+<script src="{theme:js/jquery-1.11.3.min.js}"></script>
+<script src="{theme:js/swiper.min.js}"></script>
+<script src="{theme:js/swiper.animate.min.js}"></script>
+<script> 
+//Swiper5
+  var mySwiper = new Swiper ('.swiper-container', {
+   // direction: 'herizon', // 垂直切换选项
+    loop: true, // 循环模式选项
+    
+    // 如果需要分页器
+    pagination: {
+      el: '.swiper-pagination',
+    },
+    
+    // 如果需要前进后退按钮
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    
+ 
+  
+  
+  
+    on:{
+      init: function(){
+        swiperAnimateCache(this); //隐藏动画元素 
+        swiperAnimate(this); //初始化完成开始动画
+      }, 
+      slideChangeTransitionEnd: function(){ 
+        swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
+        //this.slides.eq(this.activeIndex).find('.ani').removeClass('ani'); 动画只展现一次，去除ani类名
+      } 
+    }
+  }) 
+  
+  
+$(document).ready(function (){
+$(window).scroll(function(){
+	//获取当前鼠标滑动的高度
+	var currentTop = $(window).scrollTop();
+	if(currentTop>=32){
+		$('header').addClass('active');
+	}
+	if(currentTop<32){
+		$('header').removeClass('active');
+	}
+});
+});  
+  
+  
+  
+  
+  </script>
+
