@@ -151,7 +151,8 @@ class ParseModel extends Model
 			
 	}
 	//分页条
-	public function getPageBar($current_page,$total){
+	public function getPageBar($current_page,$total
+	){
 		//数据总条数
 		
 	}

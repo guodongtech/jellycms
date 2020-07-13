@@ -3,7 +3,7 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 use \App\Models\LoginModel;
 use \App\Models\AreaModel;
-class Login extends BaseController
+class Login extends Controller
 {
 
     private $model;
@@ -16,6 +16,7 @@ class Login extends BaseController
         $this->model = new LoginModel();
         $this->areaModel = new AreaModel();
 		$this->captcha = new \App\Libraries\Captcha();
+		$this->session = \Config\Services::session();
     }
     public function index()
     {	
@@ -82,31 +83,5 @@ class Login extends BaseController
 		session_destroy();
 		success("操作成功", '/'.ADMINNAME.'/login/');	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

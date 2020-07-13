@@ -19,15 +19,16 @@ class BaseController extends Controller
 		parent::initController($request, $response, $logger);
 		//设置SESSION
 		$this->session = \Config\Services::session();
-		
 		/*检测登录状态，未登录跳回登录页。
 			后台链接必须是 后台.php/controller/action/xxx  否则登录超时会跳回首页。 
 		*/
-		//echo $request->uri->getSegment(1);exit;
-		if(!$this->session->id && AUTH && $request->uri->getSegment(1) != 'login'){
+
+		$uriSegments = $request->uri->getSegments();///path/to/page=> ['path', 'to', 'page']
+		if(!session('id') && AUTH){
 			Header("Location: /".ADMINNAME."/login/"); 
 			exit;
 		}
+
 		// 加载白名单
 		$config = new \Config\Authconfig();
 		$white = $config->white;
@@ -37,13 +38,9 @@ class BaseController extends Controller
 		// 获取controller
 		$controller = explode('\\',$this->router->controllerName());
 		$controller = end($controller);
-		// echo $controller;
-		// $controller = $request->uri->getSegment(1);
-		// 获取action
-		// $action = $request->uri->getSegment(2);
 		$action = $this->router->methodName();
 		if($controller != 'Home'){
-			$param = $request->uri->getSegment(3)?$request->uri->getSegment(3):'';
+			$param = $uriSegments[3];
 		}else{
 			$param = '';
 		}
@@ -51,7 +48,7 @@ class BaseController extends Controller
 		// 获取参数 目前只支持固定单参
 		$res = $this->checkModel->authCheck($controller,$action,$param,$white);
 		if($res['code'] == 2){
-			echo $res['msg'];die;
+			//exit($res['msg']);  //暂时不启用。待权限录入结束再开启
 		}
 		
 
