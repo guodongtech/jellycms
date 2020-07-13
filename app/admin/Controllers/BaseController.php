@@ -42,7 +42,7 @@ class BaseController extends Controller
 		// 获取action
 		// $action = $request->uri->getSegment(2);
 		$action = $this->router->methodName();
-		if($controller != 'Home'){
+		if($controller != 'Home' && $controller != 'Login'){
 			$param = $request->uri->getSegment(3)?$request->uri->getSegment(3):'';
 		}else{
 			$param = '';
