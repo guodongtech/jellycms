@@ -24,9 +24,10 @@
 
 
 <div class="content-wrap">
- 
-	{$sort['pid']}
+	
+	 
 	<div class="content">
+		<div class="position"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
 		<ul class="sub-navs">
 			{nav:pid=2}
 			<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
@@ -35,7 +36,7 @@
 		
 		<div class="lnews">
 			<ul class="news">
-			{list:num=3 order=id asc}
+			{list:num=5 order=id desc where=id>0,status eq 1}
 			<li>
 				<a href="{$list.link}">
 					<div class="img" style="background-image:url({$list.pic})"></div>

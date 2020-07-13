@@ -4,6 +4,8 @@ use CodeIgniter\Model;
 
 class ParseModel extends Model
 {
+	protected $childrenSortIds = array();
+	protected $positions = array();
     public function getDefaultArea()
     {
 		$builder = $this->db->table('area');
@@ -87,35 +89,69 @@ class ParseModel extends Model
 							->getRowArray();	
 		return $result['model_id'];					
 	}
-	public function getList($id,$params,$page){
+	
+	//递归分类，用于列表页查询所有与当前分类是一类模型的子类ID+当前类ID
+	public function getChildrenSorts($id){
+		if(!$id) return;
+		$this->childrenSortIds[] = $id;
 		$model_id = $this->getModelId($id);
-		$children = $this->getSortByPid($id);
-		foreach($children as $key=>$val){
-			if($val['model_id'] != $model_id){
-				unset($children[$key]);
-			}
+		if(!$model_id) return;
+		$builder = $this->db->table('sorts');
+		$result   = $builder->select('id')
+							->where(['deleted'=>0,'status'=>1, 'model_id'=>$model_id, 'pid'=>$id])
+							->get()
+							->getResultArray();
+		foreach($result as $key=>$value){
+				$result = $this->getChildrenSorts($value['id']);
+				
 		}
-		$children = array_column($children, 'id');
-		$children[] = $id;
-		$ids = implode(',', $children);
-		$params = json_decode($params,true);
-		$model_id = $this->getModelId($id);
-		//拼接SQL
+        return $result;
+	}
+	
+	
+	
+	
+	public function getList($id,$params,$page){
+		
+		$this->getChildrenSorts($id);
+		$children = $this->childrenSortIds; //当前类及其模型一致的子类
+		$where = isset($params['where'])?str_replace(',',' and ',$params['where']):1;
 		$page = $page>0?$page:1;
 		$num = isset($params['num'])?$params['num']:5;
-		$limit = " limit  ".($page-1)*$num.",".$num;
-		$order = isset($params['order'])?'order by '.$params['order']:'';
-		$where = isset($params['where'])?" where  ".str_replace(',',' and ',$params['where'])." and content.deleted=0 and sorts.id in ($ids) ":" where content.deleted=0 and sorts.id in ($ids)";
-		$sql = "select content.*,sorts.urlname, model.urlname as m_urlname,sorts.id as sorts_id,sorts.name as  sortname  from ".$this->db->prefixTable('content')." as content left join ".$this->db->prefixTable('sorts')." as sorts on content.sorts_id=sorts.id left join ".$this->db->prefixTable('model')." as model on model.id=sorts.model_id $where $order $limit";
-		$result = $this->db->query($sql)->getResultArray();
+		$order = isset($params['order'])?$params['order']:'id desc';
+		$builder = $this->db->table('content');
+		$result   = $builder->select('id')
+							->where($where)
+							->where(['deleted'=>0])
+							->whereIn('sorts_id', $children)
+							->orderBy($order)
+							->get($num,($page-1)*$num)
+							->getResultArray();
+		$total = $builder->countAllResults();//总条数
+		$page = $page; //当前页数
+		
+		
+		//为降低模板标签解析复杂度，重新补充分类及模型信息。
+		$ids = array();
 		foreach($result as $key=>$value){
-			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
-			$result[$key]['link'] = url(array($urlName, $value['id']));
+			$ids[]=$value['id'];
 		}
-		return $result;
+		$builder = $this->db->table('content');
+		$result   = $builder->select('content.*, sorts.urlname as urlname, sorts.name as sortname, model.urlname as m_urlname')
+							->join('sorts', 'sorts.id = content.sorts_id', 'left')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->whereIn('content.id', $ids)
+							->get()
+							->getResultArray();
+ 		foreach($result as $key=>$value){
+			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
+			$result[$key]['link'] = $value['link']==''?url(array($urlName, $value['id'])):$value['link'];
+		}
+		return $result; 
+			
 	}
 	//分页条
-	public function getPageBar($id, $current_page){
+	public function getPageBar($current_page,$total){
 		//数据总条数
 		
 	}
@@ -143,24 +179,29 @@ class ParseModel extends Model
         return $result;
     }
 	public function getPosition($sortId){
-		//if(!$sortId)
+		static $result = array();
 		$builder = $this->db->table('sorts');
-		$result   = $builder->select('*')
-							->where(['deleted'=>0, 'id'=>$sortId])
+		$res   = $builder->select('sorts.*, model.urlname as m_urlname')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.deleted'=>0, 'sorts.id'=>$sortId])
 							->get()
 							->getRowArray();
-		if(!$result['pid']) return $result;
-		$builder = $this->db->table('sorts');
-		$resultP   = $builder->select('*')
-							->where(['deleted'=>0, 'pid'=>$result['pid']])
-							->get()
-							->getRowArray();
-		
-		
-		$result = array_merge($resultP, $result);
-        return $result;
+		$urlname = $res['urlname']==''?$res['m_urlname']:$res['urlname'];
+		if(is_array($res)){
+			if($res['outlink']==''){
+				$res['link']= url(array($urlname.'_'.$res['id']));
+			}else{
+				$res['link']= $res['outlink'];
+			}
+			$result[] = $res;
+			$this->getPosition($res['pid']); 
+		}else{
+			$result = array_reverse($result);
+			//print_r($result);
+		}
+		return $result;
 	}
-	
+ 
 	
 	
 	

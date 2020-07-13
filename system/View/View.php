@@ -472,7 +472,7 @@ class View implements RendererInterface
 				case 'position:': 
 				{
 					$position = '$position_=$this->model->getPosition($sort["id"]);';
-					return '<?php '.$position.' foreach(array($position_) as $key=>$position){?>';
+					return '<?php '.$position.' foreach($position_ as $key=>$position){?>';
 				}
 				
 				/* 
@@ -492,9 +492,19 @@ class View implements RendererInterface
 					$attr = $this->getAttrs($matches[4]);
 					isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
 					unset($attr['id']);
-					//重新组装参数 模板绑定参数只能按变量名传以便在模板里完成变量转换，其它查询条件参数为一组
-					$params = json_encode($attr);
-					return '<?php  foreach($this->model->getList($id='.$id.',$param ='."'".(string)$params."'".',$page) as $key=>$list){?>';
+					//实现属性中符号表达式的问题
+					$old_char=array(' eq ',' l ',' g ',' le ',' ge ', ' neq ');
+					$new_char=array(' = ' ,' < ',' > ',' <= ',' >= ', ' !=  ');
+					foreach($attr as $k => $v)
+					{
+						if(!in_array($k,self::$queryExcept))
+						{
+							$v    = preg_replace('%(\$\w+\->\w+\[[\'|\"]\w+[\'|\"]\])%','{$1}',$v);//对变量处理增加花括号
+							$tem .= '"'.$k.'"=>"'.str_replace($old_char,$new_char,$v).'",';
+						}
+					}
+					$params = '['.trim($tem, ',').']';
+					return '<?php  foreach($this->model->getList($id='.$id.','.$params.',$page) as $key=>$list){?>';
 				}
 				
 				//无限嵌套
