@@ -34,7 +34,12 @@ class RoleModel extends Model
 	public function edit($data){
 		return $this->save($data);
 	}
-
+	// 校验角色是否存在
+	public function roleCheck($name){
+		$sql = "SELECT * FROM ".$this->db->prefixTable('role')." where name='".$name."' and deleted=0";
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
      
 }
 

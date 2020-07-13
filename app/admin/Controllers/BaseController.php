@@ -1,6 +1,9 @@
 <?php
 namespace App\Controllers;
 use CodeIgniter\Controller;
+use Config\Services;
+use \App\Models\CheckModel;
+use \Config;
 
 class BaseController extends Controller
 {
@@ -25,6 +28,33 @@ class BaseController extends Controller
 			Header("Location: /".ADMINNAME."/login/"); 
 			exit;
 		}
+		// 加载白名单
+		$config = new \Config\Authconfig();
+		$white = $config->white;
+		// 权限校验
+		$this->router = Services::router();
+		$this->checkModel = new CheckModel();
+		// 获取controller
+		$controller = explode('\\',$this->router->controllerName());
+		$controller = end($controller);
+		// echo $controller;
+		// $controller = $request->uri->getSegment(1);
+		// 获取action
+		// $action = $request->uri->getSegment(2);
+		$action = $this->router->methodName();
+		if($controller != 'Home'){
+			$param = $request->uri->getSegment(3)?$request->uri->getSegment(3):'';
+		}else{
+			$param = '';
+		}
+		// $action =  $this->router->methodName();
+		// 获取参数 目前只支持固定单参
+		$res = $this->checkModel->authCheck($controller,$action,$param,$white);
+		if($res['code'] == 2){
+			echo $res['msg'];die;
+		}
+		
+
 		//连接数据库
 		$this->db = \Config\Database::connect();
 	}
