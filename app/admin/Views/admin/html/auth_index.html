@@ -119,7 +119,8 @@
 		treePidName: 'pid',//pid字段的名称
 		treeDefaultClose: true,//是否默认折叠
 		treeLinkage: true,//父级展开时是否自动展开所有子级
-		elem: '#table',url:'{url:/auth/getList?page=1}',
+		elem: '#table',
+		url:'{url:/auth/getList?page=1}',
 		toolbar: '#toolbarDemo',
 		title: '管理员列表',
 		layEvent: 'LAYTABLE_TIPS',
@@ -170,6 +171,30 @@ table.on('toolbar(test)', function(obj){
 	form.render();
 });
 
+form.on('submit(submit)', function(data){
+   var url = $("#form").attr('action');
+   $.ajax({
+        url:url, //请求的服务端地址
+        data:data.field,
+        type:"post",
+        dataType:"json",
+        success:function(data){
+            data = eval(data);
+            layui.use('layer', function(){
+                var layer = layui.layer;
+                var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
+                    if(data.url){
+                        window.location.href=data.url;
+                    }
+                });
+            });     
+        },
+        error:function(){
+          layer.msg('error'); //错误的处理
+        }
+    });
+   return false;
+});
 
 });
 </script>

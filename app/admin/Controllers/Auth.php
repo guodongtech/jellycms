@@ -59,15 +59,19 @@ class Auth extends BaseController
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
+			// 当前控制器 方法是否已录入
+			if($this->model->checkAdd($data)){
+				exit(json_encode(['code'=>0,'msg'=>'该权限已录入，请勿重复操作']));
+			}
 		}else{
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
 
 		if($this->model->edit($data)){
-			success("操作成功", '/'.ADMINNAME.'/menu/index/');				
+			exit(json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/auth/index/']));			
 		}else{
-			success("操作失败");
+			exit(json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/auth/index/']));
 		}
 		
     }
@@ -101,6 +105,12 @@ class Auth extends BaseController
 			"msg" => "操作成功",
 		];
 		echo json_encode($rdata);		
+    }
+    // 筛选出最底层节点 修改时默认选中
+    public function rulesDeal(){
+    	$rules_id = json_decode(post('rules_id'));
+    	$result = $this->model->rulesDeal($rules_id);
+    	exit(json_encode($result));
     }
 	
 	

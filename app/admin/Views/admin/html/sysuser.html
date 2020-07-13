@@ -93,7 +93,7 @@
 					</div>
 		  	   		 <div class="layui-form-item">
 						 <div class="layui-input-inline">
-							<button class="layui-btn" lay-submit="">立即提交</button>
+							<button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
 							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						</div>
 				    </div>
@@ -191,7 +191,31 @@ table.on('toolbar(test)', function(obj){
 	};
 	form.render();
 });
-
+// 表单提交
+form.on('submit(submit)', function(data){
+   var url = $("#form").attr('action');
+   $.ajax({
+        url:url, //请求的服务端地址
+        data:data.field,
+        type:"post",
+        dataType:"json",
+        success:function(data){
+            data = eval(data);
+            layui.use('layer', function(){
+                var layer = layui.layer;
+                var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
+                    if(data.url){
+                        window.location.href=data.url;
+                    }
+                });
+            });     
+        },
+        error:function(){
+          layer.msg('error'); //错误的处理
+        }
+    });
+   return false;
+});
 }();
 </script>
 </body>

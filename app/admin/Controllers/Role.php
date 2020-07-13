@@ -3,6 +3,7 @@ namespace App\Controllers;
 use \App\Models\RoleModel;
 use \App\Models\AuthModel;
 use \App\Models\AreaModel;
+use \Config;
 class Role extends BaseController
 {
 
@@ -21,13 +22,14 @@ class Role extends BaseController
     public function index()
     {
 		$result = $this->model->getList();
-		$authResult = $this->authModel->getList();
+		$authResult = $this->authModel->getTreeList();
 		$areaResult = $this->areaModel->getList();
 		$data = [
 			'list' => $result,
 			'authList' => $authResult,
 			'areaList' => $areaResult,
 		];
+		// echo $authResult;die;
         echo view('html/role.html', $data);
     }
  
@@ -45,30 +47,35 @@ class Role extends BaseController
     public function edit()
     {
 		$post = post();
-		if(!$post['name'] || !count($post['rules_id']) || !$post['areas_id']){
-			success("操作失w败");exit;
+		if(!$post['name'] || $post['rules_id']=="[]" || !$post['areas_id']){
+			exit(json_encode(['code'=>0,'msg'=>'参数不足']));
 		}
-		foreach($post['rules_id'] as $key=>$value){
-			$post['rules_id'][$key] = (int)$value;
-		}
-		$post['rules_id'] = json_encode($post['rules_id']);
-		foreach($post['areas_id'] as $key=>$value){
-			$post['areas_id'][$key] = (int)$value;
-		}
-		$post['areas_id'] = json_encode($post['areas_id']);
-		$data = $post;
+		// 校验角色是否存在
+		$result = $this->model->roleCheck($post['name']);
+
+		$data['name'] = $post['name'];
+		$data['rules_id'] = $post['rules_id'];
+		$data['description'] = $post['description'];
+		$data['status'] = $post['status'];
+		$data['areas_id'] = "[".implode(",", $post['areas_id'])."]";
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
+			if(count($result) > 0){
+				exit(json_encode(['code'=>0,'msg'=>'该角色已存在！']));
+			}
 		}else{
 			$data['update_user'] = $this->session->id;
+			$data['id'] = $post['id'];
 			$data['update_time'] = date('Y-m-d H:i:s',time());
+			if(count($result) > 0 && $result[0]['id']!=$post['id']){
+				exit(json_encode(['code'=>0,'msg'=>'该角色已存在！']));
+			}
 		}
-
 		if($this->model->edit($data)){
-			success("操作成功", '/'.ADMINNAME.'/role/index/');				
+			exit(json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/role/index/']));	
 		}else{
-			success("操作失败");
+			exit(json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/role/index/']));
 		}
     }
     public function del()

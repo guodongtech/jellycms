@@ -29,5 +29,13 @@ class SysUserModel extends Model
 	public function edit($data){
 		return $this->save($data);
 	}
- 
+ 	public function checkUser($data){
+		$sql = "SELECT id FROM ".$this->db->prefixTable('admin')." where name='".$data['name']."'";
+		$result = $this->db->query($sql)->getRowArray();
+        if(isset($result)){
+        	return true;
+        }else{
+        	return false;
+        }
+	}
 }

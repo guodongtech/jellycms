@@ -34,28 +34,34 @@ class SysUser extends BaseController
     public function edit()
     {
 		$post = post();
-		if(!$post['name'] || !$post['role_id'] || !$post['realname']|| $post['password'] != $post['repassword']){
-			$rdata = [
-				"code" => 0,
-				"msg" => "参数不足",
-			];
-			exit(json_encode($rdata));
+		// 校验密码
+		if($post['password'] != $post['repassword'] && $post['password'] != md5($post['repassword'])){
+			exit(json_encode(['code'=>0,'msg'=>'密码不一致']));	
 		}
-		
+		if($post['password'] == $post['repassword']){
+			$post['password'] = md5($post['password']);
+		}
+		if(!$post['name'] || !$post['role_id'] || !$post['realname']){
+			exit(json_encode(['code'=>0,'msg'=>'参数不足']));
+		}
 		unset($post['repassword']);
 		$data = $post;
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
+			// 校验用户名是否存在
+			if($this->model->checkUser($data)){
+				exit(json_encode(['code'=>0,'msg'=>'该用户已存在，请勿重复添加']));	
+			}
 		}else{
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
 
 		if($this->model->edit($data)){
-			success("操作成功", '/'.ADMINNAME.'/sysuser/index/');				
+			exit(json_encode(['code'=>1,'msg'=>'添加成功','url'=>'/'.ADMINNAME.'/sysuser/index/']));		
 		}else{
-			success("操作失败");
+			exit(json_encode(['code'=>2,'msg'=>'添加失败','url'=>'/'.ADMINNAME.'/sysuser/index/']));		
 		}
     }
     public function del()
