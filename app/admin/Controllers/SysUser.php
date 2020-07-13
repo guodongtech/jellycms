@@ -36,6 +36,7 @@ class SysUser extends BaseController
 		$post = post();
 		// 校验密码
 		if($post['password'] != $post['repassword'] && $post['password'] != md5($post['repassword'])){
+			echo $post['password']."-".md5($post['repassword'])."-".$post['repassword'];die;
 			exit(json_encode(['code'=>0,'msg'=>'密码不一致']));	
 		}
 		if($post['password'] == $post['repassword']){

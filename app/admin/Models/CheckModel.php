@@ -8,10 +8,11 @@ class CheckModel extends Model
     {
     	// 用户id
 		$id = session('id');
+		$name = session('adminname');
 		// area_id
 		$area_id = session('area_id');
 		// 给白名单放行
-		if(in_array($id,$white['user'])){
+		if(in_array($name,$white['user'])){
 			return true;
 		}
 		$str = "'".$controller."','".$action."','".$param."'";

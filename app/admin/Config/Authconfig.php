@@ -13,6 +13,7 @@ class Authconfig
 	public $white = [
 		'user'      => [
 			'admin',
+			'zhaojiabin',
 		],
 		'auth' => [				//控制器，方法，参数
 			"'home','index',''",
@@ -33,6 +34,9 @@ class Authconfig
 			"'Tags','getList',''",
 			"'Db','getList',''",
 			"'Auth','rulesDeal',''",
+			"'Login','logout',''",
+			"'Login','capthcha',''",
+			"'Login','act',''",
 		],
 	];
 }
