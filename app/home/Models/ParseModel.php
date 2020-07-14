@@ -180,15 +180,23 @@ class ParseModel extends Model
 		$pagebar['first'] = url(array($urlname));
 		$pagebar['last'] = url(array($urlname.'_'.$totalPage));
 		$pagebar['statistics'] = "共" . $total . "条 当前" . $page . "/" . $totalPage . "页";
-		$pagebar['numbar'] = 1;
+		$pagebar['numlist'] = $numlist;
 		$pagebar['select'] = 1;
-		
-        $string = "<span class='page-statistics'>".$pagebar['statistics']."</span>";
-        $string .= "<span class='page-index'><a href='" . $pagebar['first'] . "'>首页</a></span>";
-        $string .= "<span class='page-pre'><a href='" . $pagebar['pre'] . "'>前一页</a></span>";
-        $string .= "<span class='page-numbar'></span>";
-        $string .= "<span class='page-next'><a href='" . $pagebar['next'] . "'>后一页</a></span>";
-        $string .= "<span class='page-last'><a href='" . $pagebar['last'] . "'>尾页</a></span>";
+		//3,中间循环分页
+		for($i = 1; $i <= $totalPage; $i++)
+		{
+            $active = $i==$page ? "active" : "";
+			$href = url(array($urlname.'_'.$i));
+            $numlist.= "<li class='{$active}'><a href='{$href}'>{$i}</a></li>";
+		}
+		$string.= "<div class='pagination'><ul class='pager'>";
+        $string .= "<li class='pager-statistics'>".$pagebar['statistics']."</li>";
+        $string .= "<li class='pager-index'><a href='" . $pagebar['first'] . "'>首页</a></li>";
+        $string .= "<li class='pager-pre'><a href='" . $pagebar['pre'] . "'>前一页</a></li>";
+        $string .= "<li class='pager-list'>".$numlist."</span>";
+        $string .= "<li class='pager-next'><a href='" . $pagebar['next'] . "'>后一页</a></li>";
+        $string .= "<li class='pager-last'><a href='" . $pagebar['last'] . "'>尾页</a></li>";
+		$string .= "</ul></div>";
 		$pagebar['bar'] = $string;
 		return $pagebar;
 	}
