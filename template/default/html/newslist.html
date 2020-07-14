@@ -17,17 +17,21 @@
 {include:html/head.html}
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 	<div class="sort-banner-content">
-		<span class="animated bounceInDown">{$sort.name}</span>
-		<p class="animated fadeInDown">{$sort.description}</p>
+		<div class="sort-banner-left">
+			<span class="animated bounceInDown">{$sort.name}</span>
+			<p class="animated fadeInDown">{$sort.description}</p>
+		</div>
+		<div class="sort-banner-right">
+			<img class="animated flipInX" src="{$sort.ico}" />
+		</div>
 	</div>
+
 </div>
-
-
 <div class="content-wrap">
 	
 	 			
 	<div class="content">
-		<div class="position animated bounceInLeft"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+		<div class="position"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
 		<ul class="sub-navs">
 			{nav:pid=2}
 			<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
@@ -35,8 +39,8 @@
 		</ul>	
 		<div class="lnews">
 			<ul class="news">
-			{list:num=2 order=id desc where=id>0,status eq 1}
-			<li>
+			{list:num=5 order=id desc where=id>0,status eq 1}
+			<li class="animated">
 				<a href="{$list.link}">
 					<div class="img" style="background-image:url({$list.pic})"></div>
 					<div class="details">

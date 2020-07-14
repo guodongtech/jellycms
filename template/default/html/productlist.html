@@ -17,8 +17,13 @@
 {include:html/head.html}
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 	<div class="sort-banner-content">
-		<span class="animated bounceInDown">{$sort.name}</span>
-		<p class="animated fadeInDown">{$sort.description}</p>
+		<div class="sort-banner-left">
+			<span class="animated bounceInDown">{$sort.name}</span>
+			<p class="animated fadeInDown">{$sort.description}</p>
+		</div>
+		<div class="sort-banner-right">
+			<img class="animated fadeInDown" src="{$sort.ico}" />
+		</div>
 	</div>
 </div>
 

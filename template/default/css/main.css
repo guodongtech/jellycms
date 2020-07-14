@@ -773,9 +773,33 @@ footer a {
 	height:100%;
 	margin:0 auto;
 	display:flex;
+	flex-direction:row;
+	justify-content:space-between;
+	align-items:center;
+}
+.sort-banner-right{
+	position:relative;
+	height:100%;
+}
+.sort-banner-right img{
+	height:60%;
+	display:block;
+	position:absolute;
+	bottom:0;
+	right:0;
+}
+.sort-banner-left{
+	height:100%;
+	display:flex;
 	flex-direction:column;
 	justify-content:center;
 }
+
+
+
+
+
+
 .sort-banner-content span{
 	font-size:26px;
 	margin-bottom:20px;
@@ -815,13 +839,18 @@ footer a {
     transition: 0.3s;
     width: 100%;
     margin-right: 0;
-
-	
+}
+.lnews ul li:nth-child(odd) {
+	-webkit-animation-name: fadeInLeft;
+	animation-name: fadeInLeft
+}
+.lnews ul li:nth-child(even) {
+	-webkit-animation-name: fadeInRight;
+	animation-name: fadeInRight
 }
 .news li a {
     display: flex;
     padding: 25px;
-	display:flex;
 	justify-content:space-between;
 }
 .news li a:hover {
