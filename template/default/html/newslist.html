@@ -25,18 +25,17 @@
 
 <div class="content-wrap">
 	
-	 
+	 			
 	<div class="content">
 		<div class="position animated bounceInLeft"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
 		<ul class="sub-navs">
 			{nav:pid=2}
 			<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
 			{/nav}
-		</ul>
-		
+		</ul>	
 		<div class="lnews">
 			<ul class="news">
-			{list:num=3 order=id desc where=id>0,status eq 1}
+			{list:num=2 order=id desc where=id>0,status eq 1}
 			<li>
 				<a href="{$list.link}">
 					<div class="img" style="background-image:url({$list.pic})"></div>
@@ -49,6 +48,7 @@
 				</a>
 			</li>
 			{/list}
+			{pagebar:bar}
 			<ul>
 		</div>
 		

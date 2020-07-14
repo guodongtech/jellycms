@@ -294,13 +294,32 @@ class View implements RendererInterface
      */
 	public function resolve($str)
 	{
+
+		$str = preg_replace_callback('/{(\/?)(include)\s*(:?)([^}]*)}/i', array($this,'translate'), $str); //优先处理include标签
+		if(preg_match('/{(\/?)(list)\s*(:?)([^}]*)}/i', $str, $matches)){ //处理pagebar任意位置问题，三处优先处理顺序不能变
+			$attr = $this->getAttrs($matches[4]);
+			isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
+			unset($attr['id']);
+			//实现属性中符号表达式的问题
+			$old_char=array(' eq ',' l ',' g ',' le ',' ge ', ' neq ');
+			$new_char=array(' = ' ,' < ',' > ',' <= ',' >= ', ' !=  ');
+			foreach($attr as $k => $v)
+			{
+				if(!in_array($k,self::$queryExcept))
+				{
+					$v    = preg_replace('%(\$\w+\->\w+\[[\'|\"]\w+[\'|\"]\])%','{$1}',$v);//对变量处理增加花括号
+					$tem .= '"'.$k.'"=>"'.str_replace($old_char,$new_char,$v).'",';
+				}
+			}
+			$params = '['.trim($tem, ',').']';
+			$str = '<?php $data_ = $this->model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
+		}
 		//前台标签插入parsemodel
 		$queryCount = preg_match ('/{(\/?)(\include|query|content|list|nav|slide|position)\s*(:?)([^}]*)}/i', $str);
 		if($queryCount){
 			$str = ' <?php use  \App\Models\ParseModel; $this->model = new ParseModel();?>'.$str;
 		}
-		$str = preg_replace_callback('/{(\/?)(include)\s*(:?)([^}]*)}/i', array($this,'translate'), $str); //优先处理include标签
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|query|widget|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|query|widget|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -474,19 +493,6 @@ class View implements RendererInterface
 					$position = '$position_=$this->model->getPosition($sort["id"]);';
 					return '<?php '.$position.' foreach($position_ as $key=>$position){?>';
 				}
-				
-				/* 
-				//无限嵌套
-				case 'list:':
-				{
-					$attr = $this->getAttrs($matches[4]);
-					isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
-					unset($attr['id']);
-					//重新组装参数 模板绑定参数只能按变量名传以便在模板里完成变量转换，其它查询条件参数为一组
-					$params = json_encode($attr);
-					return '<?php  foreach($this->model->getList($id='.$id.',$param ='."'".(string)$params."'".') as $key=>$list){?>';
-				} */
-				//无限嵌套
 				case 'list:':
 				{
 					$attr = $this->getAttrs($matches[4]);
@@ -504,9 +510,13 @@ class View implements RendererInterface
 						}
 					}
 					$params = '['.trim($tem, ',').']';
-					return '<?php  foreach($this->model->getList($id='.$id.','.$params.',$page) as $key=>$list){?>';
+					return '<?php $data_ = $this->model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
 				}
-				
+				case 'pagebar:':
+				{
+					$key = trim($matches[4],"/ ");
+					return '<?php echo $pagebar["'.$key.'"]  ?>';
+				}
 				//无限嵌套
 				case 'nav:':
 				{
@@ -649,7 +659,6 @@ class View implements RendererInterface
 		{
 			$data = \esc($data, $context);
 		}
-
 		$this->data = array_merge($this->data, $data);
 
 		return $this;

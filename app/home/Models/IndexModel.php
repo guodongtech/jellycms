@@ -49,6 +49,16 @@ class IndexModel extends Model
 							->getResultArray();
         return $result;
     }
+    public function getSortByUrlname($urlname)
+    {
+		$builder = $this->db->table('sorts');
+		$result   = $builder->select('sorts.* , model.type as m_type')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.urlname'=>$urlname])
+							->get()
+							->getRowArray();
+        return $result;
+    }
 	
 	public function getContent($id)
 	{

@@ -53,8 +53,8 @@ class ParseModel extends Model
 							
 		
 		foreach($result as $key=>$value){
-			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
-			$result[$key]['link'] = url(array($urlName.'_'.$value['id']));
+			
+			$result[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'])):url(array($value['m_urlname'].'_'.$value['id']));
 	
 		}
         return $result;
@@ -112,7 +112,6 @@ class ParseModel extends Model
 	
 	
 	public function getList($id,$params,$page){
-		
 		$this->getChildrenSorts($id);
 		$children = $this->childrenSortIds; //当前类及其模型一致的子类
 		$where = isset($params['where'])?str_replace(',',' and ',$params['where']):1;
@@ -127,8 +126,17 @@ class ParseModel extends Model
 							->orderBy($order)
 							->get($num,($page-1)*$num)
 							->getResultArray();
-		$total = $builder->countAllResults();//总条数
+							
+		$countAllResults   = $builder->select('count(1) as count')
+							->where($where)
+							->where(['deleted'=>0])
+							->whereIn('sorts_id', $children)
+							->orderBy($order)
+							->get()
+							->getRowArray();				
+		$total = $countAllResults['count'];//总条数
 		$page = $page; //当前页数
+		$totalPage = ceil($total/$num); //当前页数
 		
 		
 		//为降低模板标签解析复杂度，重新补充分类及模型信息。
@@ -147,14 +155,42 @@ class ParseModel extends Model
 			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
 			$result[$key]['link'] = $value['link']==''?url(array($urlName, $value['id'])):$value['link'];
 		}
+		
+		//urlname
+		$build = $this->db->table('sorts');
+		$res   = $build->select('sorts.*, model.urlname as m_urlname')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.id'=>$id])
+							->get()
+							->getRowArray();
+		
+		$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
+		$result['data'] = $result;
+		$result['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
 		return $result; 
 			
 	}
 	//分页条
-	public function getPageBar($current_page,$total
-	){
-		//数据总条数
+	public function getPageBar($total, $totalPage, $page, $urlname){
+
+		$pagebar['current'] = $page;
+		$pagebar['total'] = $total;
+		$pagebar['pre'] = ($page-1)?url(array($urlname.'_'.($page-1))):url(array($urlname));
+		$pagebar['next'] = ($page+1)>=$totalPage?url(array($urlname.'_'.$totalPage)):url(array($urlname.'_'.($page+1)));
+		$pagebar['first'] = url(array($urlname));
+		$pagebar['last'] = url(array($urlname.'_'.$totalPage));
+		$pagebar['statistics'] = "共" . $total . "条 当前" . $page . "/" . $totalPage . "页";
+		$pagebar['numbar'] = 1;
+		$pagebar['select'] = 1;
 		
+        $string = "<span class='page-statistics'>".$pagebar['statistics']."</span>";
+        $string .= "<span class='page-index'><a href='" . $pagebar['first'] . "'>首页</a></span>";
+        $string .= "<span class='page-pre'><a href='" . $pagebar['pre'] . "'>前一页</a></span>";
+        $string .= "<span class='page-numbar'></span>";
+        $string .= "<span class='page-next'><a href='" . $pagebar['next'] . "'>后一页</a></span>";
+        $string .= "<span class='page-last'><a href='" . $pagebar['last'] . "'>尾页</a></span>";
+		$pagebar['bar'] = $string;
+		return $pagebar;
 	}
 	
 	
