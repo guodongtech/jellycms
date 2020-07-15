@@ -18,11 +18,11 @@
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
-			<span class="animated bounceInDown">{$sort.name}</span>
-			<p class="animated fadeInDown">{$sort.description}</p>
+			<span class="wow bounceInDown">{$sort.name}</span>
+			<p class="wow fadeInDown">{$sort.description}</p>
 		</div>
 		<div class="sort-banner-right">
-			<img class="animated flipInX" src="{$sort.ico}" />
+			<img class="wow flipInX" src="{$sort.ico}" />
 		</div>
 	</div>
 
@@ -38,9 +38,10 @@
 			{/nav}
 		</ul>	
 		<div class="lnews">
-			<ul class="news">
+			{include:html/left.html}
+			<ul class="news lnews-right wow bounceInRight">
 			{list:num=5 order=id desc where=id>0,status eq 1}
-			<li class="animated">
+			<li>
 				<a href="{$list.link}">
 					<div class="img" style="background-image:url({$list.pic})"></div>
 					<div class="details">
@@ -53,20 +54,11 @@
 			</li>
 			{/list}
 			
-			<ul>
+			</ul>
 		</div>
-		{pagebar:bar}
+		<div class="wow bounceInLeft">{pagebar:bar}</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
 {include:html/foot.html}
 </body>
 </html>

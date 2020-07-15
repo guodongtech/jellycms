@@ -27,11 +27,9 @@
 	</div>
 </div>
 <div class="content-wrap">
-{position:}
-{$position.id}
 
-{/position}
 	<div class="content">
+<div class="position"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
 		{$content.title}<br>
 		{$content.content}
 	</div>

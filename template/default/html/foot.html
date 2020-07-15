@@ -15,15 +15,13 @@
 	 <div class="footer-bottom">
 		<div>
 			<span>© 2008-2020 {$site.domain}</span>
-			<a href="http://www.miitbeian.gov.cn" target="_blank">粤ICP备09049701号</a>
 			<a rel="noreferrer" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={$site.icp}" target="_blank">{$site.icp}</a>
 			<a href="" target="_blank">《gd软件许可及服务协议》</a>
 			<a href="" target="_blank">《gd用户协议》</a>
 		</div>
 		<div>
 			<span>{$company.name}</span>
-			<span>增值电信业务经营许可证：<a target="_blank" href="">DDDDDDD</a>&nbsp;
-			<a target="_blank" href="">CCCCCCC</a></span>
+			<span>增值电信业务经营许可证</span>
 		</div>
 
 	 </div>
@@ -36,6 +34,7 @@
 <script src="{theme:js/jquery-1.11.3.min.js}"></script>
 <script src="{theme:js/swiper.min.js}"></script>
 <script src="{theme:js/swiper.animate.min.js}"></script>
+<script src="{theme:js/wow.min.js}"></script>
 <script> 
 //Swiper5
   var mySwiper = new Swiper ('.swiper-container', {
@@ -74,16 +73,34 @@ $(document).ready(function (){
 $(window).scroll(function(){
 	//获取当前鼠标滑动的高度
 	var currentTop = $(window).scrollTop();
+	var offset = $('.lnews-left').offset();
+	//导航菜单
 	if(currentTop>=32){
 		$('header').addClass('active');
-	}
-	if(currentTop<32){
+	}else if(currentTop<32){
 		$('header').removeClass('active');
 	}
+	//新闻左侧
+	//if(currentTop>=offset.left){
+	//	$('.sorts-fixed').addClass('active');
+	//}else if(currentTop<offset.left){
+	//	$('.sorts-fixed').removeClass('active');
+	//}
+	
+	
+	
+	
 });
 });  
   
-  
+var wow = new WOW({
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 0,
+    mobile: true,
+    live: true
+});
+wow.init();
   
   
   </script>
