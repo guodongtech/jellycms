@@ -18,56 +18,47 @@
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
-			<span class="animated bounceInDown">{$sort.name}</span>
-			<p class="animated fadeInDown">{$sort.description}</p>
+			<span class="wow bounceInDown">{$sort.name}</span>
+			<p class="wow fadeInDown">{$sort.description}</p>
 		</div>
 		<div class="sort-banner-right">
-			<img class="animated fadeInDown" src="{$sort.ico}" />
+			<img class="wow flipInX" src="{$sort.ico}" />
 		</div>
 	</div>
+
 </div>
-
-
-<div class="content-wrap">
-	
-	 
-	<div class="content">
-		<div class="position animated bounceInLeft"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
-		<ul class="sub-navs">
-			{nav:pid=2}
-			<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
-			{/nav}
-		</ul>
-		
-		<div class="lnews">
-			<ul class="news">
-			{list:num=3 order=id desc where=id>0,status eq 1}
-			<li>
+<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+<ul class="sub-navs">
+	{nav:pid=2}
+	<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
+	{/nav}
+</ul>
+<div class="wrap">
+	<div class="wrap-content">
+		{include:html/left.html}
+			<div class="products right wow bounceInRight buss-list">
+			<ul>
+			
+			{list:num=9 order=id desc where=id>0,status eq 1}
+			<li class="wow">
+				<div class="portfolio-block animated">
 				<a href="{$list.link}">
-					<div class="img" style="background-image:url({$list.pic})"></div>
-					<div class="details">
-						<h3 class="s">{$list.title}</h3>
-						<p>2019年11月18-20日SFCHINA第三十二届中国国际表面处理展以及CHINACOAT第二十四届中国国际涂料展于上海新国际博览中心隆重举办。2019「涂料展」及「表面处理」* 3天展期，与全球参展商见面：共有来自30多个国家/地区超过1,600家参展商展出；* 展览会规模胜2018广州展：总展出 ...</p>
-						<span>{$list.sortname}</span>
-						<h4>2019-11-28</h4>
+					<img src="{$list.pic}" alt="Protect">
+					<div class="portfolio-caption text-center animated">
+						<h3 class="">{$list.title}</h3>
+						<p>{$list.description}</p>
 					</div>
 				</a>
+				</div>
 			</li>
 			{/list}
-			<ul>
-		</div>
-		
+			{if:empty($list)}<li>分类无数据</li>{/if}
+			</ul>
+
+			</div>
 	</div>
+	<div class="wow bounceInLeft">{pagebar:bar}</div>
 </div>
-
-
-
-
-
-
-
-
-
 {include:html/foot.html}
 </body>
 </html>

@@ -27,38 +27,38 @@
 	</div>
 
 </div>
-<div class="content-wrap">
+
 	
-	 			
-	<div class="content">
-		<div class="position"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
-		<ul class="sub-navs">
-			{nav:pid=2}
-			<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
-			{/nav}
-		</ul>	
-		<div class="lnews">
+	<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+	<ul class="sub-navs">
+		{nav:pid=2}
+		<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
+		{/nav}
+	</ul>		 			
+	<div class="wrap">
+		<div class="wrap-content">
 			{include:html/left.html}
-			<ul class="news lnews-right wow bounceInRight">
+			<div class="news right wow bounceInRight">
+			
 			{list:num=5 order=id desc where=id>0,status eq 1}
 			<li>
 				<a href="{$list.link}">
-					<div class="img" style="background-image:url({$list.pic})"></div>
 					<div class="details">
 						<h3 class="s">{$list.title}</h3>
-						<p>2019年11月18-20日SFCHINA第三十二届中国国际表面处理展以及CHINACOAT第二十四届中国国际涂料展于上海新国际博览中心隆重举办。2019「涂料展」及「表面处理」* 3天展期，与全球参展商见面：共有来自30多个国家/地区超过1,600家参展商展出；* 展览会规模胜2018广州展：总展出 ...</p>
-						<span>{$list.sortname}</span>
-						<h4>2019-11-28</h4>
+						<em></em>
+						<p>2019年11月18-20日SFCHINA第三十二届中国国际表面处理展以及CHINACOAT第二十四届中国国际涂料展于上海新国际博览中心隆重举办。2019「涂料展」及「表面处理」* 3天展期 ...</p>
+						<h4><i class="fa fa-clock-o" aria-hidden="true"></i>2019年09月17日</h4>
 					</div>
 				</a>
 			</li>
 			{/list}
+			{if:empty($list)}<li>分类无数据</li>{/if}
+			</div>
 			
-			</ul>
 		</div>
 		<div class="wow bounceInLeft">{pagebar:bar}</div>
 	</div>
-</div>
+
 {include:html/foot.html}
 </body>
 </html>
