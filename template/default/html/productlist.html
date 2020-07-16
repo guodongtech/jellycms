@@ -29,28 +29,40 @@
 </div>
 <div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
 <div class="wrap">
-	<div class="wrap-content">
-		{include:html/left.html}
-			<div class="products right wow bounceInRight buss-list">
-			<ul>
-			
-			{list:num=9 order=id desc where=id>0,status eq 1}
-			<li class="wow">
-				<div class="portfolio-block animated">
-				<a href="{$list.link}">
-					<img src="{$list.pic}" alt="Protect">
-					<div class="portfolio-caption text-center animated">
-						<h3 class="">{$list.title}</h3>
-						<p>{$list.description}</p>
+	<div class="wrap-content product-list">
+		<div class="head-title">
+            <div class="formMiddle formMiddle154943" style="">
+                <div class="ztextbox">
+                    <span class="sort-name">{$sort.name}</span>
+					<div><span class="en-name">{$sort.slogan}</span></div>
+                </div>
+            </div>
+        </div>
+		<ul>
+		{list:num=6 order=id desc where=id>0,status eq 1}
+			<li>
+				<div class="item">
+					<div class="item-pic">
+						<a href="{$list.link}" title="{$list.title}">
+							<img class="aritcl_img" src="{$list.pic}" alt="">
+						</a>
 					</div>
-				</a>
+					<div class="listcontent">
+						<div class="list-text">
+							<a class="list-title" href="{$list.link}" title="{$list.title}">
+								<span style="">{$list.title}</span>
+							</a>
+							<div class="description">
+							{$list.description}...  
+							</div>
+						</div>
+					</div>
 				</div>
 			</li>
 			{/list}
 			{if:empty($list)}<li>分类无数据</li>{/if}
-			</ul>
+        </ul>
 
-			</div>
 	</div>
 	<div class="wow bounceInLeft">{pagebar:bar}</div>
 </div>
