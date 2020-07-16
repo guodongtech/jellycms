@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="{theme:css/animate.min.css}">
 <link rel="stylesheet" href="{webroot:static/font-awesome-4.7.0/css/font-awesome.min.css}">
 </head>
-<body>
+<body style="background:#fff;">
 {include:html/head.html}
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 	<div class="sort-banner-content">
@@ -29,9 +29,9 @@
 </div>
 <div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
 <div class="wrap">
-	<div class="wrap-content product-list">
+	<div class="wrap-content case-list">
 		<div class="head-title">
-            <div class="formMiddle formMiddle154943" style="">
+            <div>
                 <div class="ztextbox">
                     <span class="sort-name">{$sort.name}</span>
 					<div><span class="en-name">{$sort.slogan}</span></div>
@@ -40,22 +40,18 @@
         </div>
 		<ul>
 		{list:num=6 order=id desc where=id>0,status eq 1}
-			<li>
-				<div class="item">
-					<div class="item-pic">
-						<a href="{$list.link}" title="{$list.title}">
-							<img class="aritcl_img" src="{$list.pic}" alt="">
-						</a>
-					</div>
+			<li  class="wow bounceIn">
+				<div class="item" style="background-image:url({$list.pic})">
+					<p><a class="list-title" href="{$list.link}" title="{$list.title}"><span style="">{$list.title}</span></a></p>
 					<div class="listcontent">
+						<a href="{$list.link}" title="{$list.title}">
 						<div class="list-text">
-							<a class="list-title" href="{$list.link}" title="{$list.title}">
-								<span style="">{$list.title}</span>
-							</a>
+							<p class="number"><span class="line"></span><em>{echo:$key+1}</em></p>
 							<div class="description">
 							{$list.description}...  
 							</div>
 						</div>
+						</a>
 					</div>
 				</div>
 			</li>
