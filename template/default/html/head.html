@@ -4,7 +4,7 @@
 		<ul>
 			<li><a {if:$home}class="active"{/if} href='/'>首页</a></li>
 			{nav:pid=0}
-			<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
+			<li><a {if:$sort['id'] == $nav['id']||$topsort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
 			{/nav}
 		</ul>
 		<div class="header-right"><a href="/">登录</a><a href="/" class="reg">免费使用</a></div>

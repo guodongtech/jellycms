@@ -47,8 +47,11 @@ class Index extends BaseController
 			$this->page($params);
 			return;
 		}
-
+		$parents = $this->model->getParentsorts($sort['id']);
 		$this->data['sort'] = $sort;
+		$this->data['topsort'] = $parents[0];//顶级分类
+		array_pop($parents);//最后一个元素是当前分类，删除
+		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
 		
 		//生成分页
 		
@@ -62,7 +65,11 @@ class Index extends BaseController
 		$sort = $this->model->getSortById($content['sort_id']);
 		if(!$content) exit('内容不可用');
 		$this->data['content'] = $content;
+		$parents = $this->model->getParentsorts($sort['id']);
 		$this->data['sort'] = $sort;
+		$this->data['topsort'] = $parents[0];//顶级分类
+		array_pop($parents);//最后一个元素是当前分类，删除
+		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
 		echo view('html/'.$sort['contenttpl'],$this->data);
 		exit;
 	}

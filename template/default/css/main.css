@@ -27,7 +27,8 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   font-size: 0.875rem;
-  background:#f5f5f5
+  background:#f5f5f5;
+  font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
 }
 @media (max-width: 64rem) {
   body {
@@ -893,6 +894,12 @@ footer a {
     border-radius: 5px;
     border: 1px solid #eee;
 }
+.list-nav li a.active {
+    color: #fff;
+    font-size: 14px;
+    background-color: #52c018;
+    border-color: #52c018;
+}
 .wrap-content .right{
 	width:75%;
 }
@@ -926,7 +933,7 @@ footer a {
     align-items: center;
     line-height:32px;
     padding-left: 12px;
-    border-left: 4px solid #ec7259;
+    border-left: 4px solid #52c018;
     font-size: 18px;
     font-weight: 500;
 	background:url(../images/b3.png) repeat;

@@ -3,10 +3,9 @@
 					<div class="list-nav sect  wow bounceInLeft">
 						<h2><span>company</span>NEWS</h2>
 						<ul class="default-pc-sidebar-ul ">
-							<li class="a"><a href="news-list-3333-1.html">公司新闻</a></li>
-							<li><a href="news-list-3335-1.html">媒体新闻</a></li>
-							<li><a href="news-list-3337-1.html">国家标准</a></li>
-							<li><a href="news-list-3339-1.html">多媒体</a></li>
+							{nav:pid=$topsort['id']}
+							<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
+							{/nav}
 						</ul>
 					</div>
 					<div class="recommend left-nav sect  wow bounceInLeft">

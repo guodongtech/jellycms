@@ -100,7 +100,31 @@ class IndexModel extends Model
 		return $result;
 	}
 	
-	
+	public function getParentsorts($sortId){
+		
+		static $result = array();
+		$builder = $this->db->table('sorts');
+		
+		$res   = $builder->select('sorts.*, model.urlname as m_urlname')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.deleted'=>0, 'sorts.id'=>$sortId])
+							->get()
+							->getRowArray();
+		$urlname = $res['urlname']==''?$res['m_urlname']:$res['urlname'];
+		if(is_array($res)){
+			if($res['outlink']==''){
+				$res['link']= url(array($urlname.'_'.$res['id']));
+			}else{
+				$res['link']= $res['outlink'];
+			}
+			$result[] = $res;
+			$this->getParentsorts($res['pid']); 
+		}else{
+			$result = array_reverse($result);
+			//print_r($result);
+		}
+		return $result;
+	}
 	
 	
 	

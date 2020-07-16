@@ -27,19 +27,11 @@
 	</div>
 
 </div>
-
-	
-	<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
-	<ul class="sub-navs">
-		{nav:pid=2}
-		<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
-		{/nav}
-	</ul>		 			
+	<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>	 			
 	<div class="wrap">
 		<div class="wrap-content">
 			{include:html/left.html}
 			<div class="news right wow bounceInRight">
-			
 			{list:num=5 order=id desc where=id>0,status eq 1}
 			<li>
 				<a href="{$list.link}">
