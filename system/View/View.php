@@ -203,7 +203,6 @@ class View implements RendererInterface
 		if (isset($this->renderVars['options']['cache']))
 		{
 			$this->renderVars['cacheName'] = $this->renderVars['options']['cache_name'] ?? str_replace('.php', '', $this->renderVars['view']);
-
 			if ($output = cache($this->renderVars['cacheName']))
 			{
 				$this->logPerformance($this->renderVars['start'], microtime(true), $this->renderVars['view']);
@@ -278,7 +277,6 @@ class View implements RendererInterface
 					. '<!-- DEBUG-VIEW ENDED ' . $this->renderVars['file'] . ' -->' . PHP_EOL;
 			}
 		}
-
 		// Should we cache?
 		if (isset($this->renderVars['options']['cache']))
 		{

@@ -9,8 +9,16 @@ class Index extends BaseController
      */
 	private $data;//页面数据
 	private $model;
+	private $cacheName;//缓存文件名
 	public function __construct()
-	{
+	{	
+		//缓存文件名 
+		$this->cacheName = md5($_SERVER["QUERY_STRING"]);
+		
+		if ($output = cache($this->cacheName))
+		{
+			return $output;exit;
+		}
 		$this->model = new IndexModel();
 		$area_id = $this->data['company'] = $this->model->getDefaultArea();
 		$this->session = \Config\Services::session();
@@ -21,11 +29,12 @@ class Index extends BaseController
 		$this->data['site'] = $this->model->getSite($area_id);
 		//$this->data['sorts'] = $this->model->getSorts($area_id);
 		$this->route($_SERVER["QUERY_STRING"]);
+		
 	}
 	public function index()
 	{	
 		$this->data['home'] = 1;//首页标记
-		echo view('html/index.html',$this->data);
+		echo view('html/index.html',$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
 	}
 	
 	//列表页 $params[0] urlname; $params[1] id;$params[2]  页数
@@ -55,7 +64,7 @@ class Index extends BaseController
 		
 		//生成分页
 		
-		echo view('html/'.$sort['listtpl'],$this->data);
+		echo view('html/'.$sort['listtpl'],$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
 		exit;
 	}
 	//内容页 
@@ -74,7 +83,7 @@ class Index extends BaseController
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
-		echo view('html/'.$sort['contenttpl'],$this->data);
+		echo view('html/'.$sort['contenttpl'],$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
 		exit;
 	}
 	//单页
@@ -91,7 +100,7 @@ class Index extends BaseController
 
 		$this->data['sort'] = $sort;
 		$this->data['content'] = $content;
-		echo view('html/'.$sort['contenttpl'],$this->data);
+		echo view('html/'.$sort['contenttpl'],$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
 		exit;
 	}
 	
