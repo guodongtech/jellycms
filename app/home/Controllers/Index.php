@@ -11,12 +11,14 @@ class Index extends BaseController
 	private $model;
 	private $cacheName;//缓存文件名
 	public function __construct()
-	{	
-		//缓存文件名 
-		$this->cacheName = md5($_SERVER["QUERY_STRING"]);
+	{
+		//缓存文件名 	去除uri里的参数,防止缓存攻击
+		$cacheTemp = explode('&', $_SERVER["QUERY_STRING"]);
+		$cacheTemp = explode('htm', $cacheTemp[0]);
+		$this->cacheName = md5($cacheTemp[0]);
 		if ($output = cache($this->cacheName))
 		{
-			return $output;exit;
+			exit($output);
 		}
 		$this->model = new IndexModel();
 		$area_id = $this->data['company'] = $this->model->getDefaultArea();
@@ -33,7 +35,7 @@ class Index extends BaseController
 	public function index()
 	{	
 		$this->data['home'] = 1;//首页标记
-		echo view('html/index.html',$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
+		echo view('html/index.html',$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
 	}
 	
 	//列表页 $params[0] urlname; $params[1] id;$params[2]  页数
@@ -63,7 +65,7 @@ class Index extends BaseController
 		
 		//生成分页
 		
-		echo view('html/'.$sort['listtpl'],$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
+		echo view('html/'.$sort['listtpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
 		exit;
 	}
 	//内容页 
@@ -82,7 +84,7 @@ class Index extends BaseController
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
-		echo view('html/'.$sort['contenttpl'],$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
+		echo view('html/'.$sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
 		exit;
 	}
 	//单页
@@ -99,12 +101,14 @@ class Index extends BaseController
 
 		$this->data['sort'] = $sort;
 		$this->data['content'] = $content;
-		echo view('html/'.$sort['contenttpl'],$this->data, ['cache'=>100,'cache_name'=>$this->cacheName]);
+		echo view('html/'.$sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
 		exit;
 	}
 	
 	//处理路由 其它同类路由在app/home/config/routes.php里有一份处理CI自有模式和伪静态模式路由。
 	private function route($str){
+		$config = new \Config\Config();
+		$this->catchTime = $config->catchTime;
 		if(!$str) return; //首页
 		//去掉后缀
 		$str = str_replace(".html","",$str);

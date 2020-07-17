@@ -266,7 +266,7 @@ class App extends BaseConfig
 	public $CSPEnabled = false;
 	public function __construct()
 	{
-		$config = new \config\config();
+		$config = new \Config\Config();
 		$this->appTimezone = $config->appTimezone;
 	}
 }

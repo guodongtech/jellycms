@@ -1414,11 +1414,26 @@ aside.left .recommend a{
 	border:none;
 	padding:0;
 }
-
+.comment-list::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.comment-list::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+.comment-list::-webkit-scrollbar-thumb {
+    background-color: rgb(198, 198, 198);
+    border-radius: 4px;
+}
+.comment-list::-webkit-scrollbar-track {
+    background-color: transparent;
+}
 
 .comment-list{
-	display:flex;
-	flex-direction:column;
+	//display:flex;
+	//flex-direction:column;
+	max-height:388px;
+	overflow-y:scroll;
 }
 
 .comment-list li{

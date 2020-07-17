@@ -368,12 +368,12 @@ class View implements RendererInterface
 				case 'form:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
-					return '<?php   foreach($this->model->getFormlistByFromName("'.$attr['name'].'") as $key=>$form){?>';
+					return '<?php   foreach($this->model->getFormlistByFromName("'.$attr['name'].'",$content["id"]) as $key=>$form){?>';
 				}
 				case 'formaction:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
-					return '<?php echo "/".ENTRANCE."/form/"."'.$attr['name'].'" ;?>';
+					return '<?php echo "/".ENTRANCE."/form/index/"."'.$attr['name'].'" ;?>';
 				}
 				case 'url:':
 				{

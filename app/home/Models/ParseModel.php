@@ -259,15 +259,18 @@ class ParseModel extends Model
 	}
 	
 	//解析表单列表
-	public function getFormlistByFromName($name){
+	public function getFormlistByFromName($name, $content_id){
 		$formList = $this->getFormList();
 		$formNames = array_column($formList, 'table_name');
 		if(!in_array($name,$formNames)){
 			return array();//防止前台报错，非法访问返回空数组
 		}
+		$where = $content_id?"content_id=".$content_id:"1=1";
 		$builder = $this->db->table($name);
 		$result   = $builder->select('*')
+							->where($where)
 							->where(['deleted'=>0, 'status'=>1])
+							->orderBy('id desc')
 							->get()
 							->getResultArray();	
 		

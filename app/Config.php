@@ -38,4 +38,6 @@ class Config
 	public $adminViewName = 'view'; 
 	public $adminTheme = 'admin'; //后台模板目录在app/admin/view中
 	public $version = '3.8.1';
+	public $catchTime = 5; //缓存时间s
+	public $catched = 1;//是否开启缓存
 }
