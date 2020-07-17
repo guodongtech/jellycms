@@ -73,6 +73,10 @@ class FileHandler implements CacheInterface
 	public function __construct($config)
 	{
 		$path = ! empty($config->storePath) ? $config->storePath : WRITEPATH . 'cache';
+		if(!is_dir($path)){
+			mkdir($path,0640,true);
+		}
+		
 		if (! is_really_writable($path))
 		{
 			throw CacheException::forUnableToWrite($path);

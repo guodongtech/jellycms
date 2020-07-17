@@ -14,7 +14,6 @@ class Index extends BaseController
 	{	
 		//缓存文件名 
 		$this->cacheName = md5($_SERVER["QUERY_STRING"]);
-		
 		if ($output = cache($this->cacheName))
 		{
 			return $output;exit;
