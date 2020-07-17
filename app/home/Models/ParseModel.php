@@ -114,22 +114,21 @@ class ParseModel extends Model
 	public function getList($id,$params,$page){
 		$this->getChildrenSorts($id);
 		$children = $this->childrenSortIds; //当前类及其模型一致的子类
-		$where = isset($params['where'])?str_replace(',',' and ',$params['where']):1;
+		$where = isset($params['where'])?str_replace(',',' and ',$params['where']):'1=1';
 		$page = $page>0?$page:1;
 		$num = isset($params['num'])?$params['num']:5;
 		$order = isset($params['order'])?$params['order']:'id desc';
 		$builder = $this->db->table('content');
 		$result   = $builder->select('id')
 							->where($where)
-							->where(['deleted'=>0])
+							->where(['deleted'=>0,'status'=>1])
 							->whereIn('sorts_id', $children)
 							->orderBy($order)
 							->get($num,($page-1)*$num)
-							->getResultArray();
-							
+							->getResultArray();			
 		$countAllResults   = $builder->select('count(1) as count')
 							->where($where)
-							->where(['deleted'=>0])
+							->where(['deleted'=>0,'status'=>1])
 							->whereIn('sorts_id', $children)
 							->orderBy($order)
 							->get()
@@ -151,6 +150,7 @@ class ParseModel extends Model
 							->whereIn('content.id', $ids)
 							->get()
 							->getResultArray();
+		$result = array_reverse($result);
  		foreach($result as $key=>$value){
 			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
 			$result[$key]['link'] = $value['link']==''?url(array($urlName, $value['id'])):$value['link'];
@@ -167,6 +167,7 @@ class ParseModel extends Model
 		$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
 		$result['data'] = $result;
 		$result['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
+		
 		return $result; 
 			
 	}
@@ -246,7 +247,32 @@ class ParseModel extends Model
 		}
 		return $result;
 	}
- 
+	
+	//获取可用表单列表
+	public function getFormList(){
+		$builder = $this->db->table('form');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'status'=>1])
+							->get()
+							->getResultArray();	
+		return $result;	
+	}
+	
+	//解析表单列表
+	public function getFormlistByFromName($name){
+		$formList = $this->getFormList();
+		$formNames = array_column($formList, 'table_name');
+		if(!in_array($name,$formNames)){
+			return array();//防止前台报错，非法访问返回空数组
+		}
+		$builder = $this->db->table($name);
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'status'=>1])
+							->get()
+							->getResultArray();	
+		
+		return $result;	
+	}
 	
 	
 	

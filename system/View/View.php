@@ -315,11 +315,12 @@ class View implements RendererInterface
 			$str = '<?php $data_ = $this->model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		}
 		//前台标签插入parsemodel
-		$queryCount = preg_match ('/{(\/?)(\include|query|content|list|nav|slide|position)\s*(:?)([^}]*)}/i', $str);
+		$queryCount = preg_match ('/{(\/?)(\include|query|content|list|nav|slide|position|formaction|form)\s*(:?)([^}]*)}/i', $str);
 		if($queryCount){
 			$str = ' <?php use  \App\Models\ParseModel; $this->model = new ParseModel();?>'.$str;
 		}
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|query|widget|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		//匹配标签有先后顺序 如：for之后不能再有forXXXX
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|query|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -366,7 +367,16 @@ class View implements RendererInterface
 
 				}
 				case 'echo:': return '<?php echo '.rtrim($matches[4],';/').';?>';
-
+				case 'form:': 
+				{
+					$attr = $this->getAttrs($matches[4]);
+					return '<?php   foreach($this->model->getFormlistByFromName("'.$attr['name'].'") as $key=>$form){?>';
+				}
+				case 'formaction:': 
+				{
+					$attr = $this->getAttrs($matches[4]);
+					return '<?php echo "/".ENTRANCE."/form/"."'.$attr['name'].'" ;?>';
+				}
 				case 'url:':
 				{
 					$matches[4] = $this->varReplace($matches[4]);

@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="{theme:css/swiper.min.css}">
 <link rel="stylesheet" href="{theme:css/animate.min.css}">
 <link rel="stylesheet" href="{webroot:static/font-awesome-4.7.0/css/font-awesome.min.css}">
+<link rel="stylesheet" href="{webroot:static/layui/css/layui.css}">
 </head>
 <body>
 {include:html/head.html}
@@ -26,15 +27,150 @@
 		</div>
 	</div>
 </div>
+<div class="position"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
 <div class="content-wrap">
-{position:}
-{$position.id}
 
-{/position}
 	<div class="content">
-		{$content.title}<br>
-		{$content.content}
+		<h2 class="content-title">{$content.title}</h2>
+		<div class="content-infos">
+			<span class="author">{$content.author}</span>
+			<span class="origin"></span>
+			<span class="releaseDate">{$content.create_time}</span>
+			<span class="views_num">Pageviews：1</span>
+		</div>
+		<div class="content-detail">{$content.content}</div>	
+		<div class="article_pages">
+			<div class="pre">上一篇：<a href="{$pre.link}" title="{$pre.title}">{$pre.title}</a></div>
+			<div class="next">下一篇：<a href="{$next.link}" title="{$next.title}">{$next.title}</a></div>
+		</div>
 	</div>
+	
+	<div class="comment-wrap">
+		<div class="comment">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+				<legend>发表您的评论：</legend>
+			</fieldset>
+			<form class="layui-form" action="" lay-filter="example">
+			  <div class="layui-form-item layui-form-text">
+				<label class="layui-form-label">内容</label>
+				<div class="layui-input-block">
+				  <textarea placeholder="请输入内容" class="layui-textarea" name="desc"></textarea>
+				</div>
+			  </div>
+			  <div class="layui-form-item">
+				<label class="layui-form-label">验证码</label>
+				<div class="layui-input-inline">
+				  <input type="text" name="code" lay-verify="title" autocomplete="off" placeholder="验证码" class="layui-input">
+				</div>
+			  </div>
+			  <div class="layui-form-item">
+				<div class="layui-input-block">
+				  <button type="reset" class="layui-btn layui-btn-normal" >重置</button>
+				  <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+				</div>
+			  </div>
+			</form>
+		</div>
+	
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+		  <legend>评论列表</legend>
+		</fieldset>
+		<ul class="comment-list">
+			<li>
+				<div class="user-info">
+					<img src="/static/images/icon.jpg">
+					<div>
+						<em>依然</em>
+						<span>2月24日 9：50</span>
+					</div>
+				</div>
+				<div class="user-message">
+				小程序生成：微信小程序，百度小程序，支付宝小程序等平台小程序
+				小程序生成：微信小程序，百度小程序，支付宝小程序等平台小程序
+					<ul>
+						<li>
+							<div class="user-info">
+								<img src="/static/images/icon.jpg">
+								<div>
+									<em>依然</em>
+									<span>2月24日 9：50</span>
+								</div>
+							</div>
+							<div class="user-message">
+							有一次在一个电影院里 一对情侣来看电影
+							</div>
+						</li>
+						<li>
+							<div class="user-info">
+								<img src="/static/images/icon.jpg">
+								<div>
+									<em>依然</em>
+									<span>2月24日 9：50</span>
+								</div>
+							</div>
+							<div class="user-message">
+							有一次在一个电影院里 一对情侣来看电影 
+							</div>
+						</li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="recommend-wrap">
+		<div class="recommend">
+			<h3>——  推荐内容  ——</h3>
+			<ul class="recommend-list">
+			{list:num=3 id=5 where=isrecommend eq 1,pic neq '' order=id desc}
+			<li>
+				<div class="item wow zoomIn">
+					<div class="item-pic">
+						<a href="{$list.link}" title="{$list.title}">
+							<img class="aritcl_img" src="{$list.pic}" alt="">
+						</a>
+					</div>
+					<div class="listcontent">
+						<div class="list-text">
+							<a class="list-title" href="{$list.link}" title="{$list.title}">
+								<span style="">{$list.title}</span>
+							</a>
+							<div class="description">
+							{$list.description}...  
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+			{/list}
+			</ul>
+		
+		</div>
+	
+	
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </div>
 {include:html/foot.html}
 </body>

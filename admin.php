@@ -7,6 +7,7 @@ if (phpversion() < $minPHPVersion)
 }
 define('AUTH', true);
 define('ADMINNAME', basename(__FILE__));  //当前脚本名 菜单URL前缀
+define('ENTRANCE', basename(__FILE__));  //当前脚本名 替换ADMINNAME
 unset($minPHPVersion);
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 $pathsPath = FCPATH . 'app/admin/Config/Paths.php';

@@ -62,8 +62,12 @@ class Index extends BaseController
 	private function content($id){
 		//获取content 相关数据
 		$content = $this->model->getContent($id);
-		$sort = $this->model->getSortById($content['sort_id']);
 		if(!$content) exit('内容不可用');
+		$prenext = $this->model->getPreNext($id);
+		$this->data['pre'] = $prenext['pre'];
+		$this->data['next'] = $prenext['next'];
+		$sort = $this->model->getSortById($content['sort_id']);
+		
 		$this->data['content'] = $content;
 		$parents = $this->model->getParentsorts($sort['id']);
 		$this->data['sort'] = $sort;
