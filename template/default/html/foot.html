@@ -28,7 +28,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 	left:0;
 	right:0;
 	background:#eee;
-	border-top:1px solid #ddd;
+	border-top:1px solid #fff;
 }
 
 .layui-tab-title .layui-this:after {
@@ -45,12 +45,29 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     box-sizing: border-box;
     pointer-events: none;
 }
+.layui-tab-title {
+	box-shadow:rgba(100, 100, 100, 0.18) 0px 2px 3px 0px
+}
+.layui-tab-content {
+    padding: 10px;
+	background:#f5f5f5;
+	height:100%;
+}
+.layui-tab-item {
+    height:100%;
+}
+.layui-tab {
+    display:flex;
+	flex-direction:column;
+	justify-content:space-between;
+	height:100%;
+}
 </style>
 <!-- 控制台 -->
 <div class="console">
 <div class="layui-tab">
   <ul class="layui-tab-title">
-    <li class="layui-this">可用标签</li>
+    <li class="layui-this">前台标签</li>
     <li>可用代码</li>
     <li>可用样式</li>
     <li>手册</li>
@@ -144,11 +161,10 @@ layui.use(['form', 'layedit', 'laydate'], function(){
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
     },
-    
- 
-  
-  
-  
+	 autoplay: {
+	  disableOnInteraction: false, //手动滑动之后不打断播放
+	  delay: 2888
+	},
     on:{
       init: function(){
         swiperAnimateCache(this); //隐藏动画元素 
