@@ -13,9 +13,18 @@
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
-<body>
-<div class="gd-body">
-	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+<body class="guodong-body">
+ <div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+    <a lay-href="">主页</a><span lay-separator="">/</span>
+    <a><cite>设置</cite></a><span lay-separator="">/</span>
+    <a><cite>我的密码</cite></a>
+  </div>
+</div>
+<div class="layui-fluid">
+<div class="layui-row">
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this">站点信息</li>
 	  </ul>
@@ -119,6 +128,7 @@
 	  	</div>
 	  </div>
 	</div>
+</div>
 </div>
 <script src="/static/layui/layui.all.js"></script>
 <script>

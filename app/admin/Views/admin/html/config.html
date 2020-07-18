@@ -12,10 +12,18 @@
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
-<body>
-	<!-- <header>header</header> -->
-	<div>
-	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+<body class="guodong-body">
+ <div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+    <a lay-href="">主页</a><span lay-separator="">/</span>
+    <a><cite>设置</cite></a><span lay-separator="">/</span>
+    <a><cite>我的密码</cite></a>
+  </div>
+</div>
+<div class="layui-fluid">
+<div class="layui-row">
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">基本配置</li>
 	    <li lay-id="t2">邮件通知</li>
@@ -564,6 +572,7 @@
 		  	   
 		  </div>
 	 </div>
+</div>
 </div>
 	
 	

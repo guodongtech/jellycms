@@ -12,7 +12,7 @@
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
-<body>
+<body class="guodong-body">
 <style>
 .layui-upload-list dl {
     width: 92px;
@@ -33,8 +33,17 @@
 	cursor:pointer;
 }
 </style>
-<div class="gd-body">
-		<div class="layui-tab layui-tab-brief" lay-filter="tab">
+ <div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+    <a lay-href="">主页</a><span lay-separator="">/</span>
+    <a><cite>设置</cite></a><span lay-separator="">/</span>
+    <a><cite>我的密码</cite></a>
+  </div>
+</div>
+<div class="layui-fluid">
+<div class="layui-row">
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 			<ul class="layui-tab-title">
 				<li class="layui-this" lay-id="t1"><a href = "{url:/link/index}">友情链接列表</a></li>
 				<li lay-id="t2"><a href = "{url:/linkgroup/}">分组管理</a></li>
@@ -120,6 +129,7 @@
 	
 	</div>
 
+</div>
 </div>
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>

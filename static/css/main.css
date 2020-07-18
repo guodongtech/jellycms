@@ -167,6 +167,70 @@
     font-size: inherit;
     line-height: inherit;
   }
+.guodong-body{
+	background:#f5f5f5;
+}
+ 
+.layadmin-header {
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 0;
+    border-radius: 0;
+}
+.layadmin-tabspage-none .layadmin-header .layui-breadcrumb {
+    border-top: 1px solid #f6f6f6;
+}
+
+.layadmin-header .layui-breadcrumb {
+    padding: 0 15px;
+}
+.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
+    top: 5px;
+    padding: 0;
+}
+.layui-nav {
+    position: relative;
+    padding: 0 !important;
+   background-color: transparent !important;
+    color: #fff;
+    border-radius: 2px;
+    font-size: 0;
+    box-sizing: border-box;
+}
+.layui-nav-img {
+    width: 30px;
+    height: 30px;
+    margin-right: 0 !important;
+    border-radius: 50%;
+}
+.layui-input-block {
+    margin-left: 100px !important;
+    min-height: 36px;
+}
+.layui-form-label {
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    width: 100px !important;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+}
+.layui-table-tool {
+    position: relative;
+    z-index: 890;
+    width: 100%;
+    min-height: 50px;
+    line-height: 30px;
+    padding: 10px 15px;
+    border-width: 0 0 1px;
+	background:#fbfbfb;
+}
+.layui-layer-page .layui-layer-content {
+    padding-top:20px;
+}
+
  body#console{
 	 display:flex;
     flex-direction: column;
