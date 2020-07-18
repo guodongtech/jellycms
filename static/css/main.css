@@ -230,7 +230,13 @@
 .layui-layer-page .layui-layer-content {
     padding-top:20px;
 }
-
+.layui-nav-child {
+    left: 60px;
+    top: 25px;
+}
+.layui-nav-bar{
+	display:none;
+}
  body#console{
 	 display:flex;
     flex-direction: column;
