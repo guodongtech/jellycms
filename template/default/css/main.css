@@ -234,8 +234,9 @@ section{
 	padding-bottom:38px;
 }
 section h1{
-	font-size:28px;
-    color: #313d48;
+	font-size:24px;
+    color: #333;
+	font-weight:normal;
 }
 section p{
     color: #313d48;
@@ -276,6 +277,52 @@ section p:before {
 	text-align:center;
 	padding:20px;
 }
+
+section.about {
+	background:#f5f5f5;
+}
+.section-content.about{
+	display:flex;
+	justify-content:space-between;
+}
+.section-content.about .about-con{
+	display:flex;
+	justify-content:space-between;
+	flex-direction:row;
+	width:100%;
+	align-items:center;
+}
+.section-content.about .about-con .about-left{
+	display:flex;
+	flex-direction:column;
+	margin-right:58px;
+}
+.section-content.about .about-con .about-left h3{
+    font-size: 28px;
+    color: #666;
+	font-weight:normal;
+}
+.section-content.about .about-con .about-left span{
+	font-size: 15px;
+    color: #999;
+	line-height:36px;
+}
+.section-content.about .about-con .about-left p{
+	color: #999;
+	line-height:22px;
+}
+
+section.fe{
+	background:#fff;
+}
+
+
+
+
+
+
+
+
 
 .roll-icon-box .icon {
     border: 1px solid #d65050;
