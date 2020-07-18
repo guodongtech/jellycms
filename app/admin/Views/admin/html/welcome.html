@@ -10,17 +10,37 @@
 <title>国栋CMS</title>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" href="/static/layui/css/admin.css">
+<link rel="stylesheet" href="/static/css/animate.min.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+
+<!-- 解除闪烁 -->
+<style>
+.wow{
+	opacity:0;
+}
+.animated{
+	opacity:1 !important;
+}
+.delay1{
+	animation-delay:0.1s;
+}
+.delay3{
+	animation-delay:0.3s;
+}
+.delay5{
+	animation-delay:0.5s;
+}
+</style>
 	<!-- <header>header</header> -->
  <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
       <div class="layui-col-md8">
         <div class="layui-row layui-col-space15">
           <div class="layui-col-md6">
-            <div class="layui-card">
+            <div   class="layui-card wow bounceInLeft delay5">
               <div class="layui-card-header">快捷方式</div>
 				<div class="layui-card-body">
 					<div class="layui-carousel layadmin-carousel layadmin-shortcut">
@@ -51,7 +71,7 @@
             </div>
           </div>
           <div class="layui-col-md6">
-            <div class="layui-card">
+            <div class="layui-card wow bounceInLeft delay3">
               <div class="layui-card-header">待办事项</div>
               <div class="layui-card-body">
 
@@ -72,7 +92,7 @@
             </div>
           </div>
           <div class="layui-col-md12">
-            <div class="layui-card">
+            <div class="layui-card wow zoomIn">
               <div class="layui-card-header">数据概览</div>
               <div class="layui-card-body">
                 <div class="layui-carousel layadmin-carousel layadmin-dataview" id="charts" data-anim="fade" lay-filter="LAY-index-dataview">
@@ -84,7 +104,7 @@
                 </div>
               </div>
             </div>
-            <div class="layui-card">
+            <div class="layui-card wow bounceInUp">
               <div class="layui-tab layui-tab-brief layadmin-latestData">
                 <ul class="layui-tab-title">
                   <li class="layui-this">今日热搜</li>
@@ -105,7 +125,7 @@
       </div>
       
       <div class="layui-col-md4">
-        <div class="layui-card">
+        <div class="layui-card wow bounceInLeft delay1">
           <div class="layui-card-header">版本信息</div>
           <div class="layui-card-body layui-text">
             <table class="layui-table">
@@ -143,7 +163,7 @@
           </div>
         </div>
         
-        <div class="layui-card">
+        <div class="layui-card wow bounceIn">
           <div class="layui-card-header">效果报告</div>
           <div class="layui-card-body layadmin-takerates">
             <div class="layui-progress" lay-showPercent="yes">
@@ -157,7 +177,7 @@
           </div>
         </div>
         
-        <div class="layui-card">
+        <div class="layui-card wow bounceIn">
           <div class="layui-card-header">实时监控</div>
           <div class="layui-card-body layadmin-takerates">
             <div class="layui-progress" lay-showPercent="yes">
@@ -171,7 +191,7 @@
           </div>
         </div>
         
-        <div class="layui-card">
+        <div class="layui-card wow bounceInUp">
           <div class="layui-card-header">产品动态</div>
           <div class="layui-card-body">
             <div class="layui-carousel layadmin-carousel layadmin-news" data-autoplay="true" data-anim="fade" lay-filter="news">
@@ -184,7 +204,7 @@
           </div>
         </div>
 
-        <div class="layui-card">
+        <div class="layui-card wow bounceInUp">
           <div class="layui-card-header">
             作者心语
             <i class="layui-icon layui-icon-tips" lay-tips="" lay-offset="5"></i>
@@ -199,7 +219,19 @@
     </div>
   </div>
 <script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/wow.min.js"></script>
 <script>
+var wow = new WOW({
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 0,
+    mobile: true,
+    live: true
+});
+wow.init();
+
+
+
 !function(){
   var layer = layui.layer
   var element = layui.element;
@@ -251,8 +283,10 @@
   
 <script src="https://cdn.staticfile.org/echarts/4.8.0/echarts.min.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
+
 <script src="/static/js/macarons.js"></script>
 <script type="text/javascript">
+
 $(document).ready(function (){
 
 	//初始化echarts大小
@@ -386,6 +420,12 @@ $(document).ready(function (){
 		echart3.resize();
 	})
 
+
+
+
+
+
+  
 });
 </script>
 </body>

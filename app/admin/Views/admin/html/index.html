@@ -85,15 +85,15 @@
 $(document).ready(function(){
 	$(".main-nav li").click(function(){
 		var data_url = $(this).attr('data-url');
-		$('.main-body iframe').removeClass('active');		
+		//$('.main-body iframe').removeClass('active');		
 		$('#win-body').attr('src', data_url);
 		$(".main-nav li").removeClass("active");
 		$(this).addClass("active");
 		//存储当子菜单EQ
 		$.cookie('currentChild', $(".main-nav li").index($(this)));
-		setTimeout(function(){
-			$('.main-body iframe').addClass('active');
-		},50);
+		//setTimeout(function(){
+		//	$('.main-body iframe').addClass('active');
+		//},50);
 	});
 	
 	
