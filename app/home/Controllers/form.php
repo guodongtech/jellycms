@@ -38,10 +38,18 @@ class Form extends BaseController
 			}			
 		}
 		unset($post['code']);
-		$data = $post;
-		//创建表单时 create_time  status ip deleted字段必须创建，不管会不会用到。此处统一
+		$fields = $this->model->getFields($name);
+		print_r($fields);
+		foreach($fields as $key=>$value){
+			$data[$value] = $post[$value];
+		}
+		
+		//创建表单时 create_time  status ip deleted area_id字段必须创建，不管会不会用到。此处统一
 		$data['create_time'] = time();
+		$data['area_id'] = session('area_id');
 		$data['status'] = $form['type']; //0：前台不显示；1：前台展示；3：审核中  与form表type关联
+		
+		print_r($data);
 		if($this->model->insertData($name, $data)){
 			$rdata = [
 				"code" => 1,

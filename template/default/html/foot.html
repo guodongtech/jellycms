@@ -1,24 +1,7 @@
 
 <!-- 生成环境删除此处以下代码 -->
 <link rel="stylesheet" href="{webroot:static/layui/css/layui.css}">
-<script src="/static/layui/layui.all.js"></script>
-<script>
-layui.use(['form', 'layedit', 'laydate'], function(){
-  var form = layui.form
-  ,layer = layui.layer
-  ,layedit = layui.layedit
-  ,laydate = layui.laydate;
-  
-  //日期
-  laydate.render({
-    elem: '#date'
-  });
-  laydate.render({
-    elem: '#date1'
-  });
-
-});
-</script>
+ 
 <style>
 .console{
 	height:300px;
@@ -55,6 +38,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 }
 .layui-tab-item {
     height:100%;
+	overflow-y:auto;
 }
 .layui-tab {
     display:flex;
@@ -64,25 +48,45 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 }
 </style>
 <!-- 控制台 -->
-<div class="console">
+<!-- <div class="console">
 <div class="layui-tab">
   <ul class="layui-tab-title">
-    <li class="layui-this">前台标签</li>
+    <li class="layui-this">当前可用标签</li>
     <li>可用代码</li>
     <li>可用样式</li>
     <li>手册</li>
   </ul>
   <div class="layui-tab-content">
     <div class="layui-tab-item layui-show">
-      内容1
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
+      内容1<br>
     </div>
-    <div class="layui-tab-item">内容2</div>
+    <div class="layui-tab-item">
+		内容2
+	
+	</div>
     <div class="layui-tab-item">内容3</div>
     <div class="layui-tab-item">内容4</div>
     <div class="layui-tab-item">内容5</div>
   </div>
 </div>
-</div>
+</div> -->
 
 <!-- 生产环境删除此处以上代码 -->
 
@@ -110,23 +114,67 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 <footer>
 	 <div class="footer-top">
 		<div class="footer-top-container">
-			<ul>
-				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
-				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
-				<li><a href="">关于我们</a><a href="">关于我们</a><a href="">关于我们</a></li>
-
-			</ul>
-			<div>
-				联系我们
+			<div class="footer-left">
+				<div class="footer-logo">
+					<img src="/static/images/src.png" />
+					<p>CopyRight 2010-2020 All Right Reserved</p>
+				</div>
+				<div class="footer-contactus">
+					<p>联系人：张先生</p>
+					<p>手机：18865669007</p>
+					<p>电话：020-22043297</p>
+					<p>邮箱：510551@qq.com</p>
+					<p>地址： 北京市朝阳区远洋国际大厦</p>
+				</div>
 			</div>
+			<div class="footer-right">
+				<div class="footer-nav">
+				 
+					<div>
+						<h5>产品中心</h5>
+						<ul>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+						</ul>
+					</div>
+					<div>
+						<h5>产品中心</h5>
+						<ul>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+						</ul>
+					</div>
+					<div>
+						<h5>产品中心</h5>
+						<ul>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+							<li><a href="">关于我们</a></li>
+						</ul>
+					</div>
+
+				</div>
+				<div class="qrcode"><img src="/static/images/qrcode.png" /><p>手机二维码</p></div>
+			</div>
+			
 		</div>
+		<div class="links">
+		友情链接：{link:}
+			<a href="{$link.link}" target="_blank">{$link.name}</a>
+		{/link}
 	 </div>
+	 </div>
+
 	 <div class="footer-bottom">
 		<div>
 			<span>© 2008-2020 {$site.domain}</span>
-			<a rel="noreferrer" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={$site.icp}" target="_blank">{$site.icp}</a>
-			<a href="" target="_blank">《gd软件许可及服务协议》</a>
-			<a href="" target="_blank">《gd用户协议》</a>
+			{$site.icp}Page rendered in {elapsed_time} seconds
+	
 		</div>
 		<div>
 			<span>{$company.name}</span>

@@ -40,6 +40,16 @@
 .message input,textarea{
 	font-size:12px;
 }
+ 
+.layui-form-radio img {
+    width:30px;
+    height:30px;
+	border-radius:100%;
+}
+.layui-input-block {
+    margin-left: 80px !important;
+    min-height: 36px;
+}
 </style>
 	{include:html/head.html}
 	<div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
@@ -64,49 +74,51 @@
 				  <legend>留言列表</legend>
 				</fieldset>
 				<ul class="message-list">
+				{form:name=message num=3 pid=0}
 					<li>
 						<div class="user-info">
-							<img src="/static/images/icon.jpg">
+							<img src="{$form.icon}">
 							<div>
-								<em>依然</em>
-								<span>2月24日 9：50</span>
+								<em>{$form.nickname}</em>
+								<span>{echo:date('m月d日 h: s', $form['create_time'])}</span>
 							</div>
 						</div>
 						<div class="user-message">
-						小程序生成：微信小程序，百度小程序，支付宝小程序等平台小程序
-						小程序生成：微信小程序，百度小程序，支付宝小程序等平台小程序
+						{$form.content}
 							<ul>
-								<li>
-									<div class="user-info">
-										<img src="/static/images/icon.jpg">
-										<div>
-											<em>依然</em>
-											<span>2月24日 9：50</span>
-										</div>
-									</div>
-									<div class="user-message">
-									有一次在一个电影院里 一对情侣来看电影
-									</div>
-								</li>
-								<li>
-									<div class="user-info">
-										<img src="/static/images/icon.jpg">
-										<div>
-											<em>依然</em>
-											<span>2月24日 9：50</span>
-										</div>
-									</div>
-									<div class="user-message">
-									有一次在一个电影院里 一对情侣来看电影 
-									</div>
-								</li>
+					{form:name=message num=3 pid=$form['id'] value=form2}
+						<li>
+							<div class="user-info">
+								<img src="{$form2.icon}">
+								<div>
+									<em>{$form2.nickname}</em>
+									<span>{echo:date('m月d日 h: s', $form2['create_time'])}</span>
+								</div>
+							</div>
+							<div class="user-message">
+							{$form2.content}
+							</div>
+						</li>
+					 {/form}
 							</ul>
 						
 						
 						</div>
 					</li>
-				
+				{/form}
 				</ul>
+				
+ 
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				<div class="message">
 					<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
 					  <legend>留言信息</legend>
@@ -119,6 +131,15 @@
 						  <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="姓名" class="layui-input">
 						</div>
 					  </div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">头像</label>
+					<div class="layui-input-inline">
+						<div class="layui-input-inline">
+						  <input type="radio" name="icon" value="/static/images/icon.jpg" title="<img src='/static/images/icon.jpg'>" checked="">
+						  <input type="radio" name="icon" value="/static/images/logo.png" title="<img src='/static/images/logo.png'>">
+						</div>
+					</div>
+				</div>
 					  <div class="layui-form-item">
 						<label class="layui-form-label">手机号</label>
 						<div class="layui-input-inline">
@@ -157,14 +178,19 @@
 					  <div class="layui-form-item layui-form-text">
 						<label class="layui-form-label">内容</label>
 						<div class="layui-input-block">
-						  <textarea placeholder="请输入内容" class="layui-textarea" name="desc"></textarea>
+						  <textarea placeholder="请输入内容" class="layui-textarea" name="content"></textarea>
 						</div>
 					  </div>
-					 
+				<div class="layui-form-item">
+					<label class="layui-form-label">验证码</label>
+					<div class="layui-input-inline">
+						<input type="text" name="code" lay-verify="required"  autocomplete="off" placeholder="验证码" class="layui-input">
+					</div>
+				</div>
 					  <div class="layui-form-item">
 						<div class="layui-input-block">
 						  <button type="reset" class="layui-btn layui-btn-normal" >重置</button>
-						  <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+						  <button type="submit" class="layui-btn" lay-submit="" lay-filter="form">立即提交</button>
 						</div>
 					  </div>
 					</form>
@@ -178,21 +204,28 @@
 {include:html/foot.html}
 <script src="/static/layui/layui.all.js"></script>
 <script>
-layui.use(['form', 'layedit', 'laydate'], function(){
-  var form = layui.form
-  ,layer = layui.layer
-  ,layedit = layui.layedit
-  ,laydate = layui.laydate;
-  
-  //日期
-  laydate.render({
-    elem: '#date'
+;!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  //监听提交
+  form.on('submit(form)', function(data){
+	$.ajax({
+	   type: "POST",
+	   url: "{formaction:name=message}",
+	   data: data.field,
+	   dataType:"json",
+	   success: function(msg){
+			if(msg.code == 1){
+				layer.msg(msg.msg)
+			}
+			else{
+				layer.msg(msg.msg)
+			}
+	   }
+	});
+    return false; //中止layui submit事件。
   });
-  laydate.render({
-    elem: '#date1'
-  });
-
-});
-</script>
+}();
+</script> 
 </body>
 </html>

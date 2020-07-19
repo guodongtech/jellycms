@@ -233,9 +233,10 @@ class View implements RendererInterface
 		}
 		//解析标签
 		$template = file_get_contents($this->renderVars['file']);
-
+		$start = microtime(true);
 		$output = $this->resolve($template);
- 
+ 		$end = microtime(true);
+		//echo number_format($end-$start, 4);//正则匹配的时间 本地7ms左右
 
 		ob_start();
 		////include($this->renderVars['file']); // PHP will be processed
@@ -310,15 +311,9 @@ class View implements RendererInterface
 				}
 			}
 			$params = '['.trim($tem, ',').']';
-			$str = '<?php $data_ = $this->model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
+			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		}
-		//前台标签插入parsemodel
-		$queryCount = preg_match ('/{(\/?)(\include|query|content|list|nav|slide|position|formaction|form)\s*(:?)([^}]*)}/i', $str);
-		if($queryCount){
-			$str = ' <?php use  \App\Models\ParseModel; $this->model = new ParseModel();?>'.$str;
-		}
-		//匹配标签有先后顺序 如：for之后不能再有forXXXX
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|query|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -365,10 +360,14 @@ class View implements RendererInterface
 
 				}
 				case 'echo:': return '<?php echo '.rtrim($matches[4],';/').';?>';
+				//无限嵌套FORM
 				case 'form:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
-					return '<?php   foreach($this->model->getFormlistByFromName("'.$attr['name'].'",$content["id"]) as $key=>$form){?>';
+					isset($attr['pid'])? $pid=$attr['pid']:$pid = 0;
+					isset($attr['value'])? $value=$attr['value']:$value = 'form';
+					isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
+					return '<?php $model = new \App\Models\ParseModel();  foreach($model->getFormlistByFromName("'.$attr['name'].'",$content["id"],$pid = '.$pid.', $num='.$num.') as $key=>$'.$value.'){?>';
 				}
 				case 'formaction:': 
 				{
@@ -383,6 +382,13 @@ class View implements RendererInterface
                 case 'webroot:':
                 {
                 	return '<?php echo "/'.$matches[4].'";?>';
+                }
+                case 'label:':
+                {
+					$attr = $this->getAttrs($matches[4]);
+					//echo __NAMESPACE__;
+					/* return '<?php echo $this->model->getLabel("'.$attr['name'].'");?>'; */
+					return '<?php $model = new \App\Models\ParseModel(); echo $model->getLabel("'.$attr['name'].'")?>';
                 }
 				case 'theme:': return '<?php echo getWebThemePath()."'.$matches[4].'";?>';
 				case 'if:': return '<?php if('.$matches[4].'){?>';
@@ -493,13 +499,11 @@ class View implements RendererInterface
 				{
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['id'])) $id = $attr['id'];
-					$content = '$content_=$this->model->getContent('.$id.');';
-					return '<?php '.$content.' foreach(array($content_) as $key=>$content){?>';
+					return '<?php $model = new \App\Models\ParseModel();  foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
 				}
 				case 'position:': 
 				{
-					$position = '$position_=$this->model->getPosition($sort["id"]);';
-					return '<?php '.$position.' foreach($position_ as $key=>$position){?>';
+					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPosition($sort["id"]) as $key=>$position){?>';
 				}
 				case 'list:':
 				{
@@ -518,7 +522,7 @@ class View implements RendererInterface
 						}
 					}
 					$params = '['.trim($tem, ',').']';
-					return '<?php $data_ = $this->model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
+					return '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
 				}
 				case 'pagebar:':
 				{
@@ -533,17 +537,26 @@ class View implements RendererInterface
 					else $pid = 0;
 					if(!isset($attr['key'])) $attr['key'] = '$key';
 					else $attr['key'] = $attr['key'];
-					if(!isset($attr['nav'])) $attr['nav'] = '$nav';
-					else $attr['nav'] = $attr['nav'];
-					return '<?php   foreach($this->model->getSortByPid('.$pid.') as '.$attr['key'].' => '.$attr['nav'].'){?>';
-					 
+					
+					isset($attr['value'])? $value=$attr['value']:$value = 'nav';
+					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
+					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getSortByPid('.$pid.',$num='.$num.') as '.$attr['key'].' => $'.$value.'){?>';
 				}
 				case 'slide:':
 				{
 					$attr = $this->getAttrs($matches[4]);
+					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
 					if(isset($attr['gid'])) $gid = $attr['gid'];
 					else $gid = 0; //不设置分组ID,则读当前区域第一个可用分组
-					return '<?php foreach($this->model->getSlide('.$gid.') as $key=>$slide){?>';
+					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getSlide('.$gid.', $num='.$num.') as $key=>$slide){?>';
+				}
+				case 'link:':
+				{
+					$attr = $this->getAttrs($matches[4]);
+					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
+					if(isset($attr['gid'])) $gid = $attr['gid'];
+					else $gid = 0; //不设置分组ID,则读当前区域第一个可用分组
+					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getLink('.$gid.', $num='.$num.') as $key=>$link){?>';
 				}
 				default:
 				{

@@ -21,9 +21,6 @@
     height:30px;
 	border-radius:100%;
 }
-
-
-
 </style>
 {include:html/head.html}
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
@@ -60,7 +57,7 @@
 			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
 				<legend>发表您的评论：</legend>
 			</fieldset>
-			<form class="layui-form" method="post" action="{formaction:name=comment}" lay-filter="example" id="form">
+			<form class="layui-form" method="post" action="" lay-filter="example" id="form">
 				<input type="hidden" value={$content.id} name='content_id' />
 				<div class="layui-form-item">
 					<label class="layui-form-label">昵称</label>
@@ -102,7 +99,7 @@
 		  <legend>评论列表</legend>
 		</fieldset>
 		<ul class="comment-list">
-		 {form:name=comment num=3}
+		 {form:name=comment num=3 pid=0 value=form}
 			<li>
 				<div class="user-info">
 					<img src="{$form.icon}">
@@ -114,18 +111,20 @@
 				<div class="user-message">
 					{$form.content}
 					<ul>
+					{form:name=comment num=3 pid=$form['id'] value=form2}
 						<li>
 							<div class="user-info">
-								<img src="{$form.icon}">
+								<img src="{$form2.icon}">
 								<div>
-									<em>{$form.nickname}</em>
-									<span>2月24日 9：50</span>
+									<em>{$form2.nickname}</em>
+									<span>{echo:date('m月d日 h: s', $form2['create_time'])}</span>
 								</div>
 							</div>
 							<div class="user-message">
-							有一次在一个电影院里 一对情侣来看电影
+							{$form2.content}
 							</div>
 						</li>
+					 {/form}	
 					</ul>
 				</div>
 			</li>

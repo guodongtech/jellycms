@@ -42,13 +42,13 @@ class ParseModel extends Model
 							->getResultArray();		
         return $result;
     }
-    public function getSortByPid($pid)
+    public function getSortByPid($pid, $num)
     {
 		$builder = $this->db->table('sorts');
 		$result   = $builder->select('sorts.*,model.urlname as m_urlname, model.id as model_id')
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->where(['sorts.deleted'=>0, 'sorts.pid'=>$pid])
-							->get()
+							->get($num)
 							->getResultArray();
 							
 		
@@ -205,9 +205,8 @@ class ParseModel extends Model
 	
 	
 	
-    public function getSlide($gid)
+    public function getSlide($gid, $num)
     {
-		
 		if(!$gid){
 			$builder = $this->db->table('slide_group');
 			$result   = $builder->select('*')
@@ -215,13 +214,36 @@ class ParseModel extends Model
 								->get()
 								->getRowArray();
 			$gid = $result['id'];
-			if(!$gid) error('幻灯片分组不存在');
+			if(!$gid){
+				return array();//不存在返回空数组
+			}
 		}
 		$builder = $this->db->table('slide');
 		$result   = $builder->select('*')
 							->where(['deleted'=>0,'group_id'=>$gid])
-							->get()
+							->get($num)
 							->getResultArray();					
+        return $result;
+    }
+    public function getLink($gid, $num)
+    {
+		
+		if(!$gid){
+			$builder = $this->db->table('link_group');
+			$result   = $builder->select('*')
+								->where(['deleted'=>0,'status'=>1,'area_id'=>session('area_id')])
+								->get()
+								->getRowArray();
+			$gid = $result['id'];
+			if(!$gid){
+				return array();//不存在返回空数组
+			}
+		}
+		$builder = $this->db->table('link');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0,'group_id'=>$gid])
+							->get($num)
+							->getResultArray();							
         return $result;
     }
 	public function getPosition($sortId){
@@ -257,9 +279,18 @@ class ParseModel extends Model
 							->getResultArray();	
 		return $result;	
 	}
+	//获取可用表单列表
+	public function getLabel($name){
+		$builder = $this->db->table('label');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'status'=>1, 'name'=>$name])
+							->get()
+							->getRowArray();
+		return $result['value'];	
+	}
 	
 	//解析表单列表
-	public function getFormlistByFromName($name, $content_id){
+	public function getFormlistByFromName($name, $content_id, $pid, $num){
 		$formList = $this->getFormList();
 		$formNames = array_column($formList, 'table_name');
 		if(!in_array($name,$formNames)){
@@ -269,11 +300,10 @@ class ParseModel extends Model
 		$builder = $this->db->table($name);
 		$result   = $builder->select('*')
 							->where($where)
-							->where(['deleted'=>0, 'status'=>1])
+							->where(['deleted'=>0, 'status'=>1, 'pid'=>$pid])
 							->orderBy('id desc')
 							->get()
 							->getResultArray();	
-		
 		return $result;	
 	}
 	
