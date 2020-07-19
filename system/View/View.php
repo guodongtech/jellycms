@@ -293,7 +293,6 @@ class View implements RendererInterface
      */
 	public function resolve($str)
 	{
-
 		//优先处理include标签 为防止死循环，最多调用10层
 		for($i=0; preg_match('/{(\/?)(include)\s*(:?)([^}]*)}/i', $str, $matches); $i++){
 			$str = preg_replace_callback('/{(\/?)(include)\s*(:?)([^}]*)}/i', array($this,'translate'), $str); 
@@ -320,7 +319,7 @@ class View implements RendererInterface
 			$params = '['.trim($tem, ',').']';
 			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		}
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -564,6 +563,20 @@ class View implements RendererInterface
 					if(isset($attr['gid'])) $gid = $attr['gid'];
 					else $gid = 0; //不设置分组ID,则读当前区域第一个可用分组
 					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getLink('.$gid.', $num='.$num.') as $key=>$link){?>';
+				}
+				case 'pics:':
+				{
+					$attr = $this->getAttrs($matches[4]);
+					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
+					isset($attr['from'])? $from=$attr['from']:$from = 'content';
+					if(isset($attr['id'])){
+						$id = $attr['id'];
+					}else if($from == 'content'){
+						$id = '$content["id"]';
+					}else if($from == 'sort'){
+						$id = '$sort["id"]';
+					}
+					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPics('.$id.', $num='.$num.',"'.$from.'") as $key=>$pics){?>';
 				}
 				default:
 				{

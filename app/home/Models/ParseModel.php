@@ -307,7 +307,25 @@ class ParseModel extends Model
 		return $result;	
 	}
 	
-	
+
+	//获取图片集 只允许访问 content sorts表，其它访问非法
+	public function getPics($id, $num, $from){
+		if($from == 'content' || $from == 'sorts'){
+			$builder = $this->db->table($from);
+			$res   = $builder->select('*')
+								->where(['id'=>$id])
+								->get()
+								->getRowArray();
+			$srcs = json_decode($res['pics'], true);
+			$result = array();
+			foreach($srcs as $key=>$value){
+				$result[]['src'] = $value;
+			}
+			$result = array_slice($result,0,$num);
+			return $result;
+		}
+		return array();//防止前台报错，返回空数组	
+	}	
 	
 	
 	

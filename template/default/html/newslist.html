@@ -50,7 +50,15 @@
 		</div>
 		<div class="wow bounceInLeft">{pagebar:bar}</div>
 	</div>
+<!-- {pics:from=sort id=2 num=10}
+{$pics.src}
+{/pics} -->
+<!-- list标签简化版
+ID不传取CONTENT.ID，SORT不传取CONTENT表所有数据。当前sort=$sort['id']
+{tags:id=1,2,3 sort=1,2,3,4 num=3}
 
+
+{/tags} -->
 {include:html/foot.html}
 </body>
 </html>
