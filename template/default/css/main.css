@@ -703,6 +703,16 @@ a.btn-social, .btn-social {
 	animation-name: fadeInDown;
 	animation-delay:0.3s;
 }
+.index-news-right i{
+	font-size:18px;
+	margin-right:10px;
+}
+.index-news-right .answer i{
+	color:#52c018;
+}
+.index-news-right .question i{
+	color:rgb(255, 15, 101);
+}
 .index-news-right ul{
 	padding:20px 20px;
 	padding-top:10px;
@@ -716,7 +726,7 @@ a.btn-social, .btn-social {
 	font-weight:bold;
 	margin-bottom:14px;
 }
-.index-news-right li .awnser{
+.index-news-right li .answer{
 	color:#555
 }
 .index-news-left li a:hover,.index-news-right li a:hover {
