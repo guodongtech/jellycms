@@ -223,8 +223,15 @@
 		                     <div class="layui-input-block">
 		                     	<select name="pcode">
 			                        <option value="0">顶级栏目</option>
-			                        <option value="1">公司简介</option><option value="2">新闻中心</option><option value="3">　　公司动态</option><option value="4">　　行业动态</option><option value="5">产品中心</option><option value="6">　　网站建设</option><option value="7">　　域名空间</option><option value="8">服务案例</option><option value="9">招贤纳士</option><option value="10">在线留言</option><option value="11">联系我们</option><option value="12">解决方案</option><option value="13">API</option><option value="14">价格</option><option value="15">下载</option><option value="16">代理合作</option>			                    </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="顶级栏目" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="0" class="layui-this">顶级栏目</dd><dd lay-value="1" class="">公司简介</dd><dd lay-value="2" class="">新闻中心</dd><dd lay-value="3" class="">　　公司动态</dd><dd lay-value="4" class="">　　行业动态</dd><dd lay-value="5" class="">产品中心</dd><dd lay-value="6" class="">　　网站建设</dd><dd lay-value="7" class="">　　域名空间</dd><dd lay-value="8" class="">服务案例</dd><dd lay-value="9" class="">招贤纳士</dd><dd lay-value="10" class="">在线留言</dd><dd lay-value="11" class="">联系我们</dd><dd lay-value="12" class="">解决方案</dd><dd lay-value="13" class="">API</dd><dd lay-value="14" class="">价格</dd><dd lay-value="15" class="">下载</dd><dd lay-value="16" class="">代理合作</dd></dl></div>
-		                     </div>
+			                        <option value="1">公司简介</option><option value="2">新闻中心</option><option value="3">　　公司动态</option>
+									<option value="4">　　行业动态</option><option value="5">产品中心</option>
+									<option value="6">　　网站建设</option><option value="7">　　域名空间</option>
+									<option value="8">服务案例</option><option value="9">招贤纳士</option>
+									<option value="10">在线留言</option><option value="11">联系我们</option>
+									<option value="12">解决方案</option><option value="13">API</option><option value="14">价格</option>
+									<option value="15">下载</option><option value="16">代理合作</option>
+								</select>
+							</div>
 		                </div>
 		                
 		                <div class="layui-form-item">
@@ -239,18 +246,13 @@
 		                     <div class="layui-input-block">
 		                     	<select name="mcode" lay-filter="model" lay-verify="required">
 			                     	<option value="">请选择内容模型</option>
-			                        	                        	
 			                        	<option value="1" data-type="1" data-listtpl="" data-contenttpl="about.html">专题</option>
-			                        	                        	
 			                        	<option value="2" data-type="2" data-listtpl="newslist.html" data-contenttpl="news.html">新闻</option>
-			                        	                        	
 			                        	<option value="3" data-type="2" data-listtpl="productlist.html" data-contenttpl="product.html">产品</option>
-			                        	                        	
 			                        	<option value="4" data-type="2" data-listtpl="caselist.html" data-contenttpl="case.html">案例</option>
-			                        	                        	
 			                        	<option value="5" data-type="2" data-listtpl="joblist.html" data-contenttpl="job.html">招聘</option>
-			                        			                    </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择内容模型" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="" class="layui-select-tips">请选择内容模型</dd><dd lay-value="1" class="">专题</dd><dd lay-value="2" class="">新闻</dd><dd lay-value="3" class="">产品</dd><dd lay-value="4" class="">案例</dd><dd lay-value="5" class="">招聘</dd></dl></div>
-		                     </div>
+								</select>
+							</div>
 		                </div>
 		                
 		                 <input type="hidden" value="1" name="type" id="type">
@@ -260,22 +262,22 @@
 		                     <div class="layui-input-block">
 			                     <select name="listtpl" id="listtpl">
 			                     	<option value="">无</option>
-			                     				                        	<option value="about.html">about.html</option>
-			                        			                        	<option value="about_download.html">about_download.html</option>
-			                        			                        	<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
-			                        			                        	<option value="agent.html">agent.html</option>
-			                        			                        	<option value="buy.html">buy.html</option>
-			                        			                        	<option value="contact.html">contact.html</option>
-			                        			                        	<option value="help.html">help.html</option>
-			                        			                        	<option value="index.html">index.html</option>
-			                        			                        	<option value="index_1.html">index_1.html</option>
-			                        			                        	<option value="login.html">login.html</option>
-			                        			                        	<option value="open-api.html">open-api.html</option>
-			                        			                        	<option value="recruit.html">recruit.html</option>
-			                        			                        	<option value="register.html">register.html</option>
-			                        			                        	<option value="successcase.html">successcase.html</option>
-			                        			                     </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="无" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="" class="layui-select-tips">无</dd><dd lay-value="about.html" class="">about.html</dd><dd lay-value="about_download.html" class="">about_download.html</dd><dd lay-value="about_jiejuefangan.html" class="">about_jiejuefangan.html</dd><dd lay-value="agent.html" class="">agent.html</dd><dd lay-value="buy.html" class="">buy.html</dd><dd lay-value="contact.html" class="">contact.html</dd><dd lay-value="help.html" class="">help.html</dd><dd lay-value="index.html" class="">index.html</dd><dd lay-value="index_1.html" class="">index_1.html</dd><dd lay-value="login.html" class="">login.html</dd><dd lay-value="open-api.html" class="">open-api.html</dd><dd lay-value="recruit.html" class="">recruit.html</dd><dd lay-value="register.html" class="">register.html</dd><dd lay-value="successcase.html" class="">successcase.html</dd></dl></div>
-		                     </div>
+									<option value="about.html">about.html</option>
+									<option value="about_download.html">about_download.html</option>
+									<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
+									<option value="agent.html">agent.html</option>
+									<option value="buy.html">buy.html</option>
+									<option value="contact.html">contact.html</option>
+									<option value="help.html">help.html</option>
+									<option value="index.html">index.html</option>
+									<option value="index_1.html">index_1.html</option>
+									<option value="login.html">login.html</option>
+									<option value="open-api.html">open-api.html</option>
+									<option value="recruit.html">recruit.html</option>
+									<option value="register.html">register.html</option>
+									<option value="successcase.html">successcase.html</option>
+								</select>
+							</div>
 		                </div>
 		                
 		                 <div class="layui-form-item">
@@ -283,29 +285,29 @@
 		                     <div class="layui-input-block">
 			                     <select name="contenttpl" id="contenttpl">
 			                     	<option value="">无</option>
-			                     				                        	<option value="about.html">about.html</option>
-			                        			                        	<option value="about_download.html">about_download.html</option>
-			                        			                        	<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
-			                        			                        	<option value="agent.html">agent.html</option>
-			                        			                        	<option value="buy.html">buy.html</option>
-			                        			                        	<option value="contact.html">contact.html</option>
-			                        			                        	<option value="help.html">help.html</option>
-			                        			                        	<option value="index.html">index.html</option>
-			                        			                        	<option value="index_1.html">index_1.html</option>
-			                        			                        	<option value="login.html">login.html</option>
-			                        			                        	<option value="open-api.html">open-api.html</option>
-			                        			                        	<option value="recruit.html">recruit.html</option>
-			                        			                        	<option value="register.html">register.html</option>
-			                        			                        	<option value="successcase.html">successcase.html</option>
-			                        			                     </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="无" value="" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="" class="layui-select-tips">无</dd><dd lay-value="about.html" class="">about.html</dd><dd lay-value="about_download.html" class="">about_download.html</dd><dd lay-value="about_jiejuefangan.html" class="">about_jiejuefangan.html</dd><dd lay-value="agent.html" class="">agent.html</dd><dd lay-value="buy.html" class="">buy.html</dd><dd lay-value="contact.html" class="">contact.html</dd><dd lay-value="help.html" class="">help.html</dd><dd lay-value="index.html" class="">index.html</dd><dd lay-value="index_1.html" class="">index_1.html</dd><dd lay-value="login.html" class="">login.html</dd><dd lay-value="open-api.html" class="">open-api.html</dd><dd lay-value="recruit.html" class="">recruit.html</dd><dd lay-value="register.html" class="">register.html</dd><dd lay-value="successcase.html" class="">successcase.html</dd></dl></div>
-		                     </div>
+									<option value="about.html">about.html</option>
+									<option value="about_download.html">about_download.html</option>
+									<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
+									<option value="agent.html">agent.html</option>
+									<option value="buy.html">buy.html</option>
+									<option value="contact.html">contact.html</option>
+									<option value="help.html">help.html</option>
+									<option value="index.html">index.html</option>
+									<option value="index_1.html">index_1.html</option>
+									<option value="login.html">login.html</option>
+									<option value="open-api.html">open-api.html</option>
+									<option value="recruit.html">recruit.html</option>
+									<option value="register.html">register.html</option>
+									<option value="successcase.html">successcase.html</option>
+							 </select>
+							</div>
 		                </div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">状态</label>
 		                     <div class="layui-input-block">
-		                     	<input type="radio" name="status" value="1" title="显示" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>显示</div></div>
-								<input type="radio" name="status" value="0" title="隐藏"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>隐藏</div></div>
+		                     	<input type="radio" name="status" value="1" title="显示" checked="">
+								<input type="radio" name="status" value="0" title="隐藏">
 		                     </div>
 		                </div>    
 					<div class="layui-form-item">

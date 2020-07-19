@@ -2,6 +2,8 @@
 namespace App\Controllers;
 use \App\Models\SortsModel;
 use \App\Models\ModelModel;
+use \App\Models\AreaModel;
+use \App\Models\FileModel;
 
 class Sorts extends BaseController
 {
@@ -10,14 +12,20 @@ class Sorts extends BaseController
     {
         $this->model = new SortsModel();
         $this->modelModel = new ModelModel();
+        $this->areaModel = new AreaModel();
+        $this->FileModel = new FileModel();
     }
     public function index()
     {
 		$sortsList = $this->model->getList();
 		$modelList = $this->modelModel->getList();
+		$areaList = $this->areaModel->getList();
+		$template_file = $this->FileModel->getList();
 		$data = [
 			'list' => $sortsList,
 			'modelList' => $modelList,
+			'areaList' => $areaList,
+			'template_file' => $template_file,
 		];
         echo view('html/sorts.html', $data);
     }

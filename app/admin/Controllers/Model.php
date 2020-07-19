@@ -14,7 +14,8 @@ class Model extends BaseController
 
     public function index()
     {
-        echo view('html/model.html');
+		$data['template_file'] = array();
+        echo view('html/model.html', $data);
     }
 	//ajax列表
     public function getList()

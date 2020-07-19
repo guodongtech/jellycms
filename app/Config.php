@@ -31,10 +31,11 @@ class Config
 		'port'     => 3306,
 	];
 	public $rewriteRule = 'url';//url:普通模式?urlname/id.html ?urlname/;path：伪静态开启伪静态后路由由config/routes.php配置控制/urlname/id.html
-	public $suffix = 'html';
+	public $suffix = 'html'; //URL后缀
 	public $appTimezone = 'Asia/Shanghai';
 	public $homeViewName = 'template';
 	public $theme = 'default'; //前台模板目录在/template中
+	public $templateFolder = 'html'; //模板真实路径 $homeViewName/$theme/$templateFolder
 	public $adminViewName = 'view'; 
 	public $adminTheme = 'admin'; //后台模板目录在app/admin/view中
 	public $version = '3.8.1';
