@@ -2,6 +2,7 @@
 namespace App\Controllers;
 use \App\Models\ModelModel;
 use CodeIgniter\CLI\CLI;
+use \App\Models\FileModel;
 class Model extends BaseController
 {
 
@@ -10,11 +11,13 @@ class Model extends BaseController
     public function __construct()
     {
         $this->model = new ModelModel();
+		$this->FileModel = new FileModel();
     }
 
     public function index()
     {
-		$data['template_file'] = array();
+		$template_file = $this->FileModel->getList();
+		$data['template_file'] = $template_file;
         echo view('html/model.html', $data);
     }
 	//ajax列表
