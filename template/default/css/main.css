@@ -723,7 +723,10 @@ a.btn-social, .btn-social {
     color: #3FBBC0 !important;
 }
 
-
+.layui-input-block {
+    margin-left: 80px !important;
+    min-height: 36px;
+}
 
 /* .section-content.news .news-list ul:nth-child(1){
 	-webkit-animation-name: fadeInDown;
