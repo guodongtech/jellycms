@@ -16,7 +16,7 @@ class Model extends BaseController
 
     public function index()
     {
-		$template_file = $this->FileModel->getList();
+		$template_file = $this->FileModel->getTemplateList();
 		$data['template_file'] = $template_file;
         echo view('html/model.html', $data);
     }

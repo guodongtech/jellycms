@@ -20,7 +20,7 @@ class Sorts extends BaseController
 		$sortsList = $this->model->getList();
 		$modelList = $this->modelModel->getList();
 		$areaList = $this->areaModel->getList();
-		$template_file = $this->FileModel->getList();
+		$template_file = $this->FileModel->getTemplateList();
 		$data = [
 			'list' => $sortsList,
 			'modelList' => $modelList,

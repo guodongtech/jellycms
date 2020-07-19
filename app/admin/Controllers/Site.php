@@ -1,19 +1,22 @@
 <?php
 namespace App\Controllers;
 use \App\Models\SiteModel;
-
+use \App\Models\FileModel;
 class Site extends BaseController
 {
     private $model;
     public function __construct()
     {
         $this->model = new SiteModel();
+		$this->FileModel = new FileModel();
     }
     public function index()
     {
 		$site = $this->model->getSite($this->session->area_id);
+		$themeList = $this->FileModel->getThemeList();
 		$data = [
 			"site" => $site,
+			"themeList" => $themeList,
 		];
          echo view('html/site.html', $data);
     }

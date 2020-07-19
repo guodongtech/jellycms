@@ -88,8 +88,9 @@
 				    <label class="layui-form-label">PC模板</label>
 				    <div class="layui-input-inline">
 						<select name="pctheme">
-							<option value="default" selected="selected">default</option> 
-							<option value="default">default</option> 
+							{foreach:items = $themeList key=$k item=$v}
+							<option value="{$v}">{$v}</option>
+							{/foreach}
 						</select>
 				    </div>
 				 </div>    
@@ -97,8 +98,9 @@
 				    <label class="layui-form-label">手机模板</label>
 				    <div class="layui-input-inline">
 						<select name="mobiletheme">
-							<option value="default" selected="selected">default</option> 
-							<option value="default">default</option> 
+							{foreach:items = $themeList key=$k item=$v}
+							<option value="{$v}">{$v}</option>
+							{/foreach}
 						</select>
 				    </div>
 				 </div>
