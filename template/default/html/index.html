@@ -15,7 +15,7 @@
 </head>
 <body>
 {include:html/head.html}
-<div class="swiper-container">
+<div class="swiper-container" style="width:100%; height:450px; position:fixed; top:0; left:0;right:0; z-index:-8;" >
     <div class="swiper-wrapper">
 	{slide:}
 		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
@@ -40,7 +40,7 @@
     <div class="swiper-button-next"></div>
 </div>
  
-<section class="fe">
+<section class="fe" style="margin-top:450px;">
 	<div class="section-content featrue">
 		<h1 class="wow fadeInDown">系统特色</h1>
 		<p class="wow flipInY">永久开源、免费的 PHP 建站系统</p>
@@ -133,7 +133,7 @@
 
 
 
-<section>
+<section class="bg-f5">
 	<div class="section-content">
 		<h1 class="wow fadeInDown">功能特色</h1>
 		<p>我们一直专注于CMS系统研发，累积了丰富的实战经验</p>
@@ -184,7 +184,7 @@
 		</div>
 	</div>
 </section>
-<section>
+<section class="bg-f5">
 	<div class="section-content news">
 		<h1 class="wow fadeInDown">新闻中心</h1>
 		<p>永久开源、免费的 PHP 建站系统</p>
