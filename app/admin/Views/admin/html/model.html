@@ -69,20 +69,41 @@
 	                     </div>
 	                </div>
 	                
-	                <div class="layui-form-item">
+	               <!--  <div class="layui-form-item">
 	                     <label class="layui-form-label">列表页模板</label>
 	                     <div class="layui-input-inline">
 	                     	<input type="text" name="listtpl" placeholder="列表页模板" class="layui-input">
 	                     </div>
-	                </div>
-	                
+	                </div> -->
 	                <div class="layui-form-item">
+	                     <label class="layui-form-label">列表页模板  <span class="layui-text-red">*</span></label>
+	                     <div class="layui-input-inline">
+	                     	 <select name="listtpl" lay-verify="required">
+		                     	<option value="">请选择模板</option>
+		                     	{foreach:items = $template_file key=$k item=$v}
+		                     	<option value="{$v}">{$v}</option>
+		                     	{/foreach}
+		                    </select>
+						</div>
+	                </div>
+
+	                <!-- <div class="layui-form-item">
 	                     <label class="layui-form-label">详情页模板</label>
 	                     <div class="layui-input-inline">
 	                     	<input type="text" name="contenttpl" placeholder="详情页模板" class="layui-input">
 	                     </div>
+	                </div> -->
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">详情页模板  <span class="layui-text-red">*</span></label>
+	                     <div class="layui-input-inline">
+	                     	 <select name="contenttpl" lay-verify="required">
+		                     	<option value="">请选择模板</option>
+		                     	{foreach:items = $template_file key=$k item=$v}
+		                     	<option value="{$v}">{$v}</option>
+		                     	{/foreach}
+		                    </select>
+						</div>
 	                </div>
-	                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">状态</label>
 	                     <div class="layui-input-inline">
@@ -97,7 +118,6 @@
 	 
 	
 	 
-
 </div>
 </div>
 	

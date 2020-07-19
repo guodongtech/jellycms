@@ -28,4 +28,15 @@ class ModelModel extends Model
  	public function edit($data){
 		return $this->save($data);
 	}
+	public function checkEdit($data){
+		$sql = "SELECT id FROM ".$this->db->prefixTable('model')." where name='".$data['name']."' and deleted=0";
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
+	// 获取当前model的数据
+	public function getValues($model_id){
+    	$sql = "SELECT * FROM ".$this->db->prefixTable('model')." where id=".$model_id;
+    	$result = $this->db->query($sql)->getRowArray();
+    	return $result;
+    }
 }

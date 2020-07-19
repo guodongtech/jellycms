@@ -60,4 +60,9 @@ class SortsModel extends Model
 							->getResultArray();
         return $result;
 	}
+	public function checkEdit($data){
+		$sql = "SELECT id FROM ".$this->db->prefixTable('sorts')." where name='".$data['name']."' and deleted=0";
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
 }

@@ -44,7 +44,7 @@
 	  	    </div>
 	  	    
 	  	    <div class="layui-tab-item">
-				<form action="{url:/sorts/edit/}" method="post" id="form" class="layui-form">
+				<form action="{url:/sorts/edit/}" method="post" id="form" class="layui-form" lay-filter="sorts-form">
 					<input type="hidden" name="id" value=""> 
 		  	     	<div class="layui-tab">
 					  <ul class="layui-tab-title">
@@ -72,7 +72,17 @@
 										
 								</div>
 			                </div>
-			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">区域id</label>
+			                     <div class="layui-input-inline">
+			                     	<select name="area_id">
+									{foreach:items = $areaList key=$k item=$v}
+										<option value="{$v['id']}">&nbsp;&nbsp;&nbsp;&nbsp;{$v['name']}</option>
+									{/foreach}
+									</select>
+										
+								</div>
+			                </div>
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">栏目名称 <span class="layui-text-red">*</span></label>
 			                     <div class="layui-input-inline">
@@ -83,7 +93,7 @@
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">URL名称 </label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="filename" placeholder="请输入URL名称，如:test" class="layui-input">
+			                     	<input type="text" name="urlname" lay-verify="required" placeholder="请输入URL名称，如:test" class="layui-input">
 			                     </div>
 			                </div>
 			                
@@ -106,20 +116,9 @@
 			                     <div class="layui-input-inline">
 				                     <select name="listtpl" id="listtpl">
 				                     	<option value="">无</option>
-										<option value=".html">about.html</option>
-										<option value="about_download.html">about_download.html</option>
-										<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
-										<option value="newslist.html">agent.html</option>
-										<option value="buy.html">buy.html</option>
-										<option value="contact.html">contact.html</option>
-										<option value="help.html">help.html</option>
-										<option value="index.html">index.html</option>
-										<option value="index_1.html">index_1.html</option>
-										<option value="login.html">login.html</option>
-										<option value="open-api.html">open-api.html</option>
-										<option value="recruit.html">recruit.html</option>
-										<option value="register.html">register.html</option>
-										<option value="successcase.html">successcase.html</option>
+				                     	{foreach:items = $template_file key=$k item=$v}
+				                     		<option value="{$v}">{$v}</option>
+				                     	{/foreach}
 								 </select>
 										
 								</div>
@@ -130,20 +129,9 @@
 			                     <div class="layui-input-inline">
 				                     <select name="contenttpl" id="contenttpl">
 				                     	<option value="">无</option>
-										<option value="about.html">about.html</option>
-										<option value="about_download.html">about_download.html</option>
-										<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
-										<option value="agent.html">agent.html</option>
-										<option value="news.html">buy.html</option>
-										<option value="contact.html">contact.html</option>
-										<option value="help.html">help.html</option>
-										<option value="index.html">index.html</option>
-										<option value="index_1.html">index_1.html</option>
-										<option value="login.html">login.html</option>
-										<option value="open-api.html">open-api.html</option>
-										<option value="recruit.html">recruit.html</option>
-										<option value="register.html">register.html</option>
-										<option value="successcase.html">successcase.html</option>
+										{foreach:items = $template_file key=$k item=$v}
+				                     		<option value="{$v}">{$v}</option>
+				                     	{/foreach}
 								 </select>
 								
 								</div>
@@ -219,7 +207,7 @@
 					</div>
 					<div class="layui-form-item">
 						 <div class="layui-input-block">
-						    <button class="layui-btn" lay-submit="">立即提交</button>
+						    <button class="layui-btn" lay-submit lay-filter="submit" >立即提交</button>
 						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						 </div>
 					</div>
@@ -366,7 +354,7 @@ treetable.render({
 			{type: 'checkbox', fixed: 'left'},
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 			{field:'name', title:'栏目名称', width:120},
-			{field:'filename', title:'URL名称', width:120},
+			{field:'urlname', title:'URL名称', width:120},
 			{field:'model_id', title:'模型', width:120},
 			{field:'listtpl', title:'列表页模板', width:120},
 			{field:'contenttpl', title:'详情页模板', width:120},
@@ -435,6 +423,40 @@ treetable.render({
 
 		};
 		form.render();
+	});
+// 模型下拉联动
+form.on('select(model)', function(sortsData){
+	$.post('{url:/sorts/getValues/'+sortsData.value+'}',$("#form").serialize(),function(data){
+		form.val("sorts-form", { 
+		  "listtpl": data.listtpl
+		  ,"contenttpl": data.contenttpl
+		  ,
+		});
+	}, 'json');
+});      
+// 表单提交
+	form.on('submit(submit)', function(data){
+	   var url = $("#form").attr('action');
+	   $.ajax({
+	        url:url, //请求的服务端地址
+	        data:data.field,
+	        type:"post",
+	        dataType:"json",
+	        success:function(data){
+	            data = eval(data);
+	            layui.use('layer', function(){
+	                var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
+	                    if(data.url){
+	                        window.location.href=data.url;
+	                    }
+	                });
+	            });     
+	        },
+	        error:function(){
+	          layer.msg('error'); //错误的处理
+	        }
+	    });
+	   return false;
 	});
 })
 </script>
