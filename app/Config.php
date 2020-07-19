@@ -30,6 +30,7 @@ class Config
 		'failover' => [],
 		'port'     => 3306,
 	];
+	public $sessionExpiration        = 7200;//session超时时间 秒
 	public $rewriteRule = 'url';//url:普通模式?urlname/id.html ?urlname/;path：伪静态开启伪静态后路由由config/routes.php配置控制/urlname/id.html
 	public $suffix = 'html'; //URL后缀
 	public $appTimezone = 'Asia/Shanghai';

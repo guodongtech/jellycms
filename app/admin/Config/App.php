@@ -181,7 +181,7 @@ class App extends BaseConfig
 	|
 	*/
 	public $sessionDriver            = 'CodeIgniter\Session\Handlers\FileHandler';
-	public $sessionCookieName        = 'ci_session';
+	public $sessionCookieName        = 'jelly_session';
 	public $sessionExpiration        = 7200;
 	public $sessionSavePath          = WRITEPATH . 'session';
 	public $sessionMatchIP           = false;
@@ -268,5 +268,6 @@ class App extends BaseConfig
 	{
 		$config = new \config\config();
 		$this->appTimezone = $config->appTimezone;
+		$this->sessionExpiration = $config->sessionExpiration;
 	}
 }
