@@ -110,8 +110,8 @@ header:hover {
 	display:flex;
 	justify-content:flex-start;
 	align-items:center;
-	padding-top:10px;
-	padding-bottom:10px;
+	//padding-top:10px;
+	//padding-bottom:10px;
 	box-sizing:border-box;
 	color:#52bd32;
 	font-size:28px;
@@ -712,6 +712,7 @@ a.btn-social, .btn-social {
 }
 .index-news-right .question i{
 	color:rgb(255, 15, 101);
+	text-shadow:none;
 }
 .index-news-right ul{
 	padding:20px 20px;

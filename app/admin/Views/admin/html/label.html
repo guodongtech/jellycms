@@ -104,7 +104,7 @@
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 			{field:'name', title:'名称', width:120},
 			{field:'lebel_name', title:'调用标签', width:220, templet: function(res){
-				return '{label:'+ res.name +'}'
+				return '{label'+':'+ res.name +'}'
 			}},
 			{field:'description', title:'描述', templet: function(res){
 				return '<em>'+ res.description +'</em>'
