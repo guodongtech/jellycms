@@ -294,7 +294,14 @@ class View implements RendererInterface
 	public function resolve($str)
 	{
 
-		$str = preg_replace_callback('/{(\/?)(include)\s*(:?)([^}]*)}/i', array($this,'translate'), $str); //优先处理include标签
+		//优先处理include标签 为防止死循环，最多调用10层
+		for($i=0; preg_match('/{(\/?)(include)\s*(:?)([^}]*)}/i', $str, $matches); $i++){
+			$str = preg_replace_callback('/{(\/?)(include)\s*(:?)([^}]*)}/i', array($this,'translate'), $str); 
+			if($i>10){ //防止死循环
+				exit('模板include使用超过10层嵌套，可能已产生死循环.请检查模板调用!');
+				break;
+			}
+		}
 		if(preg_match('/{(\/?)(list)\s*(:?)([^}]*)}/i', $str, $matches)){ //处理pagebar任意位置问题，三处优先处理顺序不能变
 			$attr = $this->getAttrs($matches[4]);
 			isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
