@@ -97,7 +97,15 @@ class Model extends BaseController
 			echo json_encode($rdata);
 			exit;
 		}
-		
+		// 内置模型禁止删除
+		$check = $this->model->getValues($id);
+		if($check['issystem'] == 1){
+			$rdata = [
+				"code" => 0,
+				"msg" => "内置模型禁止删除",
+			];
+			exit(json_encode($rdata));
+		}
 		$data = [
 			'id' => $id,
 			'deleted' => 1,
