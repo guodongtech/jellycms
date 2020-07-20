@@ -33,11 +33,53 @@
         </h1>
         <div class="nav-button">
 			<div class="open"><i class="jellyfont jellymenu" aria-hidden="true"></i></div>
-            <div class="close"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <div class="close"><i class="jellyfont jellyclose" aria-hidden="true"></i></div>
         </div>
     </div>
 </header>
-<div class="swiper-container wp" style="width:100%; height:288px; position:fixed; top:55px; left:0;right:0; z-index:-8;" >
+<nav id="mobile-nav" style="margin-right: 0px;">
+  <h3>MENU</h3>
+  <ul class="default-mobile-nav-menu  cl">
+    <li class="a">
+      <a href="/" target="_self" title="" class="bb">
+        <span>首页</span>
+        <em></em>
+      </a>
+    </li>
+    <li>
+      <a href="news-list-3385-1.html" target="_self" title="" class="bb">
+        <span>新闻中心</span>
+        <em></em>
+      </a>
+      <ul>
+        <li>
+          <a href="news-list-3387-1.html" target="_self" class="">
+            <span>综合新闻</span>
+            <em></em>
+          </a>
+        </li>
+        <li>
+          <a href="news-list-3389-1.html" target="_self" class="">
+            <span>项目动态</span>
+            <em></em>
+          </a>
+        </li>
+        <li>
+          <a href="news-list-3391-1.html" target="_self" class="">
+            <span>产业资讯</span>
+            <em></em>
+          </a>
+        </li>
+      </ul>
+    </li>
+   
+    
+    
+    
+
+  </ul>
+</nav>
+<div class="swiper-container" style="width:100%; height:288px; position:fixed; top:55px; left:0;right:0; z-index:-8;" >
     <div class="swiper-wrapper">
 	{slide:}
 		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
@@ -57,12 +99,9 @@
 		</div>
 	{/slide}
     </div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
 </div>
 
-<section class="featrue wp">
+<section class="featrue wp wow fadeInUp">
 	<h1>系统特色</h1>
 	<div class="slogan-con">
 		<span class="slogan">永久开源、免费的 PHP 建站系统</span>
@@ -105,14 +144,14 @@
 		</li>
 	</ul>
 </section>
-<section class="about-us wp">
+<section class="about-us wp wow fadeInUp">
 	<div class="about-content">
 		<img src="{$site.logo}" />
 		<h2>北京国栋科技有限公司</h2>
 		<p>设计是把一种设想通过合理的规划、周密的计划、通过各种感觉形式传达出来的过程。人类通过劳动改造世界， 创造文明，创造物质财富和精神财富，而最基础、最主要的创造活动是造物。设计便是造物活动进行预先的计划， 可以把任何造物活动的计划技术和计划过程理解为设计。</p>
 	</div>
 </section>
-<section class="product wp">
+<section class="product wp wow fadeInUp">
 	<h1>功能特色</h1>
 	<div class="slogan-con">
 		<span class="slogan">永久开源、免费的 PHP 建站系统</span>
@@ -120,13 +159,13 @@
 	</div>
 	<span class="separator"></span>
 	<ul class="p-items">
-		<li><img src="/static/images/p1.jpg"><span>功能一</span></li>
-		<li><img src="/static/images/p2.jpg"><span>功能一</span></li>
-		<li><img src="/static/images/p3.jpg"><span>功能一</span></li>
-		<li><img src="/static/images/p4.jpg"><span>功能一</span></li>
+		<li class="wow fadeInUp delay1"><img src="/static/images/p1.jpg"><span>功能一</span></li>
+		<li class=" wow fadeInUp delay3"><img src="/static/images/p2.jpg"><span>功能一</span></li>
+		<li class=" wow fadeInUp delay1"><img src="/static/images/p3.jpg"><span>功能一</span></li>
+		<li class=" wow fadeInUp delay3"><img src="/static/images/p4.jpg"><span>功能一</span></li>
 	</ul>
 </section>
-<section class="statistics wp">
+<section class="statistics wp wow fadeInUp">
 	<div class="sta-data">
 		<ul>
 			<li><span>10年+</span><p>服务时间</p></li>
@@ -137,71 +176,82 @@
 	</div>
 </section>
 
-<section class="news wp">
+<section class="news wp wow fadeInUp">
 	<h1>新闻动态</h1>
 	<div class="slogan-con">
 		<span class="slogan">永久开源、免费的 PHP 建站系统</span>
 		<span class="line"></span>
 	</div>
 	<span class="separator"></span>
-	<ul class="p-items">
-		<li>
+	<ul class="n-items">
+		<li class="wow fadeInUp delay1">
 			<a href="">
-				<img src="/static/images/p1.jpg">
-				<div>
-					<span>功能一</span>
-					<p>JellyCMS V3.0.05升级日志</p>
+				<div class="basic">
+					<img src="/static/images/p1.jpg">
+					<span class="time"><i>MAR</i><em>15</em></span>
+				</div>
+				<div class="context">
+					<span>功能一功能一功能一功能一</span>
+					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
 				</div>
 			</a>
 		</li>
-		<li>
+		<li class="wow fadeInUp delay3">
 			<a href="">
-				<img src="/static/images/p1.jpg">
-				<div>
-					<span>功能一</span>
-					<p>JellyCMS V3.0.05升级日志</p>
+				<div class="basic">
+					<img src="/static/images/p1.jpg">
+					<span class="time"><i>MAR</i><em>15</em></span>
+				</div>
+				<div class="context">
+					<span>功能一功能一功能一功能一</span>
+					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
 				</div>
 			</a>
 		</li>
-		<li>
+		<li class="wow fadeInUp delay5">
 			<a href="">
-				<img src="/static/images/p1.jpg">
-				<div>
-					<span>功能一</span>
-					<p>JellyCMS V3.0.05升级日志</p>
+				<div class="basic">
+					<img src="/static/images/p1.jpg">
+					<span class="time"><i>MAR</i><em>15</em></span>
+				</div>
+				<div class="context">
+					<span>功能一功能一功能一功能一</span>
+					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
 				</div>
 			</a>
 		</li>
-		<li>
-			<a href="">
-				<img src="/static/images/p1.jpg">
-				<div>
-					<span>功能一</span>
-					<p>JellyCMS V3.0.05升级日志</p>
-				</div>
-			</a>
-		</li>
-		<li>
-			<a href="">
-				<img src="/static/images/p1.jpg">
-				<div>
-					<span>功能一</span>
-					<p>JellyCMS V3.0.05升级日志</p>
-				</div>
-			</a>
-		</li>
+ 
 	</ul>
 </section>
 
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<section class="wp contact-us wow fadeInUp">
+	<div>
+		<h1>北京国栋科技有限公司</h1>
+		<p>JellyCMS完全免费并开源（MIT Licensed）,50,000+ 使用者，200,000+ 网站及应用</p>
+	</div>
+</section>
+<section class="wp copyright wow fadeInUp">
+	<p>Copyright © 2020 北京国栋科技有限公司版权所有</p>
+	<p>技术支持：国栋科技</p>
+</section>
+
+<footer> 
+    <div class="mbfootcontact">
+		<a href="" class="jellyfont jellyhome active"></a>
+		<a href="" class="jellyfont jellyqq"></a> 
+		<a class="jellyfont jellyphone" href="tel:400-888-8888"></a>
+		<a class="jellyfont jellyweixin"></a>
+    </div>
+</footer>
+
+
+
+
+
+
+
 
 
 
@@ -233,7 +283,7 @@
     },
 	 autoplay: {
 	  disableOnInteraction: false, //手动滑动之后不打断播放
-	  delay: 88888
+	  delay: 2888
 	},
     on:{
       init: function(){
@@ -247,31 +297,78 @@
     }
   }) 
 
+var wow = new WOW({
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 0,
+    mobile: true,
+    live: true
+});
+wow.init();
 
 
+var navw = $('#mobile-nav').innerWidth(); //导航宽度
+var headh = $('header').innerHeight();	//头部高度
+var footerh = $('footer').innerHeight(); //底部高度
+var b_t = 0;	//展开导航后的 body 偏移量
+var bobyl = navw+b_t;
+$('#mobile-nav').stop().css({'marginRight':-navw});
+$('#default-mobile-spacing-header').css({'height':headh});
+$('#default-mobile-spacing-footer').css({'height':footerh});
+$('.nav-button div').click(function(){
+	if($('body').hasClass('nav-on')){
+		off();
+	} else {
+		on();
+	}
+});
+function off(){
+	$('.nav-button .close').hide();
+	$('.nav-button .open').show();
+	$('body').stop().animate({'left':0,'top':0},500);
+	$('#mobile-nav').stop().animate({'marginRight':-navw},500);
+	$('body').removeClass('nav-on').addClass('nav-off');
+	$('footer,header').stop().animate({'left':0},500);
+}
+function on(){
+	$('.nav-button .open').hide().siblings('.nav-button .close').show();
+	$('body').removeClass('nav-off').addClass('nav-on');
+	$('body').stop().animate({'left':-bobyl,'top':b_t},500);
+	$('footer,header').stop().animate({'left':-navw},500);
+	$('#mobile-nav').stop().animate({'marginRight':0},500);
 
+}
 
-
-
-
-
-
-
+var $scroll = $(document).scrollTop();
+var direction;
+$(document).scroll(function() {
+	if($('header').length && $('footer').length){
+		var ht = $('header').position().top;
+		var ft = parseInt($('footer').css('bottom'));
+		if($scroll > $(document).scrollTop()){
+			direction = 'down';
+		} else {
+			direction = 'up';
+		}
+		if(direction == 'up'){
+			if(ht == 0 && $(document).scrollTop() > 50){
+				$('header').stop().animate({'top':-headh},500);
+			}
+			if(ft < 0){
+				$('footer').stop().animate({'bottom':0},500);
+			}
+		} else if(direction == 'down'){
+			if(ht < 0){
+				$('header').stop().animate({'top':0},500);
+			}
+			if(ft == 0){
+				$('footer').stop().animate({'bottom':-footerh},500);
+			}
+		}	
+		$scroll = $(document).scrollTop();
+	}
+});
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>
