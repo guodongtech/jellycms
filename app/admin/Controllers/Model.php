@@ -46,11 +46,27 @@ class Model extends BaseController
 			exit;
 		}
 		$data = $post;
+		// 校验模型是否已存在
+		$check = $this->model->checkEdit($data);
 		if(!$post['id']){
+			if(count($check)>0){
+				$rdata = [
+					"code" => 0,
+					"msg" => "该模型已存在",
+				];
+				exit(json_encode($rdata));	
+			}
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
 		}else{
+			if(count($check)>0 && $check[0]['id']!=$post['id']){
+				$rdata = [
+					"code" => 0,
+					"msg" => "该模型已存在",
+				];
+				exit(json_encode($rdata));	
+			}
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
