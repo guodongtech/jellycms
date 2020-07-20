@@ -27,5 +27,21 @@ class LabelModel extends Model
 	public function edit($data){
 		return $this->save($data);
 	}
+	public function checkEdit($data){
+		$sql = "SELECT id FROM ".$this->db->prefixTable('label')." where name='".$data['name']."' and deleted=0";
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
+	public function inputRules($data){
+		// 是否为英文名称
+		if(!preg_match("/^[a-zA-Z1-9_]+$/", $data['name'])){
+			$rdata = [
+				"code" => 0,
+				"msg" => "必须为英文名",
+			];
+			return json_encode($rdata);
+		}
+		return true;
+	}
 }
 
