@@ -1,0 +1,51 @@
+{
+  "id": "1955700",
+  "name": "常用",
+  "font_family": "jellyfont",
+  "css_prefix_text": "jelly",
+  "description": "常用",
+  "glyphs": [
+    {
+      "icon_id": "310700",
+      "name": "menu",
+      "font_class": "menu",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "830919",
+      "name": "qq",
+      "font_class": "qq",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "1488731",
+      "name": "phone",
+      "font_class": "phone",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "5326767",
+      "name": "home",
+      "font_class": "home",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "8327185",
+      "name": "weixin",
+      "font_class": "weixin",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "15838444",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    }
+  ]
+}
