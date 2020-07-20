@@ -27,5 +27,10 @@ class MOdelFieldModel extends Model
 	public function edit($data){
 		return $this->save($data);
 	}
+	public function checkEdit($data){
+		$sql = "SELECT id FROM ".$this->db->prefixTable('modelfield')." where name='".$data['name']."' and model_id=".$data['model_id']." and deleted=0";
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
   
 }
