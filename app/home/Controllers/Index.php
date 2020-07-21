@@ -21,9 +21,6 @@ class Index extends BaseController
 			header('Location: '.$this->config->mobileDomain);
 			exit;
 		}
-		
-		
-		
 		$request = \Config\Services::request();
 		$agent = $request->getUserAgent();
 		if ($agent->isMobile())

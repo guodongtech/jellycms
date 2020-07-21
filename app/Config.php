@@ -43,5 +43,5 @@ class Config
 	public $version = '3.8.1';
 	public $catchTime = 5; //缓存时间s
 	public $catched = 1;//是否开启缓存
-	public $mobileDomain = '';//移动端域名
+	public $mobileDomain = '';//移动端域名  必须指定协议  http:// https://
 }
