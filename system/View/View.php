@@ -160,25 +160,7 @@ class View implements RendererInterface
 	{
 		$this->config   = $config;
 		$this->viewPath = rtrim($viewPath, '/ ') . '/';
-		
-		//拼接模板路径
-		$configData = new \config\config();
-		$request = \Config\Services::request();
-		$agent = $request->getUserAgent();
-		if ($agent->isMobile())
-		{
-			$this->viewPath;
-		}
-		else
-		{
-			$this->viewPath;
-		}
-		
-		
-		
-		
-		$this->viewDirectory = $this->viewDirectory.$config->theme;
-		
+		$this->viewDirectory = $this->viewDirectory;
 		$this->loader   = is_null($loader) ? Services::locator() : $loader;
 		$this->logger   = is_null($logger) ? Services::logger() : $logger;
 		$this->debug    = is_null($debug) ? CI_DEBUG : $debug;

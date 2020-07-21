@@ -102,6 +102,8 @@ function post(){
 		echo view('html/dispatch_jump.html', $data);exit;
 
     }
- 
+ function isMobile(){
+	 return 1;
+ }
  
  
