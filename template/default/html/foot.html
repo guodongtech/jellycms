@@ -205,27 +205,43 @@
   
   
 $(document).ready(function (){
-$(window).scroll(function(){
-	//获取当前鼠标滑动的高度
-	var currentTop = $(window).scrollTop();
-	var offset = $('.lnews-left').offset();
-	//导航菜单
-	if(currentTop>=32){
-		$('header').addClass('active');
-	}else if(currentTop<32){
-		$('header').removeClass('active');
-	}
-	//新闻左侧
-	//if(currentTop>=offset.left){
-	//	$('.sorts-fixed').addClass('active');
-	//}else if(currentTop<offset.left){
-	//	$('.sorts-fixed').removeClass('active');
-	//}
-	
-	
-	
-	
-});
+	$('.count').each(function() {
+		$(this).animate({
+			counter: $(this).attr('counter')
+		}, {
+			duration: 2000,
+			easing: 'swing',
+			step: function(now) {
+				now = Math.ceil(now);
+				var str = now.toString();
+				var reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
+				$(this).text(str.replace(reg,"$1,"));
+			}
+		});
+		
+	});
+
+	$(window).scroll(function(){
+		//获取当前鼠标滑动的高度
+		var currentTop = $(window).scrollTop();
+		var offset = $('.lnews-left').offset();
+		//导航菜单
+		if(currentTop>=32){
+			$('header').addClass('active');
+		}else if(currentTop<32){
+			$('header').removeClass('active');
+		}
+		//新闻左侧
+		//if(currentTop>=offset.left){
+		//	$('.sorts-fixed').addClass('active');
+		//}else if(currentTop<offset.left){
+		//	$('.sorts-fixed').removeClass('active');
+		//}
+		
+		
+		
+		
+	});
 });  
   
 var wow = new WOW({

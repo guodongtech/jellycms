@@ -406,6 +406,11 @@ section.about .about-con{
 	height:100%;
 	width:100%;
 }
+.sta-left ul li{
+	text-align:center;
+	width:25%;
+ 
+}
 .sta-left ul li em{
 	font-style:normal;
 	font-size:38px;
