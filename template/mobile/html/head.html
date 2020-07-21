@@ -1,0 +1,38 @@
+<header>
+    <div class="mobile-header wp">
+        <h1 class="l">
+            <a href="/"><img src="{$site.logo}"  height="50"/><span class="default-site-title">果冻CMS</span></a>
+        </h1>
+        <div class="nav-button">
+			<div class="open"><i class="jellyfont jellymenu" aria-hidden="true"></i></div>
+            <div class="close"><i class="jellyfont jellyclose" aria-hidden="true"></i></div>
+        </div>
+    </div>
+</header>
+<nav id="mobile-nav" style="">
+  <h3>MENU</h3>
+  <ul class="default-mobile-nav-menu  cl">
+    <li class="a">
+      <a href="/" target="_self" title="" class="bb">
+        <span>首页</span>
+        <em></em>
+      </a>
+    </li>
+{nav:pid=0}
+    <li>
+		<a {if:$sort['id'] == $nav['id']||$topsort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}' class="bb">
+			<span>{$nav.name}</span>
+			<em></em>
+		</a>
+		<ul>
+			<li>
+				<a href="news-list-3387-1.html" target="_self" class="">
+					<span>综合新闻</span>
+					<em></em>
+				</a>
+			</li>
+		</ul>
+    </li>
+{/nav}
+  </ul>
+</nav>
