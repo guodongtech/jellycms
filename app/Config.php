@@ -35,11 +35,13 @@ class Config
 	public $suffix = 'html'; //URL后缀
 	public $appTimezone = 'Asia/Shanghai';
 	public $homeViewName = 'template';
-	public $theme = 'mobile'; //前台模板目录在/template中
+	public $theme = 'default'; //前台模板目录在/template中
+	public $mobileTheme = 'mobile'; //前台模板目录在/template中
 	public $templateFolder = 'html'; //模板真实路径 $homeViewName/$theme/$templateFolder
 	public $adminViewName = 'view'; 
 	public $adminTheme = 'admin'; //后台模板目录在app/admin/view中
 	public $version = '3.8.1';
 	public $catchTime = 5; //缓存时间s
 	public $catched = 1;//是否开启缓存
+	public $mobileDomain = '';//移动端域名
 }

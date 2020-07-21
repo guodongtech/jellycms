@@ -72,8 +72,7 @@ class Paths
 	public $viewDirectory = __DIR__ . '/../../../template/';
 	public function __construct()
 	{
-		$config = new \config\config();
-		$this->viewDirectory = $this->viewDirectory.$config->theme;
+
 	}
 	
 	

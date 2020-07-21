@@ -29,8 +29,21 @@ function post(){
 	}
 }
  function getWebThemePath(){
-	 $config = new \Config\Config();
-	 return $themePath = '/'.$config->homeViewName.'/'.$config->theme.'/';
+	//拼接模板路径 域名模式待处理
+	$config = new \config\config();
+	$request = \Config\Services::request();
+	$agent = $request->getUserAgent();
+	if ($agent->isMobile())
+	{
+		$themePath = '/'.$config->homeViewName.'/'.$config->mobileTheme.'/';
+	}
+	else
+	{
+		$themePath = '/'.$config->homeViewName.'/'.$config->theme.'/';
+	}
+		
+	return $themePath;
+	 
  }
 
     /**
