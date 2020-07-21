@@ -13,7 +13,7 @@ class SysLog extends BaseController
     public function index()
     {
 
-        echo view('html/logs.html');
+        echo view('logs.html');
     }
     public function getList()
     {	

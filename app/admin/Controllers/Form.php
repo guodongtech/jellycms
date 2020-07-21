@@ -12,7 +12,7 @@ class Form extends BaseController
 
     public function index()
     {
-         echo view('html/form.html');
+         echo view('form.html');
     }
     public function getList()
     {

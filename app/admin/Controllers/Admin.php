@@ -5,15 +5,15 @@ class Admin extends BaseController
 {
 	public function index()
 	{
-		return view('html/index.html');
+		return view('index.html');
 	}
 	public function home()
 	{
-		return view('html/home.html');
+		return view('home.html');
 	}
 	public function config()
 	{
-		return view('html/config.html');
+		return view('config.html');
 	}
 	public function label()
 	{
@@ -23,11 +23,11 @@ class Admin extends BaseController
 	}
 	public function model()
 	{
-		return view('html/model.html');
+		return view('model.html');
 	}
 	public function modelfield()
 	{
-		return view('html/modelfield.html');
+		return view('modelfield.html');
 	}
 	public function site()
 	{
@@ -37,63 +37,63 @@ class Admin extends BaseController
 	}
 	public function company()
 	{
-		return view('html/company.html');
+		return view('company.html');
 	}
 	public function sort()
 	{
-		return view('html/sort.html');
+		return view('sort.html');
 	}
 	public function single()
 	{
-		return view('html/single.html');
+		return view('single.html');
 	}
 	public function content()
 	{
-		return view('html/content.html');
+		return view('content.html');
 	}
 	public function message()
 	{
-		return view('html/message.html');
+		return view('message.html');
 	}
 	public function area()
 	{
-		return view('html/area.html');
+		return view('area.html');
 	}
 	public function role()
 	{
-		return view('html/role.html');
+		return view('role.html');
 	}
 	public function user()
 	{
-		return view('html/user.html');
+		return view('user.html');
 	}
 	public function logs()
 	{
-		return view('html/logs.html');
+		return view('logs.html');
 	}
 	public function db()
 	{
-		return view('html/db.html');
+		return view('db.html');
 	}
 	public function upgrade()
 	{
-		return view('html/upgrade.html');
+		return view('upgrade.html');
 	}
 	public function slide()
 	{
-		return view('html/slide.html');
+		return view('slide.html');
 	}
 	public function links()
 	{
-		return view('html/links.html');
+		return view('links.html');
 	}
 	public function form()
 	{
-		return view('html/form.html');
+		return view('form.html');
 	}
 	public function tags()
 	{
-		return view('html/tags.html');
+		return view('tags.html');
 	}
 
 	//--------------------------------------------------------------------

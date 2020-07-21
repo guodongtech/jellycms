@@ -21,7 +21,7 @@ class ModelField extends BaseController
 		$data = [
 			"modelList" => $modelList,
 		];
-         echo view('html/modelfield.html', $data);
+         echo view('modelfield.html', $data);
     }
 	//获取列表
     public function getList()

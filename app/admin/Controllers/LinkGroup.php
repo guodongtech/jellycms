@@ -17,7 +17,7 @@ class LinkGroup extends BaseController
 		$data = [
 			"areaList" => $areaList,
 		];
-         echo view('html/link_group.html', $data);
+         echo view('link_group.html', $data);
     }
 	//获取列表
     public function getList()

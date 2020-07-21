@@ -29,10 +29,10 @@ class Home extends BaseController
 		//$parsercms = \Config\Services::parser();
 		//echo $parsercms->setData($data)->render('admin/html/index.html', $data);
 		//echo display('admin/html/index.html', $data);
-		echo view('html/index.html', $data);
+		echo view('index.html', $data);
 	}
 	public function welcome()
 	{
-		echo view('html/welcome.html');
+		echo view('welcome.html');
 	}
 }

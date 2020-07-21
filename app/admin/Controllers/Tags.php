@@ -13,7 +13,7 @@ class Tags extends BaseController
     }
     public function index()
     {
-         echo view('html/tags.html');
+         echo view('tags.html');
     }
     public function getList()
     {

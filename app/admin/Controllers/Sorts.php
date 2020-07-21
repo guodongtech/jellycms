@@ -27,7 +27,7 @@ class Sorts extends BaseController
 			'areaList' => $areaList,
 			'template_file' => $template_file,
 		];
-        echo view('html/sorts.html', $data);
+        echo view('sorts.html', $data);
     }
     public function getList()
     {

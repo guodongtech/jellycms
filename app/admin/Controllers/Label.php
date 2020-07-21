@@ -15,7 +15,7 @@ class Label extends BaseController
 		$data = [
 			'list' => $labelList,
 		];
-        echo view('html/label.html', $data);
+        echo view('label.html', $data);
     }
 	
     public function getList()

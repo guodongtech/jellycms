@@ -30,7 +30,7 @@ class Role extends BaseController
 			'areaList' => $areaResult,
 		];
 		// echo $authResult;die;
-        echo view('html/role.html', $data);
+        echo view('role.html', $data);
     }
  
     public function getList()

@@ -167,11 +167,11 @@ class View implements RendererInterface
 		$agent = $request->getUserAgent();
 		if ($agent->isMobile())
 		{
-			$this->viewPath = $this->viewPath.$configData->mobileTheme.'/'.$configData->templateFolder.'/';
+			$this->viewPath;
 		}
 		else
 		{
-			$this->viewPath = $this->viewPath.$configData->theme.'/'.$configData->templateFolder.'/';
+			$this->viewPath;
 		}
 		
 		

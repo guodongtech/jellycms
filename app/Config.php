@@ -38,6 +38,7 @@ class Config
 	public $theme = 'default'; //前台模板目录在/template中
 	public $mobileTheme = 'mobile'; //前台模板目录在/template中
 	public $templateFolder = 'html'; //模板真实路径 $homeViewName/$theme/$templateFolder
+	public $adminTemplateFolder = 'html'; //模板真实路径 $homeViewName/$theme/$templateFolder
 	public $adminViewName = 'view'; 
 	public $adminTheme = 'admin'; //后台模板目录在app/admin/view中
 	public $version = '3.8.1';

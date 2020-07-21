@@ -18,7 +18,7 @@ class FormField extends BaseController
 		$data = [
 			"formList" => $formList,
 		];
-         echo view('html/form_field.html', $data);
+         echo view('form_field.html', $data);
     }
     public function getList()
     {

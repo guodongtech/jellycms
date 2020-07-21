@@ -15,7 +15,7 @@ class Message extends BaseController
     // 列表
     public function index()
     {
-		echo view('html/message.html');
+		echo view('message.html');
     }
 
     // 删除

@@ -28,7 +28,7 @@ class Menu extends BaseController
 			'menuList' =>$menuList,
 			'roleList' =>$roleList,
 		];
-        echo view('html/menu.html', $data);
+        echo view('menu.html', $data);
     }
     public function getList()
     {

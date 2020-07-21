@@ -24,7 +24,7 @@ class Area extends BaseController
 		$data = [
 			'list' => $areaList,
 		];
-        echo view('html/area.html', $data);
+        echo view('area.html', $data);
 		
     }
     public function getList()

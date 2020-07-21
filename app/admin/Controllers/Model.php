@@ -18,7 +18,7 @@ class Model extends BaseController
     {
 		$template_file = $this->FileModel->getTemplateList();
 		$data['template_file'] = $template_file;
-        echo view('html/model.html', $data);
+        echo view('model.html', $data);
     }
 	//ajax列表
     public function getList()

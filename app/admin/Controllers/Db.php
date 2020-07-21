@@ -30,7 +30,7 @@ class Db extends BaseController
             default:
                 //error('业务不支持');
         }
-        echo view('html/db.html', $data);
+        echo view('db.html', $data);
     }
     // 数据库管理
     public function getList()

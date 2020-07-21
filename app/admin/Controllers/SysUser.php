@@ -17,7 +17,7 @@ class SysUser extends BaseController
 		$data = [
 			'roleList' => $roleResult,
 		];
-        echo view('html/sysuser.html', $data);
+        echo view('sysuser.html', $data);
     }
     public function getList()
     {

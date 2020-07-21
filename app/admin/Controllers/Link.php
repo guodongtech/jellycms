@@ -17,7 +17,7 @@ class Link extends BaseController
 		$data = [
 			"groupList" => $groupList,
 		];
-         echo view('html/link.html', $data);
+         echo view('link.html', $data);
     }
 	//获取列表
     public function getList()

@@ -13,7 +13,7 @@ class Server extends BaseController
     public function index()
     {
 		$list = $this->model->getList();
-        echo view('html/server.html');
+        echo view('server.html');
     }
 
     // 修改站点信息

@@ -16,7 +16,7 @@ class Single extends BaseController
 
     public function index()
     {
-         echo view('html/single.html');
+         echo view('single.html');
     }
     public function getList()
     {

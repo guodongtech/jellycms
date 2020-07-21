@@ -21,7 +21,7 @@ class Content extends BaseController
 			$data['model_name'] = $modelRes['name'];
 		}
 		$data['model_id'] = $model_id;
-        echo view('html/content.html', $data);
+        echo view('content.html', $data);
     }
     public function getList($model_id)
     {
@@ -50,7 +50,7 @@ class Content extends BaseController
 		if(count($modelRes)){
 			$data['model_name'] = $modelRes['name'];
 		}
-        echo view('html/content_edit.html', $data);
+        echo view('content_edit.html', $data);
     }
 	//内容页修改
     public function getContent()
@@ -81,7 +81,7 @@ class Content extends BaseController
 		if(count($modelRes)){
 			$data['model_name'] = $modelRes['name'];
 		}
-        echo view('html/content_edit.html', $data);
+        echo view('content_edit.html', $data);
     }
  
 	public function saveContent(){

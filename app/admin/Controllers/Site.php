@@ -18,7 +18,7 @@ class Site extends BaseController
 			"site" => $site,
 			"themeList" => $themeList,
 		];
-         echo view('html/site.html', $data);
+         echo view('site.html', $data);
     }
     public function edit()
     {

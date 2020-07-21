@@ -16,11 +16,11 @@ class Auth extends BaseController
 		$data = [
 			'List' =>$List,
 		];
-        echo view('html/auth_index.html', $data);
+        echo view('auth_index.html', $data);
     }
     public function group()
     {
-        echo view('html/auth_group.html');
+        echo view('auth_group.html');
     }
     public function getList()
     {

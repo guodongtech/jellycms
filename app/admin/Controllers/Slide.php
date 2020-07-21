@@ -20,7 +20,7 @@ class Slide extends BaseController
 		$data = [
 			"groupList" => $groupList,
 		];
-         echo view('html/slide.html', $data);
+         echo view('slide.html', $data);
     }
     public function getList()
     {

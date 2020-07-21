@@ -29,7 +29,7 @@ class Update extends BaseController
 
     public function index()
     {
-        echo view('html/update.html');
+        echo view('update.html');
     }
 
     // 检查更新

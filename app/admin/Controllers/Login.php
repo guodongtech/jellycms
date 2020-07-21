@@ -26,7 +26,7 @@ class Login extends Controller
 			Header("Location: /".ADMINNAME."/home/"); 
 			exit;
 		}
-		echo view('html/login.html');
+		echo view('login.html');
     }
     public function capthcha()
     {

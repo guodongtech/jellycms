@@ -15,7 +15,7 @@ class Config extends BaseController
     // 应用配置列表
     public function index()
     {
-		echo view('html/config.html');
+		echo view('config.html');
     }
 
     // 修改配置文件
