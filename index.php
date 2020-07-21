@@ -7,6 +7,7 @@ if (phpversion() < $minPHPVersion)
 	die("Your PHP version must be {$minPHPVersion} or higher to run CodeIgniter. Current version: " . phpversion());
 }
 unset($minPHPVersion);
+define('AUTHTHEME', true); //自动切换移动端模板
 define('ENTRANCE', basename(__FILE__));  //当前脚本名
 // Path to the front controller (this file)
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
