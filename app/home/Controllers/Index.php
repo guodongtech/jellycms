@@ -16,6 +16,14 @@ class Index extends BaseController
 		$cacheTemp = explode('&', $_SERVER["QUERY_STRING"]);
 		$cacheTemp = explode('htm', $cacheTemp[0]);
 		$this->config = new \config\config();
+		//已绑定移动端域名的，跳转到域名
+		if($this->config->mobileDomain != ''){
+			header('Location: '.$this->config->mobileDomain);
+			exit;
+		}
+		
+		
+		
 		$request = \Config\Services::request();
 		$agent = $request->getUserAgent();
 		if ($agent->isMobile())
