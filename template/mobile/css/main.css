@@ -171,7 +171,9 @@ header h1 a {
 .slider-text h1{
 	margin-bottom:1rem;
 }
-
+.swiper-slide {
+    padding-top:55px;
+}
 section{
 	margin-top:2rem;
 	display:flex;
@@ -317,6 +319,7 @@ section.product .p-items li{
 }
 section.product .p-items li img{
 	height:100%;
+	width:100%;
 }
 section.product .p-items li span{
 	position:absolute;
@@ -359,11 +362,16 @@ section.statistics .sta-data ul li{
 	flex-direction:column;
 }
 section.statistics .sta-data ul li span{
-	font-size:1.4rem;
+	font-size:1.6rem;
 	margin-bottom:1rem;
+	font-family: fantasy;
+	text-shadow:none;
 }
 section.statistics .sta-data ul li p{
-	color:rgb(255, 15, 101);
+	color:rgba(255, 255, 255, 0.8);
+	font-family: 微軟正黑體;
+	font-size:1.2rem;
+	text-shadow: 2px 2px 10px rgba(f, 0, 0, 1);
 }
 
 section.news{
