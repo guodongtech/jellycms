@@ -383,6 +383,7 @@ section.about .about-con{
 }
 .statistic{
     background: url(../images/net.png) repeat;
+	background-color:rgba(0,0,0,0.3);
 	height:388px;
 }
 .sta{
@@ -408,6 +409,7 @@ section.about .about-con{
 .sta-left ul li em{
 	font-style:normal;
 	font-size:38px;
+		font-family:fantasy;
 }
 .sta-left ul li em:hover{
 	//animation-name:flip;
@@ -415,6 +417,7 @@ section.about .about-con{
 .sta-left ul li p{
 	color: rgb(255, 15, 101);
 	//text-shadow: 1px 1px 1px   #fff;
+		font-family:fantasy;
 }
 .sta-left ul li p:before{
 	margin-bottom:38px;
