@@ -131,15 +131,17 @@ header h1 a {
 	position:relative;
 }
 .swiper-slide .download{
-	display:flex;
-	justify-content:flex-start;
-	align-items:center;
+ 
 	
 }
+.swiper-slide .download span{
+	display:block;
+	margin-bottom:13px;
+}
 .swiper-slide .download a{
-	padding:0.3rem 0.8rem;
+	padding:6px 8px;
 	background:#d65050;
-	margin-left:1em;
+	margin-right:8px;
 	border-radius:2px;
 	color:#fff;
 }
@@ -166,13 +168,13 @@ header h1 a {
 }
 .slider-text p{
 	line-height:1.5rem;
-	margin-bottom:1rem;
+	margin-bottom:13px;
 }
 .slider-text h1{
 	margin-bottom:1rem;
 }
 .swiper-slide {
-    padding-top:55px;
+    padding-top:20px;
 }
 section{
 	margin-top:2rem;
@@ -219,7 +221,7 @@ section span.separator{
 }
 
 section.featrue{
-	margin-top:326px;
+	//margin-top:326px;
 	background:#fff;
 }
 section.featrue .f-items{
@@ -346,7 +348,7 @@ section.statistics{
 }
 section.statistics .sta-data{
 	width:100%;
-    background: url(../images/net.png) repeat;
+    background: url(../images/net.png) repeat ;
     height: 10rem;
 	display:flex;
 	justify-content:space-between;
@@ -373,8 +375,7 @@ section.statistics .sta-data ul li span{
 section.statistics .sta-data ul li p{
 	color:rgba(255, 255, 255, 0.8);
 	font-family: 微軟正黑體;
-	font-size:1.2rem;
-	text-shadow: 2px 2px 10px rgba(f, 0, 0, 1);
+	font-size:10px;
 }
 
 section.news{
@@ -737,16 +738,16 @@ footer{
 	border-right: 1px solid rgba(255, 255, 255, 0.13);
 }
 .mbfootcontact a.qq{
-    color:rgb(45, 145, 255)
+   // color:rgb(45, 145, 255)
 }
 .mbfootcontact a.weixin{
-    color:rgb(95, 177, 4)
+    //color:rgb(95, 177, 4)
 }
 .mbfootcontact a.telephone{
-    color:rgb(34, 175, 230)
+   // color:rgb(34, 175, 230)
 }
 .mbfootcontact a.home{
-    color:#f5f5f5
+    //color:#f5f5f5
 }
 .mbfootcontact a:last-child{
 	border-right:0;
@@ -755,11 +756,10 @@ footer{
     color:#2e82c5
 }
 .newslist{
-	padding:1rem;
+	padding:8px;
 	padding-top:0;
 }
 .newslist ul{
-	padding:1rem;
 	padding-top:0;
 }
 .newslist ul li {
@@ -843,20 +843,19 @@ footer{
 	
 }
 .productlist{
-	padding:1rem;
+	padding:8px;
 	padding-top:0;
 }
 .productlist ul{
-	padding:1rem;
 	display:flex;
 	flex-direction:row;
 	flex-wrap:wrap;
 	justify-content:space-between;
 }
 .productlist ul li {
-	width: 48%;
+	width: 49%;
 	background: #fff;
-	margin-bottom: 28px;
+	margin-bottom: 8px;
 	border-radius: 6px;
 }
 .productlist ul li img{

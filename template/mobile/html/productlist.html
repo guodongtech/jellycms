@@ -38,7 +38,7 @@
 <section class="productlist wp wow fadeInUp">
 	<ul>
 		{list:num=5 order=id desc where=id>0,status eq 1}
-		<li class="cl wow delay{$key} fadeInUp">
+		<li class="cl wow delay1 fadeInUp">
 			<a href="{$list.link}">
 			<img src="/static/images/p1.jpg">
 			
@@ -51,7 +51,7 @@
 		{if:empty($list)}<li>分类无数据</li>{/if}		
 		
 	</ul>
-	<div class="wow fadeInUp page-content">{pagebar:bar}</div>
+	<div class="wow fadeInUp page-content"><!-- {pagebar:bar} --></div>
 </section>
 
 {include:foot.html}

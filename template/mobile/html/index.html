@@ -23,7 +23,7 @@
 </head>
 <body>
 {include:head.html}
-<div class="swiper-container" style="width:100%; height:330px; position:fixed; top:0; left:0;right:0; z-index:-1;" >
+<div class="swiper-container" style="width:100%; height:330px;" >
     <div class="swiper-wrapper">
 	{slide:}
 		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
@@ -33,9 +33,11 @@
 					<p class="ani" swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s">{$slide.description}</p>
 					<div class="download ani"  swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 						<span class="version">最新版本:3.8.1</span>
-						<a href="">本站</a>
-						<a href="">github</a>
-						<a href="">演示</a>
+						<p>
+							<a href="">本站</a>
+							<a href="">github</a>
+							<a href="">演示</a>
+						</p>
 					</div>
 				</div>
 				<div class="slider-pic ani" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s"><img src="{$slide.pic}"></div>
@@ -44,7 +46,6 @@
 	{/slide}
     </div>
 </div>
-
 <section class="featrue wp wow fadeInUp">
 	<h1>系统特色</h1>
 	<div class="slogan-con">
@@ -141,6 +142,18 @@
 			</a>
 		</li>
 		<li class="wow fadeInUp delay3">
+			<a href="">
+				<div class="basic">
+					<img src="/static/images/p1.jpg">
+					<span class="time"><i>MAR</i><em>15</em></span>
+				</div>
+				<div class="context">
+					<span>功能一功能一功能一功能一</span>
+					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
+				</div>
+			</a>
+		</li>
+		<li class="wow fadeInUp delay5">
 			<a href="">
 				<div class="basic">
 					<img src="/static/images/p1.jpg">
