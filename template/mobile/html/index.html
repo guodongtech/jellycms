@@ -104,10 +104,10 @@
 	</div>
 	<span class="separator"></span>
 	<ul class="p-items">
-		<li class="wow fadeInUp delay1"><img src="/static/images/p1.jpg"><span>功能一</span></li>
-		<li class=" wow fadeInUp delay3"><img src="/static/images/p2.jpg"><span>功能一</span></li>
-		<li class=" wow fadeInUp delay1"><img src="/static/images/p3.jpg"><span>功能一</span></li>
-		<li class=" wow fadeInUp delay3"><img src="/static/images/p4.jpg"><span>功能一</span></li>
+		{list:num=4 id=5 where=pic neq ''}
+		<li class=" wow fadeInUp delay1"><a href="{$list.link}"><img src="{$list.pic}"><span>{$list.title}</span></a></li>
+		{/list}
+		
 	</ul>
 </section>
 <section class="statistics wp wow fadeInUp">
@@ -129,54 +129,20 @@
 	</div>
 	<span class="separator"></span>
 	<ul class="n-items">
+		{list:num=4 id=2 where=pic neq ''}
 		<li class="wow fadeInUp delay1">
-			<a href="">
+			<a href="{$list.link}">
 				<div class="basic">
-					<img src="/static/images/p1.jpg">
+					<img src="{$list.pic}">
 					<span class="time"><i>MAR</i><em>15</em></span>
 				</div>
 				<div class="context">
-					<span>功能一功能一功能一功能一</span>
+					<span>{$list.title}</span>
 					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
 				</div>
 			</a>
 		</li>
-		<li class="wow fadeInUp delay3">
-			<a href="">
-				<div class="basic">
-					<img src="/static/images/p1.jpg">
-					<span class="time"><i>MAR</i><em>15</em></span>
-				</div>
-				<div class="context">
-					<span>功能一功能一功能一功能一</span>
-					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
-				</div>
-			</a>
-		</li>
-		<li class="wow fadeInUp delay5">
-			<a href="">
-				<div class="basic">
-					<img src="/static/images/p1.jpg">
-					<span class="time"><i>MAR</i><em>15</em></span>
-				</div>
-				<div class="context">
-					<span>功能一功能一功能一功能一</span>
-					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
-				</div>
-			</a>
-		</li>
-		<li class="wow fadeInUp delay5">
-			<a href="">
-				<div class="basic">
-					<img src="/static/images/p1.jpg">
-					<span class="time"><i>MAR</i><em>15</em></span>
-				</div>
-				<div class="context">
-					<span>功能一功能一功能一功能一</span>
-					<p>JellyCMS V3.0.05升级日志升级日志升级日志升级日志</p>
-				</div>
-			</a>
-		</li>
+		{/list}
 	</ul>
 </section>
 {include:foot.html}
