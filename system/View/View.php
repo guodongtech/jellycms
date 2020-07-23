@@ -343,9 +343,7 @@ class View implements RendererInterface
 			$params = '['.trim($tem, ',').']';
 			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		}
-		
-		
-		
+		//前面已完成中间解析，正式解析标签
 		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
@@ -356,7 +354,8 @@ class View implements RendererInterface
 	public function parseParams($matches){
 		//print_r($matches);
 		//匹配到,解析成中间结果如{$sort.title len=n} {$nav.id}
-		if(preg_match_all('/\['.$matches[1].':([\w]+)(\s+[^]]+)?\]/', $matches[3], $matchesP)){
+		//if(preg_match_all('/\['.$matches[1].':([\w]+)(\s+[^]]+)?\]/', $matches[3], $matchesP)){
+		if(preg_match_all('/\[(([\w]+)):([\w]+)(\s+[^]]+)?\]/', $matches[3], $matchesP)){
 			foreach($matchesP[0] as $key=>$value){
 				$paramTemp = str_replace(array('[', ':' , ']'), array('{$', '.', '}'), $value);
 				$matches[0] = str_replace($value, $paramTemp, $matches[0]);
