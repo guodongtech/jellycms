@@ -63,11 +63,38 @@ class ParseModel extends Model
 	public function getContent($id)
 	{
 		$builder = $this->db->table('content');
-		$result   = $builder->select('content.*, sorts.id as sort_id')
+		$result   = $builder->select('content.*, sorts.urlname as urlname, sorts.name as sortname, model.urlname as m_urlname')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
-							->where(['content.deleted'=>0, 'content.id'=>$id])
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where('content.id', $id)
 							->get()
 							->getRowArray();
+		$urlname = $result['urlname']?$result['urlname']:$result['m_urlname'];
+		$result['link'] = $result['link']==''?url(array($urlname, $result['id'])):$result['link'];		
+		return $result;
+	}
+	public function getSort($id)
+	{
+		//urlname
+		$build = $this->db->table('sorts');
+		$result   = $build->select('sorts.*, model.urlname as m_urlname, model.type as m_type')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.id'=>$id])
+							->get()
+							->getRowArray();
+/* 		//单页内容处理
+		if($result['m_type'] == 1){
+			$builder = $this->db->table('content');
+			$res   = $builder->select('*')
+								->where(['deleted'=>0, 'sorts_id'=>$result['id']])
+								->get()
+								->getRowArray();
+			$result['content'] = $res['content'];
+		}	 */		
+		$urlname = $result['urlname']?$result['urlname']:$result['m_urlname'];
+		$result['link'] = $result['link']==''?url(array($urlname)):$result['link'];
+		
+		
 		return $result;
 	}
 	

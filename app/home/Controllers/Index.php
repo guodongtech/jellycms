@@ -70,8 +70,8 @@ class Index extends BaseController
 		}
 		if(!$sort) exit('栏目不可用');
 		if($sort['m_type']==1){//单页
-			$this->page($params);
-			return;
+			//$this->page($params);
+			//return;
 		}
 		$parents = $this->model->getParentsorts($sort['id']);
 		$this->data['sort'] = $sort;

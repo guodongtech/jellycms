@@ -572,6 +572,7 @@ section.about .about-con{
     margin-bottom: 20px;
     -webkit-animation-name: zoomOut;
     animation-name: zoomOut;
+	color:#fff;
 }
 .portfolio-block .portfolio-caption .btn-sm{
     padding-top: 11px;
@@ -736,7 +737,7 @@ a.btn-social, .btn-social {
 }
 .index-news-right li .question{
 	font-weight:bold;
-	margin-bottom:14px;
+	margin-bottom:11px;
 }
 .index-news-right li .answer{
 	color:#555

@@ -337,7 +337,7 @@ class View implements RendererInterface
 			$params = '['.trim($tem, ',').']';
 			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		}
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -352,16 +352,30 @@ class View implements RendererInterface
 			{
 				case '$':
                 {
-                    $str = trim($matches[4]);
+					$arr = explode(' ', $matches[4]);
+					$attr = $this->getAttrs($matches[4]);
+                    $str = trim($arr[0]);
+					isset($attr['len'])? $len=$attr['len']:$len = 0;
+					isset($attr['strip'])? $strip=$attr['strip']:$strip = 1; //默认去掉HTML标签
                     $first = $str[0];
 					if($first != '.' && $first != '(')
 					{
 						if( strpos($str,'(') !== false || (strpos($str,'[') === false && strpos($str,'->') !== false) )
 						{
-							return '<?php echo $'.$str.';?>';
+							if(isset($attr['len']) || isset($attr['strip'])){
+								return '<?php echo $'.$str.';?>';
+							}else{
+								return '<?php echo $'.$str.';?>';
+							}
+							
 						}else if(strpos($str,'.') !== false)
 						{
-							return '<?php echo $'.str_replace(".",'["',$str).'"];?>';
+							if(isset($attr['len']) || isset($attr['strip'])){
+								return '<?php echo $'.str_replace(".",'["',$str).'"];?>';
+							}else{
+								return '<?php echo $'.str_replace(".",'["',$str).'"];?>';
+							}
+							
 						}
 						else
 						{
@@ -391,7 +405,8 @@ class View implements RendererInterface
 					isset($attr['pid'])? $pid=$attr['pid']:$pid = 0;
 					isset($attr['value'])? $value=$attr['value']:$value = 'form';
 					isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
-					return '<?php $model = new \App\Models\ParseModel();  foreach($model->getFormlistByFromName("'.$attr['name'].'",$content["id"],$pid = '.$pid.', $num='.$num.') as $key=>$'.$value.'){?>';
+					return '<?php $model = new \App\Models\ParseModel();  
+					foreach($model->getFormlistByFromName("'.$attr['name'].'",$content["id"],$pid = '.$pid.', $num='.$num.') as $key=>$'.$value.'){?>';
 				}
 				case 'formaction:': 
 				{
@@ -523,7 +538,13 @@ class View implements RendererInterface
 				{
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['id'])) $id = $attr['id'];
-					return '<?php $model = new \App\Models\ParseModel();  foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
+					return '<?php $content = array(0,1,2,3,4); $contentTemp = $content; $model = new \App\Models\ParseModel(); foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
+				}
+				case 'sort:': 
+				{
+					$attr = $this->getAttrs($matches[4]);
+					if(isset($attr['id'])) $id = $attr['id'];
+					return '<?php  $sortTemp = $sort;  $model = new \App\Models\ParseModel();  foreach(array($model->getSort('.$id.')) as $key=>$sort){?>';
 				}
 				case 'position:': 
 				{
@@ -604,7 +625,25 @@ class View implements RendererInterface
 		}
 		else
 		{
-			return '<?php }?>';
+			if($matches[2]){
+				//这两个标签在列表页或内容页有同名数组，会覆盖$content $sort的值。此处还原之前的数组
+				switch($matches[2]){
+					case 'content':
+					{
+						return '<?php } $content = $contentTemp; ?>';
+					}
+					case 'sort':
+					{
+						return '<?php } $sort = $sortTemp; ?>';
+					}
+					default:
+					{
+						return '<?php }?>';
+					}
+				}
+			}else{
+				return '<?php }?>';
+			}
 		}
 	}
     /**
