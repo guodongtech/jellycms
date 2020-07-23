@@ -319,6 +319,12 @@ class View implements RendererInterface
 				break;
 			}
 		}
+		//处理闭合类标签里的参数
+		$closedTag = "form|foreach|if|elseif|else|while|for|content|list|nav|slide|position|pagebar|link|pics|sort";
+		$closed = explode('|', $closedTag);
+		foreach($closed as $key=>$value){
+			$str = preg_replace_callback('/\{('.$value.'):([^}]+)?\}([\S\s]*?)\{\/'.$value.'\}/', array($this,'parseParams'), $str);
+		}
 		if(preg_match('/{(\/?)(list)\s*(:?)([^}]*)}/i', $str, $matches)){ //处理pagebar任意位置问题，三处优先处理顺序不能变
 			$attr = $this->getAttrs($matches[4]);
 			isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
@@ -337,7 +343,26 @@ class View implements RendererInterface
 			$params = '['.trim($tem, ',').']';
 			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		}
+		
+		
+		
 		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+	}
+    /**
+     * @brief 替换循环标签内变量 如：[sort:id]
+     * @param array $matches
+     * @return String 中间结果
+     */
+	public function parseParams($matches){
+		//print_r($matches);
+		//匹配到,解析成中间结果如{$sort.title len=n} {$nav.id}
+		if(preg_match_all('/\['.$matches[1].':([\w]+)(\s+[^]]+)?\]/', $matches[3], $matchesP)){
+			foreach($matchesP[0] as $key=>$value){
+				$paramTemp = str_replace(array('[', ':' , ']'), array('{$', '.', '}'), $value);
+				$matches[0] = str_replace($value, $paramTemp, $matches[0]);
+			}
+		}
+		return $matches[0];
 	}
     /**
      * @brief 处理设定的每一个标签
@@ -375,7 +400,6 @@ class View implements RendererInterface
 							}else{
 								return '<?php echo $'.str_replace(".",'["',$str).'"];?>';
 							}
-							
 						}
 						else
 						{
@@ -646,6 +670,9 @@ class View implements RendererInterface
 			}
 		}
 	}
+	
+	
+	
     /**
      * @brief URL生成
      * @param string $str
