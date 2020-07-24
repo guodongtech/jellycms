@@ -350,7 +350,7 @@ class View implements RendererInterface
 			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		}
 		//前面已完成中间解析，正式解析标签
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 替换循环标签里的变量 如：{nav: pid=[nav:id]}
@@ -464,6 +464,22 @@ class View implements RendererInterface
                 case 'webroot:':
                 {
                 	return '<?php echo "/'.$matches[4].'";?>';
+                }
+                case 'company:':
+                {
+                	return '<?php echo $company["'.$matches[4].'"];?>';
+                }
+                case 'site:':
+                {
+                	return '<?php echo $site["'.$matches[4].'"];?>';
+                }
+                case 'sorts:':
+                {
+                	return '<?php echo $sort["'.$matches[4].'"];?>';
+                }
+                case 'contents:':
+                {
+                	return '<?php echo $content["'.$matches[4].'"];?>';
                 }
                 case 'label:':
                 {
