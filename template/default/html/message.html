@@ -82,27 +82,27 @@
 						<div class="user-info">
 							<img src="{$form.icon}">
 							<div>
-								<em>{$form.nickname}</em>
-								<span>{echo:date('m月d日 h: s', $form['create_time'])}</span>
+								<em>[form:username]</em>
+								<span>[form:create_time style=m月d日 h:s]</span>
 							</div>
 						</div>
 						<div class="user-message">
 						{$form.content}
 							<ul>
-					{form:name=message num=3 pid=$form['id'] value=form2}
-						<li>
-							<div class="user-info">
-								<img src="{$form2.icon}">
-								<div>
-									<em>{$form2.nickname}</em>
-									<span>{echo:date('m月d日 h: s', $form2['create_time'])}</span>
-								</div>
-							</div>
-							<div class="user-message">
-							{$form2.content}
-							</div>
-						</li>
-					 {/form}
+							{form:name=message num=3 pid=$form['id'] value=form2}
+								<li>
+									<div class="user-info">
+										<img src="{$form2.icon}">
+										<div>
+											<em>{$form2.nickname}</em>
+											<span>{echo:date('m月d日 h: s', $form2['create_time'])}</span>
+										</div>
+									</div>
+									<div class="user-message">
+									{$form2.content}
+									</div>
+								</li>
+							 {/form}
 							</ul>
 						
 						

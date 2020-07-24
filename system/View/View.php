@@ -323,11 +323,12 @@ class View implements RendererInterface
 		$closedTag = "form|foreach|if|elseif|else|while|for|content|list|nav|slide|position|pagebar|link|pics|sort";
 		$closed = explode('|', $closedTag);
 		foreach($closed as $key=>$value){
-			//$str = preg_replace_callback('/\{('.$value.'):([^}]+)?\}([\S\s]*?)\{\/'.$value.'\}/', array($this,'parseParams'), $str);
+			//匹配带参数的标签（主要用在无限类标签）  参数类似[nav:name] 参数里不能再带参数
+			$str = preg_replace_callback('/\{('.$value.'):([^}]+)?\}?/ui', array($this,'parseTagParams'), $str);
 			$startTag= '\{'.$value.':';
 			$endTag = '\{\/'.$value.'\}';
 			$reg="/{$startTag}([^}]+)?\}((?>[\s\S]*?(?={$startTag}|{$endTag}))|(?R))*{$endTag}/ui"; 
-			$str = preg_replace_callback($reg, array($this,'parseParams'), $str);
+			$str = preg_replace_callback($reg, array($this,'parseParams'), $str); //匹配闭合标签体中参数 参数类似[list:title len=8]
 		}
 		//echo $str;
 		if(preg_match('/{(\/?)(list)\s*(:?)([^}]*)}/i', $str, $matches)){ //处理pagebar任意位置问题，三处优先处理顺序不能变
@@ -352,14 +353,26 @@ class View implements RendererInterface
 		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
+     * @brief 替换循环标签里的变量 如：{nav: pid=[nav:id]}
+     * @param array $matches
+     * @return String 直接PHP变量值$nav['id']
+     */
+	public function parseTagParams($matches){
+		//print_r($matches);
+		if(preg_match_all('/\[(([\w]+)):([\w]+)(\s+[^]]+)?\]/', $matches[0], $matchesP)){
+			foreach($matchesP[0] as $key=>$value){
+				$paramTemp = str_replace(array('[', ':' , ']'), array('$', '["', '"]'), $value);
+				$matches[0] = str_replace($value, $paramTemp, $matches[0]);
+			}
+		}
+		return $matches[0];
+	}
+    /**
      * @brief 替换循环标签内变量 如：[sort:id]
      * @param array $matches
      * @return String 中间结果
      */
 	public function parseParams($matches){
-		//print_r($matches);
-		//匹配到,解析成中间结果如{$sort.title len=n} {$nav.id}
-		//if(preg_match_all('/\['.$matches[1].':([\w]+)(\s+[^]]+)?\]/', $matches[3], $matchesP)){
 		if(preg_match_all('/\[(([\w]+)):([\w]+)(\s+[^]]+)?\]/', $matches[0], $matchesP)){
 			foreach($matchesP[0] as $key=>$value){
 				$paramTemp = str_replace(array('[', ':' , ']'), array('{$', '.', '}'), $value);
@@ -368,6 +381,7 @@ class View implements RendererInterface
 		}
 		return $matches[0];
 	}
+
     /**
      * @brief 处理设定的每一个标签
      * @param array $matches
@@ -398,7 +412,7 @@ class View implements RendererInterface
 						}else if(strpos($str,'.') !== false)//所有循环标签转换标签为类似{$sort.title len=10 style=Y-m-d strip=1},只需在此处理参数
 						{
 							if(isset($attr['len']) || isset($attr['strip'])){
-								 
+								
 								return '<?php echo strTreat($'.str_replace(".",'["',$str).'"],'."$len,$strip);?>";
 							}else if(isset($attr['style'])){
 								return '<?php echo date("'.$style.'",strtotime($'.str_replace(".",'["',$str).'"]));?>';

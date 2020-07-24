@@ -93,7 +93,7 @@
 			<div class="about-left wow zoomIn">
 				<h3>北京国栋科技有限公司 / GUODONG .TECH</h3>
 				<span>80% of the industry leaders</span>
-				<p>[sort:description]</p>
+				<p>[sort:content len=200]</p>
 			</div>
 			<div class="about-right wow zoomIn">
 				<img src="[sort:pic]" />
@@ -103,9 +103,6 @@
 
 	</div>
 </section>
-
-
-
 <section class="statistics">
 	<div class="statistic">
 		<div class="section-content ">
@@ -176,7 +173,7 @@
 					{/list}
 					<ul class="wow">
 						{list:num=5 id=2}
-						<li><a href="[list:link]">[list:title]</a><span>02-13</span></li>
+						<li><a href="[list:link]">[list:title]</a><span>[list:create_time style=m月d日]</span></li>
 						{/list}
 					</ul>
 				</div>
@@ -188,10 +185,9 @@
 				{list:num=4 id=2 where=pic neq ''}
 				<li>
 					<a class="question" href="[list:link]" title="[list:title]"><i class="fa fa-question-circle-o" aria-hidden="true"></i>[list:title]</a>
-					<div class="answer"><i class="fa fa-commenting-o" aria-hidden="true"></i>因为PG的锁等待判断是整个等待队列的冲突判断，这种判断的目的是防止某些锁请求一直被打断，从而这样设计的。</div>
+					<div class="answer"><i class="fa fa-commenting-o" aria-hidden="true"></i>[list:content len=60]</div>
 				</li>
 				{/list}
-
 			</ul>
 		</div>
 		</div>
@@ -202,8 +198,6 @@
 		<div class="section-content bussines">
 			<span>JellyCMS完全免费并开源（MIT Licensed）,50,000+ 使用者，200,000+ 网站及应用</span>
 			<a href="">联系我们</a>
-		 
-	 
 		</div>
 	</div>
 </section>
