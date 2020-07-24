@@ -1118,7 +1118,8 @@ footer {
 }
 .footer-top{
     width: 100%;
-	border-bottom:1px solid;
+	border-bottom:1px solid rgba(100, 100, 100, 0.18);
+	//box-shadow: rgba(100, 100, 100, 0.18) 0px 2px;
 	background:rgba(45,45,45,0.8);
 	padding: 60px 0px 20px 0px;
 }
