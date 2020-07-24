@@ -27,7 +27,7 @@
 	</div>
 
 </div>
-<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
 <div class="wrap">
 	<div class="wrap-content product-list">
 		<div class="head-title">
@@ -43,17 +43,17 @@
 			<li>
 				<div class="item wow zoomIn">
 					<div class="item-pic">
-						<a href="{$list.link}" title="{$list.title}">
-							<img class="aritcl_img" src="{$list.pic}" alt="">
+						<a href="[list:link]" title="[list:title]">
+							<img class="aritcl_img" src="[list:pic]" alt="">
 						</a>
 					</div>
 					<div class="listcontent">
 						<div class="list-text">
-							<a class="list-title" href="{$list.link}" title="{$list.title}">
-								<span style="">{$list.title}</span>
+							<a class="list-title" href="[list.link]" title="[list.title]">
+								<span style="">[list.title]</span>
 							</a>
 							<div class="description">
-							{$list.description}...  
+							[list:description]
 							</div>
 						</div>
 					</div>

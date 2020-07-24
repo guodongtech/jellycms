@@ -27,19 +27,19 @@
 	</div>
 
 </div>
-	<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>	 			
+	<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>	 			
 	<div class="wrap">
 		<div class="wrap-content">
 			{include:left.html}
 			<div class="news right wow bounceInRight">
 			{list:num=5 order=id desc where=id>0,status eq 1}
 			<li>
-				<a href="{$list.link}">
+				<a href="[list:link]">
 					<div class="details">
-						<h3 class="s">{$list.title}</h3>
+						<h3 class="s">[list:title]</h3>
 						<em></em>
-						<p>2019年11月18-20日SFCHINA第三十二届中国国际表面处理展以及CHINACOAT第二十四届中国国际涂料展于上海新国际博览中心隆重举办。2019「涂料展」及「表面处理」* 3天展期 ...</p>
-						<h4><i class="fa fa-clock-o" aria-hidden="true"></i>2019年09月17日</h4>
+						<p>[list:content len=100]</p>
+						<h4><i class="fa fa-clock-o" aria-hidden="true"></i>[list:create_time style=Y年m月d日]</h4>
 					</div>
 				</a>
 			</li>

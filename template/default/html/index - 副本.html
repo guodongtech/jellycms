@@ -18,11 +18,11 @@
 <div class="swiper-container" style="width:100%; height:450px; position:fixed; top:0; left:0;right:0; z-index:-8;" >
     <div class="swiper-wrapper">
 	{slide:}
-		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
+		<div class="swiper-slide" style="background-image:url('[slide:bgpic]'); background-color:[slide:bgcolor] ">
 			<div class="swiper-slide-content">
 				<div class="slider-text">
-					<h1 class="ani" swiper-animate-effect="bounceInLeft" swiper-animate-duration="0.3s" swiper-animate-delay="0.1s">{$slide.name}</h1>
-					<p class="ani" swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s">{$slide.description}</p>
+					<h1 class="ani" swiper-animate-effect="bounceInLeft" swiper-animate-duration="0.3s" swiper-animate-delay="0.1s">[slide:name]</h1>
+					<p class="ani" swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s">[slide:description]</p>
 					<div class="download ani"  swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 						<span class="version">最新版本:3.8.1</span>
 						<a href="">本站</a>
@@ -88,15 +88,15 @@
 	<div class="section-content about">
 	{sort:id=1}
 		<a href ="{$sort.link}"><h1 class="wow fadeInDown">关于我们</h1></a>
-		<p>{$sort.description}</p>
+		<p>[sort:description]</p>
 		<div class="about-con">
 			<div class="about-left wow zoomIn">
 				<h3>北京国栋科技有限公司 / GUODONG .TECH</h3>
 				<span>80% of the industry leaders</span>
-				<p>{$sort['description']}</p>
+				<p>[sort:description]</p>
 			</div>
 			<div class="about-right wow zoomIn">
-				<img src="{$sort.pic}" />
+				<img src="[sort:pic]" />
 			</div>
 		</div>
 	{/sort}	
@@ -134,50 +134,21 @@
 
 <section class="bg-f5">
 	<div class="section-content">
-		<h1 class="wow fadeInDown">功能特色</h1>
+		<h1 class="wow fadeInDown">产品中心</h1>
 		<p>我们一直专注于CMS系统研发，累积了丰富的实战经验</p>
 		<div class="buss-list">
 		<ul>
+		{list:num=4 id=5 where=pic neq ''}
 			<li class="wow">
-				<div class="portfolio-block animated"><img src="/static/images/p1.jpg" alt="Protect">
+				<div class="portfolio-block animated"><img src="[list:pic]" alt="Protect">
 					<div class="portfolio-caption text-center animated">
-						<h3 class="">业务中心</h3>
-						<a href="#" class="btn btn-social btn-skype btn-sm animated"><i class="fa fa-plus" aria-hidden="true"></i></a>
-						<a href="#" class="btn btn-social btn-stack-overflow btn-sm animated"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
+						<h3 class="[list:link]">[list:title]</h3>
+						<a href="[list:link]" class="btn btn-social btn-skype btn-sm animated"><i class="fa fa-plus" aria-hidden="true"></i></a>
+						<a href="[list:link]" class="btn btn-social btn-stack-overflow btn-sm animated"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</li>
-			<li class="wow">
-				<div class="portfolio-block animated"><img src="/static/images/p2.jpg" alt="Protect">
-					<div class="portfolio-caption text-center animated">
-						<h3>业务中心</h3>
-
-						<a href="#" class="btn btn-social btn-skype btn-sm animated"><i class="tn-plus"></i></a>
-						<a href="#" class="btn btn-social btn-stack-overflow btn-sm animated"><i class="tn-arrow-right"></i></a>
-					</div>
-				</div>
-			</li>
-			<li class="wow">
-				<div class="portfolio-block"><img src="/static/images/p3.jpg" alt="Protect">
-					<div class="portfolio-caption text-center animated">
-						<h3>业务中心</h3>
-
-						<a href="#" class="btn btn-social btn-skype btn-sm animated"><i class="tn-plus"></i></a>
-						<a href="#" class="btn btn-social btn-stack-overflow btn-sm animated"><i class="tn-arrow-right"></i></a>
-					</div>
-				</div>
-			</li>
-			<li class="wow">
-				<div class="portfolio-block"><img src="/static/images/p4.jpg" alt="Protect">
-					<div class="portfolio-caption text-center animated">
-						<h3 class="wow">业务中心</h3>
-
-						<a href="#" class="btn btn-social btn-skype btn-sm animated"><i class="tn-plus"></i></a>
-						<a href="#" class="btn btn-social btn-stack-overflow btn-sm animated"><i class="tn-arrow-right"></i></a>
-					</div>
-				</div>
-			</li>
- 
+		{/list}
  
 		</ul>
 		</div>
@@ -194,18 +165,18 @@
 				<div class="index-news-con">
 					{list:num=1 id=2 where=pic neq ''}
 					<div class="index-news-istop">
-						<a class="top-news-pic" href="{$list.link}"><img src="{$list.pic}" /></a>
+						<a class="top-news-pic" href="[list:link]"><img src="[list:pic]" /></a>
 						<div class="index-top-news">
-							<h3>{$list.title}</h3>
+							<h3>[list:title len=2]</h3>
 							<div class="topnews-discription">
-							{$list.description}
+							[list:description]
 							</div>
 						</div>
 					</div>
 					{/list}
 					<ul class="wow">
 						{list:num=5 id=2}
-						<li><a href="{$list.link}">{$list.title}</a><span>02-13</span></li>
+						<li><a href="[list:link]">[list:title]</a><span>02-13</span></li>
 						{/list}
 					</ul>
 				</div>
@@ -214,18 +185,9 @@
 		<div class="index-news-right wow">
 			<h3><span>常见问题</span></h3>
 			<ul>
-				{list:num=1 id=2 where=pic neq ''}
-				<div class="index-news-istop">
-					<a class="top-news-pic" href="{$list.link}"><img src="{$list.pic}" /></a>
-					<div class="index-top-news">
-						<h3>{$list.title}</h3>
-						<div class="topnews-discription">
-						{$list.description}
-						</div>
-					</div>
-				</div>
+				{list:num=4 id=2 where=pic neq ''}
 				<li>
-					<a class="question" href="{$list.link}" title="{$list.title}？"><i class="fa fa-question-circle-o" aria-hidden="true"></i>如何解决数据库雪崩？</a>
+					<a class="question" href="[list:link]" title="[list:title]"><i class="fa fa-question-circle-o" aria-hidden="true"></i>[list:title]</a>
 					<div class="answer"><i class="fa fa-commenting-o" aria-hidden="true"></i>因为PG的锁等待判断是整个等待队列的冲突判断，这种判断的目的是防止某些锁请求一直被打断，从而这样设计的。</div>
 				</li>
 				{/list}

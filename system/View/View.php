@@ -323,8 +323,13 @@ class View implements RendererInterface
 		$closedTag = "form|foreach|if|elseif|else|while|for|content|list|nav|slide|position|pagebar|link|pics|sort";
 		$closed = explode('|', $closedTag);
 		foreach($closed as $key=>$value){
-			$str = preg_replace_callback('/\{('.$value.'):([^}]+)?\}([\S\s]*?)\{\/'.$value.'\}/', array($this,'parseParams'), $str);
+			//$str = preg_replace_callback('/\{('.$value.'):([^}]+)?\}([\S\s]*?)\{\/'.$value.'\}/', array($this,'parseParams'), $str);
+			$startTag= '\{'.$value.':';
+			$endTag = '\{\/'.$value.'\}';
+			$reg="/{$startTag}([^}]+)?\}((?>[\s\S]*?(?={$startTag}|{$endTag}))|(?R))*{$endTag}/ui"; 
+			$str = preg_replace_callback($reg, array($this,'parseParams'), $str);
 		}
+		//echo $str;
 		if(preg_match('/{(\/?)(list)\s*(:?)([^}]*)}/i', $str, $matches)){ //处理pagebar任意位置问题，三处优先处理顺序不能变
 			$attr = $this->getAttrs($matches[4]);
 			isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
@@ -355,7 +360,7 @@ class View implements RendererInterface
 		//print_r($matches);
 		//匹配到,解析成中间结果如{$sort.title len=n} {$nav.id}
 		//if(preg_match_all('/\['.$matches[1].':([\w]+)(\s+[^]]+)?\]/', $matches[3], $matchesP)){
-		if(preg_match_all('/\[(([\w]+)):([\w]+)(\s+[^]]+)?\]/', $matches[3], $matchesP)){
+		if(preg_match_all('/\[(([\w]+)):([\w]+)(\s+[^]]+)?\]/', $matches[0], $matchesP)){
 			foreach($matchesP[0] as $key=>$value){
 				$paramTemp = str_replace(array('[', ':' , ']'), array('{$', '.', '}'), $value);
 				$matches[0] = str_replace($value, $paramTemp, $matches[0]);
@@ -379,23 +384,24 @@ class View implements RendererInterface
 					$arr = explode(' ', $matches[4]);
 					$attr = $this->getAttrs($matches[4]);
                     $str = trim($arr[0]);
-					isset($attr['len'])? $len=$attr['len']:$len = 0;
+					//isset($attr['len'])? $len=$attr['len']:$len = 'mb_strlen($'.str_replace(".",'["',$str).'"],"utf-8")';
+					isset($attr['len'])? $len=$attr['len']:$len = 0;//未设置则不对字符串进行截取处理
 					isset($attr['strip'])? $strip=$attr['strip']:$strip = 1; //默认去掉HTML标签
+					isset($attr['style'])? $style=$attr['style']:$style = 'Y-m-d h:i'; //默认时间样式
                     $first = $str[0];
 					if($first != '.' && $first != '(')
 					{
 						if( strpos($str,'(') !== false || (strpos($str,'[') === false && strpos($str,'->') !== false) )
 						{
-							if(isset($attr['len']) || isset($attr['strip'])){
-								return '<?php echo $'.$str.';?>';
-							}else{
-								return '<?php echo $'.$str.';?>';
-							}
+							return '<?php echo $'.$str.';?>';
 							
-						}else if(strpos($str,'.') !== false)
+						}else if(strpos($str,'.') !== false)//所有循环标签转换标签为类似{$sort.title len=10 style=Y-m-d strip=1},只需在此处理参数
 						{
 							if(isset($attr['len']) || isset($attr['strip'])){
-								return '<?php echo $'.str_replace(".",'["',$str).'"];?>';
+								 
+								return '<?php echo strTreat($'.str_replace(".",'["',$str).'"],'."$len,$strip);?>";
+							}else if(isset($attr['style'])){
+								return '<?php echo date("'.$style.'",strtotime($'.str_replace(".",'["',$str).'"]));?>';
 							}else{
 								return '<?php echo $'.str_replace(".",'["',$str).'"];?>';
 							}

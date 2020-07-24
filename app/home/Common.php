@@ -102,8 +102,39 @@ function post(){
 		echo view('html/dispatch_jump.html', $data);exit;
 
     }
- function isMobile(){
-	 return 1;
- }
+	function strTreat($str, $len, $strip){
+		if($strip){
+			$str = strip_tags($str);
+		}
+		if($len){
+			//所取长度大于等于实际长度则不处理
+			if(mb_strlen($str, 'utf-8')>$len){
+				$str = mb_substr($str, 0, $len, 'utf-8');
+				$str .= "...";
+			}else{
+				$str = $str;
+			}
+		}
+		return $str;
+	}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
