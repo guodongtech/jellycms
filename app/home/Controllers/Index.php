@@ -74,7 +74,7 @@ class Index extends BaseController
 			//return;
 		}
 		$parents = $this->model->getParentsorts($sort['id']);
-		$this->data['sort'] = $sort;
+		$this->data['sorts'] = $sort;
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
@@ -94,9 +94,9 @@ class Index extends BaseController
 		$this->data['next'] = $prenext['next'];
 		$sort = $this->model->getSortById($content['sort_id']);
 		
-		$this->data['content'] = $content;
+		$this->data['contents'] = $content;
 		$parents = $this->model->getParentsorts($sort['id']);
-		$this->data['sort'] = $sort;
+		$this->data['sorts'] = $sort;
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
@@ -115,8 +115,8 @@ class Index extends BaseController
 		}
 		$content = $this->model->getPageContent($sort['id']);
 
-		$this->data['sort'] = $sort;
-		$this->data['content'] = $content;
+		$this->data['sorts'] = $sort;
+		$this->data['contents'] = $content;
 		echo view($sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
 		exit;
 	}

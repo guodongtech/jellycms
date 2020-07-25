@@ -5,9 +5,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>{$site.title}</title>
-<meta content='{$site.keywords}' name='keywords'>
-<meta content='{$site.description}' name='description'>
+<title>{contents:title}-{sorts:name}-{site:title}</title>
+<meta content='{contents:keywords}' name='keywords'>
+<meta content='{contents:description}' name='description'>
 <link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
 <link rel="stylesheet" href="{theme:css/swiper.min.css}">
 <link rel="stylesheet" href="{theme:css/animate.min.css}">
@@ -26,11 +26,11 @@
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
-			<span class="animated bounceInDown">{$sort.name}</span>
-			<p class="animated fadeInDown">{$sort.description}</p>
+			<span class="animated bounceInDown">{sorts:name}</span>
+			<p class="animated fadeInDown">{sorts:description}</p>
 		</div>
 		<div class="sort-banner-right">
-			<img class="animated fadeInDown" src="{$sort.ico}" />
+			<img class="animated fadeInDown" src="{sorts:ico}" />
 		</div>
 	</div>
 </div>
@@ -38,14 +38,14 @@
 <div class="content-wrap">
 
 	<div class="content wow fadeInDown">
-		<h2 class="content-title">{$content.title}</h2>
+		<h2 class="content-title">{contents:title}</h2>
 		<div class="content-infos">
-			<span class="author">{$content.author}</span>
+			<span class="author">{contents:author}</span>
 			<span class="origin"></span>
-			<span class="releaseDate">{$content.create_time}</span>
+			<span class="releaseDate">{contents:create_time}</span>
 			<span class="views_num">Pageviews：1</span>
 		</div>
-		<div class="content-detail">{$content.content}</div>	
+		<div class="content-detail">{contents:content}</div>	
 		<div class="article_pages">
 			<div class="pre">上一篇：<a href="{$pre.link}" title="{$pre.title}">{$pre.title}</a></div>
 			<div class="next">下一篇：<a href="{$next.link}" title="{$next.title}">{$next.title}</a></div>
@@ -58,7 +58,7 @@
 				<legend>发表您的评论：</legend>
 			</fieldset>
 			<form class="layui-form" method="post" action="" lay-filter="example" id="form">
-				<input type="hidden" value={$content.id} name='content_id' />
+				<input type="hidden" value={contents:id} name='content_id' />
 				<div class="layui-form-item">
 					<label class="layui-form-label">昵称</label>
 					<div class="layui-input-inline">

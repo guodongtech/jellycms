@@ -5,9 +5,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>{$site.title}</title>
-<meta content='{$site.keywords}' name='keywords'>
-<meta content='{$site.description}' name='description'>
+<title>{sorts:name}-{site:title}</title>
+<meta content='{sorts:keywords}' name='keywords'>
+<meta content='{sorts:description}' name='description'>
 <link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
 <link rel="stylesheet" href="{theme:css/swiper.min.css}">
 <link rel="stylesheet" href="{theme:css/animate.min.css}">
@@ -58,15 +58,15 @@
 	<div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 		<div class="sort-banner-content">
 			<div class="sort-banner-left">
-				<span class="wow bounceInDown">{$sort.name}</span>
-				<p class="wow fadeInDown">{$sort.description}</p>
+				<span class="wow bounceInDown">{sorts:name}</span>
+				<p class="wow fadeInDown">{sorts:description}</p>
 			</div>
 			<div class="sort-banner-right">
-				<img class="wow flipInX" src="{$sort.ico}" />
+				<img class="wow flipInX" src="{sorts:ico}" />
 			</div>
 		</div>
 	</div>
-	<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+	<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
 	<div class="wrap">
 		<div class="wrap-content">
 			{include:left.html}
@@ -77,7 +77,7 @@
 				  <legend>留言列表</legend>
 				</fieldset>
 				<ul class="message-list">
-				{form:name=message num=3 pid=0}
+				{form:name=message num=3}
 					<li>
 						<div class="user-info">
 							<img src="{$form.icon}">
@@ -87,41 +87,27 @@
 							</div>
 						</div>
 						<div class="user-message">
-						{$form.content}
+						[form:content]
 							<ul>
-							{form:name=message num=3 pid=$form['id'] value=form2}
+							{form:name=message num=3 pid=[form:id] value=form2}
 								<li>
 									<div class="user-info">
-										<img src="{$form2.icon}">
+										<img src="[form2:icon]">
 										<div>
-											<em>{$form2.nickname}</em>
-											<span>{echo:date('m月d日 h: s', $form2['create_time'])}</span>
+											<em>[form2:nickname]</em>
+											<span>[form2:create_time style=m月d日 h:i]</span>
 										</div>
 									</div>
 									<div class="user-message">
-									{$form2.content}
+									[form2:content]
 									</div>
 								</li>
 							 {/form}
 							</ul>
-						
-						
 						</div>
 					</li>
 				{/form}
 				</ul>
-				
- 
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				<div class="message">
 					<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
 					  <legend>留言信息</legend>

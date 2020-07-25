@@ -5,9 +5,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>{$site.title}</title>
-<meta content='{$site.keywords}' name='keywords'>
-<meta content='{$site.description}' name='description'>
+<title>{sorts:name}-{site:title}</title>
+<meta content='{sorts:keywords}' name='keywords'>
+<meta content='{sorts:description}' name='description'>
 <link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
 <link rel="stylesheet" href="{theme:css/swiper.min.css}">
 <link rel="stylesheet" href="{theme:css/animate.min.css}">
@@ -18,11 +18,11 @@
 <div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
-			<span class="wow bounceInDown">{$sort.name}</span>
-			<p class="wow fadeInDown">{$sort.description}</p>
+			<span class="wow bounceInDown">{sorts:name}</span>
+			<p class="wow fadeInDown">{sorts:description}</p>
 		</div>
 		<div class="sort-banner-right">
-			<img class="wow flipInX" src="{$sort.ico}" />
+			<img class="wow flipInX" src="{sorts:ico}" />
 		</div>
 	</div>
 

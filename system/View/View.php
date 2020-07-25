@@ -323,11 +323,10 @@ class View implements RendererInterface
 		$closedTag = "form|foreach|if|elseif|else|while|for|content|list|nav|slide|position|pagebar|link|pics|sort";
 		$closed = explode('|', $closedTag);
 		foreach($closed as $key=>$value){
-			//匹配带参数的标签（主要用在无限类标签）  参数类似[nav:name] 参数里不能再带参数
-			$str = preg_replace_callback('/\{('.$value.'):([^}]+)?\}?/ui', array($this,'parseTagParams'), $str);
-			$startTag= '\{'.$value.':';
+
+			$startTag= '\{('.$value.'):';
 			$endTag = '\{\/'.$value.'\}';
-			$reg="/{$startTag}([^}]+)?\}((?>[\s\S]*?(?={$startTag}|{$endTag}))|(?R))*{$endTag}/ui"; 
+			$reg="/{$startTag}([^}]+)?\}(?:(?>[\s\S]*?(?={?:$startTag}|{$endTag}))|(?R))*{$endTag}/ui"; 
 			$str = preg_replace_callback($reg, array($this,'parseParams'), $str); //匹配闭合标签体中参数 参数类似[list:title len=8]
 		}
 		//echo $str;
@@ -373,9 +372,21 @@ class View implements RendererInterface
      * @return String 中间结果
      */
 	public function parseParams($matches){
-		if(preg_match_all('/\[(([\w]+)):([\w]+)(\s+[^]]+)?\]/', $matches[0], $matchesP)){
+		//print_r($matches);
+		//匹配带参数的标签（主要用在无限类标签）  参数类似[nav:name] 参数里不能再带参数如[nav:name len=9]
+		$matches[0] = preg_replace_callback('/\{('.$matches[1].'):([^}]+)?\}?/ui', array($this,'parseTagParams'), $matches[0]);
+		if(preg_match_all('/\[[\w]+:(?:[\w]+)(?:\s+[^]]+)?\]/', $matches[0], $matchesP)){
 			foreach($matchesP[0] as $key=>$value){
-				$paramTemp = str_replace(array('[', ':' , ']'), array('{$', '.', '}'), $value);
+				$paramTemp = $value;
+				if(strpos($paramTemp, '[') !== false){
+					$paramTemp = substr_replace($paramTemp,'{$',strpos($paramTemp, '['), 1); //[第一次出现
+				}
+				if(strpos($paramTemp, ':') !== false){
+					$paramTemp = substr_replace($paramTemp,".",strpos($paramTemp, ':'),1); //:第一次出现
+				}
+				if(strpos( $paramTemp, ']') !== false){
+					$paramTemp = substr_replace($paramTemp,"}",strrpos($paramTemp, ']'), 1); //]最后一次出现
+				}
 				$matches[0] = str_replace($value, $paramTemp, $matches[0]);
 			}
 		}
@@ -409,7 +420,7 @@ class View implements RendererInterface
 						{
 							return '<?php echo $'.$str.';?>';
 							
-						}else if(strpos($str,'.') !== false)//所有循环标签转换标签为类似{$sort.title len=10 style=Y-m-d strip=1},只需在此处理参数
+						}else if(strpos($str,'.') !== false)//所有循环标签转换标签为类似{sorts:title len=10 style=Y-m-d strip=1},只需在此处理参数
 						{
 							if(isset($attr['len']) || isset($attr['strip'])){
 								
@@ -475,11 +486,11 @@ class View implements RendererInterface
                 }
                 case 'sorts:':
                 {
-                	return '<?php echo $sort["'.$matches[4].'"];?>';
+                	return '<?php echo $sorts["'.$matches[4].'"];?>';
                 }
                 case 'contents:':
                 {
-                	return '<?php echo $content["'.$matches[4].'"];?>';
+                	return '<?php echo $contents["'.$matches[4].'"];?>';
                 }
                 case 'label:':
                 {
@@ -607,12 +618,12 @@ class View implements RendererInterface
 				}
 				case 'position:': 
 				{
-					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPosition($sort["id"]) as $key=>$position){?>';
+					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPosition($sorts["id"]) as $key=>$position){?>';
 				}
 				case 'list:':
 				{
 					$attr = $this->getAttrs($matches[4]);
-					isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
+					isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
 					unset($attr['id']);
 					//实现属性中符号表达式的问题
 					$old_char=array(' eq ',' l ',' g ',' le ',' ge ', ' neq ');
