@@ -47,7 +47,8 @@ class ParseModel extends Model
 		$builder = $this->db->table('sorts');
 		$result   = $builder->select('sorts.*,model.urlname as m_urlname, model.id as model_id')
 							->join('model', 'model.id = sorts.model_id', 'left')
-							->where(['sorts.deleted'=>0, 'sorts.pid'=>$pid])
+							->where(['sorts.deleted'=>0])
+							->whereIn('sorts.pid', $pid)
 							->get($num)
 							->getResultArray();
 							
@@ -139,8 +140,11 @@ class ParseModel extends Model
 	
 	
 	public function getList($id,$params,$page){
-		$this->getChildrenSorts($id);
+		foreach($id as $k=>$v){
+			$this->getChildrenSorts($v);  //列表标签会递归查询当前ID及其子类的数据，如果只想查指列表ID下的数据，请注释掉此行即可。
+		}
 		$children = $this->childrenSortIds; //当前类及其模型一致的子类
+		$children = array_unique($children);//去重
 		$where = isset($params['where'])?str_replace(',',' and ',$params['where']):'1=1';
 		$page = $page>0?$page:1;
 		$num = isset($params['num'])?$params['num']:5;

@@ -330,7 +330,7 @@ class View implements RendererInterface
 			$str = preg_replace_callback($reg, array($this,'parseParams'), $str); //匹配闭合标签体中参数 参数类似[list:title len=8]
 		}
 		//echo $str;
-		if(preg_match('/{(\/?)(list)\s*(:?)([^}]*)}/i', $str, $matches)){ //处理pagebar任意位置问题，三处优先处理顺序不能变
+/* 		if(preg_match('/{(\/?)(list)\s*(:?)([^}]*)}/i', $str, $matches)){ //处理pagebar任意位置问题，三处优先处理顺序不能变
 			$attr = $this->getAttrs($matches[4]);
 			isset($attr['id'])? $id=$attr['id']:$id = '$sort["id"]';
 			unset($attr['id']);
@@ -346,8 +346,8 @@ class View implements RendererInterface
 				}
 			}
 			$params = '['.trim($tem, ',').']';
-			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
-		}
+			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
+		} */
 		//前面已完成中间解析，正式解析标签
 		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
@@ -622,18 +622,19 @@ class View implements RendererInterface
 				{
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['id'])) $id = $attr['id'];
-					return '<?php $content = array(0,1,2,3,4); $contentTemp = $content; $model = new \App\Models\ParseModel(); foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
+					return '<?php  $model = new \App\Models\ParseModel(); foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
 				}
 				case 'sort:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['id'])) $id = $attr['id'];
-					return '<?php  $sortTemp = $sort;  $model = new \App\Models\ParseModel();  foreach(array($model->getSort('.$id.')) as $key=>$sort){?>';
+					return '<?php $model = new \App\Models\ParseModel();  foreach(array($model->getSort('.$id.')) as $key=>$sort){?>';
 				}
 				case 'position:': 
 				{
 					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPosition($sorts["id"]) as $key=>$position){?>';
 				}
+				//可指定多个ID id=1,2,3,4
 				case 'list:':
 				{
 					$attr = $this->getAttrs($matches[4]);
@@ -651,14 +652,14 @@ class View implements RendererInterface
 						}
 					}
 					$params = '['.trim($tem, ',').']';
-					return '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList($id='.$id.','.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
+					return '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
 				}
 				case 'pagebar:':
 				{
 					$key = trim($matches[4],"/ ");
 					return '<?php echo $pagebar["'.$key.'"]  ?>';
 				}
-				//无限嵌套
+				//无限嵌套 可指定多个pid=1,2,3,4
 				case 'nav:':
 				{
 					$attr = $this->getAttrs($matches[4]);
@@ -669,7 +670,7 @@ class View implements RendererInterface
 					
 					isset($attr['value'])? $value=$attr['value']:$value = 'nav';
 					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
-					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getSortByPid('.$pid.',$num='.$num.') as '.$attr['key'].' => $'.$value.'){?>';
+					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getSortByPid(array('.$pid.'),$num='.$num.') as '.$attr['key'].' => $'.$value.'){?>';
 				}
 				case 'slide:':
 				{
@@ -709,8 +710,8 @@ class View implements RendererInterface
 		}
 		else
 		{
-			if($matches[2]){
-				//这两个标签在列表页或内容页有同名数组，会覆盖$content $sort的值。此处还原之前的数组
+/* 			if($matches[2]){
+				//这两个标签在列表页或内容页有同名数组，会覆盖$content $sort的值。此处还原之前的数组  此问题已处理，但此处保留，用于重名数据参考
 				switch($matches[2]){
 					case 'content':
 					{
@@ -727,7 +728,9 @@ class View implements RendererInterface
 				}
 			}else{
 				return '<?php }?>';
-			}
+			} */
+			
+			return '<?php }?>';
 		}
 	}
 	

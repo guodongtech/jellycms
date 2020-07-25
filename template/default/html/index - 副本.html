@@ -140,9 +140,9 @@
 				<div class="portfolio-block animated"><img src="[list:pic]" alt="Protect">
 					<div class="portfolio-caption text-center animated">
 						<h3 class="[list:link]">[list:title]</h3>
-						<a href="[list:link]" class="btn btn-social btn-skype btn-sm animated"><i class="fa fa-plus" aria-hidden="true"></i></a>
-						<a href="[list:link]" class="btn btn-social btn-stack-overflow btn-sm animated"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
+						<p>[list:description]</p>
 					</div>
+					<h3 class="ltitle">[list:title]</h3>
 				</div>
 			</li>
 		{/list}
@@ -154,9 +154,9 @@
 <section class="bg-f5">
 	<div class="section-content news">
 		<h1 class="wow fadeInDown">新闻中心</h1>
-		<p>永久开源、免费的 PHP 建站系统</p>
+		<p class="wow fadeInDown delay3">永久开源、免费的 PHP 建站系统</p>
 		<div class="news-list">
-		<div class="index-news-left wow">
+		<div class="index-news-left wow bounceInLeft">
 			<h3><span>公司新闻</span></h3>
 			<div>
 				<div class="index-news-con">
@@ -164,7 +164,7 @@
 					<div class="index-news-istop">
 						<a class="top-news-pic" href="[list:link]"><img src="[list:pic]" /></a>
 						<div class="index-top-news">
-							<h3>[list:title len=2]</h3>
+							<h3>[list:title len=20]</h3>
 							<div class="topnews-discription">
 							[list:description]
 							</div>
@@ -179,11 +179,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="index-news-right wow">
+		<div class="index-news-right wow bounceInRight">
 			<h3><span>常见问题</span></h3>
 			<ul>
 				{list:num=4 id=2 where=pic neq ''}
-				<li>
+				<li class="wow bounceInRight delay{$key}">
 					<a class="question" href="[list:link]" title="[list:title]"><i class="fa fa-question-circle-o" aria-hidden="true"></i>[list:title]</a>
 					<div class="answer"><i class="fa fa-commenting-o" aria-hidden="true"></i>[list:content len=60]</div>
 				</li>

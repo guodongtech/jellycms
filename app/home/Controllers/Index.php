@@ -21,6 +21,7 @@ class Index extends BaseController
 			header('Location: '.$this->config->mobileDomain);
 			exit;
 		}
+		
 		$request = \Config\Services::request();
 		$agent = $request->getUserAgent();
 		if ($agent->isMobile())
@@ -34,7 +35,7 @@ class Index extends BaseController
 		$this->cacheName = md5($cacheTemp[0]);
 		if ($output = cache($this->cacheName))
 		{
-			exit($output);
+			//exit($output);
 		}
 		$this->model = new IndexModel();
 		$area_id = $this->data['company'] = $this->model->getDefaultArea();
@@ -51,7 +52,8 @@ class Index extends BaseController
 	public function index()
 	{	
 		$this->data['home'] = 1;//首页标记
-		echo view('index.html',$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
+		//echo view('index.html',$this->data, ['cache'=>$this->config->catchTime,'cache_name'=>$this->cacheName]);
+		echo view('index.html',$this->data);
 	}
 	
 	//列表页 $params[0] urlname; $params[1] id;$params[2]  页数
@@ -81,7 +83,8 @@ class Index extends BaseController
 		
 		//生成分页
 		
-		echo view($sort['listtpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
+		echo view($sort['listtpl'],$this->data);
+		//echo view($sort['listtpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
 		exit;
 	}
 	//内容页 
@@ -100,7 +103,8 @@ class Index extends BaseController
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
-		echo view($sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
+		//echo view($sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
+		echo view($sort['contenttpl'],$this->data);
 		exit;
 	}
 	//单页
@@ -117,7 +121,8 @@ class Index extends BaseController
 
 		$this->data['sorts'] = $sort;
 		$this->data['contents'] = $content;
-		echo view($sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
+		//echo view($sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
+		echo view($sort['contenttpl'],$this->data);
 		exit;
 	}
 	

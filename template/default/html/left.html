@@ -1,7 +1,7 @@
 			<aside class="left">
 				<div class="sorts-fixed">
 					<div class="list-nav sect  wow bounceInLeft">
-						<h2><span>company</span>NEWS</h2>
+						<h2><span>{sorts:enname}</span>NEWS</h2>
 						<ul class="default-pc-sidebar-ul ">
 							{nav:pid=$topsort['id']}
 							<li><a {if:$sort['id'] == $nav['id']}class="active"{/if} href='{$nav.link}'>{$nav.name}</a></li>
@@ -11,22 +11,18 @@
 					<div class="recommend left-nav sect  wow bounceInLeft">
 						<h3>推荐阅读</h3>
 						<ul>
-							<li><a href="">2020年PHP 高级面试题试题</a><span>阅读：236</span></li>
-							<li><a href="">2020年PHP 高级面试题试题</a><span>阅读：236</span></li>
-							<li><a href="">2020年PHP 高级面试题试题</a><span>阅读：236</span></li>
-							<li><a href="">2020年PHP 高级面试题试题</a><span>阅读：236</span></li>
-							<li><a href="">2020年PHP 高级面试题试题</a><span>阅读：236</span></li>
-							<li><a href="">2020年PHP 高级面试题试题</a><span>阅读：236</span></li>
-
+						{list:num=5 id=2 where=recommend eq 1}
+							<li><a href="[list:link]">[list:title]</a><span>阅读：[list:visit]</span></li>
+						{/list}
 						</ul>
 					</div>
 					<div class="left-contact-us left-nav sect  wow bounceInLeft">
 						<h3>联系我们</h3>
-						<p>联系人：吴先生</p>
-						<p>手机：18926129998</p>
-						<p>电话：020-22043297</p>
-						<p>邮箱：510551@qq.com</p>
-						<p>地址： 广东省广州市天河区天平架沙太路沙太路</p>
+						<p>联系人：{company:contact}</p>
+						<p>手机：{company:mobile}</p>
+						<p>电话：{company:phone}</p>
+						<p>邮箱：{company:email}</p>
+						<p>地址： {company:address}</p>
 					</div>
 				</div>
 			</aside>

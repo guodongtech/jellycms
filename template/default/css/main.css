@@ -219,12 +219,12 @@ header.other-page .header-container ul li a{
     border-radius: 3px;
     font-size: 13px;
     padding:8px 28px;
-    background-color: #d65050;
-    border: 1px solid #d65050;
+    background-color: #ff7f50;
+    border: 1px solid #ff7f50;
 	color:#fff;
 }
 .download a:hover {
-    color: #d65050;
+    color: #ff7f50;
     background-color: transparent;
 }
 .download .version{
@@ -323,7 +323,7 @@ section.about .about-con{
 }
  
 .roll-icon-box .icon {
-    border: 1px solid #d65050;
+    border: 1px solid #ff7f50;
 }
 
 .roll-icon-box .icon {
@@ -352,14 +352,14 @@ section.about .about-con{
     font-size: 26px;
 }
 .roll-icon-box .icon i, .roll-icon-box .content h3 a:hover {
-    color: #d65050;
+    color: #ff7f50;
 }
 .roll-button {
     border-radius: 3px;
     font-size: 13px;
     padding:12px 35px;
-    background-color: #d65050;
-    border: 1px solid #d65050;
+    background-color: #ff7f50;
+    border: 1px solid #ff7f50;
 	color:#fff;
 }
 
@@ -369,7 +369,7 @@ section.about .about-con{
     clear: both;
 }
 .roll-button:hover {
-    color: #d65050;
+    color: #ff7f50;
     background-color: transparent;
 }
 
@@ -421,8 +421,8 @@ section.about .about-con{
 }
 .sta-left ul li p{
 	color: rgb(255, 15, 101);
-	//text-shadow: 1px 1px 1px   #fff;
-		font-family:fantasy;
+	font-weight:bold;
+	font-family:fantasy;
 }
 .sta-left ul li p:before{
 	margin-bottom:38px;
@@ -616,8 +616,10 @@ section.about .about-con{
 }
 .portfolio-block .ltitle{
 	width:100%;
-	line-height:26px;
+	line-height:32px;
 	text-align:center;
+	background:rgba(0,0,0,0.2);
+	color:#333
 }
 .portfolio-block .portfolio-caption p{
 	padding:2px 6px;
@@ -731,7 +733,7 @@ a.btn-social, .btn-social {
 	color:#52c018;
 }
 .index-news-right .question i{
-	color:rgb(255, 15, 101);
+	color:#ff7f50;
 	text-shadow:none;
 }
 .index-news-right ul{
@@ -1224,6 +1226,9 @@ footer .footer-nav{
 	display:flex;
 	justify-content:space-between;
 	flex-direction:row;
+}
+footer .footer-nav div{
+	width:118px;
 }
 footer .footer-nav h5{
 	font-weight:bold;

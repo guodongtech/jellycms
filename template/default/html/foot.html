@@ -1,143 +1,35 @@
-
-<!-- 生成环境删除此处以下代码 -->
 <link rel="stylesheet" href="{webroot:static/layui/css/layui.css}">
- 
-<style>
-.console{
-	height:300px;
-	width:100%;
-	position:fixed;
-	bottom:0;
-	left:0;
-	right:0;
-	background:#eee;
-	border-top:1px solid #fff;
-}
-
-.layui-tab-title .layui-this:after {
-    position: absolute;
-    left: 0;
-    top: 0;
-    content: '';
-    width: 100%;
-    height: 41px;
-    border-width: 1px;
-    border-style: solid;
-    border-bottom-color: #1e9fff;
-    border-radius: 2px 2px 0 0;
-    box-sizing: border-box;
-    pointer-events: none;
-}
-.layui-tab-title {
-	box-shadow:rgba(100, 100, 100, 0.18) 0px 2px 3px 0px
-}
-.layui-tab-content {
-    padding: 10px;
-	background:#f5f5f5;
-	height:100%;
-}
-.layui-tab-item {
-    height:100%;
-	overflow-y:auto;
-}
-.layui-tab {
-    display:flex;
-	flex-direction:column;
-	justify-content:space-between;
-	height:100%;
-}
-</style>
-<!-- 控制台 -->
-<!-- <div class="console">
-<div class="layui-tab">
-  <ul class="layui-tab-title">
-    <li class="layui-this">当前可用标签</li>
-    <li>可用代码</li>
-    <li>可用样式</li>
-    <li>手册</li>
-  </ul>
-  <div class="layui-tab-content">
-    <div class="layui-tab-item layui-show">
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-      内容1<br>
-    </div>
-    <div class="layui-tab-item">
-		内容2
-	
-	</div>
-    <div class="layui-tab-item">内容3</div>
-    <div class="layui-tab-item">内容4</div>
-    <div class="layui-tab-item">内容5</div>
-  </div>
-</div>
-</div> -->
-
-<!-- 生产环境删除此处以上代码 -->
 <footer>
 	 <div class="footer-top">
 		<div class="footer-top-container">
 			<div class="footer-left wow bounceInLeft">
 				<div class="footer-logo">
 					<img src="{site:logo}" />
-					<p>CopyRight 2010-2020 All Right Reserved</p>
+					<p>{site:copyright}</p>
 				</div>
 				<div class="footer-contactus">
-					<p>联系人：赵先生</p>
-					<p>手机：18865669888</p>
-					<p>电话：020-22043297</p>
-					<p>邮箱：510551@qq.com</p>
-					<p>地址： 北京市朝阳区远洋国际大厦</p>
+					<p>联系人：{company:contact}</p>
+					<p>手机：{company:mobile}</p>
+					<p>电话：{company:phone}</p>
+					<p>邮箱：{company:email}</p>
+					<p>地址：{company:address}</p>
 				</div>
 			</div>
 			<div class="footer-right wow bounceInRight">
 				<div class="footer-nav">
-				 
+				 {nav:pid=0 num=3}
 					<div>
-						<h5>产品中心</h5>
+						<h5>[nav:name]</h5>
 						<ul>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
+							{nav:pid=[nav:id] num=4 value=nav1}
+							<li><a href="[nav1:link]">[nav1:name]</a></li>
+							{/nav}
 						</ul>
 					</div>
-					<div>
-						<h5>产品中心</h5>
-						<ul>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-						</ul>
-					</div>
-					<div>
-						<h5>产品中心</h5>
-						<ul>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-							<li><a href="">关于我们</a></li>
-						</ul>
-					</div>
+				{/nav}
 
 				</div>
-				<div class="qrcode"><img src="/static/images/qrcode.png" /><p>手机二维码</p></div>
+				<div class="qrcode"><img src="{site:qrcode}" /><p>手机二维码</p></div>
 			</div>
 			
 		</div>
@@ -160,90 +52,9 @@
 		</div>
 
 	 </div>
-
-
-
-
 </footer>
-
 <script src="{theme:js/jquery-1.11.3.min.js}"></script>
 <script src="{theme:js/swiper.min.js}"></script>
 <script src="{theme:js/swiper.animate.min.js}"></script>
 <script src="{theme:js/wow.min.js}"></script>
-
-<script> 
-//Swiper5
-  var mySwiper = new Swiper ('.swiper-container', {
-   // direction: 'herizon', // 垂直切换选项
-    loop: true, // 循环模式选项
-    
-    // 如果需要分页器
-    pagination: {
-      el: '.swiper-pagination',
-    },
-    
-    // 如果需要前进后退按钮
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-	 autoplay: {
-	  disableOnInteraction: false, //手动滑动之后不打断播放
-	  delay: 2888
-	},
-    on:{
-      init: function(){
-        swiperAnimateCache(this); //隐藏动画元素 
-        swiperAnimate(this); //初始化完成开始动画
-      }, 
-      slideChangeTransitionEnd: function(){ 
-        swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
-        //this.slides.eq(this.activeIndex).find('.ani').removeClass('ani'); 动画只展现一次，去除ani类名
-      } 
-    }
-  }) 
-  
-  
-$(document).ready(function (){
-	$(window).scroll(function(){
-		//获取当前鼠标滑动的高度
-		var currentTop = $(window).scrollTop();
-		var offset = $('.sta-left').offset();
-		//导航菜单
-		if(currentTop>=32){
-			$('header').addClass('active');
-		}else if(currentTop<32){
-			$('header').removeClass('active');
-		}
-		//计数
-		if(0){
-			$('.count').each(function() {
-				$(this).animate({
-					counter: $(this).attr('counter')
-				}, {
-					duration: 2000,
-					easing: 'swing',
-					step: function(now) {
-						now = Math.ceil(now);
-						var str = now.toString();
-						var reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
-						$(this).text(str.replace(reg,"$1,"));
-					}
-				});
-			});
-		}
-	});
-});  
-  
-var wow = new WOW({
-    boxClass: 'wow',
-    animateClass: 'animated',
-    offset: 0,
-    mobile: true,
-    live: true
-});
-wow.init();
-  
-  
-  </script>
-
+<script src="{theme:js/main.js}"></script>
