@@ -20,8 +20,8 @@
 		<div class="swiper-slide" style="background-image:url('{$slide.bgpic}'); background-color:{$slide.bgcolor} ">
 			<div class="swiper-slide-content">
 				<div class="slider-text">
-					<h1 class="ani" swiper-animate-effect="bounceInLeft" swiper-animate-duration="0.3s" swiper-animate-delay="0.1s">{$slide.name}</h1>
-					<p class="ani" swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s">{$slide.description}</p>
+					<h1 class="ani" swiper-animate-effect="bounceInLeft" swiper-animate-duration="0.3s" swiper-animate-delay="0.1s">[slide:name]</h1>
+					<p class="ani" swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s">[slide:description]</p>
 					<div class="download ani"  swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 						<span class="version">最新版本:3.8.1</span>
 						<p>
@@ -31,7 +31,7 @@
 						</p>
 					</div>
 				</div>
-				<div class="slider-pic ani" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s"><img src="{$slide.pic}"></div>
+				<div class="slider-pic ani" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s"><img src="[slide:pic]"></div>
 			</div>
 		</div>
 	{/slide}
