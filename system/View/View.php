@@ -407,8 +407,8 @@ class View implements RendererInterface
 				case '$':
                 {
 					$arr = explode(' ', $matches[4]);
+					$str = trim($arr[0]);
 					$attr = $this->getAttrs($matches[4]);
-                    $str = trim($arr[0]);
 					//isset($attr['len'])? $len=$attr['len']:$len = 'mb_strlen($'.str_replace(".",'["',$str).'"],"utf-8")';
 					isset($attr['len'])? $len=$attr['len']:$len = 0;//未设置则不对字符串进行截取处理
 					isset($attr['strip'])? $strip=$attr['strip']:$strip = 1; //默认去掉HTML标签
@@ -486,11 +486,25 @@ class View implements RendererInterface
                 }
                 case 'sorts:':
                 {
-                	return '<?php echo $sorts["'.$matches[4].'"];?>';
+					$arr = explode(' ', $matches[4]);
+					$str = trim($arr[0]);
+					$attr = $this->getAttrs($matches[4]);
+					if(isset($attr['style'])){
+						return '<?php echo date("'.$attr['style'].'",strtotime($sorts["'.str_replace(".",'["',$str).'"]));?>';
+					}else{
+						return '<?php echo $sorts["'.$matches[4].'"];?>';
+					}
                 }
                 case 'contents:':
                 {
-                	return '<?php echo $contents["'.$matches[4].'"];?>';
+					$arr = explode(' ', $matches[4]);
+					$str = trim($arr[0]);
+					$attr = $this->getAttrs($matches[4]);
+					if(isset($attr['style'])){
+						return '<?php echo date("'.$attr['style'].'",strtotime($contents["'.str_replace(".",'["',$str).'"]));?>';
+					}else{
+						return '<?php echo $contents["'.$matches[4].'"];?>';
+					}
                 }
                 case 'label:':
                 {

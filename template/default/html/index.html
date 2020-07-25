@@ -154,9 +154,9 @@
 <section class="bg-f5">
 	<div class="section-content news">
 		<h1 class="wow fadeInDown">新闻中心</h1>
-		<p>永久开源、免费的 PHP 建站系统</p>
+		<p class="wow fadeInDown delay3">永久开源、免费的 PHP 建站系统</p>
 		<div class="news-list">
-		<div class="index-news-left wow">
+		<div class="index-news-left wow bounceInLeft">
 			<h3><span>公司新闻</span></h3>
 			<div>
 				<div class="index-news-con">
@@ -179,11 +179,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="index-news-right wow">
+		<div class="index-news-right wow bounceInRight">
 			<h3><span>常见问题</span></h3>
 			<ul>
 				{list:num=4 id=2 where=pic neq ''}
-				<li>
+				<li class="wow bounceInRight delay{$key}">
 					<a class="question" href="[list:link]" title="[list:title]"><i class="fa fa-question-circle-o" aria-hidden="true"></i>[list:title]</a>
 					<div class="answer"><i class="fa fa-commenting-o" aria-hidden="true"></i>[list:content len=60]</div>
 				</li>

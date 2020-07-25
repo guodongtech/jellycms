@@ -36,7 +36,7 @@
 			<span class="author">{contents:author}</span>
 			<span class="origin"></span>
 			<span class="releaseDate">{contents:create_time}</span>
-			<span class="views_num">Pageviews：{contents:visit}</span>
+			<span class="views_num">访问：{contents:visit}</span>
 		</div>
 		<div class="content-detail">{contents:content}</div>	
 		<div class="article_pages">
@@ -122,7 +122,7 @@
 		<div class="recommend">
 			<h3>——  推荐内容  ——</h3>
 			<ul class="recommend-list">
-			{list:num=3 id=5 where=isrecommend eq 1,pic neq '' order=id desc}
+			{list:num=3 id=5 where=isrecommend eq 1,pic neq ''}
 			<li>
 				<div class="item wow zoomIn">
 					<div class="item-pic">
@@ -136,7 +136,7 @@
 								<span style="">[list:title]</span>
 							</a>
 							<div class="description">
-							{$list.description}...  
+							{$list.description}
 							</div>
 						</div>
 					</div>

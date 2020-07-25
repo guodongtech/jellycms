@@ -466,15 +466,39 @@ section.about .about-con{
 	padding:8px 15px;
 	margin-top:20px;
 }
-
-
-
-
-
-
-
-
-
+.delay0{
+	animation-delay:0s;
+}
+.delay1{
+	animation-delay:0.1s;
+}
+.delay2{
+	animation-delay:0.2s;
+}
+.delay3{
+	animation-delay:0.3s;
+}
+.delay4{
+	animation-delay:0.4s;
+}
+.delay5{
+	animation-delay:0.5s;
+}
+.delay6{
+	animation-delay:0.6s;
+}
+.delay7{
+	animation-delay:0.7s;
+}
+.delay8{
+	animation-delay:0.8s;
+}
+.delay9{
+	animation-delay:0.9s;
+}
+.delay9{
+	animation-delay:1s;
+}
 
 .contact-us{
     background: url(../images/map.png) #494d55 no-repeat center center;
@@ -529,24 +553,17 @@ section.about .about-con{
 .buss-list ul li{
 	width:22%;
 }
-.buss-list ul li:nth-child(1){
+.buss-list ul li *{
+	//transition:all 0.1s ease-in-out;
+}
+.buss-list ul li:nth-child(odd){
     -webkit-animation-name: fadeInLeft;
     animation-name: fadeInLeft;
 	animation-delay:0.1s;
 }
-.buss-list ul li:nth-child(2){
+.buss-list ul li:nth-child(even){
     -webkit-animation-name: fadeInLeft;
     animation-name: fadeInLeft;
-	animation-delay:0.3s;
-}
-.buss-list ul li:nth-child(3){
-    -webkit-animation-name: fadeInRight;
-    animation-name: fadeInRight;
-	animation-delay:0.1s;
-}
-.buss-list ul li:nth-child(4){
-    -webkit-animation-name: fadeInRight;
-    animation-name: fadeInRight;
 	animation-delay:0.3s;
 }
 .portfolio-block{
@@ -554,25 +571,24 @@ section.about .about-con{
     margin-bottom: 30px;
     border-radius: 3px;
 	box-sizing:border-box;
+	height:278px;
 }
 .portfolio-block .portfolio-caption{
     position: absolute;
     z-index: 99;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.2);
     color: #ffffff;
     top: 0;
-    border: 20px solid rgba(255,255,255,0.3);
-    opacity: 0;
+    border: 20px solid rgba(255,255,255,0.1);
+    opacity: 1;
 }
 .portfolio-block .portfolio-caption h3{
     font-size: 15pt;
     margin-top: 30px;
     margin-bottom: 20px;
-    -webkit-animation-name: zoomOut;
-    animation-name: zoomOut;
-	color:#fff;
+	color:#333;
 }
 .portfolio-block .portfolio-caption .btn-sm{
     padding-top: 11px;
@@ -584,39 +600,31 @@ section.about .about-con{
     -webkit-animation-name: fadeOutDown;
     animation-name: fadeOutDown;
 }
-.portfolio-block .portfolio-caption .btn-skype{
-    -webkit-animation-name: fadeOutLeft;
-    animation-name: fadeOutLeft;
-}
-.portfolio-block .portfolio-caption .btn-stack-overflow{
-    -webkit-animation-name: fadeOurRight;
-    animation-name: fadeOurRight;
-}
 .portfolio-block:hover .portfolio-caption{
     -webkit-animation-name: fadeInUp;
     animation-name: fadeInUp;
 	opacity:1;
+	border: 20px solid rgba(255,255,255,0.5);
+	background:rgba(0,0,0,0.3);
+	color:#333;
+}
+.portfolio-block:hover .portfolio-caption h3{
+	color:#333;
+}
+.portfolio-block:hover .portfolio-caption p{
+	color:#fff;
+}
+.portfolio-block .ltitle{
+	width:100%;
+	line-height:26px;
+	text-align:center;
+}
+.portfolio-block .portfolio-caption p{
+	padding:2px 6px;
 }
 
-.portfolio-block:hover .portfolio-caption h3.animated{
-    -webkit-animation-name: zoomIn;
-    animation-name: zoomIn;
-    -webkit-animation-delay: 200ms;
-    animation-delay: 200ms;
-}
-
-.portfolio-block:hover .portfolio-caption .btn-skype{
-    -webkit-animation-name: fadeInLeft;
-    animation-name: fadeInLeft;
-    -webkit-animation-delay: 200ms;
-    animation-delay: 200ms;
-}
-.portfolio-block:hover .portfolio-caption .btn-stack-overflow{
-    -webkit-animation-name: fadeInRight;
-    animation-name: fadeInRight;
-    -webkit-animation-delay: 200ms;
-    animation-delay: 200ms;
-}
+ 
+ 
 .text-center {
     text-align: center;
 }
@@ -772,6 +780,12 @@ a.btn-social, .btn-social {
 	width:100%;
 	padding:10px 20px;
 	font-size:13px;
+}
+.section-content.news .index-news-right li{
+	border-bottom:1px solid #f5f5f5;
+}
+.section-content.news .index-news-right li:last-child{
+	border-bottom:none;
 }
 .section-content.news .news-list ul li a{
 	color:#313d48;

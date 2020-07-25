@@ -29,27 +29,25 @@
 </div>
 <div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
 <div class="wrap">
-	<div class="wrap-content">
-		{include:left.html}
-			<div class="products right wow bounceInRight buss-list">
-			<ul>
-			
-			{list:num=9 order=id desc where=id>0,status eq 1}
-			<li class="wow">
-				<div class="portfolio-block animated">
-				<a href="[list:link]">
-					<img src="{$list.pic}" alt="Protect">
-					<div class="portfolio-caption text-center animated">
-						<h3 class="">[list:title]</h3>
-						<p>{$list.description}</p>
-					</div>
-				</a>
-				</div>
-			</li>
-			{/list}
-			{if:empty($list)}<li>分类无数据</li>{/if}
-			</ul>
-
+	<div class="wrap-content ">
+			<div class="buss-list">
+				<ul>
+				{list:num=8 order=id desc where=id>0,status eq 1}
+					<li class="wow">
+						<div class="portfolio-block animated">
+						<a href="[list:link]">
+							<img src="{$list.pic}" alt="Protect">
+							<div class="portfolio-caption text-center animated">
+								<h3 class="">[list:title]</h3>
+								<p>{$list.description}</p>
+							</div>
+						</a>
+						<h3 class="ltitle">[list:title]</h3>
+						</div>
+					</li>
+					{/list}
+				{if:empty($list)}<li>分类无数据</li>{/if}
+				</ul>
 			</div>
 	</div>
 	<div class="wow bounceInLeft">{pagebar:bar}</div>
