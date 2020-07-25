@@ -1,8 +1,7 @@
  <!DOCTYPE html>
-<html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
+<html lang='zh-Hans-CN'>
 <head>
 <meta charset='utf-8'>
-<meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
 <title>{contents:title}-{sorts:name}-{site:title}</title>
@@ -16,7 +15,7 @@
 </head>
 <body>
 {include:head.html}
-<div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
+<div class="sort-banner" style="background:url('{sorts:pic}')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
 			<span class="animated bounceInDown">{sorts:name}</span>
@@ -27,7 +26,7 @@
 		</div>
 	</div>
 </div>
-<div class="position"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+<div class="position"><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
 <div class="content-wrap">
 
 	<div class="content">
@@ -40,8 +39,8 @@
 		</div>
 		<div class="content-detail">{contents:content}</div>	
 		<div class="article_pages">
-			<div class="pre">上一篇：<a href="/designnotice/72896.jhtml" title="某某品牌设计">某某品牌设计</a></div>
-			<div class="next">下一篇：<a href="/designnotice/72894.jhtml" title="某影院空间设计">某影院空间设计</a></div>
+			<div class="pre">上一篇：<a href="{$pre.link}" title="{$pre.title}">{$pre.title}</a></div>
+			<div class="next">下一篇：<a href="{$next.link}" title="{$next.title}">{$next.title}</a></div>
 		</div>
 	</div>
 	
@@ -126,17 +125,17 @@
 			<li>
 				<div class="item wow zoomIn">
 					<div class="item-pic">
-						<a href="{$list.link}" title="{$list.title}">
-							<img class="aritcl_img" src="{$list.pic}" alt="">
+						<a href="[list:link]" title="[list:title]">
+							<img class="aritcl_img" src="[list:pic]" alt="">
 						</a>
 					</div>
 					<div class="listcontent">
 						<div class="list-text">
-							<a class="list-title" href="{$list.link}" title="{$list.title}">
-								<span style="">{$list.title}</span>
+							<a class="list-title" href="[list:link]" title="[list:title]">
+								<span style="">[list:title]</span>
 							</a>
 							<div class="description">
-							{$list.description}...  
+							[list:description len=100]  
 							</div>
 						</div>
 					</div>

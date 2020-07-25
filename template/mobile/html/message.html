@@ -2,19 +2,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="Cache-Control" content="no-transform"/>
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<title>果冻CMS-移动版</title>
-<meta name="keywords" content="果冻CMS">
-<meta name="description" content="果冻CMS">
-
-<meta name="MSSmartTagsPreventParsing" content="True">
-
-<meta http-equiv="MSThemeCompatible" content="Yes">
-<meta name="applicable-device" content="mobile">
-<meta name="apple-mobile-web-app-title" content="果冻CMS">
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>{sorts:name}-{site:title}</title>
+<meta content='{sorts:keywords}' name='keywords'>
+<meta content='{sorts:description}' name='description'>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
 <link rel="stylesheet" href="{theme:css/swiper.min.css}">
@@ -24,53 +14,27 @@
 </head>
 <body>
 {include:head.html}
-
-<!-- 
-<section class="default-mobile-list">
-<div class="box default-mobile-list-cats">
-	<h3 class="cl">
-    	<div>手机网站案例<span class="subtitle">mobile case</span></div><i class="jellyfont jellydaosanjiao"></i><i  class="jellyfont jellysanjiaoxing-copy-copy"></i>
-  	</h3>
-	<nav style="display:none;">
-	<ul>
-		<li><a href="show-list-4589-1.html">SEO优化案例<span class="subtitle">Web SEO</span></a></li>
-		<li><a href="show-list-4587-1.html">电脑网站案例<span class="subtitle">Customer Case</span></a></li>
-		<li><a href="show-list-4591-1.html">风格大赏<span class="subtitle">Style show</span></a></li>
-		<li class="back"><a href="show-list-4585-1.html">案例展示<span class="subtitle">Works Show</span></a></li>
-		</ul>
-    </nav>
-</div>
-</section> -->
-
-<section class="sort-info" style="background:url('/static/images/proxy-pic.png')">
+<section class="sort-info" style="background:url('{sorts:pic}')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
-			<span class="animated bounceInDown">{$sort.name}</span>
-			<p class="animated fadeInDown">{$sort.description}</p>
+			<span class="animated bounceInDown">{sorts:name}</span>
+			<p class="animated fadeInDown">{sorts:description}</p>
 		</div>
 		<div class="sort-banner-right">
-			<img class="animated flipInX" src="{$sort.ico}" />
+			<img class="animated flipInX" src="{sorts:ico}" />
 		</div>
 	</div>
 </section>
 <section class="content">
 	<div class="con-info">
-		<h1>{$content.title}</h1>
-		<div><i class="jellyfont jellyshijian" aria-hidden="true"></i><span>{echo:date('m月d日',$content['create_time'])}</span></div>
+		<h1>{sorts:title}</h1>
+		<div><i class="jellyfont jellyshijian" aria-hidden="true"></i><span></span></div>
 	</div>
 
 	<div class="details">
-			{$content.content}
-	</div>
-	<div class="pre-next">
-		<p><i class="jellyfont jellyarrow-left" aria-hidden="true"></i><a href="news-article-27303.html" class="s">如何可以在不影响清晰度的情况下让图片占用空间更小（打开更快）</a></p> 
-		<p><i class="jellyfont jellyjiantou" aria-hidden="true"></i><a href="news-article-27273.html" class="s">网站DIY如何操作（文字+图解）</a></p>
+		{sorts:content}
 	</div>
 </section>
-
-
-
-
 {include:foot.html}
 </body>
 </html>

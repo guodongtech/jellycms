@@ -27,7 +27,7 @@
 		</div>
 	</div>
 </div>
-<div class="position"><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+<div class="position"><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
 <div class="content-wrap">
 
 	<div class="content">
@@ -126,14 +126,14 @@
 			<li>
 				<div class="item wow zoomIn">
 					<div class="item-pic">
-						<a href="{$list.link}" title="{$list.title}">
+						<a href="[list:link]" title="[list:title]">
 							<img class="aritcl_img" src="{$list.pic}" alt="">
 						</a>
 					</div>
 					<div class="listcontent">
 						<div class="list-text">
-							<a class="list-title" href="{$list.link}" title="{$list.title}">
-								<span style="">{$list.title}</span>
+							<a class="list-title" href="[list:link]" title="[list:title]">
+								<span style="">[list:title]</span>
 							</a>
 							<div class="description">
 							{$list.description}...  

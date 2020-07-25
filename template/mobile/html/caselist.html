@@ -1,18 +1,9 @@
 <!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="Cache-Control" content="no-transform"/>
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<title>果冻CMS-移动版</title>
-<meta name="keywords" content="果冻CMS">
-<meta name="description" content="果冻CMS">
-<meta name="MSSmartTagsPreventParsing" content="True">
-<meta http-equiv="MSThemeCompatible" content="Yes">
-<meta name="applicable-device" content="mobile">
-<meta name="apple-mobile-web-app-title" content="果冻CMS">
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>{sorts:name}-{site:title}</title>
+<meta content='{sorts:keywords}' name='keywords'>
+<meta content='{sorts:description}' name='description'>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
 <link rel="stylesheet" href="{theme:css/swiper.min.css}">
@@ -22,27 +13,27 @@
 </head>
 <body>
 {include:head.html}
-<section class="sort-info" style="background:url('/static/images/proxy-pic.png')">
+<section class="sort-info" style="background:url('{sorts:pic}')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
-			<span class="animated bounceInDown">{$sort.name}</span>
-			<p class="animated fadeInDown">{$sort.description}</p>
+			<span class="animated bounceInDown">{sorts:name}</span>
+			<p class="animated fadeInDown">{sorts:description}</p>
 		</div>
 		<div class="sort-banner-right">
-			<img class="animated flipInX" src="{$sort.ico}" />
+			<img class="animated flipInX" src="{sorts:ico}" />
 		</div>
 	</div>
 </section>
 <section class="productlist wp wow fadeInUp">
 	<ul>
-		{list:num=5 order=id desc where=id>0,status eq 1}
+		{list:num=5 order=id desc}
 		<li class="cl wow delay{$key} fadeInUp">
-			<a href="{$list.link}">
+			<a href="[list:link]">
 			<img src="/static/images/p1.jpg">
 			
-				<h3 class="s">{$list.title}</h3>
-				<p>语言是大家生活起居中不能缺乏与外部沟通交流联络的专用工具之一。从出世刚开始，孩子便会倾听大家传出的各种声音并观察大家怎样互相沟通交流，从这当中获得语言信息内容。语言塑造从非常简单的"母亲“、"父亲”……叫法词刚开始。而来到一岁半-三岁环节，孩子进入了语言发展 ...</p>
-				<div class="cl"><h4><i class="jellyfont jellyshijian" aria-hidden="true"></i>{echo:date('m月d日',$list['create_time'])}</h4><em class="jellyfont jellyjiantou"></em></div>
+				<h3 class="s">[list:title]</h3>
+				<p>[list:description len=100]</p>
+				<div class="cl"><h4><i class="jellyfont jellyshijian" aria-hidden="true"></i>[list:create_time style=Y年m月d日]</h4><em class="jellyfont jellyjiantou"></em></div>
 			</a>
 		</li>
 		{/list}

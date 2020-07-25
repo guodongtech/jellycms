@@ -27,7 +27,7 @@
 	</div>
 
 </div>
-<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
 <div class="wrap">
 	<div class="wrap-content">
 		{include:left.html}
@@ -37,10 +37,10 @@
 			{list:num=9 order=id desc where=id>0,status eq 1}
 			<li class="wow">
 				<div class="portfolio-block animated">
-				<a href="{$list.link}">
+				<a href="[list:link]">
 					<img src="{$list.pic}" alt="Protect">
 					<div class="portfolio-caption text-center animated">
-						<h3 class="">{$list.title}</h3>
+						<h3 class="">[list:title]</h3>
 						<p>{$list.description}</p>
 					</div>
 				</a>

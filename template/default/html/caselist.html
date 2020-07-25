@@ -2,7 +2,6 @@
 <html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
 <head>
 <meta charset='utf-8'>
-<meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
 <title>{sorts:name}-{site:title}</title>
@@ -15,7 +14,7 @@
 </head>
 <body style="background:#fff;">
 {include:head.html}
-<div class="sort-banner" style="background:url('/static/images/proxy-pic.png')">
+<div class="sort-banner" style="background:url('{sorts:pic}')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
 			<span class="wow bounceInDown">{sorts:name}</span>
@@ -25,9 +24,8 @@
 			<img class="wow flipInX" src="{sorts:ico}" />
 		</div>
 	</div>
-
 </div>
-<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="{$position.link}">{$position.name}</a>{/position}</div>
+<div class="position wow bounceInLeft"><i class="fa fa-home" aria-hidden="true"></i><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
 <div class="wrap">
 	<div class="wrap-content case-list">
 		<div class="head-title">
@@ -39,16 +37,16 @@
             </div>
         </div>
 		<ul>
-		{list:num=6 order=id desc where=id>0,status eq 1}
+		{list:num=6 order=id desc}
 			<li  class="wow bounceIn">
-				<div class="item" style="background-image:url({$list.pic})">
-					<p><a class="list-title" href="{$list.link}" title="{$list.title}"><span style="">{$list.title}</span></a></p>
+				<div class="item" style="background-image:url([list:pic])">
+					<p><a class="list-title" href="[list:link]" title="[list:title]"><span style="">[list:title]</span></a></p>
 					<div class="listcontent">
-						<a href="{$list.link}" title="{$list.title}">
+						<a href="[list:link]" title="[list:title]">
 						<div class="list-text">
 							<p class="number"><span class="line"></span><em>{echo:$key+1}</em></p>
 							<div class="description">
-							{$list.description}...  
+							[list:description]
 							</div>
 						</div>
 						</a>
