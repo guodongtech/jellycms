@@ -159,11 +159,11 @@ table.on('tool(test)', function(obj){
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/sysuser/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 					obj.del();
 				}
 				else{
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 				}
 			}, 'json');
 		});
@@ -179,10 +179,10 @@ table.on('tool(test)', function(obj){
 		switchValue = Number(switchValue);
 		$.post('{url:/sysuser/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
-				//layer.alert(data.msg)
+				//layer.msg(data.msg)
 			}
 			else{
-				layer.alert(data.msg)
+				layer.msg(data.msg)
 			}
 		}, 'json');
 		form.render();

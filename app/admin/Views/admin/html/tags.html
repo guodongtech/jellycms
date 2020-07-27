@@ -16,8 +16,8 @@
  <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
     <a lay-href="">主页</a><span lay-separator="">/</span>
-    <a><cite>设置</cite></a><span lay-separator="">/</span>
-    <a><cite>我的密码</cite></a>
+    <a><cite>扩展内容</cite></a><span lay-separator="">/</span>
+    <a><cite>内链列表</cite></a>
   </div>
 </div>
 <div class="layui-fluid">
@@ -46,16 +46,16 @@
 	  		 	<input type="hidden" name="id" value=""> 
 
                  <div class="layui-form-item">
-                     <label class="layui-form-label">名称</label>
+                     <label class="layui-form-label">名称*</label>
                      <div class="layui-input-inline">
                      	<input type="text" name="name" required="" lay-verify="required" placeholder="请输入名称" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
-                     <label class="layui-form-label">链接</label>
+                     <label class="layui-form-label">链接*</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="link" required="" lay-verify="required" placeholder="请输入链接" class="layui-input">
+                     	<input type="text" name="link" required=""  value="" lay-verify="required|url" placeholder="请输入链接" class="layui-input">
                      </div>
                 </div>
 	  		 </form>
@@ -84,7 +84,7 @@
 		icon: 'layui-icon-tips',
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'name', title:'名称', width:120},
+			{field:'name', title:'名称', width:180},
 			{field:'link', title:'链接'},
 			{field:'status', title:'状态', width:90, event: 'switch',templet: function(res){
 				if(res.status == 1){
@@ -106,11 +106,11 @@
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/tags/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 					obj.del();
 				}
 				else{
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 				}
 			}, 'json');
 			layer.close(index);
@@ -119,31 +119,42 @@
 		layer.open({
 			type: 1,
 			skin: 'layui-layer-rim',
-			area: ['346px', '203px'],
+			area: ['346px', '258px'],
 			title :'添加标签',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
-				$.post('{url:/tags/edit}',$("#form").serialize(),function(data){
-					if(data.code == 1){
-						layer.alert(data.msg);
-						setTimeout(function (){
-							window.location.reload();
-						}, 1000);
-					}
-					else{
-						layer.alert(data.msg)
-					}
-				}, 'json');
-		},
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
+					$.post('{url:/tags/edit}',$("#form").serialize(),function(data){
+						if(data.code == 1){
+							layer.msg(data.msg);
+							setTimeout(function (){
+								window.location.reload();
+							}, 1000);
+						}
+						else{
+							layer.msg(data.msg)
+						}
+					}, 'json');
+				});
+			},
 		btn2: function(index, layero){
 			layer.close(index);
 		},
-			content: $('#gd-form').html()
+		content: $('#gd-form').html(),
+		success: function (layero) {
+			$(':focus').blur();
+			// 添加form标识
+			layero.addClass('layui-form');
+			// 将保存按钮改变成提交按钮
+			layero.find('.layui-layer-btn0').attr({
+				'lay-filter': 'form',
+				'lay-submit': ''
+			});
+			form.render();
+		},
 		});
 		
-		$('#form input[name="name"]').val(obj.data.name);
-		$('#form input[name="id"]').val(obj.data.id);
-		$('#form input[name="link"]').val(obj.data.link);
+		loadData(obj.data, '#form');
 		form.render();
 		
 	}else if(obj.event === 'switch'){
@@ -152,10 +163,10 @@
 		switchValue = Number(switchValue);
 		$.post('{url:/tags/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
-				//layer.alert(data.msg)
+				layer.msg(data.msg)
 			}
 			else{
-				layer.alert(data.msg)
+				layer.msg(data.msg)
 			}
 		}, 'json');
 		form.render();
@@ -167,43 +178,52 @@
 		var checkStatus = table.checkStatus(obj.config.id);
 		switch(obj.event){
 			case 'add':
+				$('#form').submit();
 				layer.open({
 					type: 1,
 					skin: 'layui-layer-rim',
-					area: ['346px', '203px'],
+					area: ['346px', '258px'],
 					title :'添加标签',
 					btn: ['提交', '取消'],
-					btn1: function(index, layero){
-						$.post('{url:/tags/edit}',$("#form").serialize(),function(data){
-							if(data.code == 1){
-								layer.alert(data.msg);
-								setTimeout(function (){
-									window.location.reload();
-								}, 1000);
-							}
-							else{
-								layer.alert(data.msg)
-							}
-						}, 'json');
+					yes: function(index, layero){
+						//监听提交 验证必填项
+						form.on('submit(form)', function(data){
+							$.post('{url:/tags/edit}',$("#form").serialize(),function(data){
+								if(data.code == 1){
+									layer.msg(data.msg);
+									setTimeout(function (){
+										window.location.reload();
+									}, 1000);
+								}
+								else{
+									layer.msg(data.msg)
+								}
+							}, 'json');
+							return false;
+						});
+
 					},
 					btn2: function(index, layero){
 						layer.close(index);
 					},
-					content: $('#gd-form').html()
+					content: $('#gd-form').html(),
+                    success: function (layero) {
+                        $(':focus').blur();
+                        // 添加form标识
+                        layero.addClass('layui-form');
+                        // 将保存按钮改变成提交按钮
+                        layero.find('.layui-layer-btn0').attr({
+                            'lay-filter': 'form',
+                            'lay-submit': ''
+                        });
+                        form.render();
+                    },
 				});
 			break;
 
 		};
 		form.render();
 	});
-
-
-
-
-
-
-
-
 
 }();
 </script>

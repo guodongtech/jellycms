@@ -176,11 +176,11 @@
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/model/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 					obj.del();
 				}
 				else{
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 				}
 			}, 'json');
 			layer.close(index);
@@ -195,13 +195,13 @@
 			btn1: function(index, layero){
 				$.post('{url:/model/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
-						layer.alert(data.msg);
+						layer.msg(data.msg);
 						setTimeout(function (){
 							window.location.reload();
 						}, 1000);
 					}
 					else{
-						layer.alert(data.msg)
+						layer.msg(data.msg)
 					}
 				}, 'json');
 		},
@@ -220,13 +220,13 @@
 		switchValue = Number(switchValue);
 		$.post('{url:/model/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
-				layer.alert(data.msg);
+				layer.msg(data.msg);
 				setTimeout(function (){
 					window.location.reload();
 				}, 1000);
 			}
 			else{
-				layer.alert(data.msg)
+				layer.msg(data.msg)
 			}
 		}, 'json');
 		form.render();
@@ -247,13 +247,13 @@
 					btn1: function(index, layero){
 						$.post('{url:/model/edit}',$("#form").serialize(),function(data){
 							if(data.code == 1){
-								layer.alert(data.msg);
+								layer.msg(data.msg);
 								setTimeout(function (){
 									window.location.reload();
 								}, 1000);
 							}
 							else{
-								layer.alert(data.msg);
+								layer.msg(data.msg);
 							}
 						}, 'json');
 					},

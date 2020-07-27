@@ -90,16 +90,16 @@
 				success:function(data){
 					console.log(data);
 					if(data.code == 1){
-						layer.alert(data.msg)
+						layer.msg(data.msg)
 						layer.close(index);
 						obj.del();
 					}
 					else{
-						layer.alert(data.msg)
+						layer.msg(data.msg)
 					}
 				},
 				error:function(e){
-					layer.alert("删除失败！")
+					layer.msg("删除失败！")
 				},
 			});
 			layer.close(index);
@@ -125,15 +125,15 @@
 					success:function(data){
 					console.log(data);
 					if(data.code == 1){
-							layer.alert(data.msg)
+							layer.msg(data.msg)
 							layer.close(index);
 						}
 						else{
-							layer.alert(data.msg)
+							layer.msg(data.msg)
 						}
 					},
 					error:function(e){
-						layer.alert("操作失败！")
+						layer.msg("操作失败！")
 					},
 				});
 		},
@@ -180,15 +180,15 @@
 							success:function(data){
 								console.log(data);
 								if(data.code == 1){
-									layer.alert(data.msg)
+									layer.msg(data.msg)
 									layer.close(index);
 								}
 								else{
-									layer.alert(data.msg)
+									layer.msg(data.msg)
 								}
 							},
 							error:function(e){
-								layer.alert("操作失败！")
+								layer.msg("操作失败！")
 							},
 						});
 					},

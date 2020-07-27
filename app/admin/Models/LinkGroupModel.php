@@ -14,7 +14,28 @@ class LinkGroupModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = true;
 	protected $protectFields = false;
-    public function getList()
+    public function getList($page, $limit)
+    {
+		$offset = ($page-1)*$limit;
+		$builder = $this->db->table('link_group');
+		$res   = $builder->select('link_group.*, area.name as area_name')
+							->join('area', 'area.id = link_group.area_id', 'left')
+							->where(['link_group.deleted'=>0])
+							->get($limit, $offset)
+							->getResultArray();
+							
+		$total = $builder->select('link_group.*, area.name as area_name')
+							->join('area', 'area.id = link_group.area_id', 'left')
+							->where(['link_group.deleted'=>0])
+							->countAllResults(false);					
+        $result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
+
+
+        return $result;
+    }
+    public function getAllGroupList()
     {
 		$builder = $this->db->table('link_group');
 		$result   = $builder->select('link_group.*, area.name as area_name')
@@ -22,8 +43,7 @@ class LinkGroupModel extends Model
 							->where(['link_group.deleted'=>0])
 							->get()
 							->getResultArray();
-
-        return $result;
+		return $result;
     }
 	public function edit($data){
 		return $this->save($data);

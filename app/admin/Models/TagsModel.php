@@ -15,14 +15,29 @@ class TagsModel extends Model
 	protected $skipValidation     = true;
 	protected $protectFields = false;
     // 获取内链列表
-    public function getList()
+    public function getList($page, $limit)
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('tags')." where deleted=0";
-		$result = $this->db->query($sql)->getResultArray();
-        return $result;
+		$offset = ($page-1)*$limit;
+		$builder = $this->db->table('tags');
+		$res   = $builder->select('*')
+							->where(['deleted'=>0])
+							->get($limit, $offset)
+							->getResultArray();
+		$total = $builder->select('*')->where(['deleted'=>0])
+							->countAllResults(false);	
+		$result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
     }
-
-	public function edit($data){
-		return $this->save($data);
+	public function check($name){
+		$builder = $this->db->table('tags');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'name'=>$name])
+							->get()
+							->getRowArray();
+		return $result;
+	}
+	public function edit($data, $area_id){
+		return $this->where('area_id', $area_id)->save($data);
 	}
 }

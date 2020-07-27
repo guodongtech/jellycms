@@ -148,16 +148,16 @@
 				success:function(data){
 					console.log(data);
 					if(data.code == 1){
-						layer.alert(data.msg)
+						layer.msg(data.msg)
 						layer.close(index);
 						obj.del();
 					}
 					else{
-						layer.alert(data.msg)
+						layer.msg(data.msg)
 					}
 				},
 				error:function(e){
-					layer.alert("删除失败！")
+					layer.msg("删除失败！")
 				},
 			});
 			layer.close(index);
@@ -169,43 +169,39 @@
 			area: ['530px', '356px'],
 			title :'添加标签',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
-				$.ajax({
-					url:'/index.php/user/edit',
-					type:'post',
-					data:{
-						id:$('#form input[name="id"]').val(),
-						name:$('#form input[name="name"]').val(),
-						description:$('#form input[name="description"]').val(),
-						type:$('#form select[name="type"]').val(),
-					},
-					dataType:"json",
-					success:function(data){
-					console.log(data);
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
+				$.post('{url:/user/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
-							layer.alert(data.msg)
-							layer.close(index);
-						}
-						else{
-							layer.alert(data.msg)
-						}
-					},
-					error:function(e){
-						layer.alert("操作失败！")
-					},
+						layer.msg(data.msg);
+						setTimeout(function (){
+							window.location.reload();
+						}, 1000);
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
 				});
 		},
 		btn2: function(index, layero){
 			layer.close(index);
 		},
-			content: $('#gd-form').html()
+		content: $('#gd-form').html(),
+		success: function (layero) {
+			$(':focus').blur();
+			// 添加form标识
+			layero.addClass('layui-form');
+			// 将保存按钮改变成提交按钮
+			layero.find('.layui-layer-btn0').attr({
+				'lay-filter': 'form',
+				'lay-submit': ''
+			});
+			loadData(obj.data, '#form');
+			form.render();
+		},
 		});
-		
-		$('#form input[name="name"]').val(obj.data.name);
-		$('#form input[name="realname"]').val(obj.data.realname);
-		$('#form input[name="id"]').val(obj.data.id);
-		$('#form input:radio[value='+obj.data.status+']').attr({'selected':'selected'});
-		$('#form option[value='+obj.data.role+']').attr({'selected':'selected'});
+		loadData(obj.data, '#form')
 		form.render();
 		
 	}
@@ -222,38 +218,36 @@
 					area: ['530px', '356px'],
 					title :'添加标签',
 					btn: ['提交', '取消'],
-					btn1: function(index, layero){
-						$.ajax({
-							url:'/index.php/user/add',
-							type:'post',
-							data:{
-								id:$('#form input[name="id"]').val(),
-								name:$('#form input[name="name"]').val(),
-								password:$('#form input[name="password"]').val(),
-								repassword:$('#form input[name="repassword"]').val(),
-								status:$('#form input[name="status"]').val(),
-								role:$('#form select[name="role"]').val(),
-							},
-							dataType:"json",
-							success:function(data){
-								console.log(data);
-								if(data.code == 1){
-									layer.alert(data.msg)
-									layer.close(index);
-								}
-								else{
-									layer.alert(data.msg)
-								}
-							},
-							error:function(e){
-								layer.alert("操作失败！")
-							},
-						});
+					yes: function(index, layero){
+				form.on('submit(form)', function(data){
+					$.post('{url:/user/add}',$("#form").serialize(),function(data){
+						if(data.code == 1){
+							layer.msg(data.msg);
+							setTimeout(function (){
+								window.location.reload();
+							}, 1000);
+						}
+						else{
+							layer.msg(data.msg)
+						}
+					}, 'json');
+				});
 					},
 					btn2: function(index, layero){
 						layer.close(index);
 					},
-					content: $('#gd-form').html()
+					content: $('#gd-form').html(),
+					success: function (layero) {
+						$(':focus').blur();
+						// 添加form标识
+						layero.addClass('layui-form');
+						// 将保存按钮改变成提交按钮
+						layero.find('.layui-layer-btn0').attr({
+							'lay-filter': 'form',
+							'lay-submit': ''
+						});
+						form.render();
+					},
 				});
 			break;
 

@@ -20,16 +20,19 @@ class Slide extends BaseController
 		$data = [
 			"groupList" => $groupList,
 		];
-         echo view('slide.html', $data);
+         return view('slide.html', $data);
     }
     public function getList()
     {
-		$list = $this->model->getList();
+		$get = $this->request->getGet();
+		isset($get['page'])?$page = $get['page']:$page = 1;
+		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+		$res = $this->model->getList($page, $limit);
 		$data = [
 			"code" => 0,
 			"msg" => "",
-			"count" => count($list),
-			"data" => $list,
+			"count" => $res['total'],
+			"data" => $res['list'],
 		];
 		echo json_encode($data);
     }
@@ -41,8 +44,7 @@ class Slide extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = $post;
 		if(!$post['id']){
@@ -67,7 +69,7 @@ class Slide extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
     public function del()
     {
@@ -77,8 +79,7 @@ class Slide extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -96,7 +97,7 @@ class Slide extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -107,8 +108,7 @@ class Slide extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -125,6 +125,6 @@ class Slide extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 }

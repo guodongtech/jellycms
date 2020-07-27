@@ -153,10 +153,10 @@
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/auth/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 					obj.del();
 				}else{
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 				}
 			}, 'json');
 		});

@@ -66,9 +66,10 @@
 				<form action="" method="post" id="form" class="layui-form">
 	  			<input type="hidden" name="id" value=""> 
 	  			<div class="layui-form-item">
-                     <label class="layui-form-label">区域</label>
+                     <label class="layui-form-label">区域*</label>
                      <div class="layui-input-inline">
-                     	<select name="area_id">	
+                     	<select name="area_id" lay-verify="required">
+							<option value="">请选择区域</option>
 							{foreach:items = $areaList key=$k item=$v}
 							<option value="{$v['id']}">{$v['name']}</option>
 							{/foreach}
@@ -76,15 +77,15 @@
 					</div>
                 </div>
                  <div class="layui-form-item">
-                     <label class="layui-form-label">标题</label>
+                     <label class="layui-form-label">标题*</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="name" placeholder="请输入标题" class="layui-input">
+                     	<input type="text" name="name" lay-verify="required" placeholder="请输入标题" class="layui-input">
                      </div>
                 </div>
                 <div class="layui-form-item">
                      <label class="layui-form-label">排序</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="sorting" required="" lay-verify="required" value="255" placeholder="排序" class="layui-input">
+                     	<input type="text" name="sorting" lay-verify="required|number" value="255" placeholder="排序" class="layui-input">
                      </div>
                 </div>
 	  		</form>
@@ -138,11 +139,11 @@
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/SlideGroup/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 					obj.del();
 				}
 				else{
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 				}
 			}, 'json');
 			layer.close(index);
@@ -151,26 +152,39 @@
 		layer.open({
 			type: 1,
 			skin: 'layui-layer-rim',
-			area: ['340px', '250px'],
+			area: ['340px', '306px'],
 			title :'添加标签',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
-				$.post('{url:/SlideGroup/edit}',$("#form").serialize(),function(data){
-					if(data.code == 1){
-						layer.alert(data.msg);
-						setTimeout(function (){
-							window.location.reload();
-						}, 1000);
-					}
-					else{
-						layer.alert(data.msg)
-					}
-				}, 'json');
-		},
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
+					$.post('{url:/SlideGroup/edit}',$("#form").serialize(),function(data){
+						if(data.code == 1){
+							layer.msg(data.msg);
+							setTimeout(function (){
+								window.location.reload();
+							}, 1000);
+						}
+						else{
+							layer.msg(data.msg)
+						}
+					}, 'json');
+				});
+			},
 		btn2: function(index, layero){
 			layer.close(index);
 		},
-			content: $('#gd-form').html()
+		content: $('#gd-form').html(),
+		success: function (layero) {
+			$(':focus').blur();
+			// 添加form标识
+			layero.addClass('layui-form');
+			// 将保存按钮改变成提交按钮
+			layero.find('.layui-layer-btn0').attr({
+				'lay-filter': 'form',
+				'lay-submit': ''
+			});
+			form.render();
+		},
 		});
 		loadData(obj.data, '#form');
 		form.render();
@@ -181,10 +195,10 @@
 		switchValue = Number(switchValue);
 		$.post('{url:/slidegroup/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
-				layer.alert(data.msg)
+				layer.msg(data.msg)
 			}
 			else{
-				layer.alert(data.msg)
+				layer.msg(data.msg)
 			}
 		}, 'json');
 		form.render();
@@ -199,26 +213,39 @@
 				layer.open({
 					type: 1,
 					skin: 'layui-layer-rim',
-					area: ['340px', '250px'],
+					area: ['340px', '306px'],
 					title :'添加标签',
 					btn: ['提交', '取消'],
-					btn1: function(index, layero){
-						$.post('{url:/SlideGroup/edit}',$("#form").serialize(),function(data){
-							if(data.code == 1){
-								layer.alert(data.msg);
-								setTimeout(function (){
-									window.location.reload();
-								}, 1000);
-							}
-							else{
-								layer.alert(data.msg)
-							}
-						}, 'json');
+					yes: function(index, layero){
+						form.on('submit(form)', function(data){
+							$.post('{url:/SlideGroup/edit}',$("#form").serialize(),function(data){
+								if(data.code == 1){
+									layer.msg(data.msg);
+									setTimeout(function (){
+										window.location.reload();
+									}, 1000);
+								}
+								else{
+									layer.msg(data.msg)
+								}
+							}, 'json');
+						});
 					},
 					btn2: function(index, layero){
 						layer.close(index);
 					},
-					content: $('#gd-form').html()
+					content: $('#gd-form').html(),
+					success: function (layero) {
+						$(':focus').blur();
+						// 添加form标识
+						layero.addClass('layui-form');
+						// 将保存按钮改变成提交按钮
+						layero.find('.layui-layer-btn0').attr({
+							'lay-filter': 'form',
+							'lay-submit': ''
+						});
+						form.render();
+					},
 				});
 			break;
 

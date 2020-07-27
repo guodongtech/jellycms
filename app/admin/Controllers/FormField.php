@@ -14,23 +14,25 @@ class FormField extends BaseController
 
     public function index()
     {
-		$formList = $this->formModel->getList();
+		$formList = $this->formModel->getAllForm();
 		$data = [
 			"formList" => $formList,
 		];
-         echo view('form_field.html', $data);
+         return view('form_field.html', $data);
     }
     public function getList()
     {
-		$list = $this->model->getList();
-
+		$get = $this->request->getGet();
+		isset($get['page'])?$page = $get['page']:$page = 1;
+		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+		$res = $this->model->getList($page, $limit);
 		$data = [
 			"code" => 0,
 			"msg" => "",
-			"count" => count($list),
-			"data" => $list,
+			"count" => $res['total'],
+			"data" => $res['list'],
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -40,15 +42,52 @@ class FormField extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = $post;
-		if(!$post['id']){
+				
+		$check = $this->model->checkFields($data['form_id'], $data['name']);
+		//添加字段，但字段物理存在，将此次操作改为修改
+		if($check['id'] && !$data['id']){
+			if($check['deleted']){
+				$data['deleted'] = 0;
+				$data['id'] = $check['id'];
+			}else{
+				$rdata = [
+					"code" => 0,
+					"msg" => "字段已存在",
+				];
+				return json_encode($rdata);					
+			}
+		}
+
+		$fields = array(
+			$data['name']       => array(
+			'type'           => $data['type'],
+			'constraint'     => $data['length'],
+			'null'           => TRUE,
+			)
+		);		
+		if(!$data['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
-			
+
+			if(!$this->model->addField($fields, $data['form_id'])){
+				$rdata = [
+					"code" => 0,
+					"msg" => "创建字段失败",
+				];
+				return json_encode($rdata);
+			}
 		}else{
+			echo 1;
+			if(!$this->model->editField($fields, $data['form_id'])){
+				$rdata = [
+					"code" => 0,
+					"msg" => "编辑字段失败",
+				];
+				return json_encode($rdata);
+			}
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
@@ -64,7 +103,7 @@ class FormField extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
     public function del()
     {
@@ -74,8 +113,7 @@ class FormField extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -93,19 +131,18 @@ class FormField extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
 		$post = post();
-		$allowSwitch = ['must'];
+		$allowSwitch = ['required'];
 		if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -122,7 +159,22 @@ class FormField extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
-	
+	public function test(){
+			$fields = array(
+				'blog_title'       => array(
+				'type'           => 'varchar',
+				'constraint'     => 20,
+				'null'           => TRUE,
+				)
+			);
+			if(!$this->model->addField($fields, 5)){
+				$rdata = [
+					"code" => 0,
+					"msg" => "创建字段失败",
+				];
+				return json_encode($rdata);
+			}	
+	}
 }

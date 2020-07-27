@@ -15,14 +15,23 @@ class SlideModel extends Model
 	protected $skipValidation     = true;
 	protected $protectFields = false;
     // 获取列表
-    public function getList()
+    public function getList($page, $limit)
     {
+		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('slide');
-		$result   = $builder->select('*')
-							->where(['deleted'=>0])
-							->get()
+		$res   = $builder->select('slide.*, slide_group.name as group_name')
+							->join('slide_group', 'slide_group.id = slide.group_id', 'left')
+							->where(['slide.deleted'=>0,'slide.status'=>1])
+							->get($limit, $offset)
 							->getResultArray();
-        return $result;
+							
+		$total = $builder->select('slide.*, slide_group.name as group_name')
+							->join('slide_group', 'slide_group.id = slide.group_id', 'left')
+							->where(['slide.deleted'=>0,'slide.status'=>1])
+							->countAllResults(false);					
+        $result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
     }
 
 	public function edit($data){

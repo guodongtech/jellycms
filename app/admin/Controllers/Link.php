@@ -13,23 +13,26 @@ class Link extends BaseController
     }
     public function index()
     {
-		$groupList = $this->groupModel->getList();
+		$groupList = $this->groupModel->getAllGroupList();
 		$data = [
 			"groupList" => $groupList,
 		];
-         echo view('link.html', $data);
+         return view('link.html', $data);
     }
 	//获取列表
     public function getList()
     {
-		$list = $this->model->getList();
+		$get = $this->request->getGet();
+		isset($get['page'])?$page = $get['page']:$page = 1;
+		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+		$res = $this->model->getList($page, $limit);
 		$data = [
 			"code" => 0,
 			"msg" => "",
-			"count" => count($list),
-			"data" => $list,
+			"count" => $res['total'],
+			"data" => $res['list'],
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -39,8 +42,7 @@ class Link extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = $post;
 		if(!$post['id']){
@@ -63,7 +65,7 @@ class Link extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
     public function del()
     {
@@ -73,8 +75,7 @@ class Link extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -92,7 +93,7 @@ class Link extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -103,8 +104,7 @@ class Link extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -121,7 +121,7 @@ class Link extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 
 }

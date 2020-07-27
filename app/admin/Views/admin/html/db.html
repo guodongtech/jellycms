@@ -105,10 +105,10 @@ table.on('toolbar(test)', function(obj){
 		
 		$.post('{url:/db/optimize}',{names:tableNames},function(data){
 			if(data.code == 1){
-				layer.alert(1)
+				layer.msg(1)
 			}
 			else{
-				layer.alert(msg.msg)
+				layer.msg(msg.msg)
 			}
 		}, 'json');
 		break;

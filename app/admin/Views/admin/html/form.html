@@ -37,8 +37,10 @@
 					</div>
 				</script>
 				<script type="text/html" id="barDemo">
-					<a class="layui-btn layui-btn-xs" {data-id} lay-event="edit">编辑</a>
-					<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+					<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+					{{#  if(d.issystem != 1){ }}
+					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+					{{#  } }}	
 				</script>
 			   
 			</div>
@@ -46,16 +48,16 @@
 	   			<form action="" method="post" id="form" class="layui-form">
 	   				<input type="hidden" name="id" value=""> 
 	   				<div class="layui-form-item">
-	                     <label class="layui-form-label">表单名称</label>
+	                     <label class="layui-form-label">表单名称*</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="name" maxlength="20" required="" lay-verify="required" placeholder="表单名称" class="layui-input">
+	                     	<input type="text" name="name" maxlength="20" lay-verify="required" placeholder="表单名称" class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                <div class="layui-form-item">
-	                     <label class="layui-form-label">表名称</label>
+	                     <label class="layui-form-label">表名称*</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="table_name" maxlength="30" required="" lay-verify="required" placeholder="表名称,必须为英文" class="layui-input">
+	                     	<input type="text" name="table_name" maxlength="30" lay-verify="required|en" placeholder="表名称,必须为英文" class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -74,6 +76,12 @@
 	form = layui.form;
 	var table = layui.table;
 	var $ = layui.jquery;
+	//自定义表单验证
+      form.verify({
+          en:[
+              /^[a-zA-Z]+$/,'只能输入英文'
+          ]
+      });
 	table.render({
 		elem: '#table',url:'{url:/form/getList}',
 		toolbar: '#toolbarDemo',
@@ -96,11 +104,11 @@
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/form/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 					obj.del();
 				}
 				else{
-					layer.alert(data.msg)
+					layer.msg(data.msg)
 				}
 			}, 'json');
 			layer.close(index);
@@ -109,30 +117,43 @@
 		var index = layer.open({
 			type: 1,
 			skin: 'layui-layer-rim',
-			area: ['330px', '216px'],
+			area: ['330px', '246px'],
 			anim: 1,
 			title :'编辑表单',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
 				$.post('{url:/form/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
-						layer.alert(data.msg);
+						layer.msg(data.msg);
 						setTimeout(function (){
 							window.location.reload();
 						}, 1000);
 					}
 					else{
-						layer.alert(data.msg)
+						layer.msg(data.msg)
 					}
 				}, 'json');
-		},
-		btn2: function(index, layero){
-			layer.close(index);
-		},
-			content: $('#gd-form').html()
-		});
-		loadData(obj.data, '#form');
-		form.render();
+				});
+			},
+			btn2: function(index, layero){
+				layer.close(index);
+			},
+			content: $('#gd-form').html(),
+			success: function (layero) {
+				$(':focus').blur();
+				// 添加form标识
+				layero.addClass('layui-form');
+				// 将保存按钮改变成提交按钮
+				layero.find('.layui-layer-btn0').attr({
+					'lay-filter': 'form',
+					'lay-submit': ''
+				});
+				form.render();
+			},
+			});
+			loadData(obj.data, '#form');
+			form.render();
 		
 	}
 });
@@ -145,42 +166,47 @@
 				layer.open({
 					type: 1,
 					skin: 'layui-layer-rim',
-					area: ['330px', '216px'],
+					area: ['330px', '246px'],
 					anim: 1,
 					title :'添加表单',
 					btn: ['提交', '取消'],
-					btn1: function(index, layero){
-						$.post('{url:/form/edit}',$("#form").serialize(),function(data){
-							if(data.code == 1){
-								layer.alert(data.msg);
-								setTimeout(function (){
-									window.location.reload();
-								}, 1000);
-							}
-							else{
-								layer.alert(data.msg)
-							}
-						}, 'json');
+					yes: function(index, layero){
+						form.on('submit(form)', function(data){
+							$.post('{url:/form/edit}',$("#form").serialize(),function(data){
+								if(data.code == 1){
+									layer.msg(data.msg);
+									setTimeout(function (){
+										window.location.reload();
+									}, 1000);
+								}
+								else{
+									layer.msg(data.msg)
+								}
+							}, 'json');
+						});
 					},
 					btn2: function(index, layero){
 						layer.close(index);
 					},
-					content: $('#gd-form').html()
-				});
+					content: $('#gd-form').html(),
+					success: function (layero) {
+						$(':focus').blur();
+						// 添加form标识
+						layero.addClass('layui-form');
+						// 将保存按钮改变成提交按钮
+						layero.find('.layui-layer-btn0').attr({
+							'lay-filter': 'form',
+							'lay-submit': ''
+						});
+						form.render();
+					},
+					});
+			 
 			break;
 
 		};
 		form.render();
 	});
-
-
-
-
-
-
-
-
-
 }();
 </script>
 </body>

@@ -12,18 +12,21 @@ class Form extends BaseController
 
     public function index()
     {
-         echo view('form.html');
+         return view('form.html');
     }
     public function getList()
     {
-		$list = $this->model->getList();
+		$get = $this->request->getGet();
+		isset($get['page'])?$page = $get['page']:$page = 1;
+		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+		$res = $this->model->getList($page, $limit);
 		$data = [
 			"code" => 0,
 			"msg" => "",
-			"count" => count($list),
-			"data" => $list,
+			"count" => $res['total'],
+			"data" => $res['list'],
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -33,15 +36,49 @@ class Form extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
+		//同名检测
+		if($this->model->check($post['name']) && !$post['id']){
+			$rdata = [
+				"code" => 0,
+				"msg" => $post['name'].":表单已存在",
+			];
+			return json_encode($rdata);
+		}
+		//同表名检测
+		if($this->model->checkTablename($post['table_name']) && !$post['id']){
+			$rdata = [
+				"code" => 0,
+				"msg" => $post['name'].":表名已存在",
+			];
+			return json_encode($rdata);
+		}
+
+
 		$data = $post;
-		if(!$post['id']){
+		if(!$data['id']){
+			//创建表及默认表字段 create_time create_user update_time update_user ip,默认字段不在formfield表里显示
+			//保护系统表，表单对应的表名必须为 prefix_form_XXX 在model里做处理
+			 if(!$this->model->addFormTable($post['table_name'])){
+				$rdata = [
+					"code" => 0,
+					"msg" => "创建失败",
+				];
+				return json_encode($rdata);
+			 }
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
 		}else{
+			//renameTable
+			 if(!$this->model->editFormTable($data['id'], $data['table_name'])){
+				$rdata = [
+					"code" => 0,
+					"msg" => "创建失败",
+				];
+				return json_encode($rdata);
+			 }
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
@@ -57,7 +94,7 @@ class Form extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
     public function del()
     {
@@ -67,9 +104,24 @@ class Form extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
+		$form = $this->model->getFormById($id);
+		if(!$form['id']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "表单不存在！",
+			];
+			return json_encode($rdata);
+		}
+		if($form['issystem']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "系统表单，无法删除！",
+			];
+			return json_encode($rdata);
+		}
+		
 		$data = [
 			'id' => $id,
 			'deleted' => 1,
@@ -86,7 +138,7 @@ class Form extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -97,8 +149,15 @@ class Form extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
+		}
+		$form = $this->model->getFormById($post['id']);
+		if(!$form['id']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "表单不存在！",
+			];
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -115,8 +174,8 @@ class Form extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
- 
+
 	
 }

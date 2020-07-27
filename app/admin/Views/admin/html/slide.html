@@ -32,6 +32,11 @@
 	color:#f00;
 	cursor:pointer;
 }
+.layui-colorpicker {
+    padding: 3px !important;
+	line-height:18px !important;
+}
+
 </style>
  <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
@@ -66,9 +71,10 @@
 				<form action="" method="post" id="form" class="layui-form">
 	  			<input type="hidden" name="id" value=""> 
 	  			<div class="layui-form-item">
-                     <label class="layui-form-label">分组</label>
+                     <label class="layui-form-label">分组*</label>
                      <div class="layui-input-inline">
-                     	<select name="group_id">	
+                     	<select name="group_id">
+							<option value="">请选择分组</option>
 							{foreach:items = $groupList key=$k item=$v}
 							<option value="{$v['id']}">{$v['name']}</option>
 							{/foreach}
@@ -76,22 +82,23 @@
 					</div>
                 </div>
                  <div class="layui-form-item">
-                     <label class="layui-form-label">标题</label>
+                     <label class="layui-form-label">标题*</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="name" placeholder="请输入标题" class="layui-input">
+                     	<input type="text" name="name" lay-verify="required" placeholder="请输入标题" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">描述</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="description" placeholder="请输入副标题" class="layui-input">
+						<textarea name="description" lay-verify="required" class="layui-textarea" placeholder="请输入副标题" ></textarea>
+                     
                      </div>
                 </div>
                 <div class="layui-form-item">
                      <label class="layui-form-label">背景色</label>
                      <div class="layui-input-inline">
-                     	<input type="text"  name="bgcolor" id="bgcolor-input" placeholder="背景色"  class="layui-input">
+                     	<input type="text"  name="bgcolor" id="bgcolor-input" lay-verify="required" placeholder="背景色"  class="layui-input">
                      </div>
 					 <span id="bgcolor"></span>
                 </div>
@@ -100,7 +107,7 @@
                 <div class="layui-form-item">
 					<label class="layui-form-label">背景图片</label>
 					<div class="layui-input-inline">
-						<input type="text" name="bgpic" required="" lay-verify="required" placeholder="上传图片" class="layui-input">
+						<input type="text" name="bgpic" placeholder="上传图片" class="layui-input">
 					</div>
 					<button type="button" class="layui-btn" id="uploadbgpic">
 					  <i class="layui-icon">&#xe67c;</i>上传图片
@@ -109,7 +116,7 @@
                 <div class="layui-form-item">
 					<label class="layui-form-label">图片</label>
 					<div class="layui-input-inline">
-						<input type="text" name="pic" required="" lay-verify="required" placeholder="上传图片" class="layui-input">
+						<input type="text" name="pic" placeholder="上传图片" class="layui-input">
 					</div>
 					<button type="button" class="layui-btn" id="upload">
 					  <i class="layui-icon">&#xe67c;</i>上传图片
@@ -122,23 +129,16 @@
                      	<input type="text" name="link" placeholder="跳转链接" class="layui-input">
                      </div>
                 </div>
-                
-
-                
                 <div class="layui-form-item">
                      <label class="layui-form-label">排序</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="sorting" required="" lay-verify="required" value="255" placeholder="排序" class="layui-input">
+                     	<input type="text" name="sorting" lay-verify="required|number" value="255" placeholder="排序" class="layui-input">
                      </div>
                 </div>
 	  		</form>
 	  	</script>
 	  </div>
 	</div>
-	 
-	
-	 
-
 </div>
 </div>
 <script src="/static/layui/layui.all.js"></script>
@@ -161,17 +161,18 @@
 		icon: 'layui-icon-tips',
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'group_id', title:'分组ID', width:120},
+			{field:'name', title:'标题', width:120},
+			{field:'group_id', title:'分组ID', width:80},
+			{field:'group_name', title:'分组名称', width:180},
 			{field:'pic', title:'图片', width:120,event:'preview', templet: function(res){
 				if(res.pic != ""){
-					return '<img src="'+ res.pic +'">'
+					return '<img style="height:100%;" src="'+ res.pic +'">'
 				}else{
 					return "无";
 				}
 				
 			}},
 			{field:'link', title:'链接'},
-			{field:'name', title:'标题', width:120},
 			{field:'description', title:'描述'},
 			{field:'sorting', title:'排序', width:120},
 			{field:'bgpic', title:'bgpic',hide:true},
@@ -201,26 +202,39 @@
 		layer.open({
 			type: 1,
 			skin: 'layui-layer-rim',
-			area: ['530px', '356px'],
+			area: ['450px', '356px'],
 			title :'添加标签',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
-				$.post('{url:/slide/edit}',$("#form").serialize(),function(data){
-					if(data.code == 1){
-						layer.msg(data.msg);
-						setTimeout(function (){
-							window.location.reload();
-						}, 1000);
-					}
-					else{
-						layer.msg(data.msg)
-					}
-				}, 'json');
-		},
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
+					$.post('{url:/slide/edit}',$("#form").serialize(),function(data){
+						if(data.code == 1){
+							layer.msg(data.msg);
+							setTimeout(function (){
+								window.location.reload();
+							}, 1000);
+						}
+						else{
+							layer.msg(data.msg)
+						}
+					}, 'json');
+				});
+			},
 		btn2: function(index, layero){
 			layer.close(index);
 		},
-			content: $('#gd-form').html()
+		content: $('#gd-form').html(),
+		success: function (layero) {
+			$(':focus').blur();
+			// 添加form标识
+			layero.addClass('layui-form');
+			// 将保存按钮改变成提交按钮
+			layero.find('.layui-layer-btn0').attr({
+				'lay-filter': 'form',
+				'lay-submit': ''
+			});
+			form.render();
+		},
 		});
 		//执行实例
 		var uploadInst = upload.render({
@@ -297,26 +311,39 @@
 				layer.open({
 					type: 1,
 					skin: 'layui-layer-rim',
-					area: ['530px', '356px'],
+					area: ['450px', '356px'],
 					title :'添加标签',
 					btn: ['提交', '取消'],
-					btn1: function(index, layero){
-						$.post('{url:/slide/edit}',$("#form").serialize(),function(data){
-							if(data.code == 1){
-								layer.msg(data.msg);
-								setTimeout(function (){
-									window.location.reload();
-								}, 1000);
-							}
-							else{
-								layer.msg(data.msg)
-							}
-						}, 'json');
+					yes: function(index, layero){
+						form.on('submit(form)', function(data){
+							$.post('{url:/slide/edit}',$("#form").serialize(),function(data){
+								if(data.code == 1){
+									layer.msg(data.msg);
+									setTimeout(function (){
+										window.location.reload();
+									}, 1000);
+								}
+								else{
+									layer.msg(data.msg)
+								}
+							}, 'json');
+						});
 					},
 					btn2: function(index, layero){
 						layer.close(index);
 					},
-					content: $('#gd-form').html()
+					content: $('#gd-form').html(),
+					success: function (layero) {
+						$(':focus').blur();
+						// 添加form标识
+						layero.addClass('layui-form');
+						// 将保存按钮改变成提交按钮
+						layero.find('.layui-layer-btn0').attr({
+							'lay-filter': 'form',
+							'lay-submit': ''
+						});
+						form.render();
+					},
 				});
 				//执行实例
 				var uploadInst = upload.render({

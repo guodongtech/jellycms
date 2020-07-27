@@ -170,7 +170,10 @@
 .guodong-body{
 	background:#f5f5f5;
 }
- 
+ .layui-table-tips-c {
+    padding: 0 !important;
+
+}
 .layadmin-header {
     display: block;
     height: 50px;

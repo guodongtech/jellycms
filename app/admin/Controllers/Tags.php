@@ -13,18 +13,21 @@ class Tags extends BaseController
     }
     public function index()
     {
-         echo view('tags.html');
+         return view('tags.html');
     }
     public function getList()
     {
-		$list = $this->model->getList();
+		$get = $this->request->getGet();
+		isset($get['page'])?$page = $get['page']:$page = 1;
+		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+		$res = $this->model->getList($page, $limit);
 		$data = [
 			"code" => 0,
 			"msg" => "",
-			"count" => count($list),
-			"data" => $list,
+			"count" => $res['total'],
+			"data" => $res['list'],
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -34,10 +37,18 @@ class Tags extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
+		}
+		//新建内链同名检测
+		if($this->model->check($post['name']) && !$post['id']){
+			$rdata = [
+				"code" => 0,
+				"msg" => $post['name'].":内链已存在",
+			];
+			return json_encode($rdata);
 		}
 		$data = $post;
+		$data['area_id'] = $this->session->area_id;
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
@@ -46,8 +57,8 @@ class Tags extends BaseController
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
-
-		if($this->model->edit($data)){
+		
+		if($this->model->edit($data, $this->session->area_id)){
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -58,7 +69,7 @@ class Tags extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
     public function del()
     {
@@ -68,8 +79,7 @@ class Tags extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -87,7 +97,7 @@ class Tags extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -98,14 +108,13 @@ class Tags extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
 			$post['switchName'] => (int)$post['switchValue'],
 		];
-		if($this->model->edit($data)){
+		if($this->model->edit($data, $this->session->area_id)){
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -116,6 +125,6 @@ class Tags extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 }

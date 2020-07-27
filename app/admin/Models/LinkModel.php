@@ -14,14 +14,23 @@ class LinkModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = true;
 	protected $protectFields = false;
-    public function getList()
+    public function getList($page, $limit)
     {
+		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('link');
-		$result   = $builder->select('*')
-							->where(['deleted'=>0])
-							->get()
+		$res   = $builder->select('link.*, link_group.name as group_name')
+							->join('link_group', 'link_group.id = link.group_id', 'left')
+							->where(['link.deleted'=>0,'link.status'=>1])
+							->get($limit, $offset)
 							->getResultArray();
-        return $result;
+							
+		$total = $builder->select('link.*, link_group.name as group_name')
+							->join('link_group', 'link_group.id = link.group_id', 'left')
+							->where(['link.deleted'=>0,'link.status'=>1])
+							->countAllResults(false);					
+        $result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
     }
 	public function edit($data){
 		return $this->save($data);
