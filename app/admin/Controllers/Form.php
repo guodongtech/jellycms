@@ -54,8 +54,6 @@ class Form extends BaseController
 			];
 			return json_encode($rdata);
 		}
-
-
 		$data = $post;
 		if(!$data['id']){
 			//创建表及默认表字段 create_time create_user update_time update_user ip,默认字段不在formfield表里显示

@@ -80,7 +80,6 @@ class FormField extends BaseController
 				return json_encode($rdata);
 			}
 		}else{
-			echo 1;
 			if(!$this->model->editField($fields, $data['form_id'])){
 				$rdata = [
 					"code" => 0,
