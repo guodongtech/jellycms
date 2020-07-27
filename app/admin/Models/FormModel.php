@@ -89,9 +89,14 @@ class FormModel extends Model
 				'constraint' => 10,
 				'null' => TRUE,
 			),
-			'update_user' => array(
+			'deleted' => array(
 				'type' => 'INT',
-				'constraint' => 10,
+				'constraint' => 1,
+				'null' => TRUE,
+			),
+			'status' => array(
+				'type' => 'INT',
+				'constraint' => 1,
 				'null' => TRUE,
 			),
 		);
