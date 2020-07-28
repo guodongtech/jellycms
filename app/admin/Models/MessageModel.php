@@ -6,21 +6,25 @@ class MessageModel extends Model
 {
 
     // 获取列表
-    public function getList($page = true)
+    public function getList($table_name)
     {
-        return parent::table('ay_message')->where("acode='" . session('acode') . "'")
-            ->order('id DESC')
-            ->decode(false)
-            ->page($page)
-            ->select();
+        $builder = $this->db->table($table_name);
+        $result   = $builder->select('*')
+                            ->where(['deleted'=>0])
+                            ->get()
+                            ->getResultArray();
+        return $result;
     }
 
     // 获取详情
     public function getMessage($id)
     {
-        return parent::table('ay_message')->where("id=$id")
-            ->where("acode='" . session('acode') . "'")
-            ->find();
+        $builder = $this->db->table('form');
+        $result   = $builder->select('*')
+                            ->where(['deleted'=>0, 'id'=>$id])
+                            ->get()
+                            ->getRowArray();
+        return $result;
     }
 
     // 删除留言
@@ -61,5 +65,15 @@ class MessageModel extends Model
     public function clearMessage()
     {
         return parent::table('ay_message')->delete();
+    }
+     // 获取表单字段内容 test
+    public function getExtFields($form_id)
+    {
+        $builder = $this->db->table('form_field');
+        $result   = $builder->select('*')
+                            ->where(['deleted'=>0,'form_id'=>$form_id])
+                            ->get()
+                            ->getResultArray();
+        return $result;
     }
 }
