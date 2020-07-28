@@ -12,6 +12,11 @@
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" media="screen" href="/static/css/animate.min.css">
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/admin.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
 </head>
 <body class="guodong-body">
 
@@ -24,7 +29,6 @@
 </div>
 <div class="layui-fluid animated fadeIn">
 <div class="layui-row">
-
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	<ul class="layui-tab-title">
 		<li class="layui-this" lay-id="t1">标签列表</li>
@@ -42,42 +46,56 @@
 				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 			</script>
 	  	</div>
-	  	
 	  	<script type="text/html" id="gd-form">
 			<div style="padding-right:30px;">
 				 <form action="" method="post" class="layui-form" id="form">
 					<input type="hidden" name="id" value="">
 					<div class="layui-form-item">
-						 <label class="layui-form-label">类型</label>
+						 <label class="layui-form-label">类型*</label>
 						 <div class="layui-input-block">
-							<select name="type" lay-verify="required">
-								<option  value="1">单行文本</option>
-								<option value="7">多行文本</option>
-								<option value="2">时间</option>
-								<option value="3">图片</option>
-								<option value="4">附件</option>
-								<option value="5">编辑器</option>
-								<option value="6">开关</option>
+							<select name="type" lay-filter='select' id="select" lay-verify="required">
+								<option value="">选择类型</option>
+								<option value="input">单行文本</option>
+								<option value="textarea">多行文本</option>
+								<option value="radio">单选按钮</option>
+								<option value="checkbox">多选按钮</option>
+								<option value="pic">图片上传</option>
+								<option value="file">附件上传</option>
+								<option value="time">日期选择</option>
+								<option value="editor">编辑器</option>
+								<option value="select">下拉选择</option>
 							</select>
 						 </div>
 					</div>
 					<div class="layui-form-item">
-						 <label class="layui-form-label">名称</label>
+						 <label class="layui-form-label">名称*</label>
 						 <div class="layui-input-block">
-							<input type="text" name="name" required="" lay-verify="required" placeholder="请输入标签名称" class="layui-input">
+							<input type="text" name="name" lay-verify="required" placeholder="请输入标签名称" class="layui-input">
 							<div class="layui-form-mid layui-word-aux">只能含有字母、数字、下划线</div>
 						 </div>
-						 
 					</div>
 					
 					<div class="layui-form-item">
 						 <label class="layui-form-label">描述</label>
 						 <div class="layui-input-block">
-							<input type="text" name="description" required="" lay-verify="required" placeholder="请输入标签描述" class="layui-input">
+							<input type="text" name="description" lay-verify="required" placeholder="请输入标签描述" class="layui-input">
 						 </div>
 					</div>
-					
-
+					<div class="layui-form-item value" style="display:none;">
+						<label class="layui-form-label">字段值</label>
+						<div class="layui-input-block">
+							<textarea name="value" placeholder="多个选项用逗号隔开或者回车" class="layui-textarea"></textarea>
+							<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效。</div>
+						</div>
+					</div>
+					<div class="layui-form-item content">
+						 <label class="layui-form-label">标签内容</label>
+						 <div class="content-container">
+							 <div class="layui-input-block">
+								<input type="text" name="content" lay-verify="required" placeholder="请输入标签内容" class="layui-input">
+							 </div>
+						 </div>
+					</div>
 				 </form>
 			</div>
 	  	</script>
@@ -85,15 +103,114 @@
 	  </div>
 	</div>
 	</div>
+<script type="text/html" id="input">
+	<div class="layui-input-block">
+		<input type="text" name="content" lay-verify="required" placeholder="请输入标签内容" class="layui-input">
+	</div>
+</script>
+<script type="text/html" id="textarea">
+	<div class="layui-input-block">
+		<textarea name="content" placeholder="" class="layui-textarea"></textarea>
+		<div class="layui-form-mid layui-word-aux"></div>
+	</div>
+</script>
+<script type="text/html" id="radio">
+	<div class="layui-input-block">
+       <input type="radio" name="content" value="男" title="男" checked="">
+       <input type="radio" name="content" value="女" title="女">
+       <input type="radio" name="content" value="禁" title="禁用" disabled="">
+	</div>
+</script>
+<script type="text/html" id="checkbox">
+    <div class="layui-input-block">
+      <input type="checkbox" name="content" value="写作" title="写作">
+      <input type="checkbox" name="content" value="阅读" title="阅读" checked="">
+      <input type="checkbox" name="content" value="游戏" title="游戏">
+    </div>
+</script>
+<script type="text/html" id="select">
+    <div class="layui-input-block">
+      <select name="content">
+		<option value=""></option>
+		<option value="0">写作</option>
+		<option value="1" selected="">阅读</option>
+		<option value="2">游戏</option>
+		<option value="3">音乐</option>
+      </select>
+    </div>
+</script>
+<script type="text/html" id="pic">
+	<div class="layui-input-inline">
+		<input type="text" name="content" id="logo" placeholder="请上传图片" value="" class="layui-input">
+	</div>
+	<button type="button" class="layui-btn" id="upload">
+	  <i class="layui-icon">&#xe67c;</i>上传图片
+	</button>
+</script>
+<script type="text/html" id="file">
+	<div class="layui-input-inline">
+		<input type="text" name="content" id="file" placeholder="请上传文件" value="" class="layui-input">
+	</div>
+	<button type="button" class="layui-btn" id="upload">
+	  <i class="layui-icon">&#xe67c;</i>上传文件
+	</button>
+</script>
+<script type="text/html" id="time">
+	<div class="layui-input-block">
+		<input type="text" name="content" class="layui-input" id="time" placeholder="HH:mm:ss">
+	</div>
+</script>
+<script type="text/html" id="editor">
+	<div class="layui-input-block">
+		<textarea id="ueditor" name="content"></textarea>
+	</div>
+	<script>
+		//编辑器
+		if(ue){
+			UE.getEditor('ueditor').destroy(); //ueditor对象存在将无法再次初始化，销毁ueditor
+		}
+		var ue = UE.getEditor('ueditor',{
+			maximumWords:666,
+			toolbars: [
+				['source', 'undo', 'redo'],
+				['bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc']
+			],
+		});
+	</script>
+</script>
 
-<script src="/static/layui/layui.all.js"></script>
-<script src="/static/js/jquery-3.4.1.min.js"></script>
-<script src="/static/js/admin.js"></script>
+
 <script>
 !function(){
 	var layer = layui.layer,form = layui.form;
 	var table = layui.table;
 	var $ = layui.jquery;
+    var content = '';
+    // select下拉框选中触发事件
+    form.on("select(select)", function(data){
+       //layer.msg(data.value); // 获取选中的值
+	   var content = $('#form .content-container input[name=content]').val();//默认值
+	   $('#form .content-container').html($('#' + data.value).html());
+	   switch(data.value){
+			case 'checkbox':
+			
+				$('#form .value').show();
+				break;
+			case 'select':
+			
+				$('#form .value').show();
+				break;
+			case 'radio':
+				
+				$('#form .value').show();
+				break;
+			default:
+			$('#form .value').hide();
+			$('#form .content-container input[name=content]').val(content);//还原内容	   
+			$('#form .content-container textarea[name=content]').val(content);//还原内容	   
+	   }
+		form.render();	
+    });
 	table.render({
 		elem: '#test',url:'{url:/label/getList}',
 		toolbar: '#toolbarDemo',
@@ -108,31 +225,41 @@
 				return '{label'+':'+ res.name +'}'
 			}},
 			{field:'description', title:'描述', templet: function(res){
-				return '<em>'+ res.description +'</em>'
+				return  res.description 
 			}},
+			{field:'content', title:'内容',hide:true},
 			{field:'typetext', title:'类型', width:100, sort: true,templet: function(res){
 				var typetext;
 				switch(res.type) {
-					case '1':
+					case 'input':
 						typetext = "单行文本";
 					break;
-					case '2':
+					case 'time':
 						typetext = "时间";
 					break;
-					case '3':
+					case 'pic':
 						typetext = "图片";
 					break;
-					case '4':
+					case 'file':
 						typetext = "附件";
 					break;
-					case '5':
+					case 'editor':
 						typetext = "编辑器";
 					break;
-					case '6':
+					case 'switch':
 						typetext = "开关";
 					break;
-					case '7':
+					case 'textarea':
 						typetext = "多行文本";
+					break;
+					case 'radio':
+						typetext = "单选按钮";
+					break;
+					case 'checkbox':
+						typetext = "多选按钮";
+					break;
+					case 'select':
+						typetext = "下拉选择";
 					break;
 					default:
 						typetext = "错误类型";
@@ -168,10 +295,12 @@
 		layer.open({
 			type: 1,
 			skin: 'layui-layer-rim',
-			area: ['375px', '290px'],
+			area: ['450px', '398px'],
 			title :'添加标签',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
+			maxmin:true,
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
 				$.post('{url:/label/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
 						layer.msg(data.msg);
@@ -183,14 +312,28 @@
 						layer.msg(data.msg)
 					}
 				}, 'json');
-		},
+				});
+			},
 		btn2: function(index, layero){
 			layer.close(index);
 		},
-			content: $('#gd-form').html()
+		content: $('#gd-form').html(),
+		success: function (layero) {
+			$(':focus').blur();
+			// 添加form标识
+			layero.addClass('layui-form');
+			// 将保存按钮改变成提交按钮
+			layero.find('.layui-layer-btn0').attr({
+				'lay-filter': 'form',
+				'lay-submit': ''
+			});
+			form.render();
+		},
 		});
 		loadData(obj.data, '#form');
 		form.render();
+		$('.layui-form-select dl dd.layui-this').trigger('click');//触发单击事件
+		
 	}
 });
 
@@ -198,10 +341,12 @@ $('#btn-add').click(function(){
 	layer.open({
 		type: 1,
 		skin: 'layui-layer-rim',
-		area: ['375px', '290px'],
+		area: ['450px', '398px'],
 		title :'添加标签',
 		btn: ['添加', '取消'],
-		btn1: function(index, layero){
+		maxmin:true,
+		yes: function(index, layero){
+			form.on('submit(form)', function(data){
 			$.post('{url:/label/edit}',$("#form").serialize(),function(data){
 				if(data.code == 1){
 					layer.msg(data.msg);
@@ -213,21 +358,26 @@ $('#btn-add').click(function(){
 					layer.msg(data.msg)
 				}
 			}, 'json');
-	},
-	btn2: function(index, layero){
-		layer.close(index);
-	},
-		content: $('#gd-form').html()
+			});
+		},
+		btn2: function(index, layero){
+			layer.close(index);
+		},
+		content: $('#gd-form').html(),
+		success: function (layero) {
+			$(':focus').blur();
+			// 添加form标识
+			layero.addClass('layui-form');
+			// 将保存按钮改变成提交按钮
+			layero.find('.layui-layer-btn0').attr({
+				'lay-filter': 'form',
+				'lay-submit': ''
+			});
+			form.render();
+		},
 	});
 	form.render();
 })
-
-
-
-
-
-
-
 }();
 
 
