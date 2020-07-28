@@ -16,7 +16,7 @@ class FileModel extends Model
 		$result = directory_map($path, 1);
         return $result;
     }
-	//获取主题列表 未测试
+	//获取主题列表
     public function getThemeList()
     {
 		helper('filesystem'); //加载文件系统辅助函数

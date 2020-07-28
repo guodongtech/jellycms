@@ -76,7 +76,7 @@
 							<option value="input">单行文本</option>
 							<option value="textarea">多行文本</option>
 							<option value="radio">单选按钮</option>
-							<option value="chexbox">多选按钮</option>
+							<option value="checkbox">多选按钮</option>
 							<option value="pic">图片上传</option>
 							<option value="file">附件上传</option>
 							<option value="time">日期选择</option>
@@ -89,7 +89,7 @@
 					<label class="layui-form-label">字段值</label>
 					<div class="layui-input-inline">
 						<textarea name="value" placeholder="多个选项用逗号隔开或者回车" class="layui-textarea"></textarea>
-						<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效。</div>
+						<div class="layui-form-mid layui-word-aux">只在类型为单选/多选/下拉时填写有效。</div>
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -191,7 +191,9 @@ var layer = layui.layer,form = layui.form;
 			area: ['350px', '456px'],
 			title :'编辑字段',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
+			maxmin:true,
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
 				$.post('{url:/modelfield/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
 						layer.msg(data.msg);
@@ -203,14 +205,26 @@ var layer = layui.layer,form = layui.form;
 						layer.msg(data.msg)
 					}
 				}, 'json');
-		},
-		btn2: function(index, layero){
-			layer.close(index);
-		},
-			content: $('#gd-form').html()
-		});
-		loadData(obj.data, '#form');
-		form.render();
+				});
+			},
+			btn2: function(index, layero){
+				layer.close(index);
+			},
+			content: $('#gd-form').html(),
+			success: function (layero) {
+				$(':focus').blur();
+				// 添加form标识
+				layero.addClass('layui-form');
+				// 将保存按钮改变成提交按钮
+				layero.find('.layui-layer-btn0').attr({
+					'lay-filter': 'form',
+					'lay-submit': ''
+				});
+				form.render();
+			},
+			});
+			loadData(obj.data, '#form');
+			form.render();
 		
 	}
 });
@@ -224,8 +238,10 @@ var layer = layui.layer,form = layui.form;
 					skin: 'layui-layer-rim',
 					area: ['350px', '456px'],
 					title :'添加字段',
+					maxmin:true,
 					btn: ['提交', '取消'],
-					btn1: function(index, layero){
+					yes: function(index, layero){
+						form.on('submit(form)', function(data){
 						$.post('{url:/modelfield/edit}',$("#form").serialize(),function(data){
 							if(data.code == 1){
 								layer.msg(data.msg);
@@ -234,14 +250,26 @@ var layer = layui.layer,form = layui.form;
 								}, 1000);
 							}
 							else{
-								layer.msg(data.msg);
+								layer.msg(data.msg)
 							}
 						}, 'json');
+						});
 					},
 					btn2: function(index, layero){
 						layer.close(index);
 					},
-					content: $('#gd-form').html()
+					content: $('#gd-form').html(),
+					success: function (layero) {
+						$(':focus').blur();
+						// 添加form标识
+						layero.addClass('layui-form');
+						// 将保存按钮改变成提交按钮
+						layero.find('.layui-layer-btn0').attr({
+							'lay-filter': 'form',
+							'lay-submit': ''
+						});
+						form.render();
+					},
 				});
 			break;
 		};

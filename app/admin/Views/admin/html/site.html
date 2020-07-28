@@ -14,13 +14,7 @@
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body class="guodong-body">
- <div class="layui-card layadmin-header">
-  <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
-    <a lay-href="">主页</a><span lay-separator="">/</span>
-    <a><cite>设置</cite></a><span lay-separator="">/</span>
-    <a><cite>我的密码</cite></a>
-  </div>
-</div>
+{include:head.html}
 <div class="layui-fluid">
 <div class="layui-row">
 
@@ -54,16 +48,6 @@
                 </div>
                 
                 <div class="layui-form-item">
-                     <label class="layui-form-label">LOGO</label>
-                     <div class="layui-input-inline">
-                     	<input type="text" name="logo" id="logo" value="{$site.logo}" placeholder="请上传站点LOGO图" class="layui-input">
-                     </div>
-                     <button type="button" class="layui-btn upload" id="upload">
-					 	 <i class="layui-icon"></i>上传图片
-					 </button> 
-                </div>
-                
-                <div class="layui-form-item">
                      <label class="layui-form-label">关键字</label>
                      <div class="layui-input-block">
                      	<input type="text" name="keywords" value="{$site.keywords}" placeholder="请输入站点关键字" class="layui-input">
@@ -75,6 +59,43 @@
                      <div class="layui-input-block">
                      	<textarea name="description" placeholder="请输入站点描述" class="layui-textarea">{$site.description}</textarea>
                      </div>
+                </div>
+
+                <div class="layui-form-item">
+                     <label class="layui-form-label">LOGO</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" title="单击预览" name="logo" value="{$site.logo}" placeholder="请上传站点LOGO图" class="layui-input preview">
+                     </div>
+                     <button type="button" class="layui-btn upload" id="logo">
+					 	 <i class="layui-icon"></i>上传图片
+					 </button> 
+                </div>
+                <div class="layui-form-item">
+                     <label class="layui-form-label">服务号</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" title="单击预览" name="service_code" value="{$site.service_code}" placeholder="请上传服务号二维码" class="layui-input preview">
+                     </div>
+                     <button type="button" class="layui-btn upload" id="service_code" >
+					 	 <i class="layui-icon"></i>上传图片
+					 </button> 
+                </div>
+                <div class="layui-form-item">
+                     <label class="layui-form-label">订阅号</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" title="单击预览" name="subscribe_code" value="{$site.subscribe_code}" placeholder="请上传订阅号二维码" class="layui-input preview">
+                     </div>
+                     <button type="button" class="layui-btn upload" id="subscribe_code">
+					 	 <i class="layui-icon"></i>上传图片
+					 </button> 
+                </div>
+                <div class="layui-form-item">
+                     <label class="layui-form-label">二维码</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" title="单击预览" name="qrcode" value="{$site.qrcode}" placeholder="请上传二维码" class="layui-input preview">
+                     </div>
+                     <button type="button" class="layui-btn upload" id="qrcode">
+					 	 <i class="layui-icon"></i>上传图片
+					 </button> 
                 </div>
                 
                 <div class="layui-form-item">
@@ -89,7 +110,7 @@
 				    <div class="layui-input-inline">
 						<select name="pctheme">
 							{foreach:items = $themeList key=$k item=$v}
-							<option value="{$v}">{$v}</option>
+							<option {if:$site['pctheme']==$v}selected{/if} value="{$v}">{$v}</option>
 							{/foreach}
 						</select>
 				    </div>
@@ -99,7 +120,7 @@
 				    <div class="layui-input-inline">
 						<select name="mobiletheme">
 							{foreach:items = $themeList key=$k item=$v}
-							<option value="{$v}">{$v}</option>
+							<option {if:$site['mobiletheme']==$v}selected{/if} value="{$v}">{$v}</option>
 							{/foreach}
 						</select>
 				    </div>
@@ -113,9 +134,9 @@
                 </div>
                 
                 <div class="layui-form-item">
-                     <label class="layui-form-label">尾部信息</label>
+                     <label class="layui-form-label">版权信息</label>
                      <div class="layui-input-block">
-                     	<textarea name="copyright" placeholder="请输入尾部信息" class="layui-textarea">{$site.copyright}</textarea>
+                     	<textarea name="copyright" placeholder="请输入版权信息" class="layui-textarea">{$site.copyright}</textarea>
                      </div>
                 </div>
 				
@@ -138,24 +159,53 @@
 	var layer = layui.layer,form = layui.form;
 	var layer = layui.layer,
 	form = layui.form;
-	var table = layui.table;
 	var element = layui.element;
 	var upload = layui.upload;
 	var $ = layui.jquery;
+    $('.preview').click(function(){
+		layer.open({
+			type: 1, 
+			title: false,
+			content: '<img width="300px" src="'+ $(this).val()+'" />',
+			success: function(layero, index) {
+				
+			}
+		});
+		//layer.msg('<img width="300px" src="'+ $(this).val()+'" />')
+		form.render();
+	})
 	//执行实例
 	var uploadInst = upload.render({
-		elem: '#upload',
+		elem: '#logo',
 		url: '{url:/upload/uploadFile}',
-		before: function(obj){
- 
-		},
 		done: function(res){
 			//上传完毕回调
 			$('#form input[name="logo"]').val(res.data.path);
 		},
-		error: function(){
-			//请求异常回调
-		}
+	})
+	var uploadInst = upload.render({
+		elem: '#qrcode',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="qrcode"]').val(res.data.path);
+		},
+	})
+	var uploadInst = upload.render({
+		elem: '#service_code',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="service_code"]').val(res.data.path);
+		},
+	})
+	var uploadInst = upload.render({
+		elem: '#subscribe_code',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="subscribe_code"]').val(res.data.path);
+		},
 	})
 }();
 </script>

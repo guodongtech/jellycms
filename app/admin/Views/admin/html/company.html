@@ -13,13 +13,7 @@
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body class="guodong-body">
- <div class="layui-card layadmin-header">
-  <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
-    <a lay-href="">主页</a><span lay-separator="">/</span>
-    <a><cite>设置</cite></a><span lay-separator="">/</span>
-    <a><cite>我的密码</cite></a>
-  </div>
-</div>
+{include:head.html}
 <div class="layui-fluid">
 <div class="layui-row">
 
@@ -30,67 +24,67 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		<form action="{url:/company/edit}" id="form" method="post">
-	  			<input type="hidden" name="id" value="{$com.id}"> 
+	  			<input type="hidden" name="id" value="{$company.id}"> 
 	  			<div class="layui-form-item">
                      <label class="layui-form-label">公司名称</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="name" value="{$com.name}" placeholder="公司名称" class="layui-input">
+                     	<input type="text" name="name" value="{$company.name}" placeholder="公司名称" class="layui-input">
                      </div>
                 </div>
                 
 	  			<div class="layui-form-item">
                      <label class="layui-form-label">公司地址</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="address" value="{$com.address}" placeholder="公司地址" class="layui-input">
+                     	<input type="text" name="address" value="{$company.address}" placeholder="公司地址" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">邮政编码</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="postcode" value="{$com.postcode}" placeholder="邮政编码" class="layui-input">
+                     	<input type="text" name="postcode" value="{$company.postcode}" placeholder="邮政编码" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">联系人</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="contact" value="{$com.contact}" placeholder="联系人" class="layui-input">
+                     	<input type="text" name="contact" value="{$company.contact}" placeholder="联系人" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">手机号码</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="mobile" value="{$com.mobile}" placeholder="手机号码" class="layui-input">
+                     	<input type="text" name="mobile" value="{$company.mobile}" placeholder="手机号码" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">电话号码</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="phone" value="{$com.phone}" placeholder="电话号码" class="layui-input">
+                     	<input type="text" name="phone" value="{$company.phone}" placeholder="电话号码" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">传真号码</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="fax" value="{$com.fax}" placeholder="传真号码" class="layui-input">
+                     	<input type="text" name="fax" value="{$company.fax}" placeholder="传真号码" class="layui-input">
                      </div>
                 </div>
 
                 <div class="layui-form-item">
                      <label class="layui-form-label">电子邮箱</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="email" value="{$com.email}" placeholder="电子邮箱" class="layui-input">
+                     	<input type="text" name="email" value="{$company.email}" placeholder="电子邮箱" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">QQ号码</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="qq" value="{$com.qq}" placeholder="QQ号码" class="layui-input">
+                     	<input type="text" name="qq" value="{$company.qq}" placeholder="QQ号码" class="layui-input">
                      </div>
                 </div>
 
@@ -98,14 +92,14 @@
                 <div class="layui-form-item">
                      <label class="layui-form-label">营业执照</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="blicense" value="llicense" placeholder="营业执照" class="layui-input">
+                     	<input type="text" name="license" value="{$company.qq}" placeholder="营业执照" class="layui-input">
                      </div>
                 </div>
 
                 <div class="layui-form-item">
                      <label class="layui-form-label">其它信息</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="other" value="{$com.other}" placeholder="其它信息" class="layui-input">
+                     	<input type="text" name="other" value="{$company.other}" placeholder="其它信息" class="layui-input">
                      </div>
                 </div>
                 

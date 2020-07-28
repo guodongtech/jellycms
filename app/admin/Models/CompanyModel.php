@@ -16,8 +16,11 @@ class CompanyModel extends Model
 	protected $protectFields = false;
     public function getCompany($area_id)
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('company')." where area_id= {$area_id}";
-		$result = $this->db->query($sql)->getRowArray();
+		$builder = $this->db->table('company');
+		$result   = $builder->select('*')
+							->where(['area_id'=>$area_id])
+							->get()
+							->getRowArray();
         return $result;
     }
 

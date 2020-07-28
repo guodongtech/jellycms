@@ -16,8 +16,11 @@ class SiteModel extends Model
 	protected $protectFields = false;
     public function getSite($area_id)
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('site')." where area_id= {$area_id}";
-		$result = $this->db->query($sql)->getRowArray();
+		$builder = $this->db->table('site');
+		$result   = $builder->select('*')
+							->where(['area_id'=>$area_id])
+							->get()
+							->getRowArray();
         return $result;
     }
 

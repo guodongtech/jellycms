@@ -46,17 +46,17 @@
 				<form action="" method="post" id="form" class="layui-form">
 					<input type="hidden" name="id" value=""> 
 	                <div class="layui-form-item">
-	                     <label class="layui-form-label">模型名称  <span class="layui-text-red">*</span></label>
+	                     <label class="layui-form-label">模型名称*</label>
 	                     <div class="layui-input-inline">
 	                     	<input type="text" name="name" lay-verify="required" placeholder="请输入模型名称" class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                 <div class="layui-form-item">
-	                     <label class="layui-form-label">模型类型  <span class="layui-text-red">*</span></label>
+	                     <label class="layui-form-label">类型*</label>
 	                     <div class="layui-input-inline">
-	                     	 <select name="type" lay-verify="required">
-		                     	<option value="">请选择模型类型</option>
+	                     	 <select name="type" lay-filter='select' lay-verify="required">
+		                     	<option value="">请选择类型</option>
 		                        <option value="1">单页</option>
 		                        <option value="2">列表</option>
 		                    </select>
@@ -66,18 +66,11 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">URL名称 </label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="urlname" placeholder="URL地址英文名称" class="layui-input">
+	                     	<input type="text" name="urlname" lay-verify="required|en" placeholder="URL地址英文名称" class="layui-input">
 	                     </div>
 	                </div>
-	                
-	               <!--  <div class="layui-form-item">
-	                     <label class="layui-form-label">列表页模板</label>
-	                     <div class="layui-input-inline">
-	                     	<input type="text" name="listtpl" placeholder="列表页模板" class="layui-input">
-	                     </div>
-	                </div> -->
-	                <div class="layui-form-item">
-	                     <label class="layui-form-label">列表页模板  <span class="layui-text-red">*</span></label>
+	                <div class="layui-form-item tpl-list">
+	                     <label class="layui-form-label">列表页模板*</label>
 	                     <div class="layui-input-inline">
 	                     	 <select name="listtpl" lay-verify="required">
 		                     	<option value="">请选择模板</option>
@@ -87,17 +80,10 @@
 		                    </select>
 						</div>
 	                </div>
-
-	                <!-- <div class="layui-form-item">
-	                     <label class="layui-form-label">详情页模板</label>
+	                <div class="layui-form-item tpl-content">
+	                     <label class="layui-form-label">详情页模板*</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="contenttpl" placeholder="详情页模板" class="layui-input">
-	                     </div>
-	                </div> -->
-	                <div class="layui-form-item">
-	                     <label class="layui-form-label">详情页模板  <span class="layui-text-red">*</span></label>
-	                     <div class="layui-input-inline">
-	                     	 <select name="contenttpl" lay-verify="required">
+	                     	 <select name="contenttpl">
 		                     	<option value="">请选择模板</option>
 		                     	{foreach:items = $template_file key=$k item=$v}
 		                     	<option value="{$v}">{$v}</option>
@@ -116,12 +102,8 @@
 	  	   </script>
 	  </div>
 	</div>
-	 
-	
-	 
 </div>
 </div>
-	
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
 <script src="/static/js/admin.js"></script>
@@ -131,6 +113,23 @@
 	form = layui.form;
 	var table = layui.table;
 	var $ = layui.jquery;
+	//自定义表单验证
+      form.verify({
+          en:[
+              /^[a-zA-Z]+$/,'只能输入英文'
+          ]
+      });
+// select下拉框选中触发事件
+    form.on("select(select)", function(data){
+		//layer.msg(data.value); // 获取选中的值
+		if(data.value==1){
+			$('#form .tpl-content select[name=contenttpl]').attr({'disabled':true});
+		}else{
+			$('#form .tpl-content select[name=contenttpl]').attr({'disabled':false});;
+		}
+		form.render();
+    });
+
 	table.render({
 		elem: '#table',url:'{url:/model/getList}',
 		toolbar: '#toolbarDemo',
@@ -190,9 +189,11 @@
 			type: 1,
 			skin: 'layui-layer-rim',
 			area: ['360px', '476px'],
+			maxmin:true,
 			title :'添加标签',
 			btn: ['提交', '取消'],
-			btn1: function(index, layero){
+			yes: function(index, layero){
+				form.on('submit(form)', function(data){
 				$.post('{url:/model/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
 						layer.msg(data.msg);
@@ -204,16 +205,28 @@
 						layer.msg(data.msg)
 					}
 				}, 'json');
-		},
+				});
+			},
 		btn2: function(index, layero){
 			layer.close(index);
 		},
-			content: $('#gd-form').html()
+		content: $('#gd-form').html(),
+		success: function (layero) {
+			$(':focus').blur();
+			// 添加form标识
+			layero.addClass('layui-form');
+			// 将保存按钮改变成提交按钮
+			layero.find('.layui-layer-btn0').attr({
+				'lay-filter': 'form',
+				'lay-submit': ''
+			});
+			form.render();
+		},
 		});
 		
 		loadData(obj.data, '#form')
 		form.render();
-		
+		$('.layui-form-select dl dd.layui-this').trigger('click');//触发单击事件
 	}else if(obj.event === 'switch'){
 		var switchName = $(this).find('input[type="checkbox"]').attr("name");
 		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
@@ -221,9 +234,6 @@
 		$.post('{url:/model/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
 				layer.msg(data.msg);
-				setTimeout(function (){
-					window.location.reload();
-				}, 1000);
 			}
 			else{
 				layer.msg(data.msg)
@@ -242,9 +252,11 @@
 					type: 1,
 					skin: 'layui-layer-rim',
 					area: ['360px', '476px'],
+					maxmin:true,
 					title :'添加标签',
 					btn: ['提交', '取消'],
-					btn1: function(index, layero){
+					yes: function(index, layero){
+						form.on('submit(form)', function(data){
 						$.post('{url:/model/edit}',$("#form").serialize(),function(data){
 							if(data.code == 1){
 								layer.msg(data.msg);
@@ -253,14 +265,26 @@
 								}, 1000);
 							}
 							else{
-								layer.msg(data.msg);
+								layer.msg(data.msg)
 							}
 						}, 'json');
+						});
 					},
 					btn2: function(index, layero){
 						layer.close(index);
 					},
-					content: $('#gd-form').html()
+					content: $('#gd-form').html(),
+					success: function (layero) {
+						$(':focus').blur();
+						// 添加form标识
+						layero.addClass('layui-form');
+						// 将保存按钮改变成提交按钮
+						layero.find('.layui-layer-btn0').attr({
+							'lay-filter': 'form',
+							'lay-submit': ''
+						});
+						form.render();
+					},
 				});
 			break;
 

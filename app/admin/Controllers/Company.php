@@ -14,9 +14,9 @@ class Company extends BaseController
 
     public function index()
     {
-		$com = $this->model->getCompany($this->session->area_id);
+		$company = $this->model->getCompany($this->session->area_id);
 		$data = [
-			"com" => $com,
+			"company" => $company,
 		];
          echo view('company.html', $data);
     }
@@ -25,7 +25,6 @@ class Company extends BaseController
 		$post = post();
 		if(!$post['name']){
 			error("操作失败", '/'.ADMINNAME.'/company/index/');
-			exit;
 		}
 		$data = $post;
 		$data['area_id'] = $this->session->area_id;
