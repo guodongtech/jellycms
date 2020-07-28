@@ -13,37 +13,57 @@
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body class="guodong-body">
-	<div class="layui-card layadmin-header">
-		<div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
-			<a lay-href="">主页</a><span lay-separator="">/</span>
-			<a><cite>设置</cite></a><span lay-separator="">/</span>
-			<a><cite>我的密码</cite></a>
-		</div>
-	</div>
-	<div class="layui-fluid">
-		<div class="layui-row">
+ <div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+    <a lay-href="">主页</a><span lay-separator="">/</span>
+    <a><cite>设置</cite></a><span lay-separator="">/</span>
+    <a><cite>我的密码</cite></a>
+  </div>
+</div>
+<div class="layui-fluid">
+<div class="layui-row">
 
-			<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
-				<ul class="layui-tab-title">
-					<li class="layui-this" lay-id="t1">留言列表</li>
-					<li class="" lay-id="t2">评论列表</li>
-					<li class="" lay-id="t3">电话收集列表</li>
-				</ul>
-				<div class="layui-tab-content">
-					<div class="layui-tab-item layui-show">111</div>
-					<div class="layui-tab-item">2222</div>
-					<div class="layui-tab-item">333</div>
-				</div>
-			</div>
-		</div>
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	  	{foreach:items=$forms key=$k item=$v}
+	    <a href = "{url:/message/index/}{$v['table_name']}"><li {if:$v["table_name"] == $table_name}class="layui-this"{/if}>{$v['name']}</li></a>
+	    {/foreach}
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+	  	   			<table class="layui-hide" id="table" lay-filter="test"></table>
+	  	   			<script type="text/html" id="barDemo">
+						<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+					</script>
+	  	 </div>
 	</div>
+		
+	 
+	
+</div>
+</div>
 <script src="/static/layui/layui.all.js"></script>
 <script>
 !function(){
-  var layer = layui.layer
-  ,form = layui.form;
-  
+  var layer = layui.layer,form = layui.form;
+  var table = layui.table;
+  var $ = layui.jquery;
   //layer.msg('Hello World');
+  table.render({
+		elem: '#table',url:'{url:/Message/getList/}{$table_name}',
+		// toolbar: '#toolbarDemo',
+		title: '字段列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+		{foreach:items=$fields key=$k item=$v}
+			{field:'{$k}', title:'{$v}',fixed: 'left', unresize: false, sort: true},
+		{/foreach}
+			{fixed: 'right', title:'操作', toolbar: '#barDemo',unresize: true,width:120}
+		]],
+		page: true
+	});
 }();
 </script>
 </body>

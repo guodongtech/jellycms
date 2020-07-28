@@ -14,58 +14,46 @@ class Message extends BaseController
     }
 
     // 列表
-    public function index($form_id=1)
+    public function index($table_name='message')
     {
         $forms = $this->formModel->getAllForm();
-        $issystem = ['message','comment']; // 系统内置表单
         // 获取表单信息
-        $form_massage = $this->model->getMessage($form_id);
-        if(in_array($form_massage['table_name'],$issystem)){
-            // 内置表 
-            if($form_massage['table_name'] == 'message'){
-                $fields = [
-                            'id'=>'id',
-                            'username'=>'用户名',
-                            'mobile'=>'电话',
-                            'content'=>'内容',
-                            'user_ip'=>'ip地址',
-                            'pid'=>'父消息ID',
-                            'area_id'=>'区域',
-                        ];
-            }else{
-                $fields = [
-                            'id'=>'id',
-                            'content'=>'内容',
-                            'ip'=>'ip地址',
-                            'icon'=>'用户头像',
-                            'user_id'=>'用户ID',
-                            'nickname'=>'昵称',
-                            'area_id'=>'区域',
-                        ];
-            }
-
-        }else{
-            // 获取自定义字段
-            $field_all = $this->model->getExtFields($form_id);
+        $form_massage = $this->model->getMessage($table_name);
+        $form_id = $form_massage['id'];
+        // 固定字段
+        $fields = [
+                    'id'=>'ID',
+                    'create_time'=>'创建时间',
+                    'ip'=>'IP',
+                    'status'=>'前台是否显示',
+                    // 'update_time'=>'更新时间',
+                    // 'deleted'=>'是否删除',
+                    'create_user'=>'创建人',
+                ];
+        // 获取自定义字段
+        $field_all = $this->model->getExtFields($form_id);
+        if(count($field_all)>0){
             foreach($field_all as $k=>$v){
                 $fields[$v['name']] = $v['description'];
             }
         }
         $data['forms'] = $forms;
         $data['fields'] = $fields;
-        $data['form_id'] = $form_id;
         $data['table_name'] = $form_massage['table_name'];
-		echo view('message_test.html',$data);
+		echo view('message.html',$data);
     }
     // 列表
     public function getList($table_name)
     {
-        $list = $this->model->getList($table_name);
+        $get = $this->request->getGet();
+        isset($get['page'])?$page = $get['page']:$page = 1;
+        isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+        $res = $this->model->getList($table_name, $page, $limit);
         $data = [
             "code" => 0,
             "msg" => "",
-            // "count" => $res['total'],
-            "data" => $list,
+            "count" => $res['total'],
+            "data" => $res['list'],
         ];
         return json_encode($data);
     }

@@ -6,22 +6,29 @@ class MessageModel extends Model
 {
 
     // 获取列表
-    public function getList($table_name)
+    public function getList($table_name, $page, $limit)
     {
+        $offset = ($page-1)*$limit;
+        $table_name = "form_".$table_name;
         $builder = $this->db->table($table_name);
-        $result   = $builder->select('*')
+        $res   = $builder->select('*')
                             ->where(['deleted'=>0])
-                            ->get()
+                            ->get($limit, $offset)
                             ->getResultArray();
+        $total = $builder->select('*')
+                            ->where(['deleted'=>0])
+                            ->countAllResults(false);
+        $result['list'] = $res;
+        $result['total'] = $total;
         return $result;
     }
 
     // 获取详情
-    public function getMessage($id)
+    public function getMessage($table_name)
     {
         $builder = $this->db->table('form');
         $result   = $builder->select('*')
-                            ->where(['deleted'=>0, 'id'=>$id])
+                            ->where(['deleted'=>0, 'table_name'=>$table_name])
                             ->get()
                             ->getRowArray();
         return $result;
@@ -66,12 +73,12 @@ class MessageModel extends Model
     {
         return parent::table('ay_message')->delete();
     }
-     // 获取表单字段内容 test
+     // 获取表单所有自定义字段
     public function getExtFields($form_id)
     {
         $builder = $this->db->table('form_field');
         $result   = $builder->select('*')
-                            ->where(['deleted'=>0,'form_id'=>$form_id])
+                            ->where(['deleted'=>0,'display'=>1,'form_id'=>$form_id])
                             ->get()
                             ->getResultArray();
         return $result;
