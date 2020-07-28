@@ -5,7 +5,7 @@ function loadData(jsonStr, form){
 	for(x in obj){
 		key = x;
 		value = obj[x];
-		$("[name='"+key+"'],[name='"+key+"[]']").each(function(){
+		$(form+ " [name='"+key+"'],"+form+" [name='"+key+"[]']").each(function(){
 			tagName = $(this)[0].tagName;
 			type = $(this).attr('type');
 			if(tagName=='INPUT'){

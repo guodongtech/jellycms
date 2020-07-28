@@ -48,7 +48,7 @@ class Model extends BaseController
 		$data = $post;
 		// 校验模型是否已存在
 		$check = $this->model->checkEdit($data);
-		if(!$post['id']){
+		if(!$data['id']){
 			if(count($check)>0){
 				$rdata = [
 					"code" => 0,
@@ -60,7 +60,7 @@ class Model extends BaseController
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
 		}else{
-			if(count($check)>0 && $check[0]['id']!=$post['id']){
+			if(count($check)>0 && $check[0]['id']!=$data['id']){
 				$rdata = [
 					"code" => 0,
 					"msg" => "该模型已存在",

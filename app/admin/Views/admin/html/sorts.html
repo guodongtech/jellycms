@@ -20,8 +20,8 @@
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">栏目列表</li>
-	    <li lay-id="t2">栏目新增</li>
-	    <li lay-id="t3">批量新增</li>
+	    <li lay-id="t2">添加/编辑栏目</li>
+	    <li lay-id="t3">批量添加</li>
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
@@ -42,8 +42,8 @@
 					<input type="hidden" name="id" value=""> 
 		  	     	<div class="layui-tab">
 					  <ul class="layui-tab-title">
-					    <li class="layui-this">基本选项</li>
-					    <li>高级选项</li>
+					    <li class="layui-this">基础设置</li>
+					    <li>图片及SEO设置</li>
 					  </ul>
 					  <div class="layui-tab-content">
 					    <div class="layui-tab-item layui-show">
@@ -66,8 +66,8 @@
 										
 								</div>
 			                </div>
-			                <div class="layui-form-item">
-			                     <label class="layui-form-label">区域id</label>
+<!-- 			                <div class="layui-form-item">
+			                     <label class="layui-form-label">区域</label>
 			                     <div class="layui-input-inline">
 			                     	<select name="area_id">
 									{foreach:items = $areaList key=$k item=$v}
@@ -76,18 +76,19 @@
 									</select>
 										
 								</div>
-			                </div>
+			                </div> -->
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">栏目名称 <span class="layui-text-red">*</span></label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="name" required="" lay-verify="required" placeholder="请输入栏目名称" class="layui-input">
+			                     	<input type="text" name="name"  lay-verify="required" placeholder="栏目名称" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">URL名称 </label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="urlname" lay-verify="required" placeholder="请输入URL名称，如:test" class="layui-input">
+			                     	<input type="text" name="urlname" lay-verify="required|en" placeholder="URL名称，如:news" class="layui-input">
+									<div class="layui-form-mid layui-word-aux">用于前台URL识别，必须为英文</div>
 			                     </div>
 			                </div>
 			                
@@ -108,7 +109,7 @@
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">列表页模板</label>
 			                     <div class="layui-input-inline">
-				                     <select name="listtpl" id="listtpl">
+				                     <select name="listtpl">
 				                     	<option value="">无</option>
 				                     	{foreach:items = $template_file key=$k item=$v}
 				                     		<option value="{$v}">{$v}</option>
@@ -121,12 +122,12 @@
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">详情页模板</label>
 			                     <div class="layui-input-inline">
-				                     <select name="contenttpl" id="contenttpl">
+				                     <select name="contenttpl">
 				                     	<option value="">无</option>
 										{foreach:items = $template_file key=$k item=$v}
 				                     		<option value="{$v}">{$v}</option>
 				                     	{/foreach}
-								 </select>
+									</select>
 								
 								</div>
 			                </div>
@@ -137,20 +138,31 @@
 			                     	<input type="radio" name="status" value="1" title="显示" checked="">
 									<input type="radio" name="status" value="0" title="隐藏">
 			                     </div>
-			                </div>     
+			                </div>
+			                
+			                <div class="layui-form-item">
+								 <label class="layui-form-label">内容</label>
+								 <div class="layui-form-mid layui-word-aux">此处主要用于单页栏目展示信息。在对应标签和数组参数里均可调用</div>
+			                </div>
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label"></label>
+			                     <div class="layui-input-block">
+									<textarea id="container" name="content"></textarea>
+								 </div>
+			                </div>
 					    </div>
 					    <div class="layui-tab-item">
 					    	<div class="layui-form-item">
 			                     <label class="layui-form-label">副栏目</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="subname" placeholder="请输入栏目副名称" class="layui-input">
+			                     	<input type="text" name="subname" placeholder="栏目副名称" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">跳转链接</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="outlink" placeholder="请输入跳转链接" class="layui-input">
+			                     	<input type="text" name="outlink" placeholder="跳转链接" class="layui-input">
 			                     </div>
 			                </div>
 			                
@@ -159,7 +171,7 @@
 			                     <div class="layui-input-inline">
 			                     	<input type="text" name="ico" id="ico" placeholder="请上传栏目缩略图" class="layui-input">
 			                     </div>
-			                     <button type="button" class="layui-btn upload" data-des="ico">
+			                     <button type="button" class="layui-btn upload" id="icoup" data-des="ico">
 								 	 <i class="layui-icon"></i>上传图片
 								 </button>
 								 <div id="ico_box" class="pic"></div>
@@ -168,9 +180,9 @@
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">栏目大图</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="pic" id="pic" placeholder="请上传栏目大图" class="layui-input">
+			                     	<input type="text" name="pic" id="pic" placeholder="上传栏目大图" class="layui-input">
 			                     </div>
-			                     <button type="button" class="layui-btn upload" data-des="pic">
+			                     <button type="button" class="layui-btn upload" id="picup" data-des="pic">
 								 	 <i class="layui-icon"></i>上传图片
 								 </button>
 								 <div id="pic_box" class="pic"></div>
@@ -179,21 +191,21 @@
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">标题</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="title" placeholder="请输入栏目SEO标题，需前端调用" class="layui-input">
+			                     	<input type="text" name="title" placeholder="栏目SEO标题" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">关键词</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="keywords" placeholder="请输入栏目SEO关键字，需前端调用" class="layui-input">
+			                     	<input type="text" name="keywords" placeholder="栏目SEO关键字" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">描述</label>
 			                     <div class="layui-input-block">
-			                     	<textarea name="description" placeholder="请输入栏目SEO描述，需前端调用" class="layui-textarea"></textarea>
+			                     	<textarea name="description" placeholder="栏目SEO描述" class="layui-textarea"></textarea>
 			                     </div>
 			                </div>
 					    </div>
@@ -210,103 +222,89 @@
 	  	     
 	  	     <!-- 批量新增 -->
 	  	     <div class="layui-tab-item">
-	  	     	<form action="/adminzt.php?p=/ContentSort/add" method="post" class="layui-form" lay-filter="sort">
-		  	     		<input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-		  	     		<div class="layui-form-item">
-		                     <label class="layui-form-label">父栏目</label>
-		                     <div class="layui-input-block">
-		                     	<select name="pcode">
-			                        <option value="0">顶级栏目</option>
-			                        <option value="1">公司简介</option><option value="2">新闻中心</option><option value="3">　　公司动态</option>
-									<option value="4">　　行业动态</option><option value="5">产品中心</option>
-									<option value="6">　　网站建设</option><option value="7">　　域名空间</option>
-									<option value="8">服务案例</option><option value="9">招贤纳士</option>
-									<option value="10">在线留言</option><option value="11">联系我们</option>
-									<option value="12">解决方案</option><option value="13">API</option><option value="14">价格</option>
-									<option value="15">下载</option><option value="16">代理合作</option>
-								</select>
-							</div>
-		                </div>
+	  	     	<form action="{url:/sorts/edit/}" method="post" id="batchform" class="layui-form" lay-filter="batch-sorts">
+					<div class="layui-form-item">
+						 <label class="layui-form-label">父栏目</label>
+						 <div class="layui-input-block">
+							<select name="pid">
+								<option value="0">顶级栏目</option>
+								{foreach:items = $list key=$k item=$v}
+									{if:$v['pid']==0}
+									<option value="{$v['id']}">{$v['name']}</option>
+									{foreach:items = $list key=$k1 item=$v1}
+										{if:$v['id'] == $v1['pid']}
+										<option value="{$v1['id']}">&nbsp;&nbsp;&nbsp;&nbsp;{$v1['name']}</option>
+										{/if}
+									{/foreach}
+									{/if}
+								{/foreach}
+							</select>
+						</div>
+					</div>
+<!-- 					<div class="layui-form-item">
+						 <label class="layui-form-label">区域</label>
+						 <div class="layui-input-inline">
+							<select name="area_id">
+							{foreach:items = $areaList key=$k item=$v}
+								<option value="{$v['id']}">&nbsp;&nbsp;&nbsp;&nbsp;{$v['name']}</option>
+							{/foreach}
+							</select>
+								
+						</div>
+					</div> -->
+					<div class="layui-form-item">
+						 <label class="layui-form-label">栏目名称</label>
+						 <div class="layui-input-block">
+							<input type="text" name="name"  lay-verify="required" placeholder="栏目名称，多个栏目用逗号隔开" class="layui-input">
+						 </div>
+					</div>
 		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">栏目名称</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="multiplename" required="" lay-verify="required" placeholder="请输入栏目名称，多个栏目用逗号隔开" class="layui-input">
-		                     </div>
-		                </div>
-		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">内容模型</label>
-		                     <div class="layui-input-block">
-		                     	<select name="mcode" lay-filter="model" lay-verify="required">
-			                     	<option value="">请选择内容模型</option>
-			                        	<option value="1" data-type="1" data-listtpl="" data-contenttpl="about.html">专题</option>
-			                        	<option value="2" data-type="2" data-listtpl="newslist.html" data-contenttpl="news.html">新闻</option>
-			                        	<option value="3" data-type="2" data-listtpl="productlist.html" data-contenttpl="product.html">产品</option>
-			                        	<option value="4" data-type="2" data-listtpl="caselist.html" data-contenttpl="case.html">案例</option>
-			                        	<option value="5" data-type="2" data-listtpl="joblist.html" data-contenttpl="job.html">招聘</option>
-								</select>
-							</div>
-		                </div>
-		                
-		                 <input type="hidden" value="1" name="type" id="type">
-		                 
-		                 <div class="layui-form-item">
-		                     <label class="layui-form-label">列表页模板</label>
-		                     <div class="layui-input-block">
-			                     <select name="listtpl" id="listtpl">
-			                     	<option value="">无</option>
-									<option value="about.html">about.html</option>
-									<option value="about_download.html">about_download.html</option>
-									<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
-									<option value="agent.html">agent.html</option>
-									<option value="buy.html">buy.html</option>
-									<option value="contact.html">contact.html</option>
-									<option value="help.html">help.html</option>
-									<option value="index.html">index.html</option>
-									<option value="index_1.html">index_1.html</option>
-									<option value="login.html">login.html</option>
-									<option value="open-api.html">open-api.html</option>
-									<option value="recruit.html">recruit.html</option>
-									<option value="register.html">register.html</option>
-									<option value="successcase.html">successcase.html</option>
-								</select>
-							</div>
-		                </div>
-		                
-		                 <div class="layui-form-item">
-		                     <label class="layui-form-label">详情页模板</label>
-		                     <div class="layui-input-block">
-			                     <select name="contenttpl" id="contenttpl">
-			                     	<option value="">无</option>
-									<option value="about.html">about.html</option>
-									<option value="about_download.html">about_download.html</option>
-									<option value="about_jiejuefangan.html">about_jiejuefangan.html</option>
-									<option value="agent.html">agent.html</option>
-									<option value="buy.html">buy.html</option>
-									<option value="contact.html">contact.html</option>
-									<option value="help.html">help.html</option>
-									<option value="index.html">index.html</option>
-									<option value="index_1.html">index_1.html</option>
-									<option value="login.html">login.html</option>
-									<option value="open-api.html">open-api.html</option>
-									<option value="recruit.html">recruit.html</option>
-									<option value="register.html">register.html</option>
-									<option value="successcase.html">successcase.html</option>
-							 </select>
-							</div>
-		                </div>
-		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">状态</label>
-		                     <div class="layui-input-block">
-		                     	<input type="radio" name="status" value="1" title="显示" checked="">
-								<input type="radio" name="status" value="0" title="隐藏">
-		                     </div>
-		                </div>    
+					<div class="layui-form-item">
+						 <label class="layui-form-label">内容模型</label>
+						 <div class="layui-input-block">
+							<select name="model_id" lay-filter="model" lay-verify="required">
+								<option value="">请选择内容模型</option>
+									{foreach:items = $modelList key=$k item=$v}
+										<option value="{$v['id']}">{$v['name']}</option>
+									{/foreach}
+							</select>
+						</div>
+					</div>
+		               
+					 <div class="layui-form-item">
+						 <label class="layui-form-label">列表页模板</label>
+						 <div class="layui-input-block">
+							 <select name="listtpl">
+								<option value="">列表页模板</option>
+									{foreach:items = $template_file key=$k item=$v}
+										<option value="{$v}">{$v}</option>
+									{/foreach}
+							</select>
+						</div>
+					</div>
+					
+					 <div class="layui-form-item">
+						 <label class="layui-form-label">详情页模板</label>
+						 <div class="layui-input-block">
+							 <select name="contenttpl">
+								<option value="">详情页模板</option>
+								{foreach:items = $template_file key=$k item=$v}
+								<option value="{$v}">{$v}</option>
+								{/foreach}
+						 </select>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						 <label class="layui-form-label">状态</label>
+						 <div class="layui-input-block">
+							<input type="radio" name="status" value="1" title="显示" checked="">
+							<input type="radio" name="status" value="0" title="隐藏">
+						 </div>
+					</div>    
 					<div class="layui-form-item">
 						 <div class="layui-input-block">
-						    <button class="layui-btn" lay-submit="">立即提交</button>
+						    <button class="layui-btn" lay-submit lay-filter="submit" >立即提交</button>
 						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						 </div>
 					</div>
@@ -321,8 +319,12 @@
 </div>
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
 <script src="/static/js/admin.js"></script>
 <script>
+//实例化百度编辑器
+var ue = UE.getEditor('container');
 layui.config({
 	base: '/static/layui/'
 }).extend({
@@ -334,6 +336,13 @@ var table = layui.table;
 var element = layui.element;
 var $ = layui.jquery;
 var treetable = layui.treetable;
+var upload = layui.upload;
+//自定义表单验证
+  form.verify({
+	  en:[
+		  /^[a-zA-Z]+$/,'只能输入英文'
+	  ]
+  });
 treetable.render({
 	treeColIndex: 2,//树形图标显示在第几列
 	treeSpid: 0,//最上级的父级id
@@ -387,10 +396,18 @@ treetable.render({
 
 	}else if(obj.event === 'edit'){
 		$('#form')[0].reset(); //重置表单
+
 		loadData(obj.data, '#form')
 		form.render();
 		element.tabChange('tab', 't2');
 		form.render();
+		//编辑器赋值
+		if(obj.data.content){
+			ue.setContent(obj.data.content);
+		}else{
+			ue.setContent('');
+		}
+		
 		
 	}else if(obj.event === 'switch'){
 		var switchName = $(this).find('input[type="checkbox"]').attr("name");
@@ -398,7 +415,7 @@ treetable.render({
 		switchValue = Number(switchValue);
 		$.post('{url:/sorts/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
-				//layer.msg(data.msg)
+				layer.msg(data.msg)
 			}
 			else{
 				layer.msg(data.msg)
@@ -414,39 +431,52 @@ treetable.render({
 		switch(obj.event){
 			case 'add':
 				element.tabChange('tab', 't2');
-				$('#form')[0].reset();
+				$('#form')[0].reset();//重置表单
+				ue.setContent(''); //清空编辑器
 			break;
 
 		};
 		form.render();
 	});
-// 模型下拉联动
-form.on('select(model)', function(sortsData){
-	$.post('{url:/sorts/getValues/'+sortsData.value+'}',$("#form").serialize(),function(data){
-		form.val("sorts-form", { 
-		  "listtpl": data.listtpl
-		  ,"contenttpl": data.contenttpl
-		  ,
-		});
-	}, 'json');
-});      
+	// 模型下拉联动
+	form.on('select(model)', function(sortsData){
+		var thisform = $(this).parents('form');
+		var thislayfilter = thisform.attr('lay-filter');
+		
+		$.post('{url:/sorts/getValues/}',{model_id:sortsData.value},function(data){
+			form.val(thislayfilter, { 
+			  "listtpl": data.listtpl
+			  ,"contenttpl": data.contenttpl
+			  ,
+			});
+			if(data.type==1){
+				thisform.find("select[name=contenttpl]").attr({'disabled':true})
+				thisform.find("select[name=contenttpl]").val('')
+			}else{
+				thisform.find("select[name=contenttpl]").attr({'disabled':false})
+			}
+			form.render();
+			
+		}, 'json');
+	});      
 // 表单提交
 	form.on('submit(submit)', function(data){
-	   var url = $("#form").attr('action');
+		var thisform = $(this).parents('form');
+		var url = thisform.attr('action');
 	   $.ajax({
 	        url:url, //请求的服务端地址
 	        data:data.field,
 	        type:"post",
 	        dataType:"json",
 	        success:function(data){
-	            data = eval(data);
-	            layui.use('layer', function(){
-	                var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
-	                    if(data.url){
-	                        window.location.href=data.url;
-	                    }
-	                });
-	            });     
+				if(data.code){
+					layer.msg(data.msg);
+					setTimeout(function (){
+						window.location.reload();
+					}, 1000);				
+				}else{
+					layer.msg(data.msg);
+				}
 	        },
 	        error:function(){
 	          layer.msg('error'); //错误的处理
@@ -454,7 +484,28 @@ form.on('select(model)', function(sortsData){
 	    });
 	   return false;
 	});
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#icoup',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="ico"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+	})
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#picup',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="pic"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+	})
 })
+
 </script>
 </body>
 </html>

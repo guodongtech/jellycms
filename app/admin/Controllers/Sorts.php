@@ -43,7 +43,7 @@ class Sorts extends BaseController
     public function edit()
     {
 		$post = post();
-		if(!$post['name'] || is_null($post['pid']) || !$post['urlname'] || !$post['model_id']){
+		if(!$post['name'] || !$post['model_id']){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
@@ -51,44 +51,58 @@ class Sorts extends BaseController
 			exit(json_encode($rdata));
 		}
 		$data = $post;
-		// 判断栏目名称是否已存在
-		$check = $this->model->checkEdit($data);
-		if(!$post['id']){
-			if(count($check)>0){
-				$rdata = [
-					"code" => 0,
-					"msg" => "该栏目已存在",
-				];
-				exit(json_encode($rdata));	
+		
+		//单个和批量都按批量处理
+		$names = explode(',',$data['name']);
+		unset($data['name']);
+		if(!$data['id']){
+			//有栏目存在，直接返回错误信息
+			foreach($names as $key=>$value){
+				// 判断栏目名称是否已存在
+				$check = $this->model->checkName($value,$this->session->area_id);
+				if(!empty($check)){
+					$rdata = [
+						"code" => 0,
+						"msg" => $value."已存在",
+					];
+					return json_encode($rdata);					
+				}
 			}
-			$data['create_user'] = $this->session->id;
-			$data['create_time'] = date('Y-m-d H:i:s',time());
-			$data['status'] = 1;
-		}else{
-			if(count($check)>0 && $check[0]['id']!=$post['id']){
-				$rdata = [
-					"code" => 0,
-					"msg" => "该栏目已存在",
-				];
-				exit(json_encode($rdata));	
-			}
-			$data['update_user'] = $this->session->id;
-			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
+		$success = 0;
+		$error = 0;
+		$errorName = array();
+		foreach($names as $key=>$value){
+			$data['name'] = $value;
+			if(!$data['id']){
+				$data['create_user'] = $this->session->id;
+				$data['area_id'] = $this->session->area_id;
+				$data['create_time'] = date('Y-m-d H:i:s',time());
+				$data['status'] = 1;
+			}else{
+				$data['update_user'] = $this->session->id;
+				$data['update_time'] = date('Y-m-d H:i:s',time());
+			}
 
-		if($this->model->edit($data)){
+			if($this->model->edit($data)){
+				$success++;
+			}else{
+				$error++;
+				$errorName[] = $data['name'];
+			}
+		}
+		if(!$error){
 			$rdata = [
 				"code" => 1,
-				"msg" => "编辑成功",
-				"url" => '/'.ADMINNAME.'/sorts/index/',
+				"msg" => "操作完成",
 			];
-			exit(json_encode($rdata));				
+			return json_encode($rdata);				
 		}else{
 			$rdata = [
-				"code" => 2,
-				"msg" => "操作失败，请重试",
+				"code" => 0,
+				"msg" => implode(',', $errorName)."操作失败",
 			];
-			exit(json_encode($rdata));	
+			return json_encode($rdata);	
 		}
     }
     public function del()
@@ -99,8 +113,7 @@ class Sorts extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$Child = $this->model->getChild($id);
 		if(count($Child)>0){
@@ -108,8 +121,7 @@ class Sorts extends BaseController
 				"code" => 0,
 				"msg" => "有子菜单，无法删除",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		
 		
@@ -129,7 +141,7 @@ class Sorts extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -140,8 +152,7 @@ class Sorts extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -160,9 +171,10 @@ class Sorts extends BaseController
 		}
 		echo json_encode($rdata);
     }
-    public function getValues($model_id){
-    	$values = $this->modelModel->getValues($model_id);
-    	exit(json_encode($values));
+    public function getValues(){
+		$post = post();
+    	$values = $this->modelModel->getValues($post['model_id']);
+    	return json_encode($values);
     }
 
 
