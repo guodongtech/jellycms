@@ -82,10 +82,10 @@
 						 </div>
 					</div>
 					<div class="layui-form-item value" style="display:none;">
-						<label class="layui-form-label">字段值</label>
+						<label class="layui-form-label">标签值</label>
 						<div class="layui-input-block">
 							<textarea name="value" placeholder="多个选项用逗号隔开或者回车" class="layui-textarea"></textarea>
-							<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效。</div>
+							<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效。焦点离开此处在下方预览</div>
 						</div>
 					</div>
 					<div class="layui-form-item content">
@@ -115,33 +115,20 @@
 	</div>
 </script>
 <script type="text/html" id="radio">
-	<div class="layui-input-block">
-       <input type="radio" name="content" value="男" title="男" checked="">
-       <input type="radio" name="content" value="女" title="女">
-       <input type="radio" name="content" value="禁" title="禁用" disabled="">
-	</div>
+	<div class="layui-input-block radio"></div>
 </script>
 <script type="text/html" id="checkbox">
-    <div class="layui-input-block">
-      <input type="checkbox" name="content" value="写作" title="写作">
-      <input type="checkbox" name="content" value="阅读" title="阅读" checked="">
-      <input type="checkbox" name="content" value="游戏" title="游戏">
-    </div>
+    <div class="layui-input-block checkbox"></div>
 </script>
 <script type="text/html" id="select">
     <div class="layui-input-block">
-      <select name="content">
-		<option value=""></option>
-		<option value="0">写作</option>
-		<option value="1" selected="">阅读</option>
-		<option value="2">游戏</option>
-		<option value="3">音乐</option>
+      <select class="select" name="content">
       </select>
     </div>
 </script>
 <script type="text/html" id="pic">
 	<div class="layui-input-inline">
-		<input type="text" name="content" id="logo" placeholder="请上传图片" value="" class="layui-input">
+		<input type="text" name="content" placeholder="请上传图片" value="" class="layui-input">
 	</div>
 	<button type="button" class="layui-btn" id="upload">
 	  <i class="layui-icon">&#xe67c;</i>上传图片
@@ -149,7 +136,7 @@
 </script>
 <script type="text/html" id="file">
 	<div class="layui-input-inline">
-		<input type="text" name="content" id="file" placeholder="请上传文件" value="" class="layui-input">
+		<input type="text" name="content" placeholder="请上传文件" value="" class="layui-input">
 	</div>
 	<button type="button" class="layui-btn" id="upload">
 	  <i class="layui-icon">&#xe67c;</i>上传文件
@@ -157,7 +144,7 @@
 </script>
 <script type="text/html" id="time">
 	<div class="layui-input-block">
-		<input type="text" name="content" class="layui-input" id="time" placeholder="HH:mm:ss">
+		<input type="text" name="content" class="layui-input" id="timer" placeholder="HH:mm:ss">
 	</div>
 </script>
 <script type="text/html" id="editor">
@@ -185,6 +172,8 @@
 	var layer = layui.layer,form = layui.form;
 	var table = layui.table;
 	var $ = layui.jquery;
+	var upload = layui.upload;
+	var laydate = layui.laydate;
     var content = '';
     // select下拉框选中触发事件
     form.on("select(select)", function(data){
@@ -193,15 +182,37 @@
 	   $('#form .content-container').html($('#' + data.value).html());
 	   switch(data.value){
 			case 'checkbox':
-			
+				var value = $('#form .value textarea').val();
+				value = value.split(/,|\r|\n/);
+				for(var i=0; i<value.length; i++){
+					if(content){
+						var con = content.split(/,|\r|\n/);
+						var checked='';
+						for(var j=0; j<con.length; j++){
+							checked = value[i]==con[j]?'checked':checked;
+						}					
+					}
+					$('#form .content-container .checkbox').append('<input type="checkbox" name="content[]" '+checked+' value="'+ value[i] +'" title="'+value[i]+'">');
+					}
 				$('#form .value').show();
 				break;
 			case 'select':
-			
+				var value = $('#form .value textarea').val();
+				value = value.split(/,|\r|\n/);
+				for(var i=0; i<value.length; i++){
+					var selected = value[i]==content?'selected':'';
+					$('#form .content-container .select').append('<option '+selected+' value="'+ value[i] +'" title="'+value[i]+'">'+value[i]+'</option>');
+				}
+
 				$('#form .value').show();
 				break;
 			case 'radio':
-				
+				var value = $('#form .value textarea').val();
+				value = value.split(/,|\r|\n/);
+				for(var i=0; i<value.length; i++){
+					var checked = value[i]==content?'checked':'';
+					$('#form .content-container .radio').append('<input type="radio" name="content" '+checked+' value="'+ value[i] +'" title="'+value[i]+'">');
+				}
 				$('#form .value').show();
 				break;
 			default:
@@ -209,8 +220,52 @@
 			$('#form .content-container input[name=content]').val(content);//还原内容	   
 			$('#form .content-container textarea[name=content]').val(content);//还原内容	   
 	   }
-		form.render();	
+	   //初始化其它实例
+		switch(data.value){
+			case 'pic':
+				//执行实例
+				var uploadInst = upload.render({
+					elem: '#upload',
+					url: '{url:/upload/uploadFile}',
+					done: function(res){
+						//上传完毕回调
+						$('#form input[name="content"]').val(res.data.path);
+						layer.msg('上传成功')
+					}
+				})
+				break;
+			case 'file':
+				//执行实例
+				var uploadInst = upload.render({
+					elem: '#upload',
+					accept:'file',
+					url: '{url:/upload/uploadFile}',
+					done: function(res){
+						//上传完毕回调
+						$('#form input[name="content"]').val(res.data.path);
+						layer.msg('上传成功')
+					}
+				})
+				break;
+			case 'time':
+				laydate.render({
+					elem: '#timer'
+					,type: 'datetime'
+				});
+				break;
+			default:
+	   
+	   }
+		form.render();
+		//绑定变化事件
+		$('#form .value textarea').change(function(){
+			//layer.msg(1);
+			$('.layui-form-select dl dd.layui-this').trigger('click');//触发单击事件
+		})
     });
+
+	
+	
 	table.render({
 		elem: '#test',url:'{url:/label/getList}',
 		toolbar: '#toolbarDemo',
@@ -245,9 +300,6 @@
 					break;
 					case 'editor':
 						typetext = "编辑器";
-					break;
-					case 'switch':
-						typetext = "开关";
 					break;
 					case 'textarea':
 						typetext = "多行文本";
