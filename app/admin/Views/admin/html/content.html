@@ -74,7 +74,6 @@
 				}
 				
 			}},
-			{if:$model_id !=1}
 			{field:'istop', title:'置顶', width:90,event:'switch',templet: function(res){
 				if(res.istop == 1){
 					return '<input type="checkbox" name="istop"  checked lay-skin="switch" lay-text="Y|N">';
@@ -99,8 +98,6 @@
 				}
 				
 			}},
-			{/if}
-			{field:'visits', title:'访问量', width:120},
 			{field:'create_user', title:'添加用户', width:100},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
 		]],

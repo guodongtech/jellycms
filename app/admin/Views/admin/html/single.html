@@ -53,12 +53,13 @@
 		icon: 'layui-icon-tips',
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'name', title:'标题'},
-			{field:'status', title:'状态', width:90, templet: function(res){
+			{field:'name', title:'分类名'},
+			{field:'create_time', title:'创建时间',width:200},
+			{field:'status', title:'状态', width:90,event:'switch', templet: function(res){
 				if(res.status == 1){
-					return '<input type="checkbox" name="switch"  checked lay-skin="switch" lay-text="ON|OFF">';
+					return '<input type="checkbox" name="status"  checked lay-skin="switch" lay-text="ON|OFF">';
 				}else{
-					return '<input type="checkbox" name="switch" lay-skin="switch" lay-text="ON|OFF">';
+					return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
 				}
 				
 			}},
@@ -71,9 +72,22 @@
 	var data = obj.data;
 	//console.log(obj)
 	if(obj.event === 'browse'){
-		window.location.href='{$model_id}/'+obj.data.id;
+		window.open('/?{$urlname}_'+obj.data.id);
 	}else if(obj.event === 'edit'){
 		window.location.href='{url:/single/single_edit/}'+obj.data.id;
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/single/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg)
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
+		form.render();
 	}
 });
 

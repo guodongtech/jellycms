@@ -61,7 +61,7 @@ class Index extends BaseController
 		if(count($params) == 1){
 			$sort = $this->model->getSortByUrlname($params[0]);
 		}else if(count($params) == 2){
-			$sort = $this->model->getSortByUrlname($params[0]);
+			$sort = $this->model->getSortById($params[1]);
 			//两个参数 可能是pm_modelid_id urlname_page
 			if($sort['id']){
 				$this->data['page'] = $params[1];

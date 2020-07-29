@@ -32,6 +32,14 @@ class SingleModel extends Model
 							->getRowArray();
 		return $result;
 	}
+    public function getModelInfo($model_id){
+		$builder = $this->db->table('model');
+		$result   = $builder->select('*')
+							->where(['id'=>$model_id])
+							->get()
+							->getRowArray();
+		return $result;
+	}
     public function edit($data){
 		
 		$res = $this->save($data);

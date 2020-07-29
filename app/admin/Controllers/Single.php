@@ -12,8 +12,10 @@ class Single extends BaseController
 
     public function index($model_id)
     {
+		$modelInfo = $this->model->getModelInfo($model_id);
 		$data = [
 			'model_id'=>$model_id,
+			'urlname'=>$modelInfo['urlname'],
 		];
          return view('single.html', $data);
     }
@@ -49,5 +51,32 @@ class Single extends BaseController
 			return error("操作失败", '/'.ADMINNAME.'/single/index/');
 		}
     }
-    
+    public function switch()
+    {
+		$post = post();
+		$allowSwitch = ['status'];
+		if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $post['id'],
+			$post['switchName'] => (int)$post['switchValue'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		echo json_encode($rdata);
+    }
 }
