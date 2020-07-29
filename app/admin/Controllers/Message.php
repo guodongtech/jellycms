@@ -60,19 +60,62 @@ class Message extends BaseController
     // 删除
     public function del()
     {
-        if (! $id = get('id', 'int')) {
-            error('传递的参数值错误！', - 1);
+        $id = post('id');
+        $table_name = post('table_name');
+        if(!$id){
+            $rdata = [
+                "code" => 0,
+                "msg" => "参数不足",
+            ];
+            return json_encode($rdata);
         }
-        
-        if ($this->model->delMessage($id)) {
-            $this->log('删除留言' . $id . '成功！');
-            success('删除成功！', - 1);
-        } else {
-            $this->log('删除留言' . $id . '失败！');
-            error('删除失败！', - 1);
+        $data = [
+            'id' => $id,
+            'deleted' => 1,
+        ];
+        if($this->model->edit($data,$table_name)){
+            $rdata = [
+                "code" => 1,
+                "msg" => "操作成功",
+            ];
+        }else{
+            $rdata = [
+                "code" => 0,
+                "msg" => "操作失败",
+            ];
         }
-    }
 
+        return json_encode($rdata);
+    }
+    public function switch()
+    {
+        $post = post();
+        $table_name = $post['table_name'];
+        $allowSwitch = ['status'];
+        if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
+            $rdata = [
+                "code" => 0,
+                "msg" => "参数不足",
+            ];
+            return json_encode($rdata);
+        }
+        $data = [
+            'id' => $post['id'],
+            $post['switchName'] => (int)$post['switchValue'],
+        ];
+        if($this->model->edit($data,$table_name)){
+            $rdata = [
+                "code" => 1,
+                "msg" => "操作成功",
+            ];
+        }else{
+            $rdata = [
+                "code" => 0,
+                "msg" => "操作失败",
+            ];
+        }
+        return json_encode($rdata);
+    }
     // 修改
     public function mod()
     {

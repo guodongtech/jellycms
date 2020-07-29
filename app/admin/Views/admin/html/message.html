@@ -52,12 +52,58 @@
 		icon: 'layui-icon-tips',
 		cols: [[
 		{foreach:items=$fields key=$k item=$v}
-			{field:'{$k}', title:'{$v}',fixed: 'left', unresize: false, sort: true},
+			{if: $k !== 'status'}
+				{field:'{$k}', title:'{$v}', unresize: false, sort: true},
+			{else:}
+				{field:'{$k}', title:'{$v}', event: 'switch',templet: function(res){
+					if(res.status == 1){
+						return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+					}else{
+						return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
+					}
+				}},
+			{/if}
+			
 		{/foreach}
 			{fixed: 'right', title:'操作', toolbar: '#barDemo',unresize: true,width:120}
 		]],
-		page: true
+		page: true,
 	});
+  	//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	var table_name = '{$table_name}';
+	//console.log(obj)
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/message/del/}',{id:obj.data.id,table_name:table_name},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+					obj.del();
+				}
+				else{
+					layer.msg(data.msg)
+				}
+			}, 'json');
+			layer.close(index);
+		});
+	}else if(obj.event === 'edit'){
+		
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/message/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue,table_name:table_name},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg)
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
+		form.render();
+	}
+});
 }();
 </script>
 </body>

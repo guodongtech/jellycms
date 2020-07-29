@@ -33,7 +33,14 @@ class MessageModel extends Model
                             ->getRowArray();
         return $result;
     }
-
+    public function edit($data,$table_name){
+        $id = $data['id'];
+        unset($data['id']);
+        $table_name = 'form_'.$table_name;
+        $builder = $this->db->table($table_name);
+        $builder->where(['id'=>$id])->update($data);
+        return $this->db->affectedRows();
+    }
     // 删除留言
     public function delMessage($id)
     {
