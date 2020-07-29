@@ -17,14 +17,16 @@ class ContentModel extends Model
     public function getList($model_id)
     {
 		$builder = $this->db->table('content');
-		$result   = $builder->select('content.*, sorts.name as sort_name, admin.name as create_user')
+		$result   = $builder->select('content.*, model.urlname as m_urlname, model.id as model_id, sorts.urlname as urlname, sorts.name as sort_name, admin.name as create_user')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
+							->join('model', 'model.id = sorts.model_id', 'left')
 							->join('admin', 'admin.id = content.create_user', 'left')
 							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
 							->get()
 							->getResultArray();
-		//$sql = "SELECT c.*,s.name as sort_name FROM ".$this->db->prefixTable('content')." as c left join ".$this->db->prefixTable('sorts')." as s on s.id=c.sorts_id where c.deleted=0";
-		//$result = $this->db->query($sql)->getResultArray();
+		foreach($result as $key=>$value){
+			$result[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'], $value['id'])):url(array($value['m_urlname'],$value['id']));
+		}
         return $result;
     }
     public function getContent($id)

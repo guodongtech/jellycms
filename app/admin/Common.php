@@ -1,19 +1,23 @@
 <?php
-
 /**
- * The goal of this file is to allow developers a location
- * where they can overwrite core procedural functions and
- * replace them with their own. This file is loaded during
- * the bootstrap process and is called during the frameworks
- * execution.
- *
- * This can be looked at as a `master helper` file that is
- * loaded early on, and may also contain additional functions
- * that you'd like to use throughout your entire application
- *
- * @link: https://codeigniter4.github.io/CodeIgniter4/
+ * @copyright (c) 2015-2099 www.guodong.tech
+ * @file Common.php
+ * @brief 自定义函数
+ * @author zhangteng
+ * @date 2014/7/14 23:11:50
+ * @version 1.0.0
  */
-
+ //前台 url
+ function url($parrams){
+	$config = new \Config\Config();
+	if($config->rewriteRule == 'url'){
+		count($parrams)>1?$url = '/?'.implode('/', $parrams).'.'.$config->suffix:$url = '/?'.implode('/', $parrams).'/';
+		return $url;
+	}else{
+		count($parrams)>1?$url = '/'.implode('/', $parrams).'/'.$config->suffix:$url = '/'.implode('/', $parrams).'/';
+		return $url;
+	}
+ }
 	//返回API JSON数据
 	function apiresponse($code = 0, $msg = "", $data = array(), $url = ""){
 		$res = [

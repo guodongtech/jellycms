@@ -125,39 +125,41 @@ var layer = layui.layer,form = layui.form;
 			{field:'name', title:'英文名称', width:120},
 			{field:'description', title:'字段说明', width:120},
 			{field:'type', title:'类型', width:120,hide:true},
-			{field:'type_text', title:'类型', width:90, templet: function(res){
-				switch(parseInt(res.type)){
-					case 1:
-						return '单行文本';
+			{field:'typetext', title:'类型', width:90, templet: function(res){
+				var typetext;
+				switch(res.type){
+					case 'input':
+						typetext = "单行文本";
 					break;
-					case 2:
-						return '多行文本';
+					case 'time':
+						typetext = "时间";
 					break;
-					case 3:
-						return '单选按钮';
+					case 'pic':
+						typetext = "图片";
 					break;
-					case 4:
-						return '多选按钮';
+					case 'file':
+						typetext = "附件";
 					break;
-					case 5:
-						return '图片上传';
+					case 'editor':
+						typetext = "编辑器";
 					break;
-					case 6:
-						return '附件上传';
+					case 'textarea':
+						typetext = "多行文本";
 					break;
-					case 7:
-						return '日期选择';
+					case 'radio':
+						typetext = "单选按钮";
 					break;
-					case 8:
-						return '编辑器';
+					case 'checkbox':
+						typetext = "多选按钮";
 					break;
-					case 9:
-						return '下拉选择';
+					case 'select':
+						typetext = "下拉选择";
 					break;
 					default:
-						return '错误！';
+						typetext = "错误类型";
 					
 				}
+				return typetext;
 			}},
 			{field:'model_id', title:'关联模型', width:120,hide:true},
 			{field:'model_name', title:'关联模型', width:120},

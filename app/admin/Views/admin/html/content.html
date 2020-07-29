@@ -32,14 +32,45 @@
 	  	   <div class="layui-tab-item layui-show">
 				<table class="layui-hide" id="table" lay-filter="test"></table>
 				<script type="text/html" id="toolbarDemo">
-					<div class="layui-btn-container">
-						<button class="layui-btn layui-btn-sm" lay-event="add">添加{$model_name}</button>
+
+					<div class="layui-btn-container layui-input-inline">
+						<div class="layui-btn-group">
+							<button type="button" class="layui-btn layui-btn-sm"  lay-event="add">添加</button>
+							<button type="button" class="layui-btn layui-btn-sm">批量删除</button>
+						</div>
+						<div class="layui-btn-group">
+							<button type="button" class="layui-btn layui-btn-sm">复制</button>
+							<button type="button" class="layui-btn layui-btn-sm">移动</button>
+						</div>
 					</div>
+					<div class="layui-input-inline">到</div>
+					<form action="" method="post" id="form" class="layui-form layui-input-inline">
+						<div class="layui-input-inline" style="min-width:200px;">
+							<select name="sorts">
+								<option value=""></option>
+								<option value="0">写作</option>
+								<option value="1" selected="">阅读</option>
+								<option value="2">游戏</option>
+								<option value="3">音乐</option>
+								<option value="4">旅行</option>
+							</select>
+						</div>
+						<div class="layui-input-inline" style="width:200px;">
+							<input type="text" name="keywords" placeholder="输入关键词" class="layui-input">
+						</div>
+						<div class="layui-input-inline">
+							<button class="layui-btn" id="submit" type="submit">搜索</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+					</form>
 				</script>
 				<script type="text/html" id="barDemo">
-					<a class="layui-btn layui-btn-xs" lay-event="preview">预览</a>
-					<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-					<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+					<div class="layui-btn-group">
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon"></i></button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="del"><i class="layui-icon"></i></button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="browse"><i class="layui-icon"></i></button>
+					</div>
+ 
 				</script>  
 	  	   </div>
 	  </div>
@@ -61,9 +92,36 @@
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
 		cols: [[
+			{type: 'checkbox', fixed: 'left'},
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'sort_name', title:'栏目', width:120},
 			{field:'title', title:'标题'},
+			{field:'sort_name', title:'栏目名称', width:120},
+			{field:'link', title:'链接',hide:true},
+			{field:'top', title:'置顶', width:90,event:'switch',templet: function(res){
+				if(res.top == 1){
+					return '<input type="checkbox" name="top"  checked lay-skin="switch" lay-text="Y|N">';
+				}else{
+					return '<input type="checkbox" name="top" lay-skin="switch" lay-text="Y|N">';
+				}
+				
+			}},
+			{field:'recommend', title:'推荐', width:120,event:'switch',templet: function(res){
+				if(res.recommend == 1){
+					return '<input type="checkbox" name="recommend"  checked lay-skin="switch" lay-text="Y|N">';
+				}else{
+					return '<input type="checkbox" name="recommend" lay-skin="switch" lay-text="Y|N">';
+				}
+				
+			}},
+			{field:'headline', title:'头条', width:120,event:'switch',templet: function(res){
+				if(res.recommend == 1){
+					return '<input type="checkbox" name="headline"  checked lay-skin="switch" lay-text="Y|N">';
+				}else{
+					return '<input type="checkbox" name="headline" lay-skin="switch" lay-text="Y|N">';
+				}
+				
+			}},
+			{field:'create_user', title:'创建用户', width:100},
 			{field:'create_time', title:'添加时间', width:180},
 			{field:'sorting', title:'排序', width:80},
 			{field:'status', title:'状态', width:90,event:'switch', templet: function(res){
@@ -74,31 +132,6 @@
 				}
 				
 			}},
-			{field:'istop', title:'置顶', width:90,event:'switch',templet: function(res){
-				if(res.istop == 1){
-					return '<input type="checkbox" name="istop"  checked lay-skin="switch" lay-text="Y|N">';
-				}else{
-					return '<input type="checkbox" name="istop" lay-skin="switch" lay-text="Y|N">';
-				}
-				
-			}},
-			{field:'isrecommend', title:'推荐', width:120,event:'switch',templet: function(res){
-				if(res.isrecommend == 1){
-					return '<input type="checkbox" name="isrecommend"  checked lay-skin="switch" lay-text="Y|N">';
-				}else{
-					return '<input type="checkbox" name="isrecommend" lay-skin="switch" lay-text="Y|N">';
-				}
-				
-			}},
-			{field:'isheadline', title:'头条', width:120,event:'switch',templet: function(res){
-				if(res.isrecommend == 1){
-					return '<input type="checkbox" name="isheadline"  checked lay-skin="switch" lay-text="Y|N">';
-				}else{
-					return '<input type="checkbox" name="isheadline" lay-skin="switch" lay-text="Y|N">';
-				}
-				
-			}},
-			{field:'create_user', title:'添加用户', width:100},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
 		]],
 		page: true
@@ -106,39 +139,40 @@
 
 	//监听行工具事件
 	table.on('tool(test)', function(obj){
-	var data = obj.data;
-	//console.log(obj)
-	if(obj.event === 'del'){
-		layer.confirm('真的删除行么', function(index){
-			$.post('{url:/content/del}',{id:obj.data.id},function(data){
+		var data = obj.data;
+		//console.log(obj)
+		if(obj.event === 'del'){
+			layer.confirm('真的删除行么', function(index){
+				$.post('{url:/content/del}',{id:obj.data.id},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg)
+						obj.del();
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				},'json');
+				layer.close(index);
+			});
+		}else if(obj.event === 'edit'){
+			window.location.href='{url:/Content/ContentEdit/}{$model_id}/'+obj.data.id;
+		}else if(obj.event === 'browse'){
+			window.open(obj.data.link);
+		}else if(obj.event === 'switch'){
+			var switchName = $(this).find('input[type="checkbox"]').attr("name");
+			var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+			switchValue = Number(switchValue);
+			$.post('{url:/content/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 				if(data.code == 1){
 					layer.msg(data.msg)
-					obj.del();
 				}
 				else{
 					layer.msg(data.msg)
 				}
-			},'json');
-			layer.close(index);
-		});
-	}else if(obj.event === 'edit'){
-		window.location.href='{url:/Content/ContentEdit/}{$model_id}/'+obj.data.id;
-		
-	}else if(obj.event === 'switch'){
-		var switchName = $(this).find('input[type="checkbox"]').attr("name");
-		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
-		switchValue = Number(switchValue);
-		$.post('{url:/content/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
-			if(data.code == 1){
-				layer.msg(data.msg)
-			}
-			else{
-				layer.msg(data.msg)
-			}
-		}, 'json');
-		form.render();
-	}
-});
+			}, 'json');
+			form.render();
+		}
+	});
 
 	//头工具栏事件
 	table.on('toolbar(test)', function(obj){
@@ -150,15 +184,6 @@
 		};
 		form.render();
 	});
-
-
-
-
-
-
-
-
-
 }();
 </script>
 </body>

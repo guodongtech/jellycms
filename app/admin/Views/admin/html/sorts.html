@@ -358,12 +358,13 @@ treetable.render({
 		cols: [[
 			{type: 'checkbox', fixed: 'left'},
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'name', title:'栏目名称', width:120},
+			{field:'name', title:'栏目名称'},
 			{field:'urlname', title:'URL名称', width:120},
-			{field:'model_id', title:'模型', width:120},
+			{field:'m_name', title:'模型', width:120},
+			{field:'model_id', title:'模型', hide:true},
 			{field:'listtpl', title:'列表页模板', width:120},
 			{field:'contenttpl', title:'详情页模板', width:120},
-			{field:'sorting', title:'排序'},
+			{field:'sorting', title:'排序', width:120},
 			{field:'status', title:'状态', width:100,event:'switch', templet: function(res){
 				if(res.status == 1){
 					return '<input type="checkbox" name="status"  checked lay-skin="switch" lay-text="ON|OFF">';

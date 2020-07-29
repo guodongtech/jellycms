@@ -156,7 +156,7 @@ class Content extends BaseController
     public function switch()
     {
 		$post = post();
-		$allowSwitch = ['status', 'istop', 'isrecommend', 'isheadline'];
+		$allowSwitch = ['status', 'top', 'recommend', 'headline'];
 		if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
 			$rdata = [
 				"code" => 0,
@@ -182,39 +182,5 @@ class Content extends BaseController
 		}
 		echo json_encode($rdata);
     }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

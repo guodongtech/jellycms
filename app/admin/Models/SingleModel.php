@@ -17,10 +17,16 @@ class SingleModel extends Model
     public function getList($model_id)
     {
 		$builder = $this->db->table('sorts');
-		$result   = $builder->select('*')
-							->where(['model_id'=>$model_id])
-							->get()
+		$result   = $builder->select('sorts.*,model.urlname as m_urlname, model.id as model_id')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.deleted'=>0, 'sorts.model_id'=>$model_id])
+							->get($num)
 							->getResultArray();
+							
+		
+		foreach($result as $key=>$value){
+			$result[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'])):url(array($value['m_urlname'].'_'.$value['id']));
+		}
         return $result;
     }
 

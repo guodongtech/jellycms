@@ -17,8 +17,9 @@ class SortsModel extends Model
     public function getList()
     {
 		$builder = $this->db->table('sorts');
-		$result   = $builder->select('*')
-							->where(['deleted'=>0])
+		$result   = $builder->select('sorts.*, model.name as m_name')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.deleted'=>0])
 							->get()
 							->getResultArray();
 							

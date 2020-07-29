@@ -30,8 +30,10 @@
 					</div>
 				</script>
 				<script type="text/html" id="barDemo">
-					<a class="layui-btn layui-btn-xs" lay-event="browse">预览</a>
-					<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+					<div class="layui-btn-group">
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="edit"><i class="layui-icon"></i></button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="browse"><i class="layui-icon"></i></button>
+					</div>
 				</script>
 	  	   </div>
 	  </div>
@@ -63,16 +65,16 @@
 				}
 				
 			}},
-			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+			{field:'link', title:'分类名',hide:true},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:100}
 		]],
 		page: true
 	});
 	//监听行工具事件
 	table.on('tool(test)', function(obj){
 	var data = obj.data;
-	//console.log(obj)
 	if(obj.event === 'browse'){
-		window.open('/?{$urlname}_'+obj.data.id);
+		window.open(obj.data.link);
 	}else if(obj.event === 'edit'){
 		window.location.href='{url:/single/single_edit/}'+obj.data.id;
 	}else if(obj.event === 'switch'){

@@ -13,6 +13,77 @@
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body class="guodong-body">
+<style>
+.layui-upload-img {
+    width: 92px;
+    height: 92px;
+}
+.layui-elem-quote{
+	margin-left:100px;
+	zoom:1;
+	display:inline-block; 
+	*display:inline; 
+	*zoom:1;
+}
+.pics-wrap{
+	display:none;
+}
+.layui-upload-list ul{
+	display:flex;
+	justify-content:flex-start;
+	flex-direction:row;
+	flex-wrap:wrap;
+}
+.layui-upload-list ul li{
+	border:1px solid #eee;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-direction:column;
+	margin-right:6px;
+	padding:6px;
+	transition:all 0.2s ease-in;
+	position:relative;
+	overflow:hidden;
+}
+.layui-upload-list ul li i{
+	position:absolute;
+	top:100%;
+	font-size:30px;
+	z-index:0;
+	transition:all 0.2s ease-in;
+	opacity:0;
+	color:#d9534f;
+}
+.layui-upload-list ul li span{
+	width:100%;
+	height:26px;
+	line-height:26px;
+	display:block;
+	border:1px solid #f5f5f5;
+	margin-top:6px;
+	color:#333;
+	text-align:center;
+	transition:all 0.2s ease-in-out;
+	width:120px;
+}
+.layui-upload-list ul li span:focus{
+	border:1px solid #999
+}
+.layui-upload-list ul li:hover i{
+	z-index:10;
+	top:40px;
+	opacity:1;
+}
+.layui-upload-list ul li:hover{
+	background:rgba(0,0,0,0.1);
+	cursor:pointer;
+}
+span[contenteditable]:empty:before {
+	content: attr(placeholder);
+	color: #cccccc;
+}
+</style>
 <div class="layui-card layadmin-header">
 	<div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
 		<a lay-href="">主页</a><span lay-separator="">/</span>
@@ -35,8 +106,8 @@
 		  	     	<input type="hidden" name="id" value="{$id}"> 
 		  	     	<div class="layui-tab">
 					  <ul class="layui-tab-title">
-					    <li class="layui-this">基本内容</li>
-					    <li>高级内容</li>
+					    <li class="layui-this">基础内容</li>
+					    <li>SEO及其它设置</li>
 					  </ul>
 					  <div class="layui-tab-content">
 					    <div class="layui-tab-item layui-show">
@@ -44,7 +115,7 @@
 			                     <label class="layui-form-label">栏目名称   <span class="layui-text-red">*</span></label>
 			                     <div class="layui-input-inline">
 			                     	<select name="sorts_id" lay-verify="required">
-				                        <option value="">请选择栏目名称</option>
+				                        <option value="">选择栏目名称</option>
 										{foreach:items = $sorts key=$k item=$v}
 										<option {if:$content['sorts_id']==$v['id']}selected{/if} value="{$v.id}">{$v.name}</option>
 											{foreach:items = $v['child'] key=$k1 item=$v1}
@@ -61,8 +132,32 @@
 			                     	<input type="text" name="title" lay-verify="required" placeholder="内容标题" value="" class="layui-input">
 			                     </div>
 			                </div>
- 		                	
-			                			                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">内容</label>
 			                     <div class="layui-input-block">
@@ -73,52 +168,60 @@
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">tags</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="tags" value="" placeholder="请输入文章tag，英文逗号隔开" class="layui-input">
+			                     	<input type="text" name="tags" value="" placeholder="输入文章tag，英文逗号隔开" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">作者</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="author" placeholder="请输入作者" value="" class="layui-input">
+			                     	<input type="text" name="author" placeholder="输入作者" value="" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">来源</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="source" placeholder="请输入来源" value="" class="layui-input">
+			                     	<input type="text" name="source" placeholder="输入来源" value="" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">缩略图</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="pic" id="pic" value="" placeholder="请上传缩略图" class="layui-input">
+			                     	<input type="text" name="pic" value="" placeholder="上传缩略图" class="layui-input">
 			                     </div>
-			                     <button type="button" class="layui-btn upload watermark" data-des="pic">
+			                     <button type="button" class="layui-btn upload watermark" id="pic">
 								 	 <i class="layui-icon"></i>上传图片
 								 </button> 
 								 <div id="ico_box" class="pic addedit"></div>
 			                </div>
 			                
 			                <div class="layui-form-item">
-			                     <label class="layui-form-label">轮播多图</label>
-			                     <div class="layui-input-inline">
-			                     	<input type="text" name="pics" id="pics" value=""  placeholder="请上传轮播多图" class="layui-input">
-			                     </div>
-			                     <button type="button" class="layui-btn uploads watermark" data-des="pics">
-								 	 <i class="layui-icon"></i>上传多图
-								 </button> 
-								 <div id="pics_box" class="pic addedit" data-listidx="0"><dl style="cursor: pointer;"></dl></div>
+								<label class="layui-form-label">上传多图</label>
+								<div class="layui-input-inline">
+									<input type="text" name="pics"  placeholder="上传多图" class="layui-input">
+									<input type="hidden" name="pictitles" class="layui-input">
+								</div>
+								<button type="button" class="layui-btn uploads watermark" id="pics">
+									<i class="layui-icon"></i>上传多图
+								</button>
+								<div class="pics-wrap">
+									<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+										多图预览：
+										<div class="layui-upload-list" id="pics-preview">
+											<ul></ul>
+										</div>
+									</blockquote>
+								</div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">参数</label>
 			                     <div class="layui-input-block">
-									<input type="checkbox" name="istop" value="1" title="置顶">
-			                    	<input type="checkbox" name="isrecommend" value="1" title="推荐">
-			                    	<input type="checkbox" name="isheadline" value="1" title="头条">
+									<input type="checkbox" name="top" value="1" title="置顶">
+			                    	<input type="checkbox" name="recommend" value="1" title="推荐">
+			                    	<input type="checkbox" name="headline" value="1" title="头条">
 			                     </div>
 			                </div>
 					    </div>
@@ -141,38 +244,38 @@
 					   		 <div class="layui-form-item">
 			                     <label class="layui-form-label">标题颜色</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="color" placeholder="请选择标题颜色" value="" class="layui-input" autocomplete="off" >
+			                     	<input type="text" name="color" placeholder="选择标题颜色" value="" class="layui-input" autocomplete="off" >
 			                     </div>
 			                 </div>
 			                 
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">副标题</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="subtitle" placeholder="请输入副标题" value="" class="layui-input">
+			                     	<input type="text" name="subtitle" placeholder="输入副标题" value="" class="layui-input">
 			                     </div>
 			                 </div>
 			                 
 			                  <div class="layui-form-item">
 			                     <label class="layui-form-label">跳转外链接</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="link" placeholder="请输入跳转外链接" value="" class="layui-input">
+			                     	<input type="text" name="link" placeholder="输入跳转外链接" value="" class="layui-input">
 			                     </div>
 			                 </div>
 			                 
 			                 <div class="layui-form-item">
-			                     <label class="layui-form-label">发布时间</label>
+			                     <label class="layui-form-label">定时发布</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="date" value="" readonly="" placeholder="请选择发布时间" class="layui-input datetime" lay-key="1">
+			                     	<input type="text" name="date" value="" readonly="" placeholder="选择发布时间" class="layui-input datetime" lay-key="1">
 			                     </div>
-			                     <div class="layui-form-mid layui-word-aux">温馨提示：设置未来时间可定时发布！</div>
+			                     <div class="layui-form-mid layui-word-aux">满足条件，在最近一次请求时会触发发布动作</div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 		                		<label class="layui-form-label">附件</label>
 		                		<div class="layui-input-inline">
-			                     	<input type="text" name="enclosure" id="enclosure" placeholder="请上传附件" class="layui-input">
+			                     	<input type="text" name="otherfile" placeholder="上传附件" class="layui-input">
 			                     </div>
-			                     <button type="button" class="layui-btn file" data-des="enclosure">
+			                     <button type="button" class="layui-btn" id="otherfile">
 								 	 <i class="layui-icon"></i>上传附件
 								 </button>
 			                </div>
@@ -180,14 +283,14 @@
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">SEO关键字</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="keywords" value="" placeholder="请输入详情页SEO关键字" class="layui-input">
+			                     	<input type="text" name="keywords" value="" placeholder="输入详情页SEO关键字" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">SEO描述</label>
 			                     <div class="layui-input-block">
-			                     	<textarea name="description" placeholder="请输入详情页SEO描述" class="layui-textarea"></textarea>
+			                     	<textarea name="description" placeholder="输入详情页SEO描述" class="layui-textarea"></textarea>
 			                     </div>
 			                </div>
 			                
@@ -226,11 +329,22 @@
 	var table = layui.table;
 	var element = layui.element;
 	var $ = layui.jquery;
+	var upload = layui.upload;
 	{if:$id}
+	//动态回填表单
 	$.post('{url:/content/getContent}',{id:{$id}},function(data){
 		if(data.code == 1){
 			loadData(data.content, '#form')
 			form.render();
+			//处理多图
+			if(pics = $('#form input[name="pics"]').val()){
+				$('.pics-wrap').show('slow');
+				var pics = $('#form input[name="pics"]').val().split(',');
+				var pictitles = $('#form input[name="pictitles"]').val().split(',');
+				for(var i=0; i<pics.length; i++){
+					$('#form #pics-preview ul').append('<li><img class="layui-upload-img" src="'+ pics[i] +'" /><span contenteditable=true placeholder="图片标题">'+ pictitles[i] +'</span><i class="fa fa-trash-o" aria-hidden="true"></i></li>');
+				}
+			}
 			var ue = UE.getEditor('container');
 		}
 		else{
@@ -241,8 +355,118 @@
 	{else:}
 	var ue = UE.getEditor('container');
 	{/if}
-}();
 	
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#pic',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="pic"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})	
+	//执行实例 多图上传
+	var pics=new Array();
+	var pictitles=new Array();
+	pics = $('#form input[name="pics"]').val().split(','); //保存原始值
+	var uploadInst = upload.render({
+		elem: '#pics',
+		multiple: true,
+		url: '{url:/upload/uploadFile}',
+		before: function(res){
+			$('.pics-wrap').show('slow');
+		},
+		done: function(res){
+			//上传完毕回调
+			pics[pics.length]=res.data.path;
+			$('#form input[name="pics"]').val($('#form input[name="pics"]').val() + pics.toString());
+			$('#form #pics-preview ul').append('<li><img class="layui-upload-img" src="'+ res.data.path +'" /><span contenteditable=true placeholder="图片标题"></span><i class="fa fa-trash-o" aria-hidden="true"></i></li>');
+			$('.layui-upload-list ul li span').each(function(i){
+				pictitles[i]=$(this).html();
+			})
+			$('#form input[name="pictitles"]').val(pictitles.toString());
+			form.render;
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
+	//执行实例 上传文件
+	var uploadInst = upload.render({
+		elem: '#otherfile',
+		accept:"file",
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="otherfile"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
+}();
+//删除图片
+ $("body").on("click",".layui-upload-list ul li i",function(){
+	$(this).parents('li').remove();
+	//重新为表单赋值
+	var pics=new Array();
+	var pictitles=new Array();
+	$('.layui-upload-list ul li img').each(function(i){
+		pics[i]=$(this).attr('src');
+	})
+	$('#form input[name="pics"]').val(pics.toString());
+	
+	$('.layui-upload-list ul li span').each(function(i){
+		pictitles[i]=$(this).html();
+	})
+	$('#form input[name="pictitles"]').val(pictitles.toString());
+	if($('.layui-upload-list ul li').length == 0){
+		$('.pics-wrap').hide('slow');
+		$('#form input[name="pics"]').val('')
+		$('#form input[name="pictitles"]').val('')
+	}
+	layer.msg('已删除');
+});
+ $("body").on("focusout",".layui-upload-list ul li span",function(e){
+	var pictitles=new Array();
+	$('.layui-upload-list ul li span').each(function(i){
+		pictitles[i]=$(this).html();
+	})
+	$('#form input[name="pictitles"]').val(pictitles.toString());
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 </body>
