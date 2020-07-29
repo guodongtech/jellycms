@@ -28,7 +28,7 @@ class Message extends BaseController
                     'status'=>'前台是否显示',
                     // 'update_time'=>'更新时间',
                     // 'deleted'=>'是否删除',
-                    'create_user'=>'创建人',
+                    'create_user_name'=>'创建人',
                 ];
         // 获取自定义字段
         $field_all = $this->model->getExtFields($form_id);
@@ -40,6 +40,7 @@ class Message extends BaseController
         $data['forms'] = $forms;
         $data['fields'] = $fields;
         $data['table_name'] = $form_massage['table_name'];
+        $data['issystem'] = $form_massage['issystem'];
 		echo view('message.html',$data);
     }
     // 列表
@@ -107,6 +108,44 @@ class Message extends BaseController
             $rdata = [
                 "code" => 1,
                 "msg" => "操作成功",
+            ];
+        }else{
+            $rdata = [
+                "code" => 0,
+                "msg" => "操作失败",
+            ];
+        }
+        return json_encode($rdata);
+    }
+    // 消息回复
+    public function reply()
+    {
+        $post = post();
+        $table_name = $post['table_name'];
+
+        if(!$post['pid'] || is_null($post['content'])){
+            $rdata = [
+                "code" => 0,
+                "msg" => "参数不足",
+            ];
+            return json_encode($rdata);
+        }
+        $data = [
+            'pid' => $post['pid'],
+            'content' => $post['content'],
+            'area_id' => session('area_id'),
+            'create_user' => session('id'),
+            'create_time' => date("Y-m-d H:i:s"),
+            'status' => 1,
+            'deleted' => 0,
+        ];
+        $add_res = $this->model->edit($data,$table_name);
+        if($add_res>0){
+            $data['id'] = $add_res;
+            $rdata = [
+                "code" => 1,
+                "msg" => "操作成功",
+                "data" => $data,
             ];
         }else{
             $rdata = [
