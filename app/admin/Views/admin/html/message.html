@@ -27,7 +27,10 @@
 	  	   <div class="layui-tab-item layui-show">
 	  	   			<table class="layui-hide" id="table" lay-filter="test"></table>
 	  	   			<script type="text/html" id="barDemo">
-						<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+						<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+						{if: $issystem == 1}
+						<a class="layui-btn layui-btn-xs" lay-event="reply">回复</a>
+						{/if}
 						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 					</script>
 	  	 </div>
@@ -39,7 +42,11 @@
 </div>
 <script src="/static/layui/layui.all.js"></script>
 <script>
-!function(){
+layui.config({
+	base: '/static/layui/'
+}).extend({
+	treetable: 'treetable-lay/treetable'
+}).use(['layer', 'table', 'form', 'jquery', 'element'], function(){
   var layer = layui.layer,form = layui.form;
   var table = layui.table;
   var $ = layui.jquery;
@@ -47,18 +54,86 @@
   table.render({
 		elem: '#table',url:'{url:/Message/getList/}{$table_name}',
 		// toolbar: '#toolbarDemo',
-		title: '字段列表',
+		title: '信息列表',
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
 		cols: [[
 		{foreach:items=$fields key=$k item=$v}
-			{field:'{$k}', title:'{$v}',fixed: 'left', unresize: false, sort: true},
+			{if: $k !== 'status'}
+				{field:'{$k}', title:'{$v}', unresize: false, sort: true},
+			{else:}
+				{field:'{$k}', title:'{$v}', event: 'switch',templet: function(res){
+					if(res.status == 1){
+						return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+					}else{
+						return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
+					}
+				}},
+			{/if}
+			
 		{/foreach}
-			{fixed: 'right', title:'操作', toolbar: '#barDemo',unresize: true,width:120}
+			{fixed: 'right', title:'操作', toolbar: '#barDemo',unresize: true}
 		]],
-		page: true
+		page: true,
 	});
-}();
+  	//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	var table_name = '{$table_name}';
+	//console.log(obj)
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/message/del/}',{id:obj.data.id,table_name:table_name},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+					obj.del();
+				}
+				else{
+					layer.msg(data.msg)
+				}
+			}, 'json');
+			layer.close(index);
+		});
+	}else if(obj.event === 'check'){
+
+	}else if(obj.event === 'reply'){
+		layer.prompt({
+	        formType: 2,
+	        title: '对 ID 为 ['+ data.id +'] 的信息回复',
+	    }, function(value, index){
+	    	$.post('{url:/message/reply/}',{pid:obj.data.id,table_name:table_name,content:value},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+					// 插入一行
+					var tabledata = table.cache['table'];
+					tabledata.push(data.data)
+					table.reload("table", {
+						data: tabledata,
+					})
+				}
+				else{
+					layer.msg(data.msg)
+				}
+			}, 'json');
+
+	        layer.close(index);
+	    });
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/message/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue,table_name:table_name},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg)
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
+		form.render();
+	}
+});
+});
 </script>
 </body>
 </html>

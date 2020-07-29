@@ -10,9 +10,11 @@ class MessageModel extends Model
     {
         $offset = ($page-1)*$limit;
         $table_name = "form_".$table_name;
-        $builder = $this->db->table($table_name);
-        $res   = $builder->select('*')
-                            ->where(['deleted'=>0])
+        $builder = $this->db->table($table_name." f");
+        $res   = $builder->select('f.*,a.name as create_user_name')
+                            ->join('admin a', 'f.create_user = a.id', 'left')
+                            ->where(['f.deleted'=>0])
+                            ->orderby('f.id asc')
                             ->get($limit, $offset)
                             ->getResultArray();
         $total = $builder->select('*')
@@ -33,7 +35,23 @@ class MessageModel extends Model
                             ->getRowArray();
         return $result;
     }
-
+    public function edit($data,$table_name){
+        if(isset($data['id']) && $data['id']>0){
+            $id = $data['id'];
+            unset($data['id']);
+            $table_name = 'form_'.$table_name;
+            $builder = $this->db->table($table_name);
+            $builder->where(['id'=>$id])->update($data);
+            return $this->db->affectedRows();
+        }else{
+            $table_name = 'form_'.$table_name;
+            $builder = $this->db->table($table_name);
+            $builder->insert($data);
+            return $this->db->insertID();
+        }
+        
+        
+    }
     // 删除留言
     public function delMessage($id)
     {
