@@ -1,0 +1,149 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body class="guodong-body">
+{include:head.html}
+<div class="layui-fluid">
+<div class="layui-row">
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">单篇编辑</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+		  <form action="{url:/single/edit}" method="post" id="form" class="layui-form">
+				<input type="hidden" name="id" value="{$sortinfo.id}"> 
+				<div class="layui-form-item">
+					 <label class="layui-form-label">分类名</label>
+					 <div class="layui-input-inline">
+						<input type="text" name="name" disabled value="{$sortinfo.name}" class="layui-input layui-disabled">
+					 </div>
+				</div>
+				<div class="layui-form-item">
+					 <label class="layui-form-label">副标题</label>
+					 <div class="layui-input-inline">
+						<input type="text" name="subname" value="{$sortinfo.subname}" placeholder="副标题" class="layui-input">
+					 </div>
+				</div>
+				
+				<div class="layui-form-item">
+					 <label class="layui-form-label">跳转链接</label>
+					 <div class="layui-input-inline">
+						<input type="text" name="outlink" value="{$sortinfo.outlink}" placeholder="跳转链接" class="layui-input">
+					 </div>
+				</div>
+
+				 <div class="layui-form-item">
+					 <label class="layui-form-label">栏目缩略图</label>
+					 <div class="layui-input-inline">
+						<input type="text" name="ico" id="ico" value="{$sortinfo.ico}"  placeholder="上传栏目缩略图" class="layui-input">
+					 </div>
+					 <button type="button" class="layui-btn upload" id="icoup" data-des="ico">
+						 <i class="layui-icon"></i>上传图片
+					 </button>
+					 <div id="ico_box" class="pic"></div>
+				</div>
+				
+				<div class="layui-form-item">
+					 <label class="layui-form-label">栏目大图</label>
+					 <div class="layui-input-inline">
+						<input type="text" name="pic" value="{$sortinfo.pic}" placeholder="上传栏目大图" class="layui-input">
+					 </div>
+					 <button type="button" class="layui-btn upload" id="picup" data-des="pic">
+						 <i class="layui-icon"></i>上传图片
+					 </button>
+					 <div id="pic_box" class="pic"></div>
+				</div>
+				
+				<div class="layui-form-item">
+					 <label class="layui-form-label">SEO标题</label>
+					 <div class="layui-input-block">
+						<input type="text" name="title" value="{$sortinfo.title}" placeholder="栏目SEO标题" class="layui-input">
+					 </div>
+				</div>
+				
+				<div class="layui-form-item">
+					 <label class="layui-form-label">关键词</label>
+					 <div class="layui-input-block">
+						<input type="text" name="keywords" value="{$sortinfo.keywords}" placeholder="栏目SEO关键字" class="layui-input">
+					 </div>
+				</div>
+				
+				<div class="layui-form-item">
+					 <label class="layui-form-label">描述</label>
+					 <div class="layui-input-block">
+						<textarea name="description"  placeholder="栏目SEO描述" class="layui-textarea">{$sortinfo.description}</textarea>
+					 </div>
+				</div>
+				<div class="layui-form-item">
+					 <label class="layui-form-label">内容</label>
+					 <div class="layui-input-block">
+						<textarea id="container" name="content">{$sortinfo.content}</textarea>
+					 </div>
+				</div>
+				<div class="layui-form-item">
+					 <div class="layui-input-block">
+					    <button class="layui-btn" id="submit" type="submit">立即提交</button>
+					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					 </div>
+				</div>
+			</form>
+				
+	  	   </div>
+	  </div>
+	 </div>
+</div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+//实例化百度编辑器
+var ue = UE.getEditor('container');
+!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var $ = layui.jquery;
+	var element = layui.element;
+	var upload = layui.upload;
+	form.render();
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#icoup',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="ico"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+	})
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#picup',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="pic"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+	})
+
+}();
+</script>
+</body>
+</html>

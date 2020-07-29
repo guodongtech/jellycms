@@ -21,7 +21,13 @@ class Content extends BaseController
 			$data['model_name'] = $modelRes['name'];
 		}
 		$data['model_id'] = $model_id;
-        echo view('content.html', $data);
+		//单页类模型使用模板
+		if($data['type'] == 1){
+			return view('single.html', $data);
+		}else{
+			//列表页类模型使用模板
+			return view('content.html', $data);
+		} 
     }
     public function getList($model_id)
     {

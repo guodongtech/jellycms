@@ -1,0 +1,168 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>国栋CMS</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body class="guodong-body">
+<div class="layui-card layadmin-header">
+	<div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+		<a lay-href="">主页</a><span lay-separator="">/</span>
+		<a><cite>设置</cite></a><span lay-separator="">/</span>
+		<a><cite>我的密码</cite></a>
+	</div>
+</div>
+<div class="layui-fluid">
+<div class="layui-row">
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">{$model_name}列表</li>
+	    <a id="add-content" href="{url:/Content/ContentAdd/}{$model_id}"><li lay-id="t2" >添加/编辑{$model_name}</li></a>
+	  </ul>
+	  <div class="layui-tab-content" >
+	  	   <div class="layui-tab-item layui-show">
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="toolbarDemo">
+					<div class="layui-btn-container">
+						<button class="layui-btn layui-btn-sm" lay-event="add">添加{$model_name}</button>
+					</div>
+				</script>
+				<script type="text/html" id="barDemo">
+					<a class="layui-btn layui-btn-xs" lay-event="preview">预览</a>
+					<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+					<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+				</script>  
+	  	   </div>
+	  </div>
+	 </div>
+</div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script>
+!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var $ = layui.jquery;
+	table.render({
+		elem: '#table',url:'{url:/content/getList/}{$model_id}',
+		toolbar: '#toolbarDemo',
+		title: '{$model_name}列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'sort_name', title:'栏目', width:120},
+			{field:'title', title:'标题'},
+			{field:'create_time', title:'添加时间', width:180},
+			{field:'sorting', title:'排序', width:80},
+			{field:'status', title:'状态', width:90,event:'switch', templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status"  checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
+				}
+				
+			}},
+			{if:$model_id !=1}
+			{field:'istop', title:'置顶', width:90,event:'switch',templet: function(res){
+				if(res.istop == 1){
+					return '<input type="checkbox" name="istop"  checked lay-skin="switch" lay-text="Y|N">';
+				}else{
+					return '<input type="checkbox" name="istop" lay-skin="switch" lay-text="Y|N">';
+				}
+				
+			}},
+			{field:'isrecommend', title:'推荐', width:120,event:'switch',templet: function(res){
+				if(res.isrecommend == 1){
+					return '<input type="checkbox" name="isrecommend"  checked lay-skin="switch" lay-text="Y|N">';
+				}else{
+					return '<input type="checkbox" name="isrecommend" lay-skin="switch" lay-text="Y|N">';
+				}
+				
+			}},
+			{field:'isheadline', title:'头条', width:120,event:'switch',templet: function(res){
+				if(res.isrecommend == 1){
+					return '<input type="checkbox" name="isheadline"  checked lay-skin="switch" lay-text="Y|N">';
+				}else{
+					return '<input type="checkbox" name="isheadline" lay-skin="switch" lay-text="Y|N">';
+				}
+				
+			}},
+			{/if}
+			{field:'visits', title:'访问量', width:120},
+			{field:'create_user', title:'添加用户', width:100},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+		]],
+		page: true
+	});
+
+	//监听行工具事件
+	table.on('tool(test)', function(obj){
+	var data = obj.data;
+	//console.log(obj)
+	if(obj.event === 'del'){
+		layer.confirm('真的删除行么', function(index){
+			$.post('{url:/content/del}',{id:obj.data.id},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+					obj.del();
+				}
+				else{
+					layer.msg(data.msg)
+				}
+			},'json');
+			layer.close(index);
+		});
+	}else if(obj.event === 'edit'){
+		window.location.href='{url:/Content/ContentEdit/}{$model_id}/'+obj.data.id;
+		
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/content/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg)
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
+		form.render();
+	}
+});
+
+	//头工具栏事件
+	table.on('toolbar(test)', function(obj){
+		var checkStatus = table.checkStatus(obj.config.id);
+		switch(obj.event){
+			case 'add':
+				window.location.href=$("#add-content").attr('href');
+			break;
+		};
+		form.render();
+	});
+
+
+
+
+
+
+
+
+
+}();
+</script>
+</body>
+</html>
