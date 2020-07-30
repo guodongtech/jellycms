@@ -348,7 +348,7 @@ class ParseModel extends Model
 								->where(['id'=>$id])
 								->get()
 								->getRowArray();
-			$srcs = json_decode($res['pics'], true);
+			$srcs = explode(',', $res['pics']);
 			$result = array();
 			foreach($srcs as $key=>$value){
 				$result[]['src'] = $value;
