@@ -155,6 +155,37 @@ class Message extends BaseController
         }
         return json_encode($rdata);
     }
+    // 审核
+    public function check()
+    {
+        $post = post();
+        $table_name = $post['table_name'];
+        if(!$post['id'] || !$post['table_name'] || !$post['checked']){
+            $rdata = [
+                "code" => 0,
+                "msg" => "参数不足",
+            ];
+            return json_encode($rdata);
+        }
+        $data = [
+            'id' => $post['id'],
+            'checked' => $post['checked'],
+            'status' => $post['status'],
+        ];
+        $res = $this->model->edit($data,$table_name);
+        if($res>0){
+            $rdata = [
+                "code" => 1,
+                "msg" => "操作成功",
+            ];
+        }else{
+            $rdata = [
+                "code" => 0,
+                "msg" => "操作失败",
+            ];
+        }
+        return json_encode($rdata);
+    }
     // 修改
     public function mod()
     {

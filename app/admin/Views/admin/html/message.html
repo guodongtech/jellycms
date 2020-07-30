@@ -27,8 +27,8 @@
 	  	   <div class="layui-tab-item layui-show">
 	  	   			<table class="layui-hide" id="table" lay-filter="test"></table>
 	  	   			<script type="text/html" id="barDemo">
-						<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
 						{if: $issystem == 1}
+						<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
 						<a class="layui-btn layui-btn-xs" lay-event="reply">回复</a>
 						{/if}
 						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -59,9 +59,7 @@ layui.config({
 		icon: 'layui-icon-tips',
 		cols: [[
 		{foreach:items=$fields key=$k item=$v}
-			{if: $k !== 'status'}
-				{field:'{$k}', title:'{$v}', unresize: false, sort: true},
-			{else:}
+			{if: $k == 'status'}
 				{field:'{$k}', title:'{$v}', event: 'switch',templet: function(res){
 					if(res.status == 1){
 						return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
@@ -69,6 +67,19 @@ layui.config({
 						return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
 					}
 				}},
+			{elseif: $k == 'checked'}
+				{field:'{$k}', title:'{$v}', templet: function(res){
+					if(res.checked == 1){
+						return '通过';
+					}else if(res.checked == 2){
+						return '未通过';
+					}else{
+						return '待审核';
+					}
+				}},
+			{else:}
+				{field:'{$k}', title:'{$v}', unresize: false, sort: true},
+				
 			{/if}
 			
 		{/foreach}
@@ -95,11 +106,46 @@ layui.config({
 			layer.close(index);
 		});
 	}else if(obj.event === 'check'){
-
+		layer.confirm('是否通过审核', {
+			btn: ['通过', '拒绝', '取消'],
+			btn3: function(index, layero){
+			    layer.close(index);
+			}
+		}, function(index, layero){
+		  //审核通过的回调
+		  	$.post('{url:/message/check/}',{id:data.id,table_name:table_name,checked:1,status:1},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg);
+					obj.update({
+				      checked: '1',
+				      status: '1'
+				    });
+				    form.render();
+				}
+				else{
+					layer.msg(data.msg)
+				}
+			}, 'json');
+		}, function(index){
+		  //审核不通过的回调
+		  	$.post('{url:/message/check/}',{id:data.id,table_name:table_name,checked:2,status:0},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+					obj.update({
+				      checked: '2',
+				      status: '0'
+				    });
+				    form.render();
+				}
+				else{
+					layer.msg(data.msg)
+				}
+			}, 'json');
+		});
 	}else if(obj.event === 'reply'){
 		layer.prompt({
 	        formType: 2,
-	        title: '对 ID 为 ['+ data.id +'] 的信息回复',
+	        title: '对内容 ['+ strDeal(10,data.content) +'] 的回复',
 	    }, function(value, index){
 	    	$.post('{url:/message/reply/}',{pid:obj.data.id,table_name:table_name,content:value},function(data){
 				if(data.code == 1){
@@ -132,8 +178,15 @@ layui.config({
 		}, 'json');
 		form.render();
 	}
+	function strDeal(length,str){
+		if(str.length>length){
+			return str.substring(0, length) + "......";
+		}
+		return str;
+	}
 });
 });
+
 </script>
 </body>
 </html>
