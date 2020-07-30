@@ -311,13 +311,14 @@ class ParseModel extends Model
 		return $result;	
 	}
 	//获取可用表单列表
-	public function getLabel($name){
+	public function getLabel($name, $value){
 		$builder = $this->db->table('label');
 		$result   = $builder->select('*')
 							->where(['deleted'=>0, 'status'=>1, 'name'=>$name])
 							->get()
 							->getRowArray();
-		return $result['value'];	
+						
+		return $result[$value];	
 	}
 	
 	//解析表单列表

@@ -508,10 +508,11 @@ class View implements RendererInterface
                 }
                 case 'label:':
                 {
+					$arr = explode(' ', $matches[4]);
+					$str = trim($arr[0]);
 					$attr = $this->getAttrs($matches[4]);
-					//echo __NAMESPACE__;
-					/* return '<?php echo $this->model->getLabel("'.$attr['name'].'");?>'; */
-					return '<?php $model = new \App\Models\ParseModel(); echo $model->getLabel("'.$attr['name'].'")?>';
+					isset($attr['value'])? $value=$attr['value']:$value = 'value';
+					return '<?php $model = new \App\Models\ParseModel(); echo $model->getLabel("'.$str.'", "'.$value.'")?>';
                 }
 				case 'theme:': return '<?php echo getWebThemePath()."'.$matches[4].'";?>';
 				case 'if:': return '<?php if('.$matches[4].'){?>';
