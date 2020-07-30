@@ -50,9 +50,7 @@ class ModelField extends BaseController
 		}
 		
 		$data = $post;
-		if(is_array($data['content'])){
-			$data['content'] = implode(',', $data['content']);
-		}
+		unset($post['content']);
 		// 校验 输入规则
 		$input_check = $this->model->inputRules($data);
 		if($input_check !== true){
