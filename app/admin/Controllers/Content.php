@@ -38,13 +38,11 @@ class Content extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
 	//内容页修改
     public function contentEdit($model_id, $id)
-    {	
-
-
+    {
 		$sorts = $this->sortsModel->getSelect();
 		$data =[
 			'model_id'=>$model_id,
@@ -53,24 +51,22 @@ class Content extends BaseController
 		];
 		//获取模型名
 		$modelRes = $this->model->getModelName($model_id);
-		if(count($modelRes)){
-			$data['model_name'] = $modelRes['name'];
-		}
-        echo view('content_edit.html', $data);
+		$data['model_name'] = $modelRes['name'];
+		$data['modelfields'] = $this->model->getModelFields($model_id);
+        return view('content_edit.html', $data);
     }
 	//内容页修改
     public function getContent()
     {	
 		$id = post('id');
 		$content = $this->model->getContent($id);
-		
 		$data =[
 			"code" => 1,
 			"msg" => "读取成功",
 			'content'=>$content,
 		];
 
-		echo json_encode($data);
+		return json_encode($data,true);
     }
 	
 	
@@ -87,7 +83,7 @@ class Content extends BaseController
 		if(count($modelRes)){
 			$data['model_name'] = $modelRes['name'];
 		}
-        echo view('content_edit.html', $data);
+        return view('content_edit.html', $data);
     }
  
 	public function saveContent(){
@@ -99,8 +95,7 @@ class Content extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = $post;
 		//LAYUI问题处理
@@ -132,8 +127,7 @@ class Content extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		
 		$data = [
@@ -151,7 +145,7 @@ class Content extends BaseController
 				"msg" => "操作成功",
 			];			
 		}
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -162,8 +156,7 @@ class Content extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -180,7 +173,7 @@ class Content extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 
 }

@@ -32,13 +32,31 @@ class ContentModel extends Model
     public function getContent($id)
     {
 		$builder = $this->db->table('content');
-		$result   = $builder->select('content.*, sorts.model_id as model_id ')
+		$content   = $builder->select('content.*, sorts.model_id as model_id ')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->where(['content.deleted'=>0, 'content.id'=>$id])
 							->get()
-							->getRowArray();
+							->getRowArray();			
+
+												
+		//获取模型字段值					
+		$builder = $this->db->table('content_ext');
+		$extend   = $builder->select('content_ext.value, modelfield.name as m_name')
+							->join('modelfield', 'modelfield.id = content_ext.modelfield_id', 'left')
+							->where(['modelfield.deleted'=>0, 'content_ext.content_id'=>$id])
+							->get()
+							->getResultArray();
+		foreach($extend as $key=>$value){
+			$mvalue= explode(',',$extend[$key]['value']);
+			$content[$extend[$key]['m_name']] = count($mvalue)>1?$mvalue:$extend[$key]['value'];
+		 
+		}
+		$result = $content;
         return $result;
     }
+	
+	
+	
     public function getModelId($id)
     {
 		$builder = $this->db->table('content');
@@ -55,6 +73,19 @@ class ContentModel extends Model
 							->where(['deleted'=>0,'id'=>$id])
 							->get()
 							->getRowArray();
+		return $result;
+	}
+	public function getModelFields($model_id){
+		//获取模型扩展字段					
+		$builder = $this->db->table('modelfield');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'model_id'=>$model_id])
+							->get()
+							->getResultArray();		
+		//将value转换为数组					
+		foreach($result as $key=>$value){
+			$result[$key]['value'] = explode(',', $result[$key]['value']);
+		}
 		return $result;
 	}
 	public function edit($data){

@@ -83,6 +83,31 @@ span[contenteditable]:empty:before {
 	content: attr(placeholder);
 	color: #cccccc;
 }
+.layui-form-item .layui-inline {
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.layui-colorpicker {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e6e6e6;
+    padding: 5px;
+    border-radius: 2px;
+    line-height: 28px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+}
+.layui-colorpicker-trigger-span {
+    display: block;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 2px;
+    text-align: center;
+}
 </style>
 <div class="layui-card layadmin-header">
 	<div class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
@@ -128,46 +153,110 @@ span[contenteditable]:empty:before {
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">内容标题   <span class="layui-text-red">*</span></label>
-			                     <div class="layui-input-block">
+			                     <div class="layui-input-inline">
 			                     	<input type="text" name="title" lay-verify="required" placeholder="内容标题" value="" class="layui-input">
 			                     </div>
 			                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">内容</label>
 			                     <div class="layui-input-block">
 									<textarea id="container" name="content"></textarea>
 								 </div>
 			                </div>
-			                
+						{foreach:items = $modelfields key=$k item=$v}
+							{if:$v['type']=="select"}
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-inline">
+									<select name="{$v.name}">
+									{foreach:items = $v['value'] key=$kv item=$vv}
+										<option value="{$vv}">{$vv}</option>
+									{/foreach}	
+									</select>
+								</div>
+							</div>
+							{/if}
+							{if:$v['type']=="checkbox"}
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-block">
+									{foreach:items = $v['value'] key=$kv item=$vv}
+										<input type="checkbox" value="{$vv}" name="{$v.name}[]" title="{$vv}">
+									{/foreach}
+								</div>
+							</div>
+							{/if}
+							{if:$v['type']=="text"}
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">{$v.description}</label>
+									<div class="layui-input-inline">
+										<input type="text" class="layui-input" name="{$v.name}" placeholder="yyyy-MM-dd">
+									</div>
+								</div>
+							</div>
+							{/if}
+							{if:$v['type']=="pic"}
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-inline">
+									<input type="text" name="{$v.name}" placeholder="上传缩略图" class="layui-input">
+								</div>
+								<button type="button" class="layui-btn upload watermark" id="pic"><i class="layui-icon"></i>上传图片</button> 
+								<div id="ico_box" class="pic addedit"></div>
+							</div>
+							{/if}
+							{if:$v['type']=="file"}
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-inline">
+									<input type="text" name="{$v.name}" placeholder="上传文件" class="layui-input">
+								</div>
+								<button type="button" class="layui-btn upload watermark"><i class="layui-icon"></i>上传文件</button> 
+								<div id="ico_box" class="pic addedit"></div>
+							</div>
+							{/if}
+							{if:$v['type']=="input"}
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-inline">
+									<input type="text" name="{$v.name}" placeholder="请输入标题" class="layui-input">
+								</div>
+							</div>
+							{/if}
+							{if:$v['type']=="textarea"}
+							<div class="layui-form-item layui-form-text">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-block">
+									<textarea placeholder="请输入内容" name="{$v.name}" class="layui-textarea"></textarea>
+								</div>
+							</div>
+							{/if}
+							{if:$v['type']=="radio"}
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-block">
+									{foreach:items = $v['value'] key=$kv item=$vv}
+										<input type="radio" value="{$vv}" name="{$v.name}" title="{$vv}">
+									{/foreach}	
+								</div>
+							</div>
+							{/if}
+							{if:$v['type']=="color"}
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$v.description}</label>
+								<div class="layui-input-inline" style="width: 120px;">
+									<input type="text" name="{$v.name}" placeholder="请选择颜色" class="layui-input" id="test-form-input">
+								</div>
+								<div class="layui-inline" style="left: -11px;">
+									<div id="test-form"></div>
+								</div>
+							</div>
+							{/if}
+						{/foreach}
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">tags</label>
-			                     <div class="layui-input-block">
+			                     <div class="layui-input-inline">
 			                     	<input type="text" name="tags" value="" placeholder="输入文章tag，英文逗号隔开" class="layui-input">
 			                     </div>
 			                </div>
@@ -241,12 +330,15 @@ span[contenteditable]:empty:before {
 								</div>
 			                </div>
 			                
-					   		 <div class="layui-form-item">
-			                     <label class="layui-form-label">标题颜色</label>
-			                     <div class="layui-input-inline">
-			                     	<input type="text" name="color" placeholder="选择标题颜色" value="" class="layui-input" autocomplete="off" >
-			                     </div>
-			                 </div>
+<div class="layui-form-item">
+	<label class="layui-form-label">标题颜色</label>
+	<div class="layui-input-inline" style="width: 120px;">
+		<input type="text" value="" placeholder="标题颜色" class="layui-input" id="title-color-input">
+	</div>
+	<div class="layui-inline" style="left: -11px;">
+		<div id="title-color"></div>
+	</div>
+</div>
 			                 
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">副标题</label>
@@ -318,11 +410,10 @@ span[contenteditable]:empty:before {
 </div>
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
-<script src="/static/js/admin.js"></script>
+<script src="/static/js/loadData.js"></script>
 <script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
 <script type="text/javascript">
-
 !function(){
 	var layer = layui.layer,
 	form = layui.form;
@@ -330,6 +421,25 @@ span[contenteditable]:empty:before {
 	var element = layui.element;
 	var $ = layui.jquery;
 	var upload = layui.upload;
+	var colorpicker = layui.colorpicker;
+	
+  //表单赋值
+  colorpicker.render({
+    elem: '#test-form'
+    ,color: '#1c97f5'
+    ,done: function(color){
+      $('#test-form-input').val(color);
+    }
+  });	
+  //表单赋值
+  colorpicker.render({
+    elem: '#title-color'
+    ,color: '#1c97f5'
+    ,done: function(color){
+      $('#title-color-input').val(color);
+    }
+  });
+	
 	{if:$id}
 	//动态回填表单
 	$.post('{url:/content/getContent}',{id:{$id}},function(data){

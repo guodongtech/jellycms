@@ -12,7 +12,7 @@ function loadData(jsonStr, form){
 				if(type=='radio'){
 					$(this).attr('checked',$(this).val()==value);
 				}else if(type=='checkbox'){
-					arr = JSON.parse(value);
+					arr = JSON.parse(JSON.stringify(value));
 					if(typeof(arr) == 'string' || typeof(arr) == 'number'){//单个值处理
 						if($(this).val()== parseInt(arr)){
 							$(this).attr('checked',true);
