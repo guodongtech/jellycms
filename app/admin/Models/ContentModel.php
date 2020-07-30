@@ -14,6 +14,7 @@ class ContentModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = false;
 	protected $protectFields = false;
+
     public function getList($model_id, $page, $limit)
     {
 		$offset = ($page-1)*$limit;
@@ -25,7 +26,9 @@ class ContentModel extends Model
 							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
 							->get($limit, $offset)
 							->getResultArray();
-		
+		foreach($res as $key=>$value){
+			$res[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'], $value['id'])):url(array($value['m_urlname'],$value['id']));
+		}
 		$total = $builder->select('content')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
@@ -34,6 +37,7 @@ class ContentModel extends Model
         $result['total'] = $total;
 		return $result;
     }
+
     public function getContent($id)
     {
 		$builder = $this->db->table('content');
@@ -42,8 +46,7 @@ class ContentModel extends Model
 							->where(['content.deleted'=>0, 'content.id'=>$id])
 							->get()
 							->getRowArray();			
-
-												
+								
 		//获取模型字段值					
 		$builder = $this->db->table('content_ext');
 		$extend   = $builder->select('content_ext.value, modelfield.name as m_name')
@@ -82,8 +85,6 @@ class ContentModel extends Model
 		return $result;
 	}
 
-
-
     public function getModelId($id)
     {
 		$builder = $this->db->table('content');
@@ -116,6 +117,7 @@ class ContentModel extends Model
 		}
 		return $result;
 	}
+	
 	public function edit($data){
 		return $this->save($data);
 	}
