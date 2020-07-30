@@ -26,7 +26,7 @@
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">{$model_name}列表</li>
-	    <a id="add-content" href="{url:/Content/ContentAdd/}{$model_id}"><li lay-id="t2" >添加/编辑{$model_name}</li></a>
+	    <a id="add-content" href="{url:/Content/ContentEdit/}{$model_id}/0"><li lay-id="t2" >添加/编辑{$model_name}</li></a>
 	  </ul>
 	  <div class="layui-tab-content" >
 	  	   <div class="layui-tab-item layui-show">
@@ -179,7 +179,7 @@
 		var checkStatus = table.checkStatus(obj.config.id);
 		switch(obj.event){
 			case 'add':
-				window.location.href=$("#add-content").attr('href');
+				window.location.href='{url:/Content/ContentEdit/}{$model_id}/0';
 			break;
 		};
 		form.render();
