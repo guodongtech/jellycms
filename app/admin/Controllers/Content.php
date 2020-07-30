@@ -33,12 +33,15 @@ class Content extends BaseController
     }
     public function getList($model_id)
     {
-		$list = $this->model->getList($model_id);
+		$get = $this->request->getGet();
+		isset($get['page'])?$page = $get['page']:$page = 1;
+		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+		$res = $this->model->getList($model_id, $page, $limit);
 		$data = [
 			"code" => 0,
 			"msg" => "",
-			"count" => count($list),
-			"data" => $list,
+			"count" => $res['total'],
+			"data" => $res['list'],
 		];
 		return json_encode($data);
     }

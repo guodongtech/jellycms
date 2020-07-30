@@ -14,20 +14,25 @@ class ContentModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = false;
 	protected $protectFields = false;
-    public function getList($model_id)
+    public function getList($model_id, $page, $limit)
     {
+		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('content');
-		$result   = $builder->select('content.*, model.urlname as m_urlname, model.id as model_id, sorts.urlname as urlname, sorts.name as sort_name, admin.name as create_user')
+		$res   = $builder->select('content.*, model.urlname as m_urlname, model.id as model_id, sorts.urlname as urlname, sorts.name as sort_name, admin.name as create_user')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->join('admin', 'admin.id = content.create_user', 'left')
 							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
-							->get()
+							->get($limit, $offset)
 							->getResultArray();
-		foreach($result as $key=>$value){
-			$result[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'], $value['id'])):url(array($value['m_urlname'],$value['id']));
-		}
-        return $result;
+		
+		$total = $builder->select('content')
+							->join('sorts', 'sorts.id = content.sorts_id', 'left')
+							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
+							->countAllResults(false);					
+        $result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
     }
     public function getContent($id)
     {
