@@ -107,22 +107,37 @@
 
     }
 // 生成无限极树,$data为二维数组数据
-function gettree($data, $tid, $idField, $pidField, $childName = 'child')
-{
-    $tree = array();
-    foreach ($data as $key => $value) {
-        if (is_array($value)) {
-            if ($value[$pidField] == "$tid") { // 父亲找到儿子
-				$value[$childName] = gettree($data, $value[$idField], $idField, $pidField, $childName);
-                $tree[] = $value;
-            }
-        } else {
-            if ($value->$pidField == "$tid") { // 父亲找到儿子
-                $temp = clone $value;
-                $temp->$childName = gettree($data, $value->$idField, $idField, $pidField, $childName);
-                $tree[] = $temp;
-            }
-        }
+function getTree($list,$pid=0,$itemprefix = '') {
+	static $icon = array('&nbsp;&nbsp;&nbsp;', '&nbsp;&nbsp;&nbsp;', '&nbsp;&nbsp;&nbsp;');
+	//static $icon = array('│', '├', '--');
+    static $nbsp = "&nbsp;";
+	static $arr = array();
+    $number = 1;
+    foreach($list as $row) {
+    	if($row['pid'] == $pid) {
+    		$brotherCount = 0;
+    		//判断当前有多少个兄弟分类
+    		foreach($list as $r) {
+    			if($row['pid'] == $r['pid']) {
+    				$brotherCount++;
+    			}
+    		}
+    		if($brotherCount >0) {
+    			$j = $k = '';
+    			if($number == $brotherCount) {
+    				$j .= $icon[2];
+                    $k = $itemprefix ? $nbsp : '';
+    			}else{
+                    $j .= $icon[1];
+                    $k = $itemprefix ? $icon[0] : '';
+    			}
+    			$spacer = $itemprefix ? $itemprefix . $j : '';
+    			$row['name'] = $spacer.$row['name'];
+    			$arr[] = $row;
+    			$number++;
+    			getTree($list,$row['id'],$itemprefix . $k . $nbsp);
+    		}
+    	}
     }
-    return $tree;
+    return  $arr;
 }

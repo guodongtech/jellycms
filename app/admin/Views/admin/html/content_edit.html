@@ -143,9 +143,6 @@ span[contenteditable]:empty:before {
 				                        <option value="">选择栏目名称</option>
 										{foreach:items = $sorts key=$k item=$v}
 										<option {if:$content['sorts_id']==$v['id']}selected{/if} value="{$v.id}">{$v.name}</option>
-											{foreach:items = $v['child'] key=$k1 item=$v1}
-											<option {if:$content['sorts_id']==$v1['id']}selected{/if} value="{$v1.id}">&nbsp;&nbsp;&nbsp;&nbsp;{$v1.name}</option>
-											{/foreach}
 										{/foreach}
 									</select>
 								</div>
@@ -322,23 +319,20 @@ span[contenteditable]:empty:before {
 			                     	<select name="subsort_id">
 										{foreach:items = $sorts key=$k item=$v}
 										<option {if:$content['sorts_id']==$v['id']}selected{/if} value="{$v.id}">{$v.name}</option>
-											{foreach:items = $v['child'] key=$k1 item=$v1}
-											<option {if:$content['sorts_id']==$v1['id']}selected{/if} value="{$v1.id}">&nbsp;&nbsp;&nbsp;&nbsp;{$v1.name}</option>
-											{/foreach}
 										{/foreach}
 									</select>
 								</div>
 			                </div>
 			                
-<div class="layui-form-item">
-	<label class="layui-form-label">标题颜色</label>
-	<div class="layui-input-inline" style="width: 120px;">
-		<input type="text" value="" placeholder="标题颜色" class="layui-input" id="title-color-input">
-	</div>
-	<div class="layui-inline" style="left: -11px;">
-		<div id="title-color"></div>
-	</div>
-</div>
+							<div class="layui-form-item">
+								<label class="layui-form-label">标题颜色</label>
+								<div class="layui-input-inline" style="width: 120px;">
+									<input type="text" value="" placeholder="标题颜色" class="layui-input" id="title-color-input">
+								</div>
+								<div class="layui-inline" style="left: -11px;">
+									<div id="title-color"></div>
+								</div>
+							</div>
 			                 
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">副标题</label>

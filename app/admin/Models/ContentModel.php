@@ -54,9 +54,31 @@ class ContentModel extends Model
 		$result = $content;
         return $result;
     }
-	
-	
-	
+
+	public function getCopyContent($id){
+		$builder = $this->db->table('content');
+		$result   = $builder->select('*')
+							->where(['id'=>$id])
+							->get()
+							->getRowArray();
+		return $result;
+	}
+	public function getContentExtend($id){
+		$builder = $this->db->table('content_ext');
+		$result   = $builder->select('*')
+							->where(['content_id'=>$id])
+							->get()
+							->getResultArray();
+		return $result;
+	}
+	public function insertExtendBatch($data){
+		$builder = $this->db->table('content_ext');
+		$result   = $builder->insertBatch($data);
+		return $result;
+	}
+
+
+
     public function getModelId($id)
     {
 		$builder = $this->db->table('content');
@@ -75,6 +97,7 @@ class ContentModel extends Model
 							->getRowArray();
 		return $result;
 	}
+
 	public function getModelFields($model_id){
 		//获取模型扩展字段					
 		$builder = $this->db->table('modelfield');

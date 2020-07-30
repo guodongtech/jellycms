@@ -15,6 +15,8 @@ class Content extends BaseController
 
     public function index($model_id)
     {
+		$sorts = $this->sortsModel->getSelectByModelId($model_id);
+		$data['sorts'] = $sorts;
 		//获取模型名
 		$modelRes = $this->model->getModelName($model_id);
 		if(count($modelRes)){
@@ -43,7 +45,8 @@ class Content extends BaseController
 	//内容页修改
     public function contentEdit($model_id, $id)
     {
-		$sorts = $this->sortsModel->getSelect();
+		$sorts = $this->sortsModel->getSelectByModelId($model_id);
+		
 		$data =[
 			'model_id'=>$model_id,
 			'id'=>$id,
@@ -98,10 +101,6 @@ class Content extends BaseController
 			return json_encode($rdata);
 		}
 		$data = $post;
-		//LAYUI问题处理
-		$data['istop'] = $data['istop']?$data['istop']:0;
-		$data['isrecommend'] = $data['isrecommend']?$data['isrecommend']:0;
-		$data['isheadline'] = $data['isheadline']?$data['isheadline']:0;
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
@@ -117,6 +116,88 @@ class Content extends BaseController
 		}else{
 			//return redirect()->back()->withInput();
 		}
+	}
+	public function move(){
+		$ids = post('ids');
+		$sorts_id = post('sorts_id');
+		$data['sorts_id'] = $sorts_id;
+		$success = 0;
+		foreach($ids as $key=>$value){
+			$data['id'] = $value;
+			if($this->model->edit($data)){
+				$success++;
+			}
+		}
+		if(count($ids) == $success){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
+	}
+	
+	public function copy(){
+		$ids = post('ids');
+		$sorts_id = post('sorts_id');
+		$data['sorts_id'] = $sorts_id;
+		$success = 0;
+		foreach($ids as $key=>$value){
+			//复制记录
+			$content = $this->model->getCopyContent($value);
+			unset($content['id']);//释放ID，添加记录
+			if($this->model->edit($content)){
+				$success++;
+			}
+			$insertID = $this->db->insertID();
+			//复制扩展字段
+			$contentExtend = $this->model->getContentExtend($value);
+			foreach($contentExtend as $k=>$v){
+				$contentExtend[$k]['content_id'] = $insertID;
+				unset($contentExtend[$k]['id']);
+			}
+			$this->model->insertExtendBatch($contentExtend);//批量添加数据
+		}
+		if(count($ids) == $success){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
+	}
+	public function batchdel(){
+		$ids = post('ids');
+		$success = 0;
+		foreach($ids as $key=>$value){
+			$data['id'] = $value;
+			$data['deleted'] = 1;
+			if($this->model->edit($data)){
+				$success++;
+			}
+		}
+		if(count($ids) == $success){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
 	}
 	//删除操作
     public function del()

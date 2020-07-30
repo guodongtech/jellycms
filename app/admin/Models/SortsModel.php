@@ -34,7 +34,7 @@ class SortsModel extends Model
 							->where(['deleted'=>0])
 							->get()
 							->getResultArray();
-		$tree = gettree($result, 0, 'id', 'pid');
+		$tree = getTree($result);
         return $tree;
     }
     // 获取内容栏目选择列表
@@ -45,7 +45,7 @@ class SortsModel extends Model
 							->where(['deleted'=>0, 'model_id'=>$model_id])
 							->get()
 							->getResultArray();
-		$tree = gettree($result, 0, 'id', 'pid');
+		$tree = getTree($result);
         return $tree;
     }
 	public function edit($data){

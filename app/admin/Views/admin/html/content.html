@@ -36,23 +36,21 @@
 					<div class="layui-btn-container layui-input-inline">
 						<div class="layui-btn-group">
 							<button type="button" class="layui-btn layui-btn-sm"  lay-event="add">添加</button>
-							<button type="button" class="layui-btn layui-btn-sm">批量删除</button>
+							<button type="button" class="layui-btn layui-btn-sm" lay-event="batchdel">批量删除</button>
 						</div>
 						<div class="layui-btn-group">
-							<button type="button" class="layui-btn layui-btn-sm">复制</button>
-							<button type="button" class="layui-btn layui-btn-sm">移动</button>
+							<button type="button" class="layui-btn layui-btn-sm" lay-event="copy">复制</button>
+							<button type="button" class="layui-btn layui-btn-sm" lay-event="move">移动</button>
 						</div>
 					</div>
 					<div class="layui-input-inline">到</div>
 					<form action="" method="post" id="form" class="layui-form layui-input-inline">
 						<div class="layui-input-inline" style="min-width:200px;">
 							<select name="sorts">
-								<option value=""></option>
-								<option value="0">写作</option>
-								<option value="1" selected="">阅读</option>
-								<option value="2">游戏</option>
-								<option value="3">音乐</option>
-								<option value="4">旅行</option>
+								<option value="">选择栏目</option>
+								{foreach:items = $sorts key=$k item=$v}
+								<option value="{$v.id}">{$v.name}</option>
+								{/foreach}
 							</select>
 						</div>
 						<div class="layui-input-inline" style="width:200px;">
@@ -173,13 +171,83 @@
 			form.render();
 		}
 	});
-
+	
 	//头工具栏事件
 	table.on('toolbar(test)', function(obj){
 		var checkStatus = table.checkStatus(obj.config.id);
 		switch(obj.event){
 			case 'add':
 				window.location.href='{url:/Content/ContentEdit/}{$model_id}/0';
+			break;
+			case 'copy':
+				var sorts_id = $('select[name=sorts] option:selected').val();
+				if(!sorts_id){
+					layer.msg('请选择栏目');
+					break;
+				}
+				var ids = new Array();
+				var data = checkStatus.data;
+				if(!data.length){
+					layer.msg('请选择要操作的数据');
+					break;
+				}
+				$.each(data, function(i, n){
+					ids.unshift(n.id)
+				})
+				$.post('{url:/content/copy}',{ids:ids,sorts_id:sorts_id},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg);
+						table.reload('table');
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+			break;
+			case 'move':
+				var sorts_id = $('select[name=sorts] option:selected').val();
+				if(!sorts_id){
+					layer.msg('请选择栏目');
+					break;
+				}
+				var ids = new Array();
+				var data = checkStatus.data;
+				if(!data.length){
+					layer.msg('请选择要操作的数据');
+					break;
+				}
+				$.each(data, function(i, n){
+					ids.unshift(n.id)
+				})
+				$.post('{url:/content/move}',{ids:ids, sorts_id:sorts_id},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg);
+						table.reload('table');
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+			break;
+			case 'batchdel':
+				var ids = new Array();
+				var data = checkStatus.data;
+				if(!data.length){
+					layer.msg('请选择要操作的数据');
+					break;
+				}
+				$.each(data, function(i, n){
+					ids.unshift(n.id)
+				})
+				$.post('{url:/content/batchdel}',{ids:ids},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg);
+						table.reload('table');
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
 			break;
 		};
 		form.render();
