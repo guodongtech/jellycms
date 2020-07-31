@@ -18,21 +18,20 @@ function loadData(jsonStr, form){
 							$(this).attr('checked',true);
 						}
 					}else{ //多个值
+						if(arr == null)arr='';//值为null时会报错
 						for(var i =0;i<arr.length;i++){
 							if($(this).val()==arr[i]){
 								$(this).attr('checked',true);
 								break;
 							}
-						}						
+						}
 					}
-
 				}else{
 					$(this).val(value);
 				}
 			}else if(tagName=='SELECT' || tagName=='TEXTAREA'){
 				$(this).val(value);
 			}
-			
 		});
 	}
 }	

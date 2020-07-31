@@ -29,7 +29,7 @@ class ContentModel extends Model
 		foreach($res as $key=>$value){
 			$res[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'], $value['id'])):url(array($value['m_urlname'],$value['id']));
 		}
-		$total = $builder->select('content')
+		$total = $builder->select('id')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
 							->countAllResults(false);					
@@ -62,7 +62,6 @@ class ContentModel extends Model
 		$result = $content;
         return $result;
     }
-
 	public function getCopyContent($id){
 		$builder = $this->db->table('content');
 		$result   = $builder->select('*')
@@ -74,7 +73,16 @@ class ContentModel extends Model
 	public function getContentExtend($id){
 		$builder = $this->db->table('content_ext');
 		$result   = $builder->select('*')
-							->where(['content_id'=>$id])
+							->where(['deleted'=>0, 'content_id'=>$id])
+							->get()
+							->getResultArray();
+		return $result;
+	}
+	public function getContentExtendBySortsId($sorts_id){
+		$builder = $this->db->table('modelfield');
+		$result   = $builder->select('modelfield.*')
+							->join('sorts', 'modelfield.model_id = sorts.model_id', 'left')
+							->where(['modelfield.deleted'=>0, 'sorts.id'=>$sorts_id])
 							->get()
 							->getResultArray();
 		return $result;
@@ -84,7 +92,23 @@ class ContentModel extends Model
 		$result   = $builder->insertBatch($data);
 		return $result;
 	}
+	public function updateExtendBatch($data){
+		$builder = $this->db->table('content_ext');
+		foreach($data as $key=>$value){
+			$cententExt = 	$builder->select('*')
+									->where(['content_id'=>$value['content_id'], 'modelfield_id'=>$value['modelfield_id']])
+									->get()
+									->getRowArray();
+			if(empty($cententExt)){
+				$res = $builder->insert($value);
+			}else{
+				$builder->where(['content_id'=>$value['content_id'], 'modelfield_id'=>$value['modelfield_id']]);
+				$res = $builder->update($value);
+			}
 
+		}
+		return $result;
+	}
     public function getModelId($id)
     {
 		$builder = $this->db->table('content');

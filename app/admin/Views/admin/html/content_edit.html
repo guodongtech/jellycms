@@ -315,10 +315,10 @@ span[contenteditable]:empty:before {
 					    <div class="layui-tab-item ">
 					    	<div class="layui-form-item">
 			                     <label class="layui-form-label">内容副栏目</label>
-			                     <div class="layui-input-block">
+			                     <div class="layui-input-inline">
 			                     	<select name="subsort_id">
 										{foreach:items = $sorts key=$k item=$v}
-										<option {if:$content['sorts_id']==$v['id']}selected{/if} value="{$v.id}">{$v.name}</option>
+										<option {if:$content['subsort_id']==$v['id']}selected{/if} value="{$v.id}">{$v.name}</option>
 										{/foreach}
 									</select>
 								</div>
@@ -327,7 +327,7 @@ span[contenteditable]:empty:before {
 							<div class="layui-form-item">
 								<label class="layui-form-label">标题颜色</label>
 								<div class="layui-input-inline" style="width: 120px;">
-									<input type="text" value="" placeholder="标题颜色" class="layui-input" id="title-color-input">
+									<input type="text" name="color" placeholder="标题颜色" class="layui-input" id="title-color-input">
 								</div>
 								<div class="layui-inline" style="left: -11px;">
 									<div id="title-color"></div>
@@ -416,30 +416,23 @@ span[contenteditable]:empty:before {
 	var $ = layui.jquery;
 	var upload = layui.upload;
 	var colorpicker = layui.colorpicker;
-	
+
   //表单赋值
-  colorpicker.render({
-    elem: '#test-form'
-    ,color: '#1c97f5'
-    ,done: function(color){
-      $('#test-form-input').val(color);
-    }
-  });	
-  //表单赋值
-  colorpicker.render({
-    elem: '#title-color'
-    ,color: '#1c97f5'
-    ,done: function(color){
-      $('#title-color-input').val(color);
-    }
-  });
+	colorpicker.render({
+		elem: '#title-color'
+		,color: '#1c97f5'
+		,change: function(color){
+			$('#title-color-input').val(color);
+		}
+	});
 	
 	{if:$id}
 	//动态回填表单
 	$.post('{url:/content/getContent}',{id:{$id}},function(data){
 		if(data.code == 1){
-			loadData(data.content, '#form')
+			loadData(data.content, '#form');
 			form.render();
+			$('.layui-colorpicker-trigger-span').css('background',$('#title-color-input').val());
 			//处理多图
 			if(pics = $('#form input[name="pics"]').val()){
 				$('.pics-wrap').show('slow');

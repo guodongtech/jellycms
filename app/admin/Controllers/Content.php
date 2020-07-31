@@ -71,27 +71,10 @@ class Content extends BaseController
 			"msg" => "读取成功",
 			'content'=>$content,
 		];
-
-		return json_encode($data,true);
-    }
-	
-	
-	//内容页添加/修改
-    public function contentAdd($model_id)
-    {	
-		$sorts = $this->sortsModel->getSelectByModelId($model_id);
-		$data =[
-			'model_id'=>$model_id,
-			'sorts'=>$sorts,
-		];
-		//获取模型名
-		$modelRes = $this->model->getModelName($model_id);
-		if(count($modelRes)){
-			$data['model_name'] = $modelRes['name'];
-		}
-        return view('content_edit.html', $data);
-    }
  
+		return json_encode($data);
+    }
+
 	public function saveContent(){
 		//获取表单值
 		$post = Post();
@@ -103,8 +86,20 @@ class Content extends BaseController
 			];
 			return json_encode($rdata);
 		}
+		unset($post['file']); //去掉layui加的东西
 		$data = $post;
-		if(!$post['id']){
+		//扩展字段数据
+		$extendData = array();
+		//读模型扩展字段
+		$resExtend = $this->model->getContentExtendBySortsId($post['sorts_id']);
+		foreach($resExtend as $key=>$value){
+			//扩展字段二维数组
+			$extendData[$key]['modelfield_id'] = $value['id'];
+			$extendData[$key]['content_id'] = $data['id'];
+			$extendData[$key]['value'] = is_array($data[$value['name']])?implode(',', $data[$value['name']]):$data[$value['name']];
+			unset($data[$value['name']]); //从表单数据里删除扩展字段
+		}
+		if(!$data['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
@@ -113,8 +108,18 @@ class Content extends BaseController
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
 		if($this->model->edit($data)){
-			$id = $post['id']?$post['id']:$this->db->insertID();
+			$id = $data['id']?$data['id']:$this->db->insertID();
 			$modelResult = $this->model->getModelId($id);
+			if(!$data['id']){
+				//批量插入扩展字段值
+				foreach($extendData as $key=>$value){
+					$extendData[$key]['content_id'] = $id; //重新赋值
+				}
+				$this->model->insertExtendBatch($extendData);//批量添加数据
+			}else{
+				//批量更新扩展字段值
+				$this->model->updateExtendBatch($extendData);//批量更新数据
+			}
 			success("操作成功", '/'.ADMINNAME.'/content/index/'.$modelResult['model_id']);		
 		}else{
 			//return redirect()->back()->withInput();
