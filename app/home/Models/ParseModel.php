@@ -215,10 +215,18 @@ class ParseModel extends Model
 		$pagebar['numlist'] = $numlist;
 		$pagebar['select'] = 1;
 		//中间循环分页
-		$pageNum = 6;
+		$pageNum = 5;
 		//设置起点 起点位置要保证当前页在中间位置
-		$start = ($page-intval($pageNum/2))<1?1:($page-intval($pageNum/2));
-		$end = ($start + $pageNum)>$totalPage?$totalPage:($start + $pageNum);
+		
+		if(($page-intval($pageNum/2))<1||$totalPage<=$pageNum){
+			$start = 1;
+		}else if(($totalPage-$page) < $pageNum){
+			$start = $totalPage-$pageNum;
+		}else{
+			$start = $page-intval($pageNum/2);
+		}
+		
+		$end = ($start + $pageNum)>=($totalPage)?$totalPage:($start + $pageNum -1);
 		for($i = $start; $i <= $end; $i++)
 		{
             $active = $i==$page ? "active" : "";
