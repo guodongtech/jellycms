@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" media="screen" href="/static/css/animate.min.css">
 </head>
 <body class="guodong-body">
 <style>
@@ -124,8 +125,7 @@ span[contenteditable]:empty:before {
 	    <li lay-id="t1"><a href="{url:/Content/Index/}{$model_id}">{$model_name}列表</a></li>
 	    <li  class="layui-this" lay-id="t2">添加/编辑{$model_name}</li>
 	  </ul>
-	  <div class="layui-tab-content">
- 
+	  <div class="layui-tab-content animated fadeIn">
 	  	   <div class="layui-tab-item layui-show">
 	  	  		<form action="{url:/content/saveContent}" method="post" class="layui-form" lay-filter="content" id="form">
 		  	     	<input type="hidden" name="id" value="{$id}"> 

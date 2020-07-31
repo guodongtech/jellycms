@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" media="screen" href="/static/css/animate.min.css">
 </head>
 <body class="guodong-body">
 <div class="layui-card layadmin-header">
@@ -27,7 +28,7 @@
 	    <li class="layui-this" lay-id="t1">{$model_name}列表</li>
 	    <a id="add-content" href="{url:/Content/ContentEdit/}{$model_id}/0"><li lay-id="t2" >添加/编辑{$model_name}</li></a>
 	  </ul>
-	  <div class="layui-tab-content" >
+	  <div class="layui-tab-content animated fadeIn" >
 	  	   <div class="layui-tab-item layui-show">
 				<table class="layui-hide" id="table" lay-filter="test"></table>
 				<script type="text/html" id="toolbarDemo">
