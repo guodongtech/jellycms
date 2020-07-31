@@ -364,7 +364,6 @@ treetable.render({
 			{field:'model_id', title:'模型', hide:true},
 			{field:'listtpl', title:'列表页模板', width:120},
 			{field:'contenttpl', title:'详情页模板', width:120},
-			{field:'sorting', title:'排序', width:120},
 			{field:'status', title:'状态', width:100,event:'switch', templet: function(res){
 				if(res.status == 1){
 					return '<input type="checkbox" name="status"  checked lay-skin="switch" lay-text="ON|OFF">';
@@ -373,6 +372,7 @@ treetable.render({
 				}
 				
 			}},
+			{field:'sorting', title:'排序', width:80, edit: 'text'},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
 		]],
 		page: true

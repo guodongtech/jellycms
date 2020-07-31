@@ -154,12 +154,6 @@ span[contenteditable]:empty:before {
 			                     	<input type="text" name="title" lay-verify="required" placeholder="内容标题" value="" class="layui-input">
 			                     </div>
 			                </div>
-			                <div class="layui-form-item">
-			                     <label class="layui-form-label">内容</label>
-			                     <div class="layui-input-block">
-									<textarea id="container" name="content"></textarea>
-								 </div>
-			                </div>
 						{foreach:items = $modelfields key=$k item=$v}
 							{if:$v['type']=="select"}
 							<div class="layui-form-item">
@@ -271,6 +265,14 @@ span[contenteditable]:empty:before {
 			                     	<input type="text" name="source" placeholder="输入来源" value="" class="layui-input">
 			                     </div>
 			                </div>
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">内容</label>
+			                     <div class="layui-input-block">
+									<textarea id="container" name="content"></textarea>
+								 </div>
+			                </div>
+
+
 			                
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">缩略图</label>

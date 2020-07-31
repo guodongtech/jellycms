@@ -175,7 +175,6 @@ treetable.render({
 	cols: [[
 		{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 		{field:'name', title:'菜单名称', width:180},
-		{field:'sorting', title:'排序', width:120},
 		{field:'controller', title:'控制器', width:120},
 		{field:'action', title:'方法', width:120},
 		{field:'params', title:'参数', width:120},
@@ -199,6 +198,7 @@ treetable.render({
 			}
 			
 		}},
+		{field:'sorting', title:'排序', width:80, edit: 'text'},
 		{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
 	]],
 	done: function(res, curr, count){
