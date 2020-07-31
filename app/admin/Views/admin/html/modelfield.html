@@ -42,8 +42,10 @@
 				</div>
 			</script>
 			<script type="text/html" id="barDemo">
-				<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+				<div class="layui-btn-group">
+					<button type="button" class="layui-btn layui-btn-sm" title="编辑" lay-event="edit"><i class="layui-icon"></i></button>
+					<button type="button" class="layui-btn layui-btn-sm" title="删除" lay-event="del"><i class="layui-icon"></i></button>
+				</div>
 			</script>
 		</div>
 
@@ -320,7 +322,7 @@
 			{field:'model_name', title:'关联模型', width:120},
 			{field:'value', title:'字段值'},
 			{field:'sorting', title:'排序',width:80,  edit: 'text'},
-			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:100}
 		]],
 		page: true
 	});

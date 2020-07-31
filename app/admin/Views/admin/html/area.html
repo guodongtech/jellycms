@@ -38,8 +38,10 @@
 					</div>
 				</script>
 				<script type="text/html" id="barDemo">
-				  <a class="layui-btn layui-btn-xs" {data-id} lay-event="edit"><i class="fa fa-pencil fa-fw"></i>编辑</a>
-				  <a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del"><i class="fa fa-trash-o fa-fw"></i>删除</a>
+					<div class="layui-btn-group">
+						<button type="button" class="layui-btn layui-btn-sm" title="编辑" lay-event="edit"><i class="layui-icon"></i></button>
+						<button type="button" class="layui-btn layui-btn-sm" title="删除" lay-event="del"><i class="layui-icon"></i></button>
+					</div>
 				</script>
 		  </div>
 		   
@@ -131,7 +133,7 @@
 			}},
 			{field:'create_user', title:'添加用户', width:100, hide:true},
 			{field:'create_time', title:'添加时间', width:180},
-			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:100}
 		]],
 		page: true
 	});
