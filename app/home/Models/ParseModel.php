@@ -214,8 +214,12 @@ class ParseModel extends Model
 		$pagebar['statistics'] = "共" . $total . "条 当前" . $page . "/" . $totalPage . "页";
 		$pagebar['numlist'] = $numlist;
 		$pagebar['select'] = 1;
-		//3,中间循环分页
-		for($i = 1; $i <= $totalPage; $i++)
+		//中间循环分页
+		$pageNum = 6;
+		//设置起点 起点位置要保证当前页在中间位置
+		$start = ($page-intval($pageNum/2))<1?1:($page-intval($pageNum/2));
+		$end = ($start + $pageNum)>$totalPage?$totalPage:($start + $pageNum);
+		for($i = $start; $i <= $end; $i++)
 		{
             $active = $i==$page ? "active" : "";
 			$href = url(array($urlname.'_'.$i));
@@ -232,9 +236,6 @@ class ParseModel extends Model
 		$pagebar['bar'] = $string;
 		return $pagebar;
 	}
-	
-	
-	
 	
     public function getSlide($gid, $num)
     {
