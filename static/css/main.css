@@ -216,9 +216,10 @@
     display: block;
     padding: 9px 15px;
     width: 100px !important;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 20px;
     text-align: right;
+	font-size:12px;
 }
 .layui-table-tool {
     position: relative;
