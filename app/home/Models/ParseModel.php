@@ -204,7 +204,6 @@ class ParseModel extends Model
 	}
 	//分页条
 	public function getPageBar($total, $totalPage, $page, $urlname){
-
 		$pagebar['current'] = $page;
 		$pagebar['total'] = $total;
 		$pagebar['pre'] = ($page-1)?url(array($urlname.'_'.($page-1))):url(array($urlname));
@@ -217,29 +216,43 @@ class ParseModel extends Model
 		//中间循环分页
 		$pageNum = 5;
 		//设置起点 起点位置要保证当前页在中间位置
-		
-		if(($page-intval($pageNum/2))<1||$totalPage<=$pageNum){
+		if(($page-intval($pageNum/2))<1 || $totalPage<=$pageNum){
 			$start = 1;
-		}else if(($totalPage-$page) < $pageNum){
-			$start = $totalPage-$pageNum;
+		}else if(($totalPage-$page + intval($pageNum/2)) < $pageNum){
+			 $start = $totalPage-$pageNum+1;
 		}else{
-			$start = $page-intval($pageNum/2);
+			 $start = $page-intval($pageNum/2);
 		}
-		
-		$end = ($start + $pageNum)>=($totalPage)?$totalPage:($start + $pageNum -1);
+		//设置终点
+		if(($page + intval($pageNum/2))<$pageNum){
+			 $end = $pageNum;
+		}else{
+			$end = $start + $pageNum-1;
+		}
 		for($i = $start; $i <= $end; $i++)
 		{
             $active = $i==$page ? "active" : "";
 			$href = url(array($urlname.'_'.$i));
             $numlist.= "<li class='{$active}'><a href='{$href}'>{$i}</a></li>";
 		}
+		if($page == 1){
+			$pagebar['first'] = "javascript:void(0)";
+			$pagebar['pre'] = "javascript:void(0)";
+			$first = 'first';
+		}
+		if($page == $totalPage){
+			$pagebar['next'] = "javascript:void(0)";
+			$pagebar['last'] = "javascript:void(0)";
+			$last = 'last';
+		}
+		
 		$string.= "<div class='pagination'><ul class='pager'>";
         $string .= "<li class='pager-statistics'>".$pagebar['statistics']."</li>";
-        $string .= "<li class='pager-index'><a href='" . $pagebar['first'] . "'>首页</a></li>";
-        $string .= "<li class='pager-pre'><a href='" . $pagebar['pre'] . "'>前一页</a></li>";
+        $string .= "<li class='pager-index ".$first."'><a href='" . $pagebar['first'] . "'>首页</a></li>";
+        $string .= "<li class='pager-pre ".$first."'><a href='" . $pagebar['pre'] . "'>前一页</a></li>";
         $string .= "<li class='pager-list'>".$numlist."</span>";
-        $string .= "<li class='pager-next'><a href='" . $pagebar['next'] . "'>后一页</a></li>";
-        $string .= "<li class='pager-last'><a href='" . $pagebar['last'] . "'>尾页</a></li>";
+        $string .= "<li class='pager-next ".$last."'><a href='" . $pagebar['next'] . "'>后一页</a></li>";
+        $string .= "<li class='pager-last ".$last."'><a href='" . $pagebar['last'] . "'>尾页</a></li>";
 		$string .= "</ul></div>";
 		$pagebar['bar'] = $string;
 		return $pagebar;

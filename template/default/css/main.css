@@ -874,6 +874,12 @@ a.btn-social, .btn-social {
   background-color: #eeeeee;
   border-color: #ddd !important;
 }
+.pagination li.first a {
+  background-color: #eeeeee;
+}
+.pagination li.last a {
+  background-color: #eeeeee;
+}
 .pagination .active a,
 .pagination .active a:hover,
 .pagination .active a:focus {
