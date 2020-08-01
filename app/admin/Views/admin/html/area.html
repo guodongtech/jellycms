@@ -7,7 +7,8 @@
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
 <meta content="webkit" name="renderer">
 <meta content="#F55D54" name="theme-color">
-<title>国栋CMS</title>
+<title>{$GLOBALS.title}-{$GLOBALS.version}-{$GLOBALS.subtitle}</title>
+<meta content='{$GLOBALS.description}' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
@@ -44,35 +45,52 @@
 					<input type="hidden" name="id" value=""> 
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">区域名称</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="name" required="" lay-verify="required" placeholder="请输入区域名称，如：中文" class="layui-input">
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="name" lay-verify="required" placeholder="请输入区域名称，如：中文" class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                <div class="layui-form-item">
-	                     <label class="layui-form-label">区域编码</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="surname" required="" lay-verify="required" placeholder="请输入区域编码，如：cn" class="layui-input">
+	                     <label class="layui-form-label">英文别名</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="surname" lay-verify="required|en" placeholder="英文别名" class="layui-input">
 	                     </div>
 	                </div>
-	                
+                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">绑定域名</label>
-	                     <div class="layui-input-block">
+	                     <div class="layui-input-inline">
 	                     	<input type="text" name="domain" placeholder="请不要填写重复的域名，不区分就不填！" class="layui-input">
 	                     </div>
 	                </div>
 					<div class="layui-form-item">
-						 <label class="layui-form-label">绑定模板</label>
+						 <label class="layui-form-label">PC模板</label>
 						<div class="layui-input-inline">
-							<select name="group_id" lay-verify="required">
-								<option value="">选择模板</option>
+							<select name="pctheme" lay-verify="required">
+								<option value="">选择PC模板</option>
 								<option value="default">default</option>
 								<option value="default">default</option>
 								
 							</select>
 						</div>
 					</div>
+					<div class="layui-form-item">
+						 <label class="layui-form-label">WAP模板</label>
+						<div class="layui-input-inline">
+							<select name="mobiletheme" lay-verify="required">
+								<option value="">选择WAP模板</option>
+								<option value="default">default</option>
+								<option value="default">default</option>
+								
+							</select>
+						</div>
+					</div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">模板文件夹</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="htmlfolder" value="html" lay-verify="required" placeholder="模板文件夹" class="layui-input">
+	                     </div>
+	                </div>	
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">是否默认</label>
 	                     <div class="layui-input-block">
@@ -115,6 +133,7 @@
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 			{field:'name', title:'名称',width:80},
+			{field:'surname', title:'英文别名',width:100},
 			{field:'domain', title:'绑定域名'},
 			{field:'is_default', title:'默认', width:120, hide:true},
 			{field:'is_default_text', title:'默认', width:90, event: 'editStatus',templet: function(res){

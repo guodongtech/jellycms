@@ -3,7 +3,7 @@
 $minPHPVersion = '7.2';
 if (phpversion() < $minPHPVersion)
 {
-	die("Your PHP version must be {$minPHPVersion} or higher to run CodeIgniter. Current version: " . phpversion());
+	die("PHP版本不能低于{$minPHPVersion}，当前PHP版本: " . phpversion());
 }
 define('AUTH', true);
 define('ADMINNAME', basename(__FILE__));  //当前脚本名 菜单URL前缀

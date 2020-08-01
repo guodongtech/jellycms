@@ -50,8 +50,13 @@ class BaseController extends Controller
 		if($res['code'] == 2){
 			//exit($res['msg']);  //暂时不启用。待权限录入结束再开启
 		}
-		
 
+		//后台信息
+		$jellyConfig =  new \Config\config();
+		$GLOBALS['title'] = $jellyConfig->title;
+		$GLOBALS['subtitle'] = $jellyConfig->subTitle;
+		$GLOBALS['description'] = $jellyConfig->description;
+		$GLOBALS['version'] = $jellyConfig->version;
 		//连接数据库
 		$this->db = \Config\Database::connect();
 	}

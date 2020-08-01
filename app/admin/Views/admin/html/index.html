@@ -7,7 +7,7 @@
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
 <meta content="webkit" name="renderer">
 <meta content="#F55D54" name="theme-color">
-<title>国栋CMS</title>
+<title>{$GLOBALS.title}-{$GLOBALS.version}-{$GLOBALS.subtitle}</title>
 <link href="/favicon.ico" rel="icon">
 
 <link rel="stylesheet" href="/static/layui/css/layui.css">
@@ -47,7 +47,7 @@
 		</aside>
 		<div class="main-nav">
 			<div class="gd-logo">
-				<a href="/admin.php/home"><img src="/static/images/logo.png" height="30">GuoDongCMS <span class="layui-badge layui-bg-gray">V3.0.8</span>	</a>
+				<a href="/admin.php/home"><img src="/static/images/logo.png" height="30">{$GLOBALS.title}<span class="layui-badge layui-bg-gray">{$GLOBALS.version}</span>	</a>
 			</div> 
 		{foreach:items = $list key=$k1 item=$v1}
 			<ul id="menu{$v1['id']}">
