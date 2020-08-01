@@ -142,12 +142,12 @@ $("#check").on('click',function(){
 			console.log(data);
 			layer.open({
 	        type: 1 //此处以iframe举例
-	        ,title: '系统更新'
-	        ,area: ['460px', '560px']
+	        ,title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version
+	        ,area: ['460px', '260px']
 	        ,shade: 0
 	        ,maxmin: true
-	        ,offset: ['100px', '260px']
-	        ,content: data.msg.intro+data.msg.upgrade
+	        ,offset: ['250px', '260px']
+	        ,content: data.data.msg
 	        ,btn: ['升级', '忽略']
 	        ,yes: function(){
 	          layer.closeAll();

@@ -40,12 +40,6 @@ class UpdateTest extends BaseController
     // 检查更新
     public function check()
     {
-        // return json_encode(['code'=>1]);
-        // 是否开启远程读取
-        $allow_url_fopen = ini_get('allow_url_fopen');
-        if (!$allow_url_fopen) {
-            return ['code' => 1, 'msg' => "<font color='red'>需要设置 php.ini 中参数 allow_url_fopen = 1</font>"];
-        }
         $url = $this->server; 
         // $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
         // $serviceVersionList = @file_get_contents($url,false,$context);   
@@ -56,50 +50,11 @@ class UpdateTest extends BaseController
         // 处理数据 用作显示
         if(!empty($serviceVersionList))
         {
-            $upgradeArr = array();
-            $introStr = '';
-            $upgradeStr = '';
-            foreach ($serviceVersionList as $key => $val) {
-                // 需要更新的文件
-                $upgradeArr = !empty($val['upgrade']) ? $val['upgrade'] : array();
-                // $upgrade = !empty($val['upgrade']) ? $val['upgrade'] : array();
-                // 合并多版本更新文件
-                // $upgradeArr = array_merge($upgradeArr, $upgrade);
-                // 过滤换行回车
-                $introStr .= '<br>'.$this->filter_line_return($val['intro'], '<br>');
-
-            }
-
-            // 更新文件去重
-            $upgradeArr = array_unique($upgradeArr);
-            $upgradeStr = implode('<br>', $upgradeArr); // 升级提示需要覆盖哪些文件
-
-            $introArr = explode('<br>', $introStr);
-            $introStr = '更新日志：';
-
-            // 拼接日志内容  弹出框显示
-            foreach ($introArr as $key => $val) {
-                if (empty($val)) {
-                    continue;
-                }
-                $introStr .= "<br>{$key}、".$val;
-            }
-
-            $lastupgrade = $serviceVersionList[count($serviceVersionList) - 1];
-            if (!empty($lastupgrade['upgrade_title'])) {
-                $introStr .= '<br>'.$lastupgrade['upgrade_title'];
-            }
-            $lastupgrade['intro'] = htmlspecialchars_decode($introStr); // 更新日志
-            $lastupgrade['upgrade'] = htmlspecialchars_decode($upgradeStr); // 升级提示需要覆盖哪些文件
-
-            // 文件加密 缓存并入库
-            // tpCache('system', ['system_upgrade_filelist'=>base64_encode($lastupgrade['upgrade'])]);
-            /*升级公告*/
-            if (!empty($lastupgrade['notice'])) {
-                $lastupgrade['notice'] = htmlspecialchars_decode($lastupgrade['notice']) . '<br>';
-            }
+            $data['msg'] = "小提示：系统更新不会涉及前台模板及网站数据等。<br>升级将覆盖部分文件，系统会自动备份源文件在data/backup目录下";
+            $data['curent_version'] = $this->curent_version;
+            $data['target_version'] = $serviceVersionList['target_version'];
             /*--end*/
-            return json_encode(['code' => 2, 'msg' => $lastupgrade]);
+            return json_encode(['code' => 2, 'data' => $data]);
         }
         return json_encode(['code' => 1, 'msg' => '已是最新版']);
         }
@@ -139,47 +94,44 @@ class UpdateTest extends BaseController
 
         return Array
         (
-            '0' => Array
+            'id' => '156',
+            'target_version' => '3.8.1',
+            'down_url' => 'http://service.eyoucms.com/uploads/package/20200730/151423/1-200I01514235K.zip',
+            'file_md5' => '86ba8daa088a963405eee40ab3c067ad',
+            'file_size' => '1174773',
+            'sql_file' => Array
                 (
-                    'id' => '156',
-                    'key_num' => 'v1.4.7.1',
-                    'down_url' => 'http://service.eyoucms.com/uploads/package/20200730/151423/1-200I01514235K.zip',
-                    'file_md5' => '86ba8daa088a963405eee40ab3c067ad',
-                    'file_size' => '1174773',
-                    'sql_file' => Array
-                        (
-                            '0' => 'v1.4.7.1.sql'
-                        ),
-                    'intro' => "&lt;font color=&quot;red&quot;&gt;'安全'修复存在SQL注入的漏洞；&lt;/font&gt;
-                    &lt;font color=&quot;red&quot;&gt;'安全'修复存在命令执行的漏洞；&lt;/font&gt;
-                    &lt;font color=&quot;red&quot;&gt;'安全'修复个别功能存在安全隐患的漏洞；&lt;/font&gt;
-                    [新增]视频付费播放功能；
-                    [新增]会员中心支持图集模型的投稿；
-                    [新增]后台tag标签管理的每个tag标签的seo信息；
-                    [新增]补充个别文档列表遗漏的批量审核；
-                    [新增]批量新增/删除文档属性的功能；
-                    [新增]下载模型与会员等级关联的下载次数限制逻辑；",
-                    'notice' => '&lt;font color=&quot;red&quot;&gt;小提示：系统更新不会涉及前台模板及网站数据等。&lt;/font&gt;',
-                    'tips' => "检测到新版本'点击查看'",
-                    'upgrade_title' => '升级将覆盖以下文件，系统会自动备份源文件在version/backup目录下',
-                    'upgrade' => Array
-                        (
-                            '0' => 'application/common/model/Arctype.php',
-                            '1' => 'application/common/model/Taglist.php',
-                            '2' => 'application/route.php',
-                            '3' => 'application/user/controller/PayApi.php',
-                            '4' => 'application/user/controller/Pay.php',
-                            '5' => 'application/user/controller/Media.php',
-                            '6' => 'application/user/controller/UsersRelease.php',
-                            '7' => 'application/user/controller/Download.php',
-                            '8' => 'application/user/controller/Users.php',
-                            '9' => 'application/user/logic/PayApiLogic.php',
-                        ),
-                    'status' => 1,
-                    'add_time' => '1595821031',
-                    'update_time' => '1596100252',
-                    'max_version' => 'v1.4.8',
+                    '0' => 'v1.4.7.1.sql'
                 ),
+            'intro' => "&lt;font color=&quot;red&quot;&gt;'安全'修复存在SQL注入的漏洞；&lt;/font&gt;
+            &lt;font color=&quot;red&quot;&gt;'安全'修复存在命令执行的漏洞；&lt;/font&gt;
+            &lt;font color=&quot;red&quot;&gt;'安全'修复个别功能存在安全隐患的漏洞；&lt;/font&gt;
+            [新增]视频付费播放功能；
+            [新增]会员中心支持图集模型的投稿；
+            [新增]后台tag标签管理的每个tag标签的seo信息；
+            [新增]补充个别文档列表遗漏的批量审核；
+            [新增]批量新增/删除文档属性的功能；
+            [新增]下载模型与会员等级关联的下载次数限制逻辑；",
+            'notice' => '&lt;font color=&quot;red&quot;&gt;小提示：系统更新不会涉及前台模板及网站数据等。&lt;/font&gt;',
+            'tips' => "检测到新版本'点击查看'",
+            'upgrade_title' => '升级将覆盖以下文件，系统会自动备份源文件在version/backup目录下',
+            'upgrade' => Array
+                (
+                    '0' => 'application/common/model/Arctype.php',
+                    '1' => 'application/common/model/Taglist.php',
+                    '2' => 'application/route.php',
+                    '3' => 'application/user/controller/PayApi.php',
+                    '4' => 'application/user/controller/Pay.php',
+                    '5' => 'application/user/controller/Media.php',
+                    '6' => 'application/user/controller/UsersRelease.php',
+                    '7' => 'application/user/controller/Download.php',
+                    '8' => 'application/user/controller/Users.php',
+                    '9' => 'application/user/logic/PayApiLogic.php',
+                ),
+            'status' => 1,
+            'add_time' => '1595821031',
+            'update_time' => '1596100252',
+            'max_version' => 'v1.4.8',
         );
         
 
