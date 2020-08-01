@@ -27,9 +27,23 @@ class AreaModel extends Model
 	{
 		return $this->save($data);
 	}
+	//设置所有区域默认值为0
+	public function setDefault()
+	{
+		$data = array(
+			'default' => 0,
+		);
+		$builder = $this->db->table('area');
+		$builder->update($data);
+	}
+	public function getThisArea($id)
+	{
+		return $this->where(['deleted'=> 0, 'default'=>1, 'id'=>$id])
+                  ->first();
+	}
 	public function getDefalutArea()
 	{
-		return $this->where('deleted', 0)
+		return $this->where(['deleted'=> 0, 'default'=>1])
                   ->first();
 	}
  

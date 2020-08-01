@@ -1,30 +1,26 @@
 <?php
 namespace App\Controllers;
 use \App\Models\AreaModel;
-
+use \App\Models\FileModel;
 class Area extends BaseController
 {
-
-    private $count;
-
-    private $blank;
-
-    private $outData = array();
-
     private $model;
-
     public function __construct()
     {
         $this->model = new AreaModel();
+		$this->FileModel = new FileModel();
     }
 
     public function index()
     {
 		$areaList = $this->model->getList();
+		$themeList = $this->FileModel->getThemeList();
+
 		$data = [
 			'list' => $areaList,
+			"themeList" => $themeList,
 		];
-        echo view('area.html', $data);
+        return view('area.html', $data);
 		
     }
     public function getList()
@@ -36,7 +32,7 @@ class Area extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
 	public function edit(){
 		$post = $this->request->getPost();
@@ -45,9 +41,18 @@ class Area extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			exit(json_encode($rdata));
+			return json_encode($rdata);
 		}
 		$data = $post;
+		if($data['default']){
+			//设置所有区域 default=0
+			$this->model->setDefault();			
+		}else{
+			//当前区域为默认区域，不能设置成非默认
+			if(!empty($this->model->getThisArea($post['id']))){
+				error("失败:必须有一个默认区域", '/'.ADMINNAME.'/area/index/');	
+			}	
+		}
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
@@ -68,12 +73,21 @@ class Area extends BaseController
 				"code" => 0,
 				"msg" => "参数错误",
 			];
-			exit(json_encode($rdata));
+			return json_encode($rdata);
         }
 		$data = [
 			"id" => $id,
 			"deleted" =>  1,
 		];
+		//当前区域为默认区域，不能设置成非默认
+		if(!empty($this->model->getThisArea($id))){
+			$rdata = [
+				"code" => 0,
+				"msg" => "失败:默认区域不能删除",
+			];
+			return json_encode($rdata);
+		}	
+
         if($this->model->edit($data)){
 			$rdata = [
 				"code" => 1,
@@ -86,9 +100,52 @@ class Area extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
-	
+    public function switch()
+    {
+		$post = post();
+		$allowSwitch = ['default'];
+		if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		
+		//必须有一个默认区域
+		if($post['switchValue']){
+			//设置所有区域 default=0
+			$this->model->setDefault();			
+		}else{
+			//当前区域为默认区域，不能设置成非默认
+			if(!empty($this->model->getThisArea($post['id']))){
+				$rdata = [
+					"code" => 0,
+					"msg" => "失败:必须有一个默认区域",
+				];
+				return json_encode($rdata);
+			}	
+		}
+
+		$data = [
+			'id' => $post['id'],
+			$post['switchName'] => (int)$post['switchValue'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
+    }
 	 
 	
 	

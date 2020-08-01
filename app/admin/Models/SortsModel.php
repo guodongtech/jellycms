@@ -19,7 +19,7 @@ class SortsModel extends Model
 		$builder = $this->db->table('sorts');
 		$result   = $builder->select('sorts.*, model.name as m_name')
 							->join('model', 'model.id = sorts.model_id', 'left')
-							->where(['sorts.deleted'=>0])
+							->where(['sorts.deleted'=>0, 'area_id'=>session('area_id')])
 							->get()
 							->getResultArray();
 							

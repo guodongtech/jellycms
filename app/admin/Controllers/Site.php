@@ -18,7 +18,7 @@ class Site extends BaseController
 			"site" => $site,
 			"themeList" => $themeList,
 		];
-         echo view('site.html', $data);
+         return view('site.html', $data);
     }
     public function edit()
     {
@@ -26,7 +26,6 @@ class Site extends BaseController
 		unset($post['file']); //移除LAYUI多余表单
 		if(!$post['title']){
 			error("操作失败", '/'.ADMINNAME.'/site/index/');
-			exit;
 		}
 		$data = $post;
 		$data['area_id'] = $this->session->area_id;
