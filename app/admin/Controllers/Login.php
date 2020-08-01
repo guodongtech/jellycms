@@ -26,11 +26,11 @@ class Login extends Controller
 			Header("Location: /".ADMINNAME."/home/"); 
 			exit;
 		}
-		echo view('login.html');
+		return view('login.html');
     }
     public function capthcha()
     {
-		echo $this->captcha->generate();
+		return $this->captcha->generate();
     }
     public function act()
     {
@@ -43,14 +43,14 @@ class Login extends Controller
 				"code" => 0,
 				"msg" => "参数不能为空",
 			];
-			exit(json_encode($data));
+			return json_encode($data);
 		}
 		if(!$this->captcha->validate($code)){
 			$data = [
 				"code" => 0,
 				"msg" => "验证码错误",
 			];
-			exit(json_encode($data));
+			return json_encode($data);
 		}
 
 		$result = $this->model->getAdmin($name, $passwordMd5);
@@ -76,7 +76,7 @@ class Login extends Controller
 				"msg" => "账号或密码错误",
 			];			
 		}
-		echo json_encode($data);
+		return json_encode($data);
     }
 	
 	public function logout(){

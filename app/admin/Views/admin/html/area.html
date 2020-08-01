@@ -29,7 +29,7 @@
 				<table class="layui-hide" id="table" lay-filter="test"></table>
 				<script type="text/html" id="toolbarDemo">
 					<div class="layui-btn-container">
-						<button class="layui-btn layui-btn-sm" lay-event="add"><span>+</span>新建区域</button>
+						<button class="layui-btn layui-btn-sm" lay-event="add">新建区域</button>
 					</div>
 				</script>
 				<script type="text/html" id="barDemo">
@@ -60,7 +60,7 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">绑定域名</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="domain" placeholder="请不要填写重复的域名，不区分就不填！" class="layui-input">
+	                     	<input type="text" name="domain" placeholder="不要填写重复的域名，可为空！" class="layui-input">
 	                     </div>
 	                </div>
 					<div class="layui-form-item">
@@ -68,9 +68,9 @@
 						<div class="layui-input-inline">
 							<select name="pctheme" lay-verify="required">
 								<option value="">选择PC模板</option>
-								<option value="default">default</option>
-								<option value="default">default</option>
-								
+								{foreach:items = $themeList key=$k item=$v}
+								<option {if:$site['pctheme']==$v}selected{/if} value="{$v}">{$v}</option>
+								{/foreach}
 							</select>
 						</div>
 					</div>
@@ -79,9 +79,9 @@
 						<div class="layui-input-inline">
 							<select name="mobiletheme" lay-verify="required">
 								<option value="">选择WAP模板</option>
-								<option value="default">default</option>
-								<option value="default">default</option>
-								
+								{foreach:items = $themeList key=$k item=$v}
+								<option {if:$site['pctheme']==$v}selected{/if} value="{$v}">{$v}</option>
+								{/foreach}
 							</select>
 						</div>
 					</div>
@@ -94,8 +94,8 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">是否默认</label>
 	                     <div class="layui-input-block">
-	                     	<input type="radio" name="is_default" value="1" title="是">
-							<input type="radio" name="is_default" value="0" title="否" checked="">
+	                     	<input type="radio" name="default" value="1" title="是">
+							<input type="radio" name="default" value="0" title="否" checked="">
 	                     </div>
 	                </div>
 	                
@@ -124,6 +124,12 @@
 	var table = layui.table;
 	var element = layui.element;
 	var $ = layui.jquery;
+	//自定义表单验证
+      form.verify({
+          en:[
+              /^[a-zA-Z]+$/,'只能输入英文'
+          ]
+      });
 	table.render({
 		elem: '#table',url:'{url:/area/getList}',
 		toolbar: '#toolbarDemo',
@@ -132,15 +138,14 @@
 		icon: 'layui-icon-tips',
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'name', title:'名称',width:80},
-			{field:'surname', title:'英文别名',width:100},
-			{field:'domain', title:'绑定域名'},
-			{field:'is_default', title:'默认', width:120, hide:true},
-			{field:'is_default_text', title:'默认', width:90, event: 'editStatus',templet: function(res){
-				if(res.is_default == 1){
-					return '<input type="checkbox" name="switch" checked lay-skin="switch" lay-text="Y|N">';
+			{field:'name', title:'名称',width:80, edit:'text'},
+			{field:'surname', title:'英文别名',width:100, edit:'text'},
+			{field:'domain', title:'绑定域名', edit:'text'},
+			{field:'default', title:'默认', width:90, event: 'switch',templet: function(res){
+				if(res.default == 1){
+					return '<input type="checkbox" name="default" checked lay-skin="switch" lay-text="Y|N">';
 				}else{
-					return '<input type="checkbox" name="switch" lay-skin="switch" lay-text="Y|N">';
+					return '<input type="checkbox" name="default" lay-skin="switch" lay-text="Y|N">';
 				}
 				
 			}},
@@ -165,11 +170,27 @@
 					}
 				}, 'json');
 			});
-		} else if(obj.event === 'edit'){
+		}else if(obj.event === 'edit'){
 			$('#form')[0].reset(); //重置表单
 			loadData(obj.data, '#form')
 			form.render();
 			element.tabChange('tab', 't2');
+		}else if(obj.event === 'switch'){
+			var switchName = $(this).find('input[type="checkbox"]').attr("name");
+			var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+			switchValue = Number(switchValue);
+			$.post('{url:/area/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg);
+					//parent.location.reload();//刷新父窗口
+					table.reload('table');
+				}
+				else{
+					layer.msg(data.msg);
+					table.reload('table');
+				}
+			}, 'json');
+			form.render();
 		}
 	});
 	//头工具栏事件
