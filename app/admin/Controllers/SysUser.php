@@ -17,7 +17,7 @@ class SysUser extends BaseController
 		$data = [
 			'roleList' => $roleResult,
 		];
-        echo view('sysuser.html', $data);
+        return view('sysuser.html', $data);
     }
     public function getList()
     {
@@ -28,7 +28,7 @@ class SysUser extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
 
     public function edit()
@@ -36,14 +36,14 @@ class SysUser extends BaseController
 		$post = post();
 		// 校验密码
 		if($post['password'] != $post['repassword'] && $post['password'] != md5($post['repassword'])){
-			echo $post['password']."-".md5($post['repassword'])."-".$post['repassword'];die;
-			exit(json_encode(['code'=>0,'msg'=>'密码不一致']));	
+ 
+			return json_encode(['code'=>0,'msg'=>'密码不一致']);	
 		}
 		if($post['password'] == $post['repassword']){
 			$post['password'] = md5($post['password']);
 		}
 		if(!$post['name'] || !$post['role_id'] || !$post['realname']){
-			exit(json_encode(['code'=>0,'msg'=>'参数不足']));
+			return json_encode(['code'=>0,'msg'=>'参数不足']);
 		}
 		unset($post['repassword']);
 		$data = $post;
@@ -52,7 +52,7 @@ class SysUser extends BaseController
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			// 校验用户名是否存在
 			if($this->model->checkUser($data)){
-				exit(json_encode(['code'=>0,'msg'=>'该用户已存在，请勿重复添加']));	
+				return json_encode(['code'=>0,'msg'=>'该用户已存在，请勿重复添加']);	
 			}
 		}else{
 			$data['update_user'] = $this->session->id;
@@ -60,9 +60,9 @@ class SysUser extends BaseController
 		}
 
 		if($this->model->edit($data)){
-			exit(json_encode(['code'=>1,'msg'=>'添加成功','url'=>'/'.ADMINNAME.'/sysuser/index/']));		
+			return json_encode(['code'=>1,'msg'=>'添加成功','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
 		}else{
-			exit(json_encode(['code'=>2,'msg'=>'添加失败','url'=>'/'.ADMINNAME.'/sysuser/index/']));		
+			return json_encode(['code'=>2,'msg'=>'添加失败','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
 		}
     }
     public function del()
@@ -73,8 +73,7 @@ class SysUser extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -92,7 +91,7 @@ class SysUser extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -103,8 +102,7 @@ class SysUser extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -121,6 +119,6 @@ class SysUser extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 }

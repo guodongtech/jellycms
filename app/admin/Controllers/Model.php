@@ -18,7 +18,7 @@ class Model extends BaseController
     {
 		$template_file = $this->FileModel->getTemplateList();
 		$data['template_file'] = $template_file;
-        echo view('model.html', $data);
+        return view('model.html', $data);
     }
 	//ajax列表
     public function getList()
@@ -30,7 +30,7 @@ class Model extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
 
   	//添加 编辑都在此处处理
@@ -42,8 +42,7 @@ class Model extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = $post;
 		// 校验模型是否已存在
@@ -54,7 +53,7 @@ class Model extends BaseController
 					"code" => 0,
 					"msg" => "该模型已存在",
 				];
-				exit(json_encode($rdata));	
+				return json_encode($rdata);	
 			}
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
@@ -65,7 +64,7 @@ class Model extends BaseController
 					"code" => 0,
 					"msg" => "该模型已存在",
 				];
-				exit(json_encode($rdata));	
+				return json_encode($rdata);	
 			}
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
@@ -76,13 +75,13 @@ class Model extends BaseController
 				"code" => 1,
 				"msg" => "操作成功",
 			];
-			echo json_encode($rdata);			
+			return json_encode($rdata);			
 		}else{
 			$rdata = [
 				"code" => 0,
 				"msg" => "操作失败",
 			];
-			echo json_encode($rdata);
+			return json_encode($rdata);
 		}
     }
 	//删除操作
@@ -94,8 +93,7 @@ class Model extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		// 内置模型禁止删除
 		$check = $this->model->getValues($id);
@@ -104,7 +102,7 @@ class Model extends BaseController
 				"code" => 0,
 				"msg" => "内置模型禁止删除",
 			];
-			exit(json_encode($rdata));
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -121,7 +119,7 @@ class Model extends BaseController
 				"msg" => "操作成功",
 			];			
 		}
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
 	//状态
     public function switch()
@@ -133,8 +131,7 @@ class Model extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -151,7 +148,7 @@ class Model extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
  
 }

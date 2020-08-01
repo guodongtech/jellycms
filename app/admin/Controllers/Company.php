@@ -18,7 +18,7 @@ class Company extends BaseController
 		$data = [
 			"company" => $company,
 		];
-         echo view('company.html', $data);
+         return view('company.html', $data);
     }
     public function edit()
     {

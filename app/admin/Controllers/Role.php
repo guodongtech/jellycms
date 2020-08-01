@@ -30,7 +30,7 @@ class Role extends BaseController
 			'areaList' => $areaResult,
 		];
 		// echo $authResult;die;
-        echo view('role.html', $data);
+        return view('role.html', $data);
     }
  
     public function getList()
@@ -42,13 +42,13 @@ class Role extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
 		$post = post();
 		if(!$post['name'] || $post['rules_id']=="[]" || !$post['areas_id']){
-			exit(json_encode(['code'=>0,'msg'=>'参数不足']));
+			return json_encode(['code'=>0,'msg'=>'参数不足']);
 		}
 		// 校验角色是否存在
 		$result = $this->model->roleCheck($post['name']);
@@ -62,20 +62,20 @@ class Role extends BaseController
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			if(count($result) > 0){
-				exit(json_encode(['code'=>0,'msg'=>'该角色已存在！']));
+				return json_encode(['code'=>0,'msg'=>'该角色已存在！']);
 			}
 		}else{
 			$data['update_user'] = $this->session->id;
 			$data['id'] = $post['id'];
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 			if(count($result) > 0 && $result[0]['id']!=$post['id']){
-				exit(json_encode(['code'=>0,'msg'=>'该角色已存在！']));
+				return json_encode(['code'=>0,'msg'=>'该角色已存在！']);
 			}
 		}
 		if($this->model->edit($data)){
-			exit(json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/role/index/']));	
+			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/role/index/']);	
 		}else{
-			exit(json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/role/index/']));
+			return json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/role/index/']);
 		}
     }
     public function del()
@@ -86,8 +86,7 @@ class Role extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -105,7 +104,7 @@ class Role extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -116,8 +115,7 @@ class Role extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -134,6 +132,6 @@ class Role extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 }

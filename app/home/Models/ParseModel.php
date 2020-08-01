@@ -10,7 +10,7 @@ class ParseModel extends Model
     {
 		$builder = $this->db->table('area');
 		$result   = $builder->select('*')
-							->where(['is_default'=>1])
+							->where(['default'=>1])
 							->get()
 							->getRowArray();
         return $result['id'];
@@ -51,12 +51,8 @@ class ParseModel extends Model
 							->whereIn('sorts.pid', $pid)
 							->get($num)
 							->getResultArray();
-							
-		
 		foreach($result as $key=>$value){
-			
 			$result[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'])):url(array($value['m_urlname'].'_'.$value['id']));
-	
 		}
         return $result;
     }

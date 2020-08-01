@@ -77,6 +77,6 @@ class Single extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 }

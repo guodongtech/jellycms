@@ -9,7 +9,7 @@ class IndexModel extends Model
     {
 		$builder = $this->db->table('area');
 		$result   = $builder->select('*')
-							->where(['is_default'=>1])
+							->where(['default'=>1])
 							->get()
 							->getRowArray();
         return $result['id'];

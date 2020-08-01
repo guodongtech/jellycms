@@ -27,7 +27,7 @@ class Sorts extends BaseController
 			'areaList' => $areaList,
 			'template_file' => $template_file,
 		];
-        echo view('sorts.html', $data);
+        return view('sorts.html', $data);
     }
     public function getList()
     {
@@ -38,7 +38,7 @@ class Sorts extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -48,7 +48,7 @@ class Sorts extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			exit(json_encode($rdata));
+			return json_encode($rdata);
 		}
 		$data = $post;
 		
@@ -169,7 +169,7 @@ class Sorts extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
     public function getValues(){
 		$post = post();

@@ -13,7 +13,7 @@ class SysLog extends BaseController
     public function index()
     {
 
-        echo view('logs.html');
+        return view('logs.html');
     }
     public function getList()
     {	
@@ -28,7 +28,7 @@ class SysLog extends BaseController
 			"count" => $this->model->getCount(),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
   
     public function clear()
@@ -38,13 +38,13 @@ class SysLog extends BaseController
 				"code" => 1,
 				"msg" => "操作成功",
 			];
-			echo json_encode($rdata);			
+			return json_encode($rdata);			
 		}else{
 			$rdata = [
 				"code" => 0,
 				"msg" => "操作失败",
 			];
-			echo json_encode($rdata);
+			return json_encode($rdata);
 		}
     }
 }

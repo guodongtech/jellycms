@@ -28,7 +28,7 @@ class Menu extends BaseController
 			'menuList' =>$menuList,
 			'roleList' =>$roleList,
 		];
-        echo view('menu.html', $data);
+        return view('menu.html', $data);
     }
     public function getList()
     {
@@ -39,7 +39,7 @@ class Menu extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -49,7 +49,7 @@ class Menu extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			exit(json_encode($rdata));
+			return json_encode($rdata);
 		}
 		foreach($post['roles_id'] as $key=>$value){
 			$post['roles_id'][$key] = (int)$value;
@@ -78,8 +78,7 @@ class Menu extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$ChildMenu = $this->model->getChildMenu($id);
 		if(count($ChildMenu)>0){
@@ -87,8 +86,7 @@ class Menu extends BaseController
 				"code" => 0,
 				"msg" => "有子菜单，无法删除",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		
 		
@@ -108,7 +106,7 @@ class Menu extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -119,8 +117,7 @@ class Menu extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -137,7 +134,7 @@ class Menu extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 
 }

@@ -16,11 +16,11 @@ class Auth extends BaseController
 		$data = [
 			'List' =>$List,
 		];
-        echo view('auth_index.html', $data);
+        return view('auth_index.html', $data);
     }
     public function group()
     {
-        echo view('auth_group.html');
+        return view('auth_group.html');
     }
     public function getList()
     {
@@ -31,7 +31,7 @@ class Auth extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function getGroupList()
     {
@@ -42,7 +42,7 @@ class Auth extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -52,7 +52,7 @@ class Auth extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			exit(json_encode($rdata));
+			return json_encode($rdata);
 		}
 		$data = $post;
 		if(!$post['id']){
@@ -61,7 +61,7 @@ class Auth extends BaseController
 			$data['status'] = 1;
 			// 当前控制器 方法是否已录入
 			if($this->model->checkAdd($data)){
-				exit(json_encode(['code'=>0,'msg'=>'该权限已录入，请勿重复操作']));
+				return json_encode(['code'=>0,'msg'=>'该权限已录入，请勿重复操作']);
 			}
 		}else{
 			$data['update_user'] = $this->session->id;
@@ -69,9 +69,9 @@ class Auth extends BaseController
 		}
 
 		if($this->model->edit($data)){
-			exit(json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/auth/index/']));			
+			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/auth/index/']);			
 		}else{
-			exit(json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/auth/index/']));
+			return json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/auth/index/']);
 		}
 		
     }
@@ -83,8 +83,7 @@ class Auth extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$child = $this->model->getChild($id);
 		if(count($child)>0){
@@ -92,8 +91,7 @@ class Auth extends BaseController
 				"code" => 0,
 				"msg" => "有子权限，无法删除",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -104,13 +102,13 @@ class Auth extends BaseController
 			"code" => 1,
 			"msg" => "操作成功",
 		];
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     // 筛选出最底层节点 修改时默认选中
     public function rulesDeal(){
     	$rules_id = json_decode(post('rules_id'));
     	$result = $this->model->rulesDeal($rules_id);
-    	exit(json_encode($result));
+    	return json_encode($result);
     }
 	
 	

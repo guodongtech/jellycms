@@ -20,7 +20,7 @@ class SlideGroup extends BaseController
 		$data = [
 			"areaList" => $areaList,
 		];
-         echo view('slide_group.html', $data);
+         return view('slide_group.html', $data);
     }
     public function getList()
     {
@@ -31,7 +31,7 @@ class SlideGroup extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {
@@ -41,8 +41,7 @@ class SlideGroup extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = $post;
 		if(!$post['id']){
@@ -65,7 +64,7 @@ class SlideGroup extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
     public function del()
     {
@@ -75,8 +74,7 @@ class SlideGroup extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -94,7 +92,7 @@ class SlideGroup extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -105,8 +103,7 @@ class SlideGroup extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -123,6 +120,6 @@ class SlideGroup extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 }

@@ -17,20 +17,7 @@ class Db extends BaseController
     public function index()
     {
 		$data = [];
-        switch ('mysqli') {
-            case 'mysqli':
-            case 'pdo_mysql':
-                $data['db'] = 'mysql';
-				$data['tables'] = $this->model->getList();
-                break;
-            case 'sqlite':
-            case 'pdo_sqlite':
-                 $data['db'] = 'sqlite';
-                break;
-            default:
-                //error('业务不支持');
-        }
-        echo view('db.html', $data);
+        return view('db.html', $data);
     }
     // 数据库管理
     public function getList()
@@ -42,7 +29,7 @@ class Db extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
 	//数据库优化
 	public function optimize(){

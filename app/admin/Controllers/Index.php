@@ -4,6 +4,6 @@ class Index extends Base
 {    
 	public function index()
 	{	
-		echo view('index.html');
+		return view('index.html');
 	}
 }

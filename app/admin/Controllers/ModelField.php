@@ -21,7 +21,7 @@ class ModelField extends BaseController
 		$data = [
 			"modelList" => $modelList,
 		];
-         echo view('modelfield.html', $data);
+         return view('modelfield.html', $data);
     }
 	//获取列表
     public function getList()
@@ -34,7 +34,7 @@ class ModelField extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
 	//添加 编辑都在此处处理
     public function edit()
@@ -45,8 +45,7 @@ class ModelField extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		
 		$data = $post;
@@ -64,8 +63,7 @@ class ModelField extends BaseController
 					"code" => 0,
 					"msg" => "此模型下已存在该字段",
 				];
-				echo json_encode($rdata);
-				exit;
+				return json_encode($rdata);
 			}
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
@@ -76,8 +74,7 @@ class ModelField extends BaseController
 					"code" => 0,
 					"msg" => "此模型下已存在该字段",
 				];
-				echo json_encode($rdata);
-				exit;
+				return json_encode($rdata);
 			}
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
@@ -88,13 +85,13 @@ class ModelField extends BaseController
 				"code" => 1,
 				"msg" => "操作成功",
 			];
-			echo json_encode($rdata);			
+			return json_encode($rdata);			
 		}else{
 			$rdata = [
 				"code" => 0,
 				"msg" => "操作失败",
 			];
-			echo json_encode($rdata);
+			return json_encode($rdata);
 		}
     }
 	//删除操作 调用model类的save
@@ -106,8 +103,7 @@ class ModelField extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		
 		$data = [
@@ -125,7 +121,7 @@ class ModelField extends BaseController
 				"msg" => "操作成功",
 			];			
 		}
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
 
   

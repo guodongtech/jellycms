@@ -11,7 +11,7 @@ class Upload extends BaseController
 				"code" => 0,
 				"msg" => $file->getError(),
 			];
-			echo json_encode($data);
+			return json_encode($data);
 		}else{ //移动文件
 			$newDateFolder = date('Ymd', time());
 			$newName = $file->getRandomName(); 
@@ -26,7 +26,7 @@ class Upload extends BaseController
 					'path' => '/static/upload/'.$newDateFolder.'/'.$name,
 				],
 			];
-			echo json_encode($data);
+			return json_encode($data);
 		}
 	}
 }

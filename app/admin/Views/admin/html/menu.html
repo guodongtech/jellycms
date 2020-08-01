@@ -171,13 +171,13 @@ treetable.render({
 	cols: [[
 		{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 		{field:'name', title:'菜单名称', width:180},
-		{field:'controller', title:'控制器', width:120},
-		{field:'action', title:'方法', width:120},
-		{field:'params', title:'参数', width:120},
+		{field:'controller', title:'控制器', width:120, edit:'text'},
+		{field:'action', title:'方法', width:120, edit:'text'},
+		{field:'params', title:'参数', width:120, edit:'text'},
 		{field:'icon', title:'图标',width:120,hide:true},
 		{field:'roles_id', title:'角色ID', hide:true},
 		{field:'pid', title:'父类ID', hide:true},
-		{field:'url', title:'URL'},
+		{field:'url', title:'URL', edit:'text'},
 		{field:'roles_text', title:'授权角色',hide:true,templet:function(res){
 			var roles='<div class="layui-input-line">';
 			{foreach:items = $roleList key=$k item=$v}

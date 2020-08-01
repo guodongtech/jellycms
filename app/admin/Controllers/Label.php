@@ -15,7 +15,7 @@ class Label extends BaseController
 		$data = [
 			'list' => $labelList,
 		];
-        echo view('label.html', $data);
+        return view('label.html', $data);
     }
 	
     public function getList()
@@ -27,7 +27,7 @@ class Label extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
 
   	//添加 编辑都在此处处理
@@ -39,8 +39,7 @@ class Label extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = $post;
 		if(is_array($data['content'])){
@@ -99,8 +98,7 @@ class Label extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $id,
@@ -118,7 +116,7 @@ class Label extends BaseController
 			];
 		}
 
-		echo json_encode($rdata);		
+		return json_encode($rdata);		
     }
     public function switch()
     {
@@ -129,8 +127,7 @@ class Label extends BaseController
 				"code" => 0,
 				"msg" => "参数不足",
 			];
-			echo json_encode($rdata);
-			exit;
+			return json_encode($rdata);
 		}
 		$data = [
 			'id' => $post['id'],
@@ -147,7 +144,7 @@ class Label extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-		echo json_encode($rdata);
+		return json_encode($rdata);
     }
 
  

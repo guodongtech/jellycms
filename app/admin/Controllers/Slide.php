@@ -34,7 +34,7 @@ class Slide extends BaseController
 			"count" => $res['total'],
 			"data" => $res['list'],
 		];
-		echo json_encode($data);
+		return json_encode($data);
     }
     public function edit()
     {

@@ -34,7 +34,7 @@ class UpdateTest extends BaseController
 
     public function index()
     {
-        echo view('update_test.html');
+        return view('update_test.html');
     }
 
     // 检查更新
