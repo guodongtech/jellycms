@@ -39,7 +39,7 @@ class Menu extends BaseController
 			"count" => count($list),
 			"data" => $list,
 		];
-		return json_encode($data);
+		return json_encode($data, true);
     }
     public function edit()
     {
@@ -55,6 +55,7 @@ class Menu extends BaseController
 			$post['roles_id'][$key] = (int)$value;
 		}
 		$post['roles_id'] = json_encode($post['roles_id']);
+	 
 		$data = $post;
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
@@ -69,6 +70,34 @@ class Menu extends BaseController
 		}else{
 			error("操作失败", '/'.ADMINNAME.'/menu/index/');
 		}
+    }
+	//编辑字段值
+    public function changeValue()
+    {
+		$post = post();
+		if(!$post['id'] || !$post['field']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $post['id'],
+			$post['field'] => $post['value'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
     }
     public function del()
     {
@@ -88,8 +117,6 @@ class Menu extends BaseController
 			];
 			return json_encode($rdata);
 		}
-		
-		
 		$data = [
 			'id' => $id,
 			'deleted' => 1,

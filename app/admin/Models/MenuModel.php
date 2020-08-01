@@ -16,8 +16,16 @@ class MenuModel extends Model
 	protected $protectFields = false;
     public function getList()
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('menu')." where deleted=0";
-		$result = $this->db->query($sql)->getResultArray();
+		$builder = $this->db->table('menu');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0])
+							->get()
+							->getResultArray();
+        return $result;
+		//转换为数组，便于前端表单填充
+		foreach($result as $key=>$value){
+			$result[$key]['roles_id'] = json_decode($result[$key]['roles_id'], true);
+		}
         return $result;
     }
     public function getMenuListByRoleId($role_id)
@@ -29,8 +37,11 @@ class MenuModel extends Model
     // 获取菜单选择列表
     public function getSelect()
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('menu')." where pid=0 and status=1";
-		$result = $this->db->query($sql)->getResultArray();
+		$builder = $this->db->table('menu');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'pid'=>0, 'status'=>1])
+							->get()
+							->getResultArray();
         return $result;
     }
 
@@ -39,8 +50,11 @@ class MenuModel extends Model
 		return $this->save($data);
 	}
 	public function getChildMenu($pid){
-		$sql = "SELECT * FROM ".$this->db->prefixTable('menu')." where status<9 and pid={$pid}";
-		$result = $this->db->query($sql)->getResultArray();
+		$builder = $this->db->table('menu');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'pid'=>$pid])
+							->get()
+							->getResultArray();
         return $result;
 	}
 

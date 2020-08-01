@@ -128,13 +128,13 @@
 		icon: 'layui-icon-tips',
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'name', title:'用户名', width:120, edit:'text'},
+			{field:'name', title:'用户名', width:120},
 			{field:'realname', title:'真实名字', width:120, edit:'text'},
 			{field:'role_name', title:'角色名', width:120},
 			{field:'role_id', title:'角色', width:120,hide:true},
 			{field:'count', title:'登录次数', width:120},
 			{field:'last_login_ip', title:'最后登录IP', width:120},
-			{field:'create_user', title:'添加用户', width:100},
+			{field:'c_user', title:'添加用户', width:100},
 			{field:'create_time', title:'添加时间'},
 			{field:'status', title:'状态', width:90, event: 'switch',templet: function(res){
 				if(res.status == 1){
@@ -147,7 +147,20 @@
 		]],
 		page: true
 	});
-
+	//监听单元格编辑
+	table.on('edit(test)', function(obj){
+		var value = obj.value, //得到修改后的值
+		data = obj.data, //得到所在行所有键值
+		field = obj.field; //得到字段
+		$.post('{url:/sysuser/changeValue}',{id:data.id,value:value,field:field},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg)
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
+	});
 	//监听行工具事件
 table.on('tool(test)', function(obj){
 	var data = obj.data;

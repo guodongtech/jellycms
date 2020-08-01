@@ -78,6 +78,34 @@ class Role extends BaseController
 			return json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/role/index/']);
 		}
     }
+	//编辑字段值
+    public function changeValue()
+    {
+		$post = post();
+		if(!$post['id'] || !$post['field'] || !$post['value']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $post['id'],
+			$post['field'] => $post['value'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
+    }
     public function del()
     {
 		$id = post('id');

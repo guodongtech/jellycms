@@ -64,6 +64,34 @@ class Area extends BaseController
 			success("操作成功", '/'.ADMINNAME.'/area/index/');				
 		}
 	}
+	//编辑字段值
+    public function changeValue()
+    {
+		$post = post();
+		if(!$post['id'] || !$post['field'] || !$post['value']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $post['id'],
+			$post['field'] => $post['value'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
+    }
     //删除
     public function del()
     {

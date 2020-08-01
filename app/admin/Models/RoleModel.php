@@ -17,8 +17,9 @@ class RoleModel extends Model
     public function getList()
     {
 		$builder = $this->db->table('role');
-		$result   = $builder->select('*')
-							->where(['deleted'=>0])
+		$result   = $builder->select('role.*, admin.name as create_user')
+							->join('admin', 'role.create_user = admin.id', 'left')
+							->where(['role.deleted'=>0])
 							->get()
 							->getResultArray();
         return $result;

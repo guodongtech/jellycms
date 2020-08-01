@@ -51,7 +51,7 @@ class SysUser extends BaseController
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			// 校验用户名是否存在
-			if($this->model->checkUser($data)){
+			if($this->model->checkUser($data['name'])){
 				return json_encode(['code'=>0,'msg'=>'该用户已存在，请勿重复添加']);	
 			}
 		}else{
@@ -65,6 +65,34 @@ class SysUser extends BaseController
 			return json_encode(['code'=>2,'msg'=>'添加失败','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
 		}
     }
+	//编辑字段值
+    public function changeValue()
+    {
+		$post = post();
+		if(!$post['id'] || !$post['field'] || !$post['value']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $post['id'],
+			$post['field'] => $post['value'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
+    }
     public function del()
     {
 		$id = post('id');
@@ -72,6 +100,14 @@ class SysUser extends BaseController
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$check = $this->model->checkUserById($id);
+		if($check['issystem']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "系统用户，不可删除",
 			];
 			return json_encode($rdata);
 		}

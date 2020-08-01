@@ -16,7 +16,7 @@ class Db extends BaseController
     // 数据库管理
     public function index()
     {
-		$data = [];
+		$data['tables'] = $this->model->getList();
         return view('db.html', $data);
     }
     // 数据库管理

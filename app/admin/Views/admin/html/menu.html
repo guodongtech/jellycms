@@ -65,29 +65,30 @@
 				 <div class="layui-form-item">
                      <label class="layui-form-label">控制器</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="controller" placeholder="CONTROLLER" class="layui-input">
+                     	<input type="text" name="controller"  placeholder="CONTROLLER" class="layui-input urlpart">
                      </div>
 					  <div class="layui-form-mid layui-word-aux">外部URL可不填</div>
                 </div>
 				 <div class="layui-form-item">
                      <label class="layui-form-label">方法</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="action" placeholder="ACTION" class="layui-input">
+                     	<input type="text" name="action" placeholder="ACTION" class="layui-input urlpart">
                      </div>
 					 <div class="layui-form-mid layui-word-aux">外部URL可不填</div>
                 </div>
 				 <div class="layui-form-item">
                      <label class="layui-form-label">参数</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="params" placeholder="PARAMS" class="layui-input">
+                     	<input type="text" name="params" placeholder="PARAMS" class="layui-input urlpart">
                      </div>
+					 <div class="layui-form-mid layui-word-aux">外部URL可不填</div>
                 </div>
 				 <div class="layui-form-item">
                      <label class="layui-form-label">URL</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="url" lay-verify="required" placeholder="URL" class="layui-input">
+                     	<input type="text" name="url"  placeholder="URL" class="layui-input">
                      </div>
-					 <div class="layui-form-mid layui-word-aux">/CONTROLLER/ACTION/PARAMS</div>
+					 <div class="layui-form-mid layui-word-aux">/CONTROLLER/ACTION/PARAMS或外部URL</div>
                 </div>
                 
 				<div class="layui-form-item">
@@ -117,9 +118,8 @@
                 <div class="layui-form-item">
                      <label class="layui-form-label">授权角色</label>
 					<div class="layui-input-block">
-					
 						{foreach:items = $roleList key=$k item=$v}
-						<input type="checkbox" name="roles_id[]" value="{$v['id']}" title="{$v['name']}">
+						<input type="checkbox" lay-verify="required" name="roles_id[]" value="{$v['id']}" title="{$v['name']}">
 						{/foreach}
 					</div>
                 </div>                 
@@ -199,9 +199,33 @@ treetable.render({
 	]],
 	done: function(res, curr, count){
 	},
-	page: true
+	//page: true
 });
 
+//URL拼接
+$(".urlpart").keyup(function(){
+	var realurl = '';
+	$(".urlpart").each(function(){
+		if($(this).val() !=''){
+			realurl = realurl + '/' + $(this).val();
+		}
+	})
+	$('input[name=url]').val(realurl);
+})
+//监听单元格编辑
+table.on('edit(test)', function(obj){
+	var value = obj.value, //得到修改后的值
+	data = obj.data, //得到所在行所有键值
+	field = obj.field; //得到字段
+	$.post('{url:/menu/changeValue}',{id:data.id,value:value,field:field},function(data){
+		if(data.code == 1){
+			layer.msg(data.msg)
+		}
+		else{
+			layer.msg(data.msg)
+		}
+	}, 'json');
+});
 	//监听行工具事件
 table.on('tool(test)', function(obj){
 	var data = obj.data;
@@ -229,7 +253,7 @@ table.on('tool(test)', function(obj){
 		switchValue = Number(switchValue);
 		$.post('{url:/menu/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
-				//layer.msg(data.msg)
+				layer.msg(data.msg)
 			}
 			else{
 				layer.msg(data.msg)

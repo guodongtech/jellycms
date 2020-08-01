@@ -16,26 +16,42 @@ class SysUserModel extends Model
 	protected $protectFields = false;
     public function getList()
     {
-		$sql = "SELECT a.*,r.name as role_name FROM ".$this->db->prefixTable('admin')." as a left join ".$this->db->prefixTable('role')." as r on a.role_id=r.id where a.status<9";
-		$result = $this->db->query($sql)->getResultArray();
+		//角色 管理员状态都需正常才显示 删除角色 或者角色不可用 都不显示
+		$builder = $this->db->table('admin');
+		$result   = $builder->select('admin.id,admin.realname,admin.count, admin.last_login_ip, admin.status, admin.create_time, admin.name,role.name as role_name, create_admin.name as c_user')
+							->join('role', 'role.id = admin.role_id', 'left')
+							->join('admin as create_admin', 'create_admin.id = admin.create_user', 'left')
+							->where(['admin.deleted'=>0,'admin.status'=>1, 'role.deleted'=>0,'role.status'=>1])
+							->get()
+							->getResultArray();
         return $result;
     }
     public function getSelect()
     {
-		$sql = "SELECT id,name FROM ".$this->db->prefixTable('admin')." where status=1";
-		$result = $this->db->query($sql)->getResultArray();
+		$builder = $this->db->table('admin');
+		$result   = $builder->select('id,name')
+							->where(['deleted'=>0, 'status'=>1])
+							->get()
+							->getResultArray();
         return $result;
     }
 	public function edit($data){
 		return $this->save($data);
 	}
- 	public function checkUser($data){
-		$sql = "SELECT id FROM ".$this->db->prefixTable('admin')." where name='".$data['name']."'";
-		$result = $this->db->query($sql)->getRowArray();
-        if(isset($result)){
-        	return true;
-        }else{
-        	return false;
-        }
+ 	public function checkUser($name){
+		$builder = $this->db->table('admin');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'name'=>$name])
+							->get()
+							->getRowArray();
+        return $result;
+	}
+ 	public function checkUserById($id){
+		$builder = $this->db->table('admin');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'id'=>$id])
+							->get()
+							->getRowArray();
+        return $result;
 	}
 }
