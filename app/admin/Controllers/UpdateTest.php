@@ -1,15 +1,21 @@
 <?php
 namespace App\Controllers;
 use \App\Models\SysLogModel;
+use \config;
 class UpdateTest extends BaseController
 {
 
-    // 服务器地址
-    private $server;
+    // 服务器地址  获取更新内容
+    private $upgrade_url;
 
     // 当前版本
     private $curent_version;
-
+    // 版本文件路径
+    private $version_txt_path;
+    // 下载到
+    private $download_path;
+    // 备份到
+    private $backup_path;
     // 更新分支
     private $branch;
 
@@ -24,8 +30,14 @@ class UpdateTest extends BaseController
 
     public function __construct()
     {
+        $config = new \Config\Config();
+        $this->data_path = ROOTPATH . '../';
+        $this->upgrade_url = 'http://www.lianxi.com/backend/Update/check/curent_version/'.$this->curent_version;  //先随便写一个
+        $this->version_txt_path = $this->data_path.'version/conf/version.txt'; // 版本文件路径
         $this->curent_version = $this->getCmsVersion();
-        $this->server = 'https://www.pbootcms.com/version/version?curent_version='.$this->curent_version;  //先随便写一个
+        $this->prefix = $config->database['DBPrefix'];
+        $this->download_path = $this->data_path.'version/download/';
+        $this->backup_path = $this->data_path.'version/backup/';
       //  error_reporting(0);
        // $this->branch = $this->config('upgrade_branch') == '2.X.dev' ? '2.X.dev' : '2.X';
       //  $this->force = $this->config('upgrade_force') ?: 0;
@@ -36,34 +48,39 @@ class UpdateTest extends BaseController
     {
         return view('update_test.html');
     }
-
+    // 远程拉取更新数据 
+    public function getUpgradeData(){
+         $url = $this->upgrade_url; 
+        $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
+        $serviceVersionList = @file_get_contents($url,false,$context);   
+        $serviceVersionList = json_decode($serviceVersionList,true);
+        return $serviceVersionList;
+    }
     // 检查更新
     public function check()
     {
-        $url = $this->server; 
-        // $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
-        // $serviceVersionList = @file_get_contents($url,false,$context);   
-        // $serviceVersionList = json_decode($serviceVersionList,true);
-        // 远程拉取更新数据  暂用死数据
-        $serviceVersionList = $this->serviceVersionList();
+        // 远程拉取更新数据 
+       $serviceVersionList = $this->getUpgradeData();
         // print_r($serviceVersionList);die;
         if(!empty($serviceVersionList))
         {
             $data['msg'] = "小提示：系统更新不会涉及前台模板及网站数据等。<br>升级将覆盖部分文件，系统会自动备份源文件在data/backup目录下";
-            $data['curent_version'] = $this->curent_version;
-            $data['target_version'] = $serviceVersionList['target_version'];
-            $data['max_version'] = $serviceVersionList['max_version'];
+            $data['curent_version'] = $this->curent_version; //当前版本
+            $data['target_version'] = $serviceVersionList['target_version']; // 目标版本
+            $data['max_version'] = $serviceVersionList['max_version'];  // 最新版本
             $data['upgrade'] = $serviceVersionList['upgrade']; //文件列表
             /*--end*/
             return json_encode(['code' => 2, 'data' => $data]);
         }
-        return json_encode(['code' => 1, 'msg' => '已是最新版']);
+        return json_encode(['code' => 1, 'msg' => '当前已是最新版']);
     }
     /**
     * 检测目录权限、当前版本的数据库是否与官方一致
     */
     public function checkAuthority(){
-        $filelist = post('filelist'); // 暂不加密
+        // 远程拉取更新数据 
+       $serviceVersionList = $this->getUpgradeData();
+        $filelist = $serviceVersionList['upgrade'];
         $dirs = array();
         $i = -1;
         foreach($filelist as $filename)
@@ -124,63 +141,7 @@ class UpdateTest extends BaseController
             }
         /*↑↑↑↑获取远程服务器提供的数据库更新信息↑↑↑↑*/
             if (is_array($params)) {
-                if (1 == intval($params['code'])) {
-                /*------------------组合本地数据库信息----------------------*/
-
-                    $dbtables = $this->db->query("SHOW TABLE STATUS")->getResultArray();
-                    $local_database = array();
-                    foreach ($dbtables as $k => $v) {
-                        $table = $v['Name'];
-                        if (preg_match('/^'.$this->DBPrefix.'/i', $table)) {
-                            $local_database[$table] = [
-                                'name'  => $table,
-                                'field' => [],
-                            ];
-                        }
-                    }
-                    /*------------------end----------------------*/
-                    /*------------------组合官方远程数据库信息----------------------*/
-                    $info = $params['info'];
-                    $info = preg_replace("#[\r\n]{1,}#", "\n", $info);
-                    $infos = explode("\n", $info);
-                    $infolists = [];
-                    foreach ($infos as $key => $val) {
-                        if (!empty($val)) {
-                            $arr = explode('|', $val);
-                            $infolists[$arr[0]] = $val;
-                        }
-                    }
-                    /*------------------end----------------------*/
-                    /*------------------校验数据库是否合格----------------------*/
-                    foreach ([1] as $testk => $testv) {
-                        // 对比数据表数量
-                        if (count($local_database) < count($infolists)) {
-                            $is_pass = false;
-                            break;
-                        }
-
-                        // 对比数据表字段数量
-                        foreach ($infolists as $k1 => $v1) {
-                            $arr1 = explode('|', $v1);
-                            
-                            if (1 >= count($arr1)) {
-                                continue; // 忽略不对比的数据表
-                            }
-
-                            $fieldArr = explode(',', $arr1[1]);
-                            $table = preg_replace('/^ey_/i', $this->DBPrefix, $arr1[0]);
-                            // $local_fields = Db::getFields($table); // 本地数据表字段列表
-                            $local_fields =$this->db->getFieldNames($table); // 本地数据表字段列表
-                            $local_database[$table]['field'] = $local_fields;
-                            if (count($local_fields) < count($fieldArr)) {
-                                $is_pass = false;
-                                break;
-                            }
-                        }
-                        if (false == $is_pass) break;
-                    }
-                    /*------------------end----------------------*/
-                }elseif(2 == intval($params['code'])){
+                if (2 == intval($params['code'])){
                     return json_encode(['msg'=>'官方缺少版本号'.$this->getCmsVersion().'的数据库比较文件，请第一时间联系技术支持！','code'=>2]);
                 }
                 if (true == $is_pass) {
@@ -193,6 +154,174 @@ class UpdateTest extends BaseController
             return json_encode(['msg'=>$msg,'code'=>2]);
         }
     }
+    /**
+     * 执行更新
+     */
+    public function Upgrade(){
+        error_reporting(0);//关闭所有错误报告
+        $allow_url_fopen = ini_get('allow_url_fopen');
+        if (!$allow_url_fopen) {
+            return json_encode(['code' => 0, 'msg' => "请联系空间商，设置 php.ini 中参数 allow_url_fopen = 1"]);
+        }     
+               
+        if (!extension_loaded('zip')) {
+            return json_encode(['code' => 0, 'msg' => "请联系空间商，开启 php.ini 中的php-zip扩展"]);
+        }
+
+        $serviceVersionList = @file_get_contents($this->upgrade_url);
+        if (false === $serviceVersionList) {
+            return json_encode(['code' => 0, 'msg' => "无法连接远程升级服务器！"]);
+        } else {
+            $serviceVersionList = json_decode($serviceVersionList,true);
+            if (empty($serviceVersionList)) {
+                return json_encode(['code' => 0, 'msg' => "当前没有可升级的版本！"]);
+            }
+        }
+        clearstatcache(); // 清除文件夹权限缓存
+        if (!is_writeable($this->version_txt_path)) {
+            return json_encode(['code' => 0, 'msg' => '文件'.$this->version_txt_path.' 不可写，不能升级!!!']);
+        }
+        /*--end*/
+        /* 下载更新包到backup/download*/
+        $result = $this->downloadFile($serviceVersionList['down_url'], $serviceVersionList['file_md5']);
+        if (!isset($result['code']) || $result['code'] != 1) {
+            return json_encode($result);
+        }
+        /*解压到更新包的文件夹*/
+        $DownFileName = explode('/', $serviceVersionList['down_url']);    
+        $DownFileName = end($DownFileName);
+        $folderName = str_replace(".zip", "", $DownFileName);  // 文件夹
+        /*--end*/
+        /*解压之前，删除已重复的文件夹*/
+        $this->delFile($this->download_path.$folderName);
+        /*--end*/
+
+        /*解压文件*/
+        $zip = new \ZipArchive();//新建一个ZipArchive的对象
+        if ($zip->open($this->download_path.$DownFileName) != true) {
+            return json_encode(['code' => 0, 'msg' => "升级包读取失败!"]);
+        }
+        $zip->extractTo($this->download_path.$folderName.'/');//解压缩到在当前路径下backup文件夹内
+        $zip->close();//关闭处理的zip文件
+        /*--end*/
+        /*升级之前，备份涉及的源文件*/
+        $upgrade = $serviceVersionList['upgrade'];
+        if (!empty($upgrade) && is_array($upgrade)) {
+            foreach ($upgrade as $key => $val) {
+                $source_file = $this->data_path.$val;
+                if (file_exists($source_file)) {
+                    $destination_file = $this->backup_path.$this->curent_version.'_jelly/'.$val;
+                    $this->ciMkdir(dirname($destination_file));
+                    $copy_bool = @copy($source_file, $destination_file);
+                    if (false == $copy_bool) {
+                        return json_encode(['code' => 0, 'msg' => "更新前备份文件失败，请检查所有目录是否有读写权限"]);
+                    }
+                }
+            }
+        }
+
+        /*--end*/
+        /*升级的 sql文件*/
+        if(!empty($serviceVersionList['sql_file']))
+        {
+            //读取数据文件
+            $sqlpath = $this->download_path.$folderName.'/sql/'.trim($serviceVersionList['sql_file']);
+            $execute_sql = file_get_contents($sqlpath);
+            $sqlFormat = $this->sql_split($execute_sql, $this->prefix);
+            /**
+             * 执行SQL语句
+             */
+            try {
+                $counts = count($sqlFormat);
+
+                for ($i = 0; $i < $counts; $i++) {
+                    $sql = trim($sqlFormat[$i]);
+
+                    if (stristr($sql, 'CREATE TABLE')) {
+                        $this->db->query($sql);
+                    } else {
+                        if(trim($sql) == '')
+                           continue;
+                        $this->db->query($sql);
+                    }
+                }
+            } catch (\Exception $e) {
+                return json_encode(['code' => -2, 'msg' => "数据库执行中途失败，请查看官方解决教程，否则将影响后续的版本升级！"]);
+            }
+        } 
+        /*--end*/
+        // 递归复制文件夹
+        $copy_data = $this->recurseCopy($this->download_path.$folderName.'/www', rtrim($this->data_path, '/'), $folderName);
+        /*覆盖自定义后台入口文件*/
+        // $login_php = 'admin.php';
+        // $rootLoginFile = $this->download_path.$folderName.'/www/'.$login_php;
+        // if (file_exists($rootLoginFile)) {
+        //     $adminbasefile = preg_replace('/^(.*)\/([^\/]+)$/i', '$2', request()->baseFile());
+        //     if ($login_php != $adminbasefile && is_writable($this->root_path.$adminbasefile)) {
+        //         if (!@copy($rootLoginFile, $this->root_path.$adminbasefile)) {
+        //             return ['code' => 0, 'msg' => "更新入口文件失败，请第一时间请求技术支持，否则将影响部分功能的使用！"];
+        //         }
+        //         @unlink($this->root_path.$login_php);
+        //     } 
+        // }
+        /*--end*/
+
+        /*修改版本文件 version.txt*/
+
+        /*--end*/
+        
+        /*删除下载的升级包*/
+        $ziplist = glob($this->download_path.'*.zip');
+        @array_map('unlink', $ziplist);
+        /*--end*/
+        // 推送回服务器  记录升级成功
+        // $this->UpgradeLog($serviceVersion['key_num']);
+        
+        return json_encode(['code' => $copy_data['code'], 'msg' => "升级成功{$copy_data['msg']}"]); //code 1 成功  2失败
+
+    }
+    /**     
+     * @param type $fileUrl 下载文件地址
+     * @param type $md5File 文件MD5 加密值 用于对比下载是否完整
+     * @return string 错误或成功提示
+     */
+    private function downloadFile($fileUrl,$md5File)
+    {
+        $downFileName = explode('/', $fileUrl);
+        $downFileName = end($downFileName);
+        $saveDir = $this->download_path.$downFileName; // 保存目录
+        $this->ciMkdir(dirname($saveDir));
+        $content = @file_get_contents($fileUrl, 0, null, 0, 1);
+        if (false === $content) {                 
+            $fileUrl = str_replace('http://', 'https://', $fileUrl);
+            $content = @file_get_contents($fileUrl, 0, null, 0, 1);
+        }
+
+        if(!$content){
+            return ['code' => 0, 'msg' => '官方升级包不存在']; // 文件存在直接退出
+        }
+        if (!stristr($fileUrl, 'https://')) {
+            $ch = curl_init($fileUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+            $file = curl_exec ($ch);
+        } else {
+            $file = httpRequest($fileUrl);
+        }
+
+        if (preg_match('#__HALT_COMPILER()#i', $file)) {
+            return ['code' => 0, 'msg' => '下载包损坏，请联系官方客服！'];
+        }
+        curl_close ($ch);                                                            
+        $fp = fopen($saveDir,'w');
+        fwrite($fp, $file);
+        fclose($fp);
+        if(!$this->eyPreventShell($saveDir) || !file_exists($saveDir) || $md5File != md5_file($saveDir))
+        {
+            return ['code' => 0, 'msg' => '下载保存升级包失败，请检查所有目录的权限以及用户组不能为root'];
+        }
+        return ['code' => 1, 'msg' => '下载成功'];
+    }     
      function getDbInfo(){
         return array(
             'code' => 1,
@@ -216,10 +345,10 @@ gd_test1|id,a,b,c,d,e|;;;;;|",
      *
      * @return string
      */
-    function getCmsVersion()
+    public function getCmsVersion()
     {
         $ver              = '3.8.0';
-        $version_txt_path = ROOTPATH . '..\version\conf\version.txt';
+        $version_txt_path = $this->version_txt_path;
         if (file_exists($version_txt_path)) {
             $fp      = fopen($version_txt_path, 'r');
             $content = @fread($fp, filesize($version_txt_path));
@@ -276,46 +405,6 @@ gd_test1|id,a,b,c,d,e|;;;;;|",
             return true;
         }
     }
-    public function serviceVersionList(){
-
-        return Array
-        (
-            'id' => '156',
-            'target_version' => '3.8.1',
-            'down_url' => 'http://service.eyoucms.com/uploads/package/20200730/151423/1-200I01514235K.zip',
-            'file_md5' => '86ba8daa088a963405eee40ab3c067ad',
-            'file_size' => '1174773',
-            'sql_file' => Array
-                (
-                    '0' => 'v1.4.7.1.sql'
-                ),
-            'intro' => "&lt;font color=&quot;red&quot;&gt;'安全'修复存在SQL注入的漏洞；&lt;/font&gt;
-            &lt;font color=&quot;red&quot;&gt;'安全'修复存在命令执行的漏洞；&lt;/font&gt;
-            &lt;font color=&quot;red&quot;&gt;'安全'修复个别功能存在安全隐患的漏洞；&lt;/font&gt;
-            [新增]视频付费播放功能；
-            [新增]会员中心支持图集模型的投稿；
-            [新增]后台tag标签管理的每个tag标签的seo信息；
-            [新增]补充个别文档列表遗漏的批量审核；
-            [新增]批量新增/删除文档属性的功能；
-            [新增]下载模型与会员等级关联的下载次数限制逻辑；",
-            'notice' => '&lt;font color=&quot;red&quot;&gt;小提示：系统更新不会涉及前台模板及网站数据等。&lt;/font&gt;',
-            'tips' => "检测到新版本'点击查看'",
-            'upgrade_title' => '升级将覆盖以下文件，系统会自动备份源文件在version/backup目录下',
-            'upgrade' => Array
-                (
-                    '0' => 'version/conf/version.txt',
-                    '1' => 'version/sqldata/version.sql',
-                    '2' => 'version/sqldata/version1.sql',
-                    '3' => 'version/sqldata/version2.sql',
-                ),
-            'status' => 1,
-            'add_time' => '1595821031',
-            'update_time' => '1596100252',
-            'max_version' => '3.8.1',
-        );
-        
-
-    }
     /**
      *  过滤换行回车符
      *
@@ -336,304 +425,156 @@ gd_test1|id,a,b,c,d,e|;;;;;|",
     function ciMkdir($path, $purview = 0777)
     {
         if (!is_dir($path)) {
-            ciMkdir(dirname($path), $purview);
+            $this->ciMkdir(dirname($path), $purview);
             if (!mkdir($path, $purview)) {
                 return false;
             }
         }
         return true;
     }
-
-    // 执行下载
-    public function down()
+    /**
+     * 递归删除文件夹
+     *
+     * @param string $path 目录路径
+     * @param boolean $delDir 是否删除空目录
+     * @return boolean
+     */
+    function delFile($path, $delDir = FALSE)
     {
-        if (! ! $list = get('list')) {
-            if (! is_array($list)) { // 单个文件转换为数组
-                $list = array(
-                    $list
-                );
+        if (!is_dir($path))
+            return FALSE;
+        $handle = @opendir($path);
+        if ($handle) {
+            while (false !== ($item = readdir($handle))) {
+                if ($item != "." && $item != "..")
+                    is_dir("$path/$item") ? $this->delFile("$path/$item", $delDir) : @unlink("$path/$item");
             }
-            $len = count($list) ?: 0;
-            foreach ($list as $value) {
-                // 过滤掉相对路径
-                $value = preg_replace_r('{\.\.(\/|\\\\)}', '', $value);
-                // 本地存储路径
-                $path = RUN_PATH . '/upgrade' . $value;
-                // 自动创建目录
-                if (! check_dir(dirname($path), true)) {
-                    json(0, '目录写入权限不足，无法下载升级文件！' . dirname($path));
-                }
-                
-                // 定义执行下载的类型
-                $types = '.zip|.rar|.doc|.docx|.ppt|.pptx|.xls|.xlsx|.chm|.ttf|.otf|';
-                $pathinfo = explode(".", basename($path));
-                $ext = end($pathinfo); // 获取扩展
-                if (preg_match('/\.' . $ext . '\|/i', $types)) {
-                    $result = $this->getServerDown('/release/' . $this->branch . $value, $path);
-                } else {
-                    $result = $this->getServerFile($value, $path);
-                }
-            }
-            if ($len == 1) {
-                json(1, "更新文件 " . basename($value) . " 下载成功!");
-            } else {
-                json(1, "更新文件" . basename($value) . "等文件全部下载成功!");
+            closedir($handle);
+            if ($delDir) {
+                return @rmdir($path);
             }
         } else {
-            json(0, '请选择要下载的文件！');
+            if (file_exists($path)) {
+                return @unlink($path);
+            } else {
+                return FALSE;
+            }
         }
     }
+    private function sql_split($sql, $tablepre) {
 
-    // 执行更新
-    public function update()
+        if ($tablepre != "ey_")
+            $sql = str_replace("`ey_", '`'.$tablepre, $sql);
+              
+        $sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
+        
+        $sql = str_replace("\r", "\n", $sql);
+        $ret = array();
+        $num = 0;
+        $queriesarray = explode(";\n", trim($sql));
+        unset($sql);
+        foreach ($queriesarray as $query) {
+            $ret[$num] = '';
+            $queries = explode("\n", trim($query));
+            $queries = array_filter($queries);
+            foreach ($queries as $query) {
+                $str1 = substr($query, 0, 1);
+                if ($str1 != '#' && $str1 != '-')
+                    $ret[$num] .= $query;
+            }
+            $num++;
+        }
+        return $ret;
+    }
+    /**
+     * 自定义函数递归的复制带有多级子目录的目录
+     * 递归复制文件夹
+     *
+     * @param string $src 原目录
+     * @param string $dst 复制到的目录
+     * @param string $folderName 存放升级包目录名称
+     * @return string
+     */                        
+    //参数说明：            
+    //自定义函数递归的复制带有多级子目录的目录
+    private function recurseCopy($src, $dst, $folderName)
     {
-        if ($_POST) {
-            if (! ! $list = post('list')) {
-                $list = explode(',', $list);
-                $backdir = date('YmdHis');
-                
-                // 分离文件
-                foreach ($list as $value) {
-                    // 过滤掉相对路径
-                    $value = preg_replace_r('{\.\.(\/|\\\\)}', '', $value);
-                    
-                    if (stripos($value, '/script/') === 0 && preg_match('/\.sql$/i', $value)) {
-                        $sqls[] = $value;
-                    } else {
-                        $path = RUN_PATH . '/upgrade' . $value;
-                        $des_path = ROOT_PATH . $value;
-                        $back_path = DOC_PATH . STATIC_DIR . '/backup/upgrade/' . $backdir . $value;
-                        if (! check_dir(dirname($des_path), true)) {
-                            json(0, '目录写入权限不足，无法正常升级！' . dirname($des_path));
-                        }
-                        if (file_exists($des_path)) { // 文件存在时执行备份
-                            check_dir(dirname($back_path), true);
-                            copy($des_path, $back_path);
-                        }
-                        
-                        // 如果后台入口文件修改过名字，则自动适配
-                        if (stripos($path, 'admin.php') !== false && stripos($_SERVER['SCRIPT_FILENAME'], 'admin.php') === false) {
-                            if (file_exists($_SERVER['SCRIPT_FILENAME'])) {
-                                $des_path = $_SERVER['SCRIPT_FILENAME'];
-                            }
-                        }
-                        
-                        $files[] = array(
-                            'sfile' => $path,
-                            'dfile' => $des_path
-                        );
-                    }
+        static $badcp = 0; // 累计覆盖失败的文件总数
+        static $n = 0; // 累计执行覆盖的文件总数
+        static $total = 0; // 累计更新的文件总数
+        $dir = opendir($src);
+        $this->ciMkdir($dst);
+        while (false !== $file = readdir($dir)) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->recurseCopy($src . '/' . $file, $dst . '/' . $file, $folderName);
                 }
-                
-                // 更新数据库
-                if (isset($sqls)) {
-                    $db = new DatabaseController();
-                    switch (get_db_type()) {
-                        case 'sqlite':
-                            copy(DOC_PATH . $this->config('database.dbname'), DOC_PATH . STATIC_DIR . '/backup/sql/' . date('YmdHis') . '_' . basename($this->config('database.dbname')));
-                            break;
-                        case 'mysql':
-                            $db->backupDB();
-                            break;
-                    }
-                    sort($sqls); // 排序
-                    foreach ($sqls as $value) {
-                        $path = RUN_PATH . '/upgrade' . $value;
-                        if (file_exists($path)) {
-                            $sql = file_get_contents($path);
-                            if (! $this->upsql($sql)) {
-                                $this->log("数据库 $value 更新失败!");
-                                json(0, "数据库" . basename($value) . " 更新失败！");
-                            }
+                else {
+                    if (file_exists($src . DIRECTORY_SEPARATOR . $file)) {
+                        $rs = @copy($src . DIRECTORY_SEPARATOR . $file, $dst . DIRECTORY_SEPARATOR . $file);
+                        if($rs) {
+                            $n++;
+                            @unlink($src . DIRECTORY_SEPARATOR . $file);
                         } else {
-                            json(0, "数据库文件" . basename($value) . "不存在！");
+                            $n++;
+                            $badcp++;
                         }
-                    }
-                }
-                
-                // 替换文件
-                if (isset($files)) {
-                    foreach ($files as $value) {
-                        if (! copy($value['sfile'], $value['dfile'])) {
-                            $this->log("文件 " . $value['dfile'] . " 更新失败!");
-                            json(0, "文件 " . basename($value['dfile']) . " 更新失败，请重试!");
-                        }
-                    }
-                }
-                
-                // 清理缓存
-                path_delete(RUN_PATH . '/upgrade', true);
-                path_delete(RUN_PATH . '/cache');
-                path_delete(RUN_PATH . '/complite');
-                path_delete(RUN_PATH . '/config');
-                
-                $this->log("系统更新成功!");
-                json(1, '系统更新成功！');
-            } else {
-                json(0, '请选择要更新的文件！');
-            }
-        }
-    }
-
-    // 缓存文件
-    private function local()
-    {
-        $files = $this->getLoaclList(RUN_PATH . '/upgrade');
-        $files = json_decode(json_encode($files));
-        foreach ($files as $key => $value) {
-            $file = ROOT_PATH . $value->path;
-            if (file_exists($file)) {
-                $files[$key]->type = '<span style="color:Red">覆盖</span>';
-                $files[$key]->ltime = date('Y-m-d H:i:s', filemtime($file));
-            } else {
-                $files[$key]->type = '新增';
-                $files[$key]->ltime = '无';
-            }
-            $files[$key]->ctime = date('Y-m-d H:i:s', $files[$key]->ctime);
-            $upfile[] = $files[$key];
-        }
-        return $upfile;
-    }
-
-    // 执行更新数据库
-    private function upsql($sql)
-    {
-        $sql = explode(';', $sql);
-        $model = new Model();
-        foreach ($sql as $value) {
-            $value = trim($value);
-            if ($value) {
-                $model->amd($value);
-            }
-        }
-        return true;
-    }
-
-    // 获取列表
-    private function getServerList()
-    {
-        $param = array(
-            'version' => APP_VERSION . '.' . RELEASE_TIME . '.' . $this->revise,
-            'branch' => $this->branch,
-            'force' => $this->force,
-            'site' => get_http_url(),
-            'snuser' => $this->config('sn_user')
-        );
-        $url = $this->server . '/index.php?p=/upgrade/getlist&' . http_build_query($param);
-        if (! ! $rs = json_decode(get_url($url, '', '', true))) {
-            if ($rs->code) {
-                if (is_array($rs->data)) {
-                    return $rs->data;
-                } else {
-                    json(1, $rs->data);
-                }
-            } else {
-                json(0, $rs->data);
-            }
-        } else {
-            $this->log('连接更新服务器发生错误，请稍后再试！');
-            json(0, '连接更新服务器发生错误，请稍后再试！');
-        }
-    }
-
-    // 获取文件
-    private function getServerFile($source, $des)
-    {
-        $url = $this->server . '/index.php?p=/upgrade/getFile&branch=' . $this->branch;
-        $data['path'] = $source;
-        $file = basename($source);
-        if (! ! $rs = json_decode(get_url($url, $data, '', true))) {
-            if ($rs->code) {
-                if (! file_put_contents($des, base64_decode($rs->data))) {
-                    $this->log("更新文件  " . $file . " 下载失败!");
-                    json(0, "更新文件 " . $file . " 下载失败!");
-                } else {
-                    return true;
-                }
-            } else {
-                json(0, $rs->data);
-            }
-        } else {
-            $this->log("更新文件 " . $file . " 获取失败!");
-            json(0, "更新文件 " . $file . " 获取失败!");
-        }
-    }
-
-    // 获取非文本文件
-    private function getServerDown($source, $des)
-    {
-        $url = $this->server . $source;
-        $file = basename($source);
-        if (($sfile = fopen($url, "rb")) && ($dfile = fopen($des, "wb"))) {
-            while (! feof($sfile)) {
-                $fwrite = fwrite($dfile, fread($sfile, 1024 * 8), 1024 * 8);
-                if ($fwrite === false) {
-                    $this->log("更新文件 " . $file . " 下载失败!");
-                    json(0, "更新文件 " . $file . " 下载失败!");
-                }
-            }
-            if ($sfile) {
-                fclose($sfile);
-            }
-            if ($dfile) {
-                fclose($dfile);
-            }
-            return true;
-        } else {
-            $this->log("更新文件 " . $file . " 获取失败!");
-            json(0, "更新文件 " . $file . " 获取失败!");
-        }
-    }
-
-    // 获取文件列表
-    private function getLoaclList($path)
-    {
-        $files = scandir($path);
-        foreach ($files as $value) {
-            if ($value != '.' && $value != '..') {
-                if (is_dir($path . '/' . $value)) {
-                    $this->getLoaclList($path . '/' . $value);
-                } else {
-                    $file = $path . '/' . $value;
-                    
-                    // 避免中文乱码
-                    if (! mb_check_encoding($file, 'utf-8')) {
-                        $out_path = mb_convert_encoding($file, 'UTF-8', 'GBK');
                     } else {
-                        $out_path = $file;
+                        $n++;
                     }
-                    
-                    $out_path = str_replace(RUN_PATH . '/upgrade', '', $out_path);
-                    
-                    $this->files[] = array(
-                        'path' => $out_path,
-                        'md5' => md5_file($file),
-                        'ctime' => filemtime($file)
-                    );
+                    $total++;
                 }
             }
         }
-        return $this->files;
+        closedir($dir);
+
+        $code = 1;
+        $msg = '！';
+        if($badcp > 0)
+        {
+            $code = 2;
+            $msg = "，其中失败 <font color='red'>{$badcp}</font> 个文件，<br />请从升级包目录[<font color='red'>data/download/{$folderName}/www</font>]中的取出全部文件覆盖到根目录，完成手工升级。";
+        }
+
+        $this->copySpeed($n, $total);
+
+        return ['code'=>$code, 'msg'=>$msg];
     }
 
-    // 比较程序本号
-    private function compareVersion($sv, $cv)
+    /**
+     * 复制文件进度
+     */
+    private function copySpeed($n, $total)
     {
-        if (empty($sv) || $sv == $cv) {
-            return 0;
+        $data = false;
+
+        if ($n < $total) {
+            $this->copySpeed($n, $total);
+        } else {
+            $data = true;
         }
-        $sv = explode('.', $sv);
-        $cv = explode('.', $cv);
-        $len = count($sv) > count($cv) ? count($sv) : count($cv);
-        for ($i = 0; $i < $len; $i ++) {
-            $n1 = $sv[$i] or 0;
-            $n2 = $cv[$i] or 0;
-            if ($n1 > $n2) {
-                return 1;
-            } elseif ($n1 < $n2) {
-                return 0;
-            }
-        }
-        return 0;
+        
+        return $data;
     }
+    /**
+     * 验证是否shell注入
+     * @param mixed        $data 任意数值
+     * @return mixed
+     */
+    function eyPreventShell($data = '')
+    {
+        $data = true;
+        if (is_string($data) && (preg_match('/^phar:\/\//i', $data) || stristr($data, 'phar://'))) {
+            $data = false;
+        } else if (is_numeric($data)) {
+            $data = intval($data);
+        }
+
+        return $data;
+    }
+
+
+
+
+
 }

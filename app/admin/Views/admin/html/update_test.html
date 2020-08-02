@@ -136,10 +136,9 @@
 $("#check").on('click',function(){
   	$.post('{url: /UpdateTest/check}',function(data){
 		if(data.code == 1){
-			layer.msg('data')
+			layer.msg('当前版本已是最新')
 		}
 		else{
-			console.log(data);
 			layer.open({
 	        type: 1 //此处以iframe举例
 	        ,title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(当前最新"+data.data.max_version+")"
@@ -176,7 +175,6 @@ function checkdir(data) {
         type : "POST",
         url  : "{url: UpdateTest/checkAuthority}",
         timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
-        data : {filelist:data.data.upgrade},
         dataType:"json",
         // error: function(request) {
         //     parent.layer.closeAll();
@@ -185,17 +183,63 @@ function checkdir(data) {
         //     });
         // },
         success: function(res) {
-        	console.log(res.msg);
-            parent.layer.closeAll();
+            layer.closeAll();
             if (1 == res.code) {
-            	layer.msg('开始升级')
-                // upgrade($(obj));
+            	// 开始升级
+                upgrade(data);
             } else {
                 //提示框
                 layer.msg(res.msg)
             }
         }
     }); 
+}
+
+/** 
+ * 升级系统
+ */
+function upgrade(data){
+    layer_loading('升级<font id="upgrade_speed">中</font>');
+    var version = data.data.curent_version;
+    var max_version = data.data.max_version;
+    var timer = '';
+    var speed = 0.01;
+    $.ajax({
+        type : "GET",
+        url  :  '{url: UpdateTest/Upgrade}',
+        timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+        dataType:"json",
+        beforeSend:function(){
+            timer = setInterval(function(){
+                random = Math.floor(Math.random()*89+10);
+                random = random.toString();
+                random = '1.' + random;
+                speed = speed + parseFloat(random);
+                speed = Math.floor(speed * 100) / 100;
+                if (speed >= 98) {
+                    speed = 98;
+                }
+                $('#upgrade_speed').html(speed+'%');
+            }, 500);
+        },
+        error: function(request) {
+            layer.closeAll();
+            layer.alert("空间超时请稍后再试，或手工升级！", {icon: 2, title:false}, function(){
+                top.location.reload();
+            });
+        },
+        success: function(res) {
+            $('#upgrade_speed').html('100%');
+            clearInterval(timer);
+            parent.layer.closeAll();
+            if(res.code == 1){
+
+            	layer.msg('更新完成')
+            }else{
+            	layer.msg(res.msg)
+            }
+        }
+    });
 }
 function layer_loading(msg){
     var loading = parent.layer.msg(
@@ -212,34 +256,6 @@ function layer_loading(msg){
 
     return loading;
 }
-function upgrade(code){
-        layer_loading('升级中');
-        $.ajax({
-            type : "GET",
-            url  : "{:url('Weapp/OneKeyUpgrade')}",
-            timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
-            data : {code:code, _ajax:1},
-            error: function(request) {
-                layer.closeAll();
-                layer.alert("升级失败，请第一时间联系技术协助！", {icon: 2, closeBtn: false, title:false}, function(){
-                    window.location.reload();
-                });
-            },
-            success: function(res) {
-                layer.closeAll();
-                if(1 == res.code){
-                    layer.alert('已升级最新版本!', {icon: 1, closeBtn: false, title:false}, function(){
-                        window.location.reload();
-                    });
-                }
-                else{
-                    layer.alert(res.msg, {icon: 2, closeBtn: false, title:false}, function(){
-                        window.location.reload();
-                    });
-                }
-            }
-        });                 
-    }
   //layer.msg('Hello World');
 }();
 </script>
