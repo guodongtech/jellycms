@@ -47,19 +47,170 @@ class UpdateTest extends BaseController
         // 远程拉取更新数据  暂用死数据
         $serviceVersionList = $this->serviceVersionList();
         // print_r($serviceVersionList);die;
-        // 处理数据 用作显示
         if(!empty($serviceVersionList))
         {
             $data['msg'] = "小提示：系统更新不会涉及前台模板及网站数据等。<br>升级将覆盖部分文件，系统会自动备份源文件在data/backup目录下";
             $data['curent_version'] = $this->curent_version;
             $data['target_version'] = $serviceVersionList['target_version'];
+            $data['max_version'] = $serviceVersionList['max_version'];
+            $data['upgrade'] = $serviceVersionList['upgrade']; //文件列表
             /*--end*/
             return json_encode(['code' => 2, 'data' => $data]);
         }
         return json_encode(['code' => 1, 'msg' => '已是最新版']);
+    }
+    /**
+    * 检测目录权限、当前版本的数据库是否与官方一致
+    */
+    public function checkAuthority(){
+        $filelist = post('filelist'); // 暂不加密
+        $dirs = array();
+        $i = -1;
+        foreach($filelist as $filename)
+
+        {
+            $tfilename = $filename;
+            //取文件路径
+            $curdir = $this->GetDirName($tfilename);
+            if (empty($curdir)) {
+                continue;
+            }
+            if( !isset($dirs[$curdir]) ) 
+            {
+                $dirs[$curdir] = $this->TestIsFileDir($curdir);
+            }
+
+            if($dirs[$curdir]['isdir'] == FALSE) 
+            {
+                continue;
+            }
+            else {
+                @$this->ciMkdir($curdir, 0777);
+                $dirs[$curdir] = $this->TestIsFileDir($curdir);
+            }
+            $i++;
         }
+        $is_pass = true;
+        $msg = '检测通过';
+        if($i > -1)
+        {
+            $n = 0;
+            $dirinfos = '';
+            foreach($dirs as $curdir)
+            {
+                $dirinfos .= $curdir['name']."&nbsp;&nbsp;状态：";
+                if ($curdir['writeable']) {
+                    $dirinfos .= "[√正常]";
+                } else {
+                    $is_pass = false;
+                    $n++;
+                    $dirinfos .= "<font color='red'>[×不可写]</font>";
+                }
+                $dirinfos .= "<br />";
+            }
+            $title = "本次升级需要在下面文件夹写入更新文件，已检测站点有 <font color='red'>{$n}</font> 处没有写入权限：<br />";
+            $title .= "<font color='red'>问题分析（如有问题，请咨询技术支持）：<br />";
+            $title .= "1、检查站点目录的用户组与所有者，禁止是 root ;<br />";
+            $title .= "2、检查站点目录的读写权限，一般权限值是 0755 ;<br />";
+            $title .= "</font>涉及更新目录列表如下：<br />";
+            $msg = $title . $dirinfos;
+        }
+        if($is_pass == true){
+            /*↓↓↓↓获取远程服务器提供的数据库更新信息↓↓↓↓*/
+            // 暂时写死
+            $params = $this->getDbInfo();
+            if (false == $params) {
+                return json_encode(['msg'=>'连接升级服务器超时，请刷新重试，或者联系技术支持！','code'=>2]);
+            }
+        /*↑↑↑↑获取远程服务器提供的数据库更新信息↑↑↑↑*/
+            if (is_array($params)) {
+                if (1 == intval($params['code'])) {
+                /*------------------组合本地数据库信息----------------------*/
 
+                    $dbtables = $this->db->query("SHOW TABLE STATUS")->getResultArray();
+                    $local_database = array();
+                    foreach ($dbtables as $k => $v) {
+                        $table = $v['Name'];
+                        if (preg_match('/^'.$this->DBPrefix.'/i', $table)) {
+                            $local_database[$table] = [
+                                'name'  => $table,
+                                'field' => [],
+                            ];
+                        }
+                    }
+                    /*------------------end----------------------*/
+                    /*------------------组合官方远程数据库信息----------------------*/
+                    $info = $params['info'];
+                    $info = preg_replace("#[\r\n]{1,}#", "\n", $info);
+                    $infos = explode("\n", $info);
+                    $infolists = [];
+                    foreach ($infos as $key => $val) {
+                        if (!empty($val)) {
+                            $arr = explode('|', $val);
+                            $infolists[$arr[0]] = $val;
+                        }
+                    }
+                    /*------------------end----------------------*/
+                    /*------------------校验数据库是否合格----------------------*/
+                    foreach ([1] as $testk => $testv) {
+                        // 对比数据表数量
+                        if (count($local_database) < count($infolists)) {
+                            $is_pass = false;
+                            break;
+                        }
 
+                        // 对比数据表字段数量
+                        foreach ($infolists as $k1 => $v1) {
+                            $arr1 = explode('|', $v1);
+                            
+                            if (1 >= count($arr1)) {
+                                continue; // 忽略不对比的数据表
+                            }
+
+                            $fieldArr = explode(',', $arr1[1]);
+                            $table = preg_replace('/^ey_/i', $this->DBPrefix, $arr1[0]);
+                            // $local_fields = Db::getFields($table); // 本地数据表字段列表
+                            $local_fields =$this->db->getFieldNames($table); // 本地数据表字段列表
+                            $local_database[$table]['field'] = $local_fields;
+                            if (count($local_fields) < count($fieldArr)) {
+                                $is_pass = false;
+                                break;
+                            }
+                        }
+                        if (false == $is_pass) break;
+                    }
+                    /*------------------end----------------------*/
+                }elseif(2 == intval($params['code'])){
+                    return json_encode(['msg'=>'官方缺少版本号'.$this->getCmsVersion().'的数据库比较文件，请第一时间联系技术支持！','code'=>2]);
+                }
+                if (true == $is_pass) {
+                    return json_encode(['msg'=>'环境检测完成','code'=>1]);
+                } else {
+                    return json_encode(['msg'=>'当前数据库结构与官方不一致，请查看官方解决教程！','code'=>2]);
+                }
+            }
+        }else{
+            return json_encode(['msg'=>$msg,'code'=>2]);
+        }
+    }
+     function getDbInfo(){
+        return array(
+            'code' => 1,
+            'info' =>"gd_test|id,a,b,c,d,e|;;;;;|
+gd_test1|id,a,b,c,d,e|;;;;;|",
+        );
+     }
+     /**
+     * 获取文件的目录路径
+     * @param string $filename 文件路径+文件名
+     * @return string
+     */
+    private function GetDirName($filename)
+    {
+        $dirname = preg_replace("#[\\\\\/]{1,}#", '/', $filename);
+        $dirname = preg_replace("#([^\/]*)$#", '', $dirname);
+        return $dirname;
+    }
     /**
      * 获取当前CMS版本号
      *
@@ -76,7 +227,7 @@ class UpdateTest extends BaseController
             $ver = $content ? $content : $ver;
             // echo $ver;die;
         } else {
-            $r = $this->ci_mkdir(dirname($version_txt_path));
+            $r = $this->ciMkdir(dirname($version_txt_path));
             if ($r) {
                 $fp = fopen($version_txt_path, "w+") or die("请设置" . $version_txt_path . "的权限为777");
                 // 读缓存 数据库 暂时写死
@@ -89,6 +240,41 @@ class UpdateTest extends BaseController
 
         }
         return $ver;
+    }
+    /**
+     * 测试目录路径是否有读写权限
+     * @param string $dirname 文件目录路径
+     * @return array
+     */
+    private function TestIsFileDir($dirname)
+    {
+        $dirs = array('name'=>'', 'isdir'=>FALSE, 'writeable'=>FALSE);
+        $dirs['name'] =  $dirname;
+        $this->ciMkdir($dirname);
+        if(is_dir($dirname))
+        {
+            $dirs['isdir'] = TRUE;
+            $dirs['writeable'] = $this->TestWriteAble($dirname);
+        }
+        return $dirs;
+    }
+    /**
+     * 测试目录路径是否有写入权限
+     * @param string $d 目录路劲
+     * @return boolean
+     */
+    private function TestWriteAble($d)
+    {
+        $tfile = '_jelly.txt';
+        $fp = @fopen($d.$tfile,'w');
+        if(!$fp) {
+            return false;
+        }
+        else {
+            fclose($fp);
+            $rs = @unlink($d.$tfile);
+            return true;
+        }
     }
     public function serviceVersionList(){
 
@@ -117,21 +303,15 @@ class UpdateTest extends BaseController
             'upgrade_title' => '升级将覆盖以下文件，系统会自动备份源文件在version/backup目录下',
             'upgrade' => Array
                 (
-                    '0' => 'application/common/model/Arctype.php',
-                    '1' => 'application/common/model/Taglist.php',
-                    '2' => 'application/route.php',
-                    '3' => 'application/user/controller/PayApi.php',
-                    '4' => 'application/user/controller/Pay.php',
-                    '5' => 'application/user/controller/Media.php',
-                    '6' => 'application/user/controller/UsersRelease.php',
-                    '7' => 'application/user/controller/Download.php',
-                    '8' => 'application/user/controller/Users.php',
-                    '9' => 'application/user/logic/PayApiLogic.php',
+                    '0' => 'version/conf/version.txt',
+                    '1' => 'version/sqldata/version.sql',
+                    '2' => 'version/sqldata/version1.sql',
+                    '3' => 'version/sqldata/version2.sql',
                 ),
             'status' => 1,
             'add_time' => '1595821031',
             'update_time' => '1596100252',
-            'max_version' => 'v1.4.8',
+            'max_version' => '3.8.1',
         );
         
 
@@ -142,7 +322,7 @@ class UpdateTest extends BaseController
      * @param     string $str 字符串信息
      * @return    string
      */
-    function filter_line_return($str = '', $replace = '')
+    function filterLineReturn($str = '', $replace = '')
     {
         return str_replace(PHP_EOL, $replace, $str);
     }
@@ -153,10 +333,10 @@ class UpdateTest extends BaseController
      * @param intval $purview 目录权限码
      * @return boolean
      */
-    function ci_mkdir($path, $purview = 0777)
+    function ciMkdir($path, $purview = 0777)
     {
         if (!is_dir($path)) {
-            ci_mkdir(dirname($path), $purview);
+            ciMkdir(dirname($path), $purview);
             if (!mkdir($path, $purview)) {
                 return false;
             }
