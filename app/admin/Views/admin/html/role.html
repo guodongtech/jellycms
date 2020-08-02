@@ -88,7 +88,9 @@
 						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 						  <legend>权限列表</legend>
 						</fieldset>   
- 						<div id="auth-list"></div>
+ 						<div id="auth-list">
+							<table class="layui-hide" id="auth-table" lay-filter="auth-list"></table>
+						</div>
 						
 					</div>
 		  	   		 <div class="layui-form-item">
@@ -111,38 +113,70 @@
 <script src="/static/js/jquery-3.4.1.min.js"></script>
 <script src="/static/js/loadData.js"></script>
 <script>
-!function(){
-var layer = layui.layer,
-form = layui.form;
-var table = layui.table;
-var element = layui.element;
-var $ = layui.jquery;
-table.render({
-	elem: '#table',url:'{url:/role/getList}',
-	toolbar: '#toolbarDemo',
-	title: '提示',
-	layEvent: 'LAYTABLE_TIPS',
-	icon: 'layui-icon-tips',
-	cols: [[
-		{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-		{field:'name', title:'名称', width:120, edit:'text'},
-		{field:'description', title:'描述', edit:'text'},
-		{field:'create_user', title:'添加用户', width:100},
-		{field:'create_time', title:'添加时间', width:180},
-		{field:'create_time', title:'添加时间', width:180},
-		{field:'status', title:'状态', width:90, event: 'switch',templet: function(res){
-			if(res.status == 1){
-				return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
-			}else{
-				return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
-			}
-		}},
-		{field:'areas_id', title:'区域列表', hide:true},
-		{field:'rules_id', title:'权限列表', hide:true},
-		{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
-	]],
-	page: true
-});
+    layui.config({
+        base: '/static/layui/'
+    }).extend({
+        treeTable: 'treetable-lay/treeTable'
+    }).use(['layer', 'table', 'treeTable', 'form', 'jquery', 'element'], function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var $ = layui.jquery;
+	table.render({
+		elem: '#table',url:'{url:/role/getList}',
+		toolbar: '#toolbarDemo',
+		title: '提示',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'名称', width:120, edit:'text'},
+			{field:'description', title:'描述', edit:'text'},
+			{field:'create_user', title:'添加用户', width:100},
+			{field:'create_time', title:'添加时间', width:180},
+			{field:'create_time', title:'添加时间', width:180},
+			{field:'status', title:'状态', width:90, event: 'switch',templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
+				}
+			}},
+			{field:'areas_id', title:'区域列表', hide:true},
+			{field:'rules_id', title:'权限列表', hide:true},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
+		]],
+		page: true
+	});
+
+	var treeTable = layui.treeTable;
+	// 渲染表格
+	var insTb = treeTable.render({
+		elem: '#auth-table',
+		url:'{url:/auth/getList?page=1}',
+		tree: {
+			iconIndex: 2,
+			isPidData: true,
+			idName: 'id',
+			pidName: 'pid',
+			arrowType: 'arrow',
+			getIcon: ''
+		},
+		cols: [[
+			{type: 'numbers'},
+			{type: 'checkbox'},
+			{field:'name', title:'权限名',templet: function(res){
+				return '<i class="fa '+ res.icon +'" aria-hidden="true">'+ res.name +'</i>'
+			}},
+			{field:'controller', title:'控制器', width:120},
+			{field:'action', title:'方法', width:120},
+			{field:'icon', title:'图标',width:120,hide:true},
+			{field:'create_time', title:'创建时间', width:200},
+		]],
+		style: 'margin-top:0;'
+	});
+
 	//监听单元格编辑
 	table.on('edit(test)', function(obj){
 		var value = obj.value, //得到修改后的值
@@ -158,105 +192,68 @@ table.render({
 		}, 'json');
 	});
 	//监听行工具事件
-table.on('tool(test)', function(obj){
-	var data = obj.data;
-	if(obj.event === 'del'){
-		layer.confirm('真的删除行么', function(index){
-			$.post('{url:/role/del}',{id:obj.data.id},function(data){
+	table.on('tool(test)', function(obj){
+		var data = obj.data;
+		if(obj.event === 'del'){
+			layer.confirm('真的删除行么', function(index){
+				$.post('{url:/role/del}',{id:obj.data.id},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg)
+						obj.del();
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+			});
+		}else if(obj.event === 'edit'){
+				$('#form')[0].reset(); //重置表单
+				loadData(obj.data, '#form');
+				form.render();
+				element.tabChange('tab', 't2');
+				$.ajax({
+					url:"{url:/auth/rulesDeal}", //请求的服务端地址
+					data:{"rules_id":obj.data['rules_id']},
+					type:"post",
+					dataType:"json",
+					success:function(data){
+	 
+					}
+				});
+				
+			
+		}else if(obj.event === 'switch'){
+			var switchName = $(this).find('input[type="checkbox"]').attr("name");
+			var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+			switchValue = Number(switchValue);
+			$.post('{url:/role/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 				if(data.code == 1){
-					layer.msg(data.msg)
-					obj.del();
+					//layer.msg(data.msg)
 				}
 				else{
 					layer.msg(data.msg)
 				}
 			}, 'json');
-		});
-	}else if(obj.event === 'edit'){
-			$('#form')[0].reset(); //重置表单
-			loadData(obj.data, '#form');
 			form.render();
-			element.tabChange('tab', 't2');
-			// 处理auth树的默认选中和展开
-			var authList = JSON.stringify({$authList});
-			// 筛选出最底层的节点
-			$.ajax({
-                url:"{url:/auth/rulesDeal}", //请求的服务端地址
-                data:{"rules_id":obj.data['rules_id']},
-                type:"post",
-                dataType:"json",
-                success:function(data){
-                	var son_id = data['diff1'];// 默认选中
-                    for(var i=0;i<son_id.length;i++){
-						authList = authList.replace("\"id\":\""+son_id[i]+"\"","\"id\":\""+son_id[i]+"\",\"checked\":true");
-					}
-					var par_id = data['diff2'];// 默认展开
-                    for(var i=0;i<par_id.length;i++){
-						authList = authList.replace("\"id\":\""+par_id[i]+"\"","\"id\":\""+par_id[i]+"\",\"spread\":true");
-					}
-					// 权限树形图
-					layui.use('tree', function(){
-					    var tree = layui.tree;
-					   
-					    //渲染
-					    tree.render({
-					      elem: '#auth-list',
-					      id: 'authCheck',
-					      accordion:true,
-					      data: JSON.parse(authList),
-					      showCheckbox: true,
-					    });
-					});
-                }
-            });
+		}
 			
-		
-	}else if(obj.event === 'switch'){
-		var switchName = $(this).find('input[type="checkbox"]').attr("name");
-		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
-		switchValue = Number(switchValue);
-		$.post('{url:/role/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
-			if(data.code == 1){
-				//layer.msg(data.msg)
-			}
-			else{
-				layer.msg(data.msg)
-			}
-		}, 'json');
+	});
+
+	//头工具栏事件
+	table.on('toolbar(test)', function(obj){
+		switch(obj.event){
+			case 'add':
+				element.tabChange('tab', 't2');
+				$('#form')[0].reset();
+				$('#form input[name="id"]').val('');
+
+				
+			break;
+		};
 		form.render();
-	}
-		
-});
-
-//头工具栏事件
-table.on('toolbar(test)', function(obj){
-	var checkStatus = table.checkStatus(obj.config.id);
-	switch(obj.event){
-		case 'add':
-			element.tabChange('tab', 't2');
-			$('#form')[0].reset();
-			$('#form input[name="id"]').val('');
-
 			
-		break;
-	};
-	form.render();
-		
-});
-
-// 权限树形图
-layui.use('tree', function(){
-    var tree = layui.tree;
-    //渲染
-    tree.render({
-      elem: '#auth-list',
-      id: 'authCheck',
-      accordion:true,
-      data: {$authList},
-      showCheckbox: true,
-    });
-});
-
+	});
+ 
 	// 表单提交
 	form.on('submit(submit)', function(data){
 		var tree = layui.tree;
@@ -264,7 +261,6 @@ layui.use('tree', function(){
 		var list = new Array();
 		list = getChecked_list(checkData); // 获取选中节点的id值
 	    var url = $("#form").attr('action');
-	    data.field.rules_id = "["+list+"]";
 	    $.ajax({
 	        url:url, //请求的服务端地址
 	        data:data.field,
@@ -287,25 +283,8 @@ layui.use('tree', function(){
 	    });
 	   return false;
 	});
-}();
-// 获取选中节点的id
-    function getChecked_list(data) {
-        var id = "";
-        $.each(data, function (index, item) {
-            if (id != "") {
-                id = id + "," + item.id;
-            }
-            else {
-                id = item.id;
-            }
-            var i = getChecked_list(item.children);
-            if (i != "") {
-                id = id + "," + i;
-            }
-        });
-        return id;
-    }
-
+});
+ 
 </script>
 </body>
 </html>

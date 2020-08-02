@@ -12,9 +12,9 @@ class Auth extends BaseController
 
     public function index()
     {
-		$List = $this->model->getSelect();
+		$list = $this->model->getSelect();
 		$data = [
-			'List' =>$List,
+			'list' =>$list,
 		];
         return view('auth_index.html', $data);
     }

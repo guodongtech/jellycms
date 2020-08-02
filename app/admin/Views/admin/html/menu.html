@@ -147,30 +147,32 @@
 layui.config({
 	base: '/static/layui/'
 }).extend({
-	treetable: 'treetable-lay/treetable'
-}).use(['layer', 'table', 'treetable', 'form', 'jquery', 'element'], function(){
+	treeTable: 'treetable-lay/treeTable'
+}).use(['layer', 'table', 'treeTable', 'form', 'jquery', 'element'], function(){
 var layer = layui.layer,
 form = layui.form;
 var table = layui.table;
 var element = layui.element;
 var $ = layui.jquery;
-var treetable = layui.treetable;
-treetable.render({
-	treeColIndex: 1,//树形图标显示在第几列
-	treeSpid: 0,//最上级的父级id
-	treeIdName: 'id',//id字段的名称
-	treePidName: 'pid',//pid字段的名称
-	treeDefaultClose: true,//是否默认折叠
-	treeLinkage: true,//父级展开时是否自动展开所有子级
+var treeTable = layui.treeTable;
+treeTable.render({
+	tree: {
+		iconIndex: 1,
+		isPidData: true,
+		idName: 'id',
+		pidName: 'pid',
+		arrowType: 'arrow',
+		getIcon: ''
+	},
 	elem: '#table',
 	url:'{url:/menu/getList}',
 	toolbar: '#toolbarDemo',
 	title: '菜单列表',
-	layEvent: 'LAYTABLE_TIPS',
-	icon: 'layui-icon-tips',
 	cols: [[
 		{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-		{field:'name', title:'菜单名称', width:180},
+		{field:'name', title:'权限名',templet: function(res){
+			return '<i class="fa '+ res.icon +'" aria-hidden="true">'+ res.name +'</i>'
+		}},
 		{field:'controller', title:'控制器', width:120, edit:'text'},
 		{field:'action', title:'方法', width:120, edit:'text'},
 		{field:'params', title:'参数', width:120, edit:'text'},
@@ -213,7 +215,7 @@ $(".urlpart").keyup(function(){
 	$('input[name=url]').val(realurl);
 })
 //监听单元格编辑
-table.on('edit(test)', function(obj){
+treeTable.on('edit(table)', function(obj){
 	var value = obj.value, //得到修改后的值
 	data = obj.data, //得到所在行所有键值
 	field = obj.field; //得到字段
@@ -227,7 +229,7 @@ table.on('edit(test)', function(obj){
 	}, 'json');
 });
 	//监听行工具事件
-table.on('tool(test)', function(obj){
+treeTable.on('tool(table)', function(obj){
 	var data = obj.data;
 	if(obj.event === 'del'){
 		layer.confirm('真的删除行么', function(index){
@@ -264,8 +266,7 @@ table.on('tool(test)', function(obj){
 });
 
 //头工具栏事件
-table.on('toolbar(test)', function(obj){
-	var checkStatus = table.checkStatus(obj.config.id);
+treeTable.on('toolbar(table)', function(obj){
 	switch(obj.event){
 		case 'add':
 			element.tabChange('tab', 't2');

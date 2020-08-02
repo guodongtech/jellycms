@@ -41,20 +41,13 @@
 				<form action="{url:/auth/edit}" method="post" class="layui-form" id="form">
 					<input type="hidden" name="id" value=""> 
 					<div class="layui-form-item">
-						<label class="layui-form-label">权限分组</label>
+						<label class="layui-form-label">父权限</label>
 						<div class="layui-input-inline">
 						<select name="pid" lay-verify="required">
 							<option value="0">顶级分组</option>
-							{foreach:items = $List key=$k item=$v}
-								{if:$v['pid']==0}
-								<option value="{$v['id']}">{$v['name']}</option>
-								{foreach:items = $List key=$k1 item=$v1}
-									{if:$v['id'] == $v1['pid']}
-									<option value="{$v1['id']}">----{$v1['name']}</option>
-									{/if}
+								{foreach:items = $list key=$k item=$v}
+								<option value="{$v.id}">{$v.name}</option>
 								{/foreach}
-								{/if}
-							{/foreach}
 						</select>
 						</div>
 					</div>
@@ -118,30 +111,32 @@
     layui.config({
         base: '/static/layui/'
     }).extend({
-        treetable: 'treetable-lay/treetable'
-    }).use(['layer', 'table', 'treetable', 'form', 'jquery', 'element'], function(){
+        treeTable: 'treetable-lay/treeTable'
+    }).use(['layer', 'table', 'treeTable', 'form', 'jquery', 'element'], function(){
 	var layer = layui.layer,
 	form = layui.form;
 	var table = layui.table;
 	var element = layui.element;
 	var $ = layui.jquery;
-	var treetable = layui.treetable;
-	treetable.render({
-		treeColIndex: 1,//树形图标显示在第几列
-		treeSpid: 0,//最上级的父级id
-		treeIdName: 'id',//id字段的名称
-		treePidName: 'pid',//pid字段的名称
-		treeDefaultClose: true,//是否默认折叠
-		treeLinkage: true,//父级展开时是否自动展开所有子级
+	var treeTable = layui.treeTable;
+	treeTable.render({
+		tree: {
+			iconIndex: 1,
+			isPidData: true,
+			idName: 'id',
+			pidName: 'pid',
+			arrowType: 'arrow',
+			getIcon: ''
+		},
 		elem: '#table',
 		url:'{url:/auth/getList?page=1}',
 		toolbar: '#toolbarDemo',
-		title: '管理员列表',
-		layEvent: 'LAYTABLE_TIPS',
-		icon: 'layui-icon-tips',
+		title: '权限列表',
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
-			{field:'name', title:'权限名'},
+			{field:'name', title:'权限名',templet: function(res){
+				return '<i class="fa '+ res.icon +'" aria-hidden="true">'+ res.name +'</i>'
+			}},
 			{field:'controller', title:'控制器', width:120, edit:'text'},
 			{field:'action', title:'方法', width:120, edit:'text'},
 			{field:'icon', title:'图标',width:120,hide:true},
@@ -152,7 +147,7 @@
 		page: true
 	});
 	//监听单元格编辑
-	table.on('edit(test)', function(obj){
+	treeTable.on('edit(table)', function(obj){
 		var value = obj.value, //得到修改后的值
 		data = obj.data, //得到所在行所有键值
 		field = obj.field; //得到字段
@@ -166,9 +161,9 @@
 		}, 'json');
 	});
 	//监听行工具事件
-	table.on('tool(test)', function(obj){
+	treeTable.on('tool(table)', function(obj){
 	var data = obj.data;
-	if(obj.event === 'del'){
+	if(obj.event == 'del'){
 		layer.confirm('真的删除行么', function(index){
 			$.post('{url:/auth/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
@@ -179,7 +174,7 @@
 				}
 			}, 'json');
 		});
-	}else if(obj.event === 'edit'){
+	}else if(obj.event == 'edit'){
 		$('#form')[0].reset(); //重置表单
 		loadData(obj.data, '#form')
 		form.render();
@@ -188,8 +183,7 @@
 });
 
 //头工具栏事件
-table.on('toolbar(test)', function(obj){
-	var checkStatus = table.checkStatus(obj.config.id);
+treeTable.on('toolbar(table)', function(obj){
 	switch(obj.event){
 		case 'add':
 			element.tabChange('tab', 't2');

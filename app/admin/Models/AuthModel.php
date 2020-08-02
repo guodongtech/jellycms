@@ -28,23 +28,35 @@ class AuthModel extends Model
     // 获取权限列表
     public function getTreeList()
     {
-		$sql = "SELECT id,name as title,pid FROM ".$this->db->prefixTable('auth_rule')." where status = 1";
-		$result = $this->db->query($sql)->getResultArray();
-		$tree_list = $this->LayuilevelTree($result);
+		$builder = $this->db->table('auth_rule');
+		$result   = $builder->select('id,name as title,pid')
+							->where(['deleted'=>0, 'status'=>1])
+							->orderBy('sorting DESC, id ASC')
+							->get()
+							->getResultArray();
+		$tree_list = getTree($result);
         return json_encode($tree_list);
     }
     public function getSelect()
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('auth_rule')." where status=1";
-		$result = $this->db->query($sql)->getResultArray();
+		$builder = $this->db->table('auth_rule');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0])
+							->orderBy('sorting DESC, id ASC')
+							->get()
+							->getResultArray();
+		$result = getTree($result);					
         return $result;
     }
 	public function edit($data){
 		return $this->save($data);
 	}
 	public function getChild($pid){
-		$sql = "SELECT * FROM ".$this->db->prefixTable('auth_rule')." where status=1 and pid={$pid}";
-		$result = $this->db->query($sql)->getResultArray();
+		$builder = $this->db->table('auth_rule');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'pid'=>$pid])
+							->get()
+							->getResultArray();
         return $result;
 	}
 	public function checkAdd($data){
