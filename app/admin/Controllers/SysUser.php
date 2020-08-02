@@ -62,7 +62,7 @@ class SysUser extends BaseController
 		}
 
 		if($this->model->edit($data)){
-			return json_encode(['code'=>1,'msg'=>'添加成功','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
+			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
 		}else{
 			return json_encode(['code'=>2,'msg'=>'添加失败','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
 		}
@@ -128,7 +128,6 @@ class SysUser extends BaseController
 				"msg" => "操作失败",
 			];
 		}
-
 		return json_encode($rdata);		
     }
     public function switch()

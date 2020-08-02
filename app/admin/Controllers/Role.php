@@ -47,7 +47,7 @@ class Role extends BaseController
     public function edit()
     {
 		$post = post();
-		if(!$post['name'] || $post['rules_id']=="[]" || !$post['areas_id']){
+		if(!$post['name'] || !$post['areas_id']){
 			return json_encode(['code'=>0,'msg'=>'参数不足']);
 		}
 		// 校验角色是否存在
@@ -57,7 +57,11 @@ class Role extends BaseController
 		$data['rules_id'] = $post['rules_id'];
 		$data['description'] = $post['description'];
 		$data['status'] = $post['status'];
-		$data['areas_id'] = "[".implode(",", $post['areas_id'])."]";
+		$areas_id = $post['areas_id'];
+		foreach($areas_id as $key=>$value){
+			$areas_id[$key] = (int)$areas_id[$key];
+		}
+		$data['areas_id'] = json_encode($areas_id, true);
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
@@ -73,9 +77,17 @@ class Role extends BaseController
 			}
 		}
 		if($this->model->edit($data)){
-			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/role/index/']);	
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+			return json_encode($rdata);			
 		}else{
-			return json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/role/index/']);
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+			return json_encode($rdata);
 		}
     }
 	//编辑字段值

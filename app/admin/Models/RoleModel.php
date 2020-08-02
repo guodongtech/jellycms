@@ -22,6 +22,11 @@ class RoleModel extends Model
 							->where(['role.deleted'=>0])
 							->get()
 							->getResultArray();
+		//转换为数组，便于前端表单填充
+		foreach($result as $key=>$value){
+			$result[$key]['areas_id'] = json_decode($result[$key]['areas_id'], true);
+			$result[$key]['rules_id'] = json_decode($result[$key]['rules_id'], true);
+		}
         return $result;
     }
 

@@ -95,7 +95,7 @@
 					</div>
 		  	   		 <div class="layui-form-item">
 						 <div class="layui-input-inline">
-							<button class="layui-btn" lay-filter="submit" lay-submit="">立即提交</button>
+							<button lay-submit lay-filter="submit" class="layui-btn">立即提交</button>
 							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						 </div>
 				    </div>
@@ -209,19 +209,9 @@
 		}else if(obj.event === 'edit'){
 				$('#form')[0].reset(); //重置表单
 				loadData(obj.data, '#form');
+				insTb.setChecked(obj.data.rules_id);
 				form.render();
 				element.tabChange('tab', 't2');
-				$.ajax({
-					url:"{url:/auth/rulesDeal}", //请求的服务端地址
-					data:{"rules_id":obj.data['rules_id']},
-					type:"post",
-					dataType:"json",
-					success:function(data){
-	 
-					}
-				});
-				
-			
 		}else if(obj.event === 'switch'){
 			var switchName = $(this).find('input[type="checkbox"]').attr("name");
 			var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
@@ -246,8 +236,6 @@
 				element.tabChange('tab', 't2');
 				$('#form')[0].reset();
 				$('#form input[name="id"]').val('');
-
-				
 			break;
 		};
 		form.render();
@@ -256,11 +244,13 @@
  
 	// 表单提交
 	form.on('submit(submit)', function(data){
-		var tree = layui.tree;
-		var checkData = tree.getChecked('authCheck');
-		var list = new Array();
-		list = getChecked_list(checkData); // 获取选中节点的id值
 	    var url = $("#form").attr('action');
+		var checked = insTb.checkStatus(false);
+		var rules_id = new Array();
+		for(var i=0; i<checked.length; i++){
+			rules_id.push(parseInt(checked[i]['id']));
+		}
+		data.field.rules_id = JSON.stringify(rules_id);
 	    $.ajax({
 	        url:url, //请求的服务端地址
 	        data:data.field,
