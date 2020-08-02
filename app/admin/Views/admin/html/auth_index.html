@@ -69,17 +69,25 @@
 					 <div class="layui-form-item">
 						 <label class="layui-form-label">控制器</label>
 						 <div class="layui-input-inline">
-							<input type="text" name="controller" lay-verify="required" placeholder="CONTROLLER" class="layui-input">
+							<input type="text" name="controller"  placeholder="CONTROLLER" class="layui-input">
 						 </div>
-						  <div class="layui-form-mid layui-word-aux">*</div>
+						  <div class="layui-form-mid layui-word-aux"></div>
 					</div>
 					 <div class="layui-form-item">
 						 <label class="layui-form-label">方法</label>
 						 <div class="layui-input-inline">
-							<input type="text" name="action" lay-verify="required" placeholder="ACTION" class="layui-input">
+							<input type="text" name="action" placeholder="ACTION" class="layui-input">
 						 </div>
-						 <div class="layui-form-mid layui-word-aux">*</div>
+						 <div class="layui-form-mid layui-word-aux"></div>
 					</div>
+                
+ 				<div class="layui-form-item">
+                     <label class="layui-form-label">图标</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" name="icon" value="fa-folder-open" placeholder="图标:fa-sliders" class="layui-input">
+                     </div>
+					 <div class="layui-form-mid layui-word-aux"><a target="_blank" href="http://font-awesome.guodong.tech/">图标列表</a></div>
+                </div>  
 					<div class="layui-form-item">
 						 <label class="layui-form-label">排序</label>
 						 <div class="layui-input-inline">
@@ -136,6 +144,7 @@
 			{field:'name', title:'权限名'},
 			{field:'controller', title:'控制器', width:120, edit:'text'},
 			{field:'action', title:'方法', width:120, edit:'text'},
+			{field:'icon', title:'图标',width:120,hide:true},
 			{field:'create_time', title:'创建时间', width:200},
 			{field:'sorting', title:'排序',width:80, edit: 'text'},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
@@ -149,10 +158,10 @@
 		field = obj.field; //得到字段
 		$.post('{url:/auth/changeValue}',{id:data.id,value:value,field:field},function(data){
 			if(data.code == 1){
-				layer.msg(data.msg)
+				layer.msg(data.msg);
 			}
 			else{
-				layer.msg(data.msg)
+				layer.msg(data.msg);
 			}
 		}, 'json');
 	});
@@ -199,15 +208,15 @@ form.on('submit(submit)', function(data){
         type:"post",
         dataType:"json",
         success:function(data){
-            data = eval(data);
-            layui.use('layer', function(){
-                var layer = layui.layer;
-                var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
-                    if(data.url){
-                        window.location.href=data.url;
-                    }
-                });
-            });     
+			if(data.code == 1){
+				layer.msg(data.msg)
+				setTimeout(function (){
+					window.location.reload();
+				}, 1000);
+			}
+			else{
+				layer.msg(data.msg)
+			}     
         },
         error:function(){
           layer.msg('error'); //错误的处理

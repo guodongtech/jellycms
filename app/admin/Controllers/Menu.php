@@ -47,7 +47,7 @@ class Menu extends BaseController
 		if(!$post['name'] || !$post['roles_id']){
 			$rdata = [
 				"code" => 0,
-				"msg" => "参数不足",
+				"msg" => "菜单名 授权角色不能为空",
 			];
 			return json_encode($rdata);
 		}
@@ -64,12 +64,18 @@ class Menu extends BaseController
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
-
 		if($this->model->edit($data)){
-			success("操作成功", '/'.ADMINNAME.'/menu/index/');				
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];		
 		}else{
-			error("操作失败", '/'.ADMINNAME.'/menu/index/');
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
 		}
+		return json_encode($rdata);
     }
 	//编辑字段值
     public function changeValue()

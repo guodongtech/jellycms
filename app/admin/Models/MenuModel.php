@@ -21,7 +21,6 @@ class MenuModel extends Model
 							->where(['deleted'=>0])
 							->get()
 							->getResultArray();
-        return $result;
 		//转换为数组，便于前端表单填充
 		foreach($result as $key=>$value){
 			$result[$key]['roles_id'] = json_decode($result[$key]['roles_id'], true);

@@ -50,7 +50,11 @@ class Area extends BaseController
 		}else{
 			//当前区域为默认区域，不能设置成非默认
 			if(!empty($this->model->getThisArea($post['id']))){
-				error("失败:必须有一个默认区域", '/'.ADMINNAME.'/area/index/');	
+				$rdata = [
+					"code" => 0,
+					"msg" => "必须有一个默认区域",
+				];
+			return json_encode($rdata);
 			}	
 		}
 		if(!$post['id']){
@@ -61,14 +65,23 @@ class Area extends BaseController
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
 		if($this->model->edit($data)){
-			success("操作成功", '/'.ADMINNAME.'/area/index/');				
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];		
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
 		}
+		return json_encode($rdata);
 	}
 	//编辑字段值
     public function changeValue()
     {
 		$post = post();
-		if(!$post['id'] || !$post['field'] || !$post['value']){
+		if(!$post['id'] || !$post['field']){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",

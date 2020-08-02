@@ -75,7 +75,7 @@ class Auth extends BaseController
     public function edit()
     {
 		$post = post();
-		if(!$post['name'] || !$post['controller']|| !$post['action']){
+		if(!$post['name']){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
@@ -97,10 +97,17 @@ class Auth extends BaseController
 		}
 
 		if($this->model->edit($data)){
-			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/auth/index/']);			
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];		
 		}else{
-			return json_encode(['code'=>2,'msg'=>'操作失败，请重试！','url'=>'/'.ADMINNAME.'/auth/index/']);
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
 		}
+		return json_encode($rdata);
 		
     }
     public function del()
@@ -123,7 +130,7 @@ class Auth extends BaseController
 		}
 		$data = [
 			'id' => $id,
-			'status' => 0,
+			'deleted' => 1,
 		];
 		$result = $this->model->edit($data);
 		$rdata = [

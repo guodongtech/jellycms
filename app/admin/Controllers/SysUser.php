@@ -36,16 +36,18 @@ class SysUser extends BaseController
 		$post = post();
 		// 校验密码
 		if($post['password'] != $post['repassword'] && $post['password'] != md5($post['repassword'])){
- 
 			return json_encode(['code'=>0,'msg'=>'密码不一致']);	
 		}
-		if($post['password'] == $post['repassword']){
+		//密码为空，清除掉密码字段
+		if($post['password'] && $post['repassword'] && $post['password'] == $post['repassword']){
 			$post['password'] = md5($post['password']);
+		}else{
+			unset($post['password']);
 		}
+
 		if(!$post['name'] || !$post['role_id'] || !$post['realname']){
 			return json_encode(['code'=>0,'msg'=>'参数不足']);
 		}
-		unset($post['repassword']);
 		$data = $post;
 		if(!$post['id']){
 			$data['create_user'] = $this->session->id;
