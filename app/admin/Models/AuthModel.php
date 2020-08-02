@@ -17,8 +17,12 @@ class AuthModel extends Model
 	// 获取权限列表
     public function getList()
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('auth_rule')." where status = 1";
-		$result = $this->db->query($sql)->getResultArray();
+		$builder = $this->db->table('auth_rule');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0])
+							->orderBy('sorting DESC, id ASC')
+							->get()
+							->getResultArray();
         return $result;
     }
     // 获取权限列表

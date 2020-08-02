@@ -19,6 +19,7 @@ class MenuModel extends Model
 		$builder = $this->db->table('menu');
 		$result   = $builder->select('*')
 							->where(['deleted'=>0])
+							->orderBy('sorting DESC, id ASC')
 							->get()
 							->getResultArray();
 		//转换为数组，便于前端表单填充
