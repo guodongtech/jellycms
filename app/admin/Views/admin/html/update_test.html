@@ -142,7 +142,7 @@ $("#check").on('click',function(){
 			console.log(data);
 			layer.open({
 	        type: 1 //此处以iframe举例
-	        ,title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version
+	        ,title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(当前最新"+data.data.max_version+")"
 	        ,area: ['460px', '260px']
 	        ,shade: 0
 	        ,maxmin: true
@@ -150,7 +150,10 @@ $("#check").on('click',function(){
 	        ,content: data.data.msg
 	        ,btn: ['升级', '忽略']
 	        ,yes: function(){
-	          layer.closeAll();
+	            layer.closeAll();
+	            setTimeout(function(){
+	                checkdir(data); // 请求后台
+	            },200);
 	        }
 	        ,btn2: function(){
 	          layer.closeAll();
@@ -164,6 +167,79 @@ $("#check").on('click',function(){
 		}
 	}, 'json');
 })
+/** 
+ * 检测升级文件的目录权限
+ */
+function checkdir(data) {
+    layer_loading('检测系统');
+    $.ajax({
+        type : "POST",
+        url  : "{url: UpdateTest/checkAuthority}",
+        timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+        data : {filelist:data.data.upgrade},
+        dataType:"json",
+        // error: function(request) {
+        //     parent.layer.closeAll();
+        //     parent.layer.alert("检测不通过，可能被服务器防火墙拦截，请添加白名单，或者联系技术协助！", {icon: 2, title:false}, function(){
+        //         top.location.reload();
+        //     });
+        // },
+        success: function(res) {
+        	console.log(res.msg);
+            parent.layer.closeAll();
+            if (1 == res.code) {
+            	layer.msg('开始升级')
+                // upgrade($(obj));
+            } else {
+                //提示框
+                layer.msg(res.msg)
+            }
+        }
+    }); 
+}
+function layer_loading(msg){
+    var loading = parent.layer.msg(
+    msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
+    {
+        icon: 1,
+        time: 3600000, //1小时后后自动关闭
+        shade: [0.2] //0.1透明度的白色背景
+    });
+    //loading层
+    var index = parent.layer.load(3, {
+        shade: [0.1,'#fff'] //0.1透明度的白色背景
+    });
+
+    return loading;
+}
+function upgrade(code){
+        layer_loading('升级中');
+        $.ajax({
+            type : "GET",
+            url  : "{:url('Weapp/OneKeyUpgrade')}",
+            timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+            data : {code:code, _ajax:1},
+            error: function(request) {
+                layer.closeAll();
+                layer.alert("升级失败，请第一时间联系技术协助！", {icon: 2, closeBtn: false, title:false}, function(){
+                    window.location.reload();
+                });
+            },
+            success: function(res) {
+                layer.closeAll();
+                if(1 == res.code){
+                    layer.alert('已升级最新版本!', {icon: 1, closeBtn: false, title:false}, function(){
+                        window.location.reload();
+                    });
+                }
+                else{
+                    layer.alert(res.msg, {icon: 2, closeBtn: false, title:false}, function(){
+                        window.location.reload();
+                    });
+                }
+            }
+        });                 
+    }
   //layer.msg('Hello World');
 }();
 </script>
