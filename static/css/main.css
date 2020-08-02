@@ -175,7 +175,7 @@
 
 }
 .layui-form-checkbox i {
-    height: 30px !important;
+    height: 30px;
 }
 .layadmin-header {
     display: block;
