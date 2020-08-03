@@ -3,23 +3,18 @@ namespace App\Controllers;
 use  \App\Models\DbModel;
 class Db extends BaseController
 {
-
     private $model;
-
-    private $dbauth;
-
     function __construct()
     {
         $this->model = new DbModel();
     }
 
-    // 数据库管理
+    // 数据库页面
     public function index()
     {
-		$data['tables'] = $this->model->getList();
-        return view('db.html', $data);
+        return view('db.html');
     }
-    // 数据库管理
+    //表列表
     public function getList()
     {
 		$list = $this->model->getList();
@@ -31,10 +26,39 @@ class Db extends BaseController
 		];
 		return json_encode($data);
     }
-	//数据库优化
+	//优化
 	public function optimize(){
 		$post = post();
-		print_r($post);
+		if($this->model->optimize($post['table'])){
+			$data = [
+				"code" => 1,
+				"msg" => "优化完成",
+			];			
+		}else{
+			$data = [
+				"code" => 0,
+				"msg" => "优化失败",
+			];				
+		}
+
+		return json_encode($data);
+	}
+	//修复
+	public function repair(){
+		$post = post();
+		if($this->model->repair($post['table'])){
+			$data = [
+				"code" => 1,
+				"msg" => "优化完成",
+			];			
+		}else{
+			$data = [
+				"code" => 0,
+				"msg" => "优化失败",
+			];				
+		}
+
+		return json_encode($data);
 	}
 
 

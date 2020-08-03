@@ -12,6 +12,33 @@
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
+<style>
+ 
+.console {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 10px solid #F8F8F8;
+    border-top-width: 0;
+    padding: 10px;
+    line-height: 20px;
+    overflow: auto;
+    background-color: #3F3F3F;
+    color: #eee;
+    font-size: 12px;
+    font-family: Courier New;
+}
+.console .green{
+	color: #52c018!important;
+}
+.console .red{
+	color: #ff3300!important;
+}
+.layui-layer-page .layui-layer-content {
+     padding-top: 10px; 
+}
+
+</style>
 <body class="guodong-body">
 {set:$dataSize=0}
 {set:$DataFreeSize=0}
@@ -27,11 +54,13 @@
 		  	   <div class="layui-tab-item layui-show">
 					<table class="layui-hide" id="table" lay-filter="test"></table>
 					<script type="text/html" id="toolbarDemo">
-						<div class="layui-btn-container">
-							<button class="layui-btn layui-btn-sm" lay-event="optimize">优化</button>
-							<button class="layui-btn layui-btn-sm" lay-event="repair">修复</button>
-							<button class="layui-btn layui-btn-sm" lay-event="backuptable">备份表</button>
-							<button class="layui-btn layui-btn-sm" lay-event="backupdatabase">备份数据库</button>
+						<div class="layui-btn-container ">
+							<div class="layui-btn-group">
+								<button class="layui-btn layui-btn-sm" lay-event="optimize">优化</button>
+								<button class="layui-btn layui-btn-sm" lay-event="repair">修复</button>
+								<button class="layui-btn layui-btn-sm" lay-event="backuptables">备份表</button>
+								<button class="layui-btn layui-btn-sm" lay-event="backupdatabase">备份数据库</button>
+							</div>
 						</div>
 					</script>
 					<script type="text/html" id="barDemo">
@@ -42,9 +71,19 @@
 	  </div>
 </div>
 </div>
-<script src="/static/layui/layui.all.js"></script>
+
+<div id="console" style="display:none;">
+	<div class="console" contenteditable=true>
+		<ul id="console-content">
+			<li class="green">表gd_user完成</li>
+			<li class="red">服务器返回时间0.7S</li>
+		</ul>
+	</div>
+</div>
+<script src="/static/layui/layui.js"></script>
+<!-- layer模块增加了content方法，不要用官方文件直接替换 -->
 <script>
-!function(){
+layui.use(['layer', 'form','table','jquery','element'], function(){
 	var layer = layui.layer,
 	form = layui.form;
 	var table = layui.table;
@@ -56,7 +95,7 @@
 		title: '提示',
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
-		//totalRow: true,
+		totalRow: true,
 		cols: [[
 			{type: 'checkbox', fixed: 'left'},
 			{field:'Name', title:'表名称', width:180,},
@@ -79,39 +118,150 @@
 		page: false
 	});
  
+	var tableNames = new Array();//未处理表数组
+	//头工具栏事件
+	table.on('toolbar(test)', function(obj){
+		var checkStatus = table.checkStatus(obj.config.id);
+		switch(obj.event){
+			case 'optimize':
+				var data = checkStatus.data;
+				if(data.length==0){
+					layer.msg('请选择需要操作的表');
+					break;
+				}
+				tableNames = []; //清空表数组
+				initconsole();
+				data.forEach(function (item, idnex, array) {
+					tableNames.push(item.Name);
+				})
+				optimize(tableNames);
+				
+				break;
+			case 'repair':
+				var data = checkStatus.data;
+				if(data.length==0){
+					layer.msg('请选择需要操作的表');
+					break;
+				}
+				
+				tableNames = []; //清空表数组
+				initconsole();
+				
+				data.forEach(function (item, idnex, array) {
+					tableNames.push(item.Name);
+				})
+				repair(tableNames);
+				break;
+			case 'backuptables':
+				var data = checkStatus.data;
+				initconsole();
+				//layer_loading('正在处理');
 
-//头工具栏事件
-table.on('toolbar(test)', function(obj){
-	var checkStatus = table.checkStatus(obj.config.id);
-	switch(obj.event){
-		case 'optimize':
-		var data = checkStatus.data;
-		var tableNames = [];
-		data.forEach(function (item, idnex, array) {
-			tableNames[idnex] = item.Name;
-		})
-		
-		$.post('{url:/db/optimize}',{names:tableNames},function(data){
+				break;
+			case 'backupdatabase':
+				var data = checkStatus.data;
+				var tableNames = new Array();
+				data.forEach(function (item, idnex, array) {
+					tableNames.push(item.Name);
+				})
+				layer_loading('正在处理');
+
+				break;
+		};
+		form.render();
+	})
+	function layer_loading(msg){
+		var loading = parent.layer.msg(
+		msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
+		{
+			icon: 1,
+			time: 3600000, //1小时后后自动关闭
+			shade: [0.2] //0.1透明度的白色背景
+		});
+		//loading层
+		var index = parent.layer.load(3, {
+			shade: [0.1,'#fff'] //0.1透明度的白色背景
+		});
+		return loading;
+	}
+	
+	var index;//控制台句柄
+	//初始化进度控制台 警告：layer.js 添加了content方法不可用官方文件直接替换
+	function initconsole(){
+		index = layer.open({
+		  type: 1 
+		  ,area: ['500px', '300px']
+		  ,title: '进度控制台'
+		  ,maxmin: true //允许全屏最小化
+		  ,content: $('#console').html()
+		});
+		clear(index);
+		insert('<li>控制初始化完成</li>');
+		update(index);
+	}
+
+	//插入消息
+	function insert(str){
+		$('#console-content').prepend(str);
+	}
+	//更新控制台消息
+	function update(index){
+		layer.content($('#console').html(), index) 
+	}
+	//清空控制台消息
+	function clear(index){
+		$('#console-content').html('');
+		layer.content('', index);
+	}
+	//批量优化表
+	function optimize(tableNames){
+		if(tableNames.length == 0){
+			insert('<li>任务完成！</li>');
+			update(index);
+			return true;
+		}
+		var start = Date.parse(new Date());//开始时间
+		insert('<li>正在优化:'+tableNames[0]+'</li>');
+		update(index);
+		$.post('{url:/db/optimize}',{table:tableNames[0]},function(data){
 			if(data.code == 1){
-				layer.msg(1)
+				var end = Date.parse(new Date());//结束时间
+				insert('<li class="green">优化完成:'+tableNames[0]+'。耗时:'+ (end-start) +'ms</li>');
+				update(index);
+				tableNames.splice(0,1);//删除当前元素
+				optimize(tableNames);
 			}
 			else{
-				layer.msg(msg.msg)
+				insert('<li class="red">优化失败:'+name+'</li>');
+				update(index);
 			}
 		}, 'json');
-		break;
-	};
-	form.render();
+	}
+	//批量修复表
+	function repair(tableNames){
+		if(tableNames.length == 0){
+			insert('<li>任务完成！</li>');
+			update(index);
+			return true;
+		}
+		var start = Date.parse(new Date());//开始时间
+		insert('<li>正在修复:'+tableNames[0]+'</li>');
+		update(index);
+		$.post('{url:/db/repair}',{table:tableNames[0]},function(data){
+			if(data.code == 1){
+				var end = Date.parse(new Date());//结束时间
+				insert('<li class="green">修复完成:'+tableNames[0]+'。耗时:'+ (end-start) +'ms</li>');
+				update(index);
+				tableNames.splice(0,1);//删除当前元素
+				repair(tableNames);
+			}
+			else{
+				insert('<li class="red">修复失败:'+name+'</li>');
+				update(index);
+			}
+		}, 'json');
+	}
 })
-
-
-
-
-
-
-
-
-}();
 </script>
 </body>
 </html>
