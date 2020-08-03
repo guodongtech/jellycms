@@ -30,60 +30,27 @@
 						<th width="30">选择</th>
 						<th>更新文件</th>
 						<th>更新方式</th>
+						<th>与官方原始版本是否一致</th>
 						<th>本地时间</th>
 						<th>更新时间</th>
 					</tr>
 				</thead>
 				<tbody id="upfile">
+				{if: $upgrade_list}
+					{foreach: items=$upgrade_list item=$v}
 					<tr>
 						<td><input type="checkbox" checked="" class="checkbox checkitem" lay-ignore="" name="list" value="/LICENSE"></td>
-						<td>/LICENSE</td>
-						<td>新增</td>
+						<td>{$v['filename']}</td>
+						<td>{$v['type']}</td>
+						<td>{$v['is_same']}</td>
 						<td>无</td>
 						<td>2020-03-08 23:26:00</td>
 					</tr>
-					<tr>
-						<td><input type="checkbox" checked="" class="checkbox checkitem" lay-ignore="" name="list" value="/README.md"></td>
-						<td>/README.md</td>
-						<td>新增</td>
-						<td>无</td>
-						<td>2020-03-08 23:26:00</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" checked="" class="checkbox checkitem" lay-ignore="" name="list" value="/admin.php">
-						</td>
-						<td>/admin.php</td>
-						<td>新增</td>
-						<td>无</td>
-						<td>2020-03-08 23:26:00</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" checked="" class="checkbox checkitem" lay-ignore="" name="list" value="/apps/admin/controller/system/ConfigController.php">
-						</td>
-						<td>/apps/admin/controller/system/ConfigController.php</td>
-						<td><span style="color:Red">覆盖</span></td>
-						<td>2020-06-18 15:21:08</td>
-						<td>2020-06-21 21:34:46</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" checked="" class="checkbox checkitem" lay-ignore="" name="list" value="/apps/common/version.php">
-						</td>
-						<td>/apps/common/version.php</td>
-						<td><span style="color:Red">覆盖</span></td>
-						<td>2020-06-18 15:21:08</td>
-						<td>2020-06-21 21:34:46</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" checked="" class="checkbox checkitem" lay-ignore="" name="list" value="/doc/ChangeLog.txt">
-						</td>
-						<td>/doc/ChangeLog.txt</td>
-						<td><span style="color:Red">覆盖</span></td>
-						<td>2020-06-18 15:21:08</td>
-						<td>2020-06-21 21:34:46</td>
-					</tr>
+					{/foreach}
+				{/if}
 					<tr>
 						<td><input type="checkbox" class="checkbox" checked="" lay-ignore="" id="checkall" title="全选"></td>
-						<td colspan="4">总共检测到 6 个文件</td>
+						<td colspan="5">总共检测到 {$filecount} 个文件</td>
 					</tr>
 				</tbody>
 			</table>
@@ -136,7 +103,7 @@
 $("#check").on('click',function(){
   	$.post('{url: /UpdateTest/check}',function(data){
 		if(data.code == 1){
-			layer.msg('当前版本已是最新')
+			layer.msg(data.msg)
 		}
 		else{
 			layer.open({
@@ -223,7 +190,7 @@ function upgrade(data){
             }, 500);
         },
         error: function(request) {
-            layer.closeAll();
+            parent.layer.closeAll();
             layer.alert("空间超时请稍后再试，或手工升级！", {icon: 2, title:false}, function(){
                 top.location.reload();
             });
@@ -233,7 +200,6 @@ function upgrade(data){
             clearInterval(timer);
             parent.layer.closeAll();
             if(res.code == 1){
-
             	layer.msg('更新完成')
             }else{
             	layer.msg(res.msg)

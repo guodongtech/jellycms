@@ -1,0 +1,225 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>{$GLOBALS.title}-{$GLOBALS.version}-{$GLOBALS.subtitle}</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body class="guodong-body">
+{include:head.html}
+<div class="layui-fluid">
+<div class="layui-row">
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
+	<ul class="layui-tab-title">
+		<li class="layui-this" lay-id="t1">版本列表</li>
+		<li lay-id="t2">升级配置</li>
+	</ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="barDemo">
+				<div class="layui-btn-group">
+					<button type="button" class="layui-btn layui-btn-sm" title="编辑" lay-event="edit"><i class="layui-icon"></i></button>
+					<button type="button" class="layui-btn layui-btn-sm" title="删除" lay-event="del"><i class="layui-icon"></i></button>
+				</div>
+			</script>	
+	         </div>
+	        <div class="layui-tab-item">
+	  	   		<form action="{url:/Sysuptest/edit}" method="post" id="form" class="layui-form" lay-filter="version-form">
+					<input type="hidden" name="id" value=""> 
+					<input type="hidden" name="zip_download" value=""> 
+					<input type="hidden" name="zip_file_md5" value=""> 
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							版本号
+						</label>
+						<div class="layui-input-inline">
+							<input type="text" name="version_num" value='' lay-verify="required" placeholder="请输入版本号" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							版本路径
+						</label>
+						<div class="layui-input-inline">
+	                     	 <select name="version_path" lay-verify="required">
+		                     	<option value="">请选择版本路径</option>
+		                     	{foreach:items = $folder_list key=$k item=$v}
+		                     	<option value="{$v}">{$v}</option>
+		                     	{/foreach}
+		                    </select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							上一版本号
+						</label>
+						<div class="layui-input-inline">
+	                     	 <select name="prev_version_num" lay-verify="required">
+		                     	<option value="">请选择上一版本</option>
+		                     	{foreach:items = $version_list key=$k item=$v}
+		                     	<option value="{$v['version_num']}">{$v['version_num']}</option>
+		                     	{/foreach}
+		                    </select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							上一版本路径
+						</label>
+						<div class="layui-input-inline">
+	                     	 <select name="prev_version_path" lay-verify="required">
+		                     	<option value="">请选择上一版本路径</option>
+		                     	{foreach:items = $folder_list key=$k item=$v}
+		                     	<option value="{$v}">{$v}</option>
+		                     	{/foreach}
+		                    </select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">更新包</label>
+						 <div class="layui-input-inline">
+							<input type="text" name="zip_file_path" id="zip_file" value=""  placeholder="上传更新包" class="layui-input">
+						 </div>
+						 <button type="button" class="layui-btn upload" id="zipup" data-des="ico">
+							 <i class="layui-icon"></i>上传更新包
+						 </button>
+						 <div id="ico_box" class="pic"></div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">
+							是否开启更新
+						</label>
+						<div class="layui-input-inline">
+							<input type="radio" name="status" value="1" title="开启">
+							<input type="radio" name="status" value="0" title="不开启" checked="">
+						</div>
+					</div>
+		  	   		 <div class="layui-form-item">
+						 <div class="layui-input-inline">
+							<button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						</div>
+				    </div>
+				</form>
+	  	   	</div>
+	  </div>
+	</div>	
+</div>
+</div>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script src="/static/js/loadData.js"></script>
+<script>
+!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var $ = layui.jquery;
+	var element = layui.element;
+	var upload = layui.upload;
+	form.render();
+	
+	table.render({
+		elem: '#table',url:'{url:/Sysuptest/getList}',
+		// toolbar: '#toolbarDemo',
+		title: '提示',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field:'version_num', title:'版本号'},
+			{field:'version_path', title:'版本路径'},
+			{field:'status', title:'是否开启更新'},
+			{field:'prev_version_num', title:'上一版版本号', hide:true},
+			{field:'prev_version_path', title:'上一版版本路径', hide:true},
+			{field:'upgrade_file', title:'更新的文件', hide:true},
+			{field:'zip_download', title:'下载路径', hide:true},
+			{field:'zip_file_md5', title:'文件md5', hide:true},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
+		]],
+		// page: true
+	});
+	//执行实例
+		var uploadInst = upload.render({
+			elem: '#zipup',
+			url: '{url: Sysuptest/uploadFile}',
+			accept:'file',
+			data:{
+				version_num:function(){
+					return form.val("version-form").version_num;
+				}
+			},
+			done: function(res){
+				if(res.code == 1){
+					//上传完毕回调
+					$('#form input[name="zip_file_path"]').val(res.data.zip_file_path);
+					$('#form input[name="zip_download"]').val(res.data.zip_download);
+					$('#form input[name="zip_file_md5"]').val(res.data.zip_file_md5);
+					parent.layer.msg('上传成功')
+				}else{
+					parent.layer.msg(res.msg)
+				}
+			},
+		})
+	//监听行工具事件
+	table.on('tool(test)', function(obj){
+		var data = obj.data;
+		if(obj.event === 'del'){
+			// layer.confirm('真的删除行么', function(index){
+			// 	$.post('{url:/sysuser/del}',{id:obj.data.id},function(data){
+			// 		if(data.code == 1){
+			// 			layer.msg(data.msg)
+			// 			obj.del();
+			// 		}
+			// 		else{
+			// 			layer.msg(data.msg)
+			// 		}
+			// 	}, 'json');
+			// });
+		}else if(obj.event === 'edit'){
+			console.log(obj.data)
+				$('#form')[0].reset(); //重置表单
+				loadData(obj.data, '#form')
+				form.render();
+				element.tabChange('tab', 't2');
+			
+		}
+	});
+	// 表单提交
+form.on('submit(submit)', function(data){
+   var url = $("#form").attr('action');
+   $.ajax({
+        url:url, //请求的服务端地址
+        data:data.field,
+        type:"post",
+        dataType:"json",
+        success:function(data){
+        	layui.use('layer', function(){
+                var layer = layui.layer;
+                var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
+                    if(data.url){
+                        window.location.href=data.url;
+                    }
+                });
+            });  
+        },
+        error:function(){
+          layer.msg('error'); //错误的处理
+        }
+    });
+   return false;
+});
+	
+}();
+</script>
+</body>
+</html>

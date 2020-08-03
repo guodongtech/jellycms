@@ -31,10 +31,10 @@ class UpdateTest extends BaseController
     public function __construct()
     {
         $config = new \Config\Config();
-        $this->data_path = ROOTPATH . '../';
-        $this->upgrade_url = 'http://www.lianxi.com/backend/Update/check/curent_version/'.$this->curent_version;  //先随便写一个
+        $this->data_path = FCPATH;
         $this->version_txt_path = $this->data_path.'version/conf/version.txt'; // 版本文件路径
         $this->curent_version = $this->getCmsVersion();
+        $this->upgrade_url = 'http://www.jellycms.com/admin.php/Sysuptest/checkinfo/'.$this->curent_version;  //先随便写一个
         $this->prefix = $config->database['DBPrefix'];
         $this->download_path = $this->data_path.'version/download/';
         $this->backup_path = $this->data_path.'version/backup/';
@@ -43,24 +43,51 @@ class UpdateTest extends BaseController
       //  $this->force = $this->config('upgrade_force') ?: 0;
         //$this->revise = $this->config('revise_version') ?: 0;
     }
-
-    public function index()
-    {
-        return view('update_test.html');
-    }
     // 远程拉取更新数据 
     public function getUpgradeData(){
-         $url = $this->upgrade_url; 
+        $url = $this->upgrade_url; 
         $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
-        $serviceVersionList = @file_get_contents($url,false,$context);   
+        $serviceVersionList = @file_get_contents($url,false,$context);
+        if($serviceVersionList == false){
+            return false;
+        }
         $serviceVersionList = json_decode($serviceVersionList,true);
         return $serviceVersionList;
     }
+
+    public function index()
+    {
+        $serviceVersionList = $this->getUpgradeData();
+        if(empty($serviceVersionList) || !isset($serviceVersionList)){
+            $data['filecount'] = 0;
+             return view('update_test.html',$data);
+        }
+        $upgrade_list = $serviceVersionList['upgrade'];
+        foreach($upgrade_list as $k=>$v){
+            if(!file_exists($this->data_path.$v['filename'])){
+                $upgrade_list[$k]['is_same'] = '';
+                continue;
+            }
+            // 校验文件MD5
+            if(md5_file($this->data_path.$v['filename']) == $v['curent_file_md5']){
+                $upgrade_list[$k]['is_same'] = '一致';
+            }else{
+                $upgrade_list[$k]['is_same'] = '不一致';
+            }
+        }
+        $data['upgrade_list'] = $upgrade_list;
+        $data['filecount'] = count($upgrade_list);
+        return view('update_test.html',$data);
+    }
+    
     // 检查更新
     public function check()
     {
         // 远程拉取更新数据 
        $serviceVersionList = $this->getUpgradeData();
+       if($serviceVersionList == false){
+            return json_encode(['code' => 1, 'msg' => '无法连接远程数据库']);
+       }
         // print_r($serviceVersionList);die;
         if(!empty($serviceVersionList))
         {
@@ -80,13 +107,17 @@ class UpdateTest extends BaseController
     public function checkAuthority(){
         // 远程拉取更新数据 
        $serviceVersionList = $this->getUpgradeData();
+       if($serviceVersionList == false){
+            return json_encode(['code' => 2, 'msg' => '无法连接远程数据库']);
+       }
         $filelist = $serviceVersionList['upgrade'];
+
         $dirs = array();
         $i = -1;
         foreach($filelist as $filename)
 
         {
-            $tfilename = $filename;
+            $tfilename = $filename['filename']; 
             //取文件路径
             $curdir = $this->GetDirName($tfilename);
             if (empty($curdir)) {
@@ -133,23 +164,7 @@ class UpdateTest extends BaseController
             $msg = $title . $dirinfos;
         }
         if($is_pass == true){
-            /*↓↓↓↓获取远程服务器提供的数据库更新信息↓↓↓↓*/
-            // 暂时写死
-            $params = $this->getDbInfo();
-            if (false == $params) {
-                return json_encode(['msg'=>'连接升级服务器超时，请刷新重试，或者联系技术支持！','code'=>2]);
-            }
-        /*↑↑↑↑获取远程服务器提供的数据库更新信息↑↑↑↑*/
-            if (is_array($params)) {
-                if (2 == intval($params['code'])){
-                    return json_encode(['msg'=>'官方缺少版本号'.$this->getCmsVersion().'的数据库比较文件，请第一时间联系技术支持！','code'=>2]);
-                }
-                if (true == $is_pass) {
-                    return json_encode(['msg'=>'环境检测完成','code'=>1]);
-                } else {
-                    return json_encode(['msg'=>'当前数据库结构与官方不一致，请查看官方解决教程！','code'=>2]);
-                }
-            }
+            return json_encode(['msg'=>'环境检测完成','code'=>1]);
         }else{
             return json_encode(['msg'=>$msg,'code'=>2]);
         }
@@ -183,7 +198,7 @@ class UpdateTest extends BaseController
         }
         /*--end*/
         /* 下载更新包到backup/download*/
-        $result = $this->downloadFile($serviceVersionList['down_url'], $serviceVersionList['file_md5']);
+        $result = $this->downloadFile($serviceVersionList['down_url'], $serviceVersionList['zip_file_md5']);
         if (!isset($result['code']) || $result['code'] != 1) {
             return json_encode($result);
         }
@@ -203,14 +218,15 @@ class UpdateTest extends BaseController
         }
         $zip->extractTo($this->download_path.$folderName.'/');//解压缩到在当前路径下backup文件夹内
         $zip->close();//关闭处理的zip文件
+
         /*--end*/
         /*升级之前，备份涉及的源文件*/
         $upgrade = $serviceVersionList['upgrade'];
         if (!empty($upgrade) && is_array($upgrade)) {
             foreach ($upgrade as $key => $val) {
-                $source_file = $this->data_path.$val;
+                $source_file = $this->data_path.$val['filename'];
                 if (file_exists($source_file)) {
-                    $destination_file = $this->backup_path.$this->curent_version.'_jelly/'.$val;
+                    $destination_file = $this->backup_path.$this->curent_version.'_jelly/'.$val['filename'];
                     $this->ciMkdir(dirname($destination_file));
                     $copy_bool = @copy($source_file, $destination_file);
                     if (false == $copy_bool) {
@@ -219,8 +235,8 @@ class UpdateTest extends BaseController
                 }
             }
         }
-
         /*--end*/
+
         /*升级的 sql文件*/
         if(!empty($serviceVersionList['sql_file']))
         {
@@ -250,7 +266,7 @@ class UpdateTest extends BaseController
             }
         } 
         /*--end*/
-        // 递归复制文件夹
+        // 递归复制文件夹 
         $copy_data = $this->recurseCopy($this->download_path.$folderName.'/www', rtrim($this->data_path, '/'), $folderName);
         /*覆盖自定义后台入口文件*/
         // $login_php = 'admin.php';
@@ -267,9 +283,17 @@ class UpdateTest extends BaseController
         /*--end*/
 
         /*修改版本文件 version.txt*/
+        $r = $this->ciMkdir(dirname($this->version_txt_path));
+        if ($r) {
+            $fp = fopen($this->version_txt_path, "w+") or die("请设置" . $this->version_txt_path . "的权限为777");
+            $web_version = $serviceVersionList['target_version'];
+            $ver         = !empty($web_version) ? $web_version : $ver;
+            if (fwrite($fp, $ver)) {
+                fclose($fp);
+            }
+        }
+        /*--end*/   
 
-        /*--end*/
-        
         /*删除下载的升级包*/
         $ziplist = glob($this->download_path.'*.zip');
         @array_map('unlink', $ziplist);
@@ -321,14 +345,7 @@ class UpdateTest extends BaseController
             return ['code' => 0, 'msg' => '下载保存升级包失败，请检查所有目录的权限以及用户组不能为root'];
         }
         return ['code' => 1, 'msg' => '下载成功'];
-    }     
-     function getDbInfo(){
-        return array(
-            'code' => 1,
-            'info' =>"gd_test|id,a,b,c,d,e|;;;;;|
-gd_test1|id,a,b,c,d,e|;;;;;|",
-        );
-     }
+    }
      /**
      * 获取文件的目录路径
      * @param string $filename 文件路径+文件名
@@ -463,8 +480,8 @@ gd_test1|id,a,b,c,d,e|;;;;;|",
     }
     private function sql_split($sql, $tablepre) {
 
-        if ($tablepre != "ey_")
-            $sql = str_replace("`ey_", '`'.$tablepre, $sql);
+        if ($tablepre != "gd_")
+            $sql = str_replace("`gd_", '`'.$tablepre, $sql);
               
         $sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
         
@@ -514,7 +531,8 @@ gd_test1|id,a,b,c,d,e|;;;;;|",
                         $rs = @copy($src . DIRECTORY_SEPARATOR . $file, $dst . DIRECTORY_SEPARATOR . $file);
                         if($rs) {
                             $n++;
-                            @unlink($src . DIRECTORY_SEPARATOR . $file);
+                            // 删除已copy的文件
+                            // @unlink($src . DIRECTORY_SEPARATOR . $file);
                         } else {
                             $n++;
                             $badcp++;
