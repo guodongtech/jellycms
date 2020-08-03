@@ -64,15 +64,20 @@
 							</div>
 						</div>
 					</script>
-					<script type="text/html" id="barDemo">
-
-					</script>
 			  	</div>
 		  </div>
 	  </div>
 </div>
 </div>
- 
+
+<div id="console" style="display:none;">
+	<div class="console" contenteditable=true>
+		<ul id="console-content">
+			<li class="green">表gd_user完成</li>
+			<li class="red">服务器返回时间0.7S</li>
+		</ul>
+	</div>
+</div>
 <script src="/static/layui/layui.js"></script>
 <!-- layer模块增加了content方法，不要用官方文件直接替换 -->
 <script>
@@ -88,7 +93,7 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 		title: '提示',
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
-		totalRow: true,
+		//totalRow: true,
 		cols: [[
 			{type: 'checkbox', fixed: 'left'},
 			{field:'Name', title:'表名称', width:180,},
@@ -106,7 +111,6 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 			{field:'Data_free', title:'多余', width:120,templet: function(res){
 				return parseInt(res.Data_free) / 1024 + 'KB';
 			}},
-			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:80,hide:true}
 		]],
 	});
  
