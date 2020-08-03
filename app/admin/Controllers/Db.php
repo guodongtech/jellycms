@@ -3,10 +3,41 @@ namespace App\Controllers;
 use  \App\Models\DbModel;
 class Db extends BaseController
 {
+	private $maxLimit     = 1500;              //设置最大读取数据条数(条)
+	private $partSize     = 5000;              //分卷大小(KB)
+	private $ctrlRes      = array();           //要操作的资源
+	private $fileName     = null;              //当前备份数据的文件名
+	private $part         = 1;                 //分卷号初始值
+	private $totalSize    = 0;                 //备份数据共占字节数
+	private $showMess     = false;             //展示状态信息
+	private $dir          = 'backup/database'; //备份路径
+	private $fPrefix      = 'jellycms';        //备份文件名前缀
+	private $fExtend      = '.sql';            //备份文件扩展名
+	private $tablePre     = 'jelly_';       //表前缀
+	
     private $model;
     function __construct()
     {
         $this->model = new DbModel();
+		$config = new \config\config();
+		if(isset($config->dbbackup) && $config->dbbackup != null)
+		{
+			//$this->dir = FCPATH.$config->dbbackup;
+			$this->dir = WRITEPATH.$config->dbbackup; //存放至缓存主目录
+		}
+
+		if(isset($config->database['DBPrefix']))
+		{
+			$this->tablePre = $config->database['DBPrefix'];
+		}
+		if(!file_exists($this->dir))
+		{
+			$issetDir = mkdir(iconv("UTF-8", "GBK", $this->dir),0644,true);;
+			if(!$issetDir)
+			{
+				return $this->dir."备份目录不存在";
+			}
+		}
     }
 
     // 数据库页面
@@ -14,8 +45,35 @@ class Db extends BaseController
     {
         return view('db.html');
     }
+    // 数据库页面
+    public function dbManage()
+    {
+        return view('dbmanage.html');
+    }
+	//备份的文件列表
+	function getList()
+	{
+		helper('filesystem'); //加载文件系统辅助函数
+		$files = directory_map($this->dir, 1);
+		$list = [];
+		foreach($files as $key=>$value){
+			$list[$key]['name'] = $value;
+			$list[$key] = [
+				'name' => $value,
+				'size' => number_format(filesize($this->dir.'/'.$value)/1024,1).'KB',
+				'time' => date('Y-m-d H:i:s', filemtime($this->dir.'/'.$value) )
+			];
+		}
+		$data = [
+			"code" => 0,
+			"msg" => "",
+			"count" => count($list),
+			"data" => $list,
+		];
+		return json_encode($data);
+	}
     //表列表
-    public function getList()
+    public function getTableList()
     {
 		$list = $this->model->getList();
 		$data = [
@@ -50,235 +108,17 @@ class Db extends BaseController
 			$data = [
 				"code" => 1,
 				"msg" => "优化完成",
-			];			
+			];
 		}else{
 			$data = [
 				"code" => 0,
 				"msg" => "优化失败",
-			];				
+			];
 		}
 
 		return json_encode($data);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // 数据库修改
-    public function mod()
-    {
-        if (! $_POST) {
-            alert_back('非法访问！', - 1);
-        }
-        
-        $submit = post('submit', 'letter', true);
-        
-        switch ($submit) {
-            case 'yh':
-                $tables = self::getTableList();
-                if (! $tables)
-                    alert_back('请选择数据表！');
-                if ($this->model->optimize(implode(',', $tables))) {
-                    // $this->log('优化数据库表成功！');
-                    success('优化成功！', - 1);
-                } else {
-                    // $this->log('优化数据库表失败！');
-                    error('优化失败！', - 1);
-                }
-                break;
-            case 'xf':
-                $tables = self::getTableList();
-                if (! $tables)
-                    alert_back('请选择数据表！');
-                if ($this->model->repair(implode(',', $tables))) {
-                    // $this->log('修复数据库表成功！');
-                    success('修复成功！', - 1);
-                } else {
-                    // $this->log('修复数据库表失败！');
-                    error('修复失败！', - 1);
-                }
-                break;
-            case 'bf':
-                $tables = self::getTableList();
-                if (! $tables)
-                    alert_back('请选择数据表！');
-                if ($this->backupTable($tables)) {
-                    $this->log('备份数据库表成功！');
-                    success('备份表成功！', - 1);
-                } else {
-                    $this->log('备份数据库表失败！');
-                    error('备份失败！', - 1);
-                }
-                break;
-            case 'bfdb':
-                if ($this->backupDB()) {
-                    $this->log('备份数据库成功！');
-                    success('备份数据库成功！', - 1);
-                } else {
-                    $this->log('备份数据库失败！');
-                    error('备份失败！', - 1);
-                }
-                break;
-            case 'bfsqlite':
-                if (copy(DOC_PATH . $this->dbauth['dbname'], DOC_PATH . STATIC_DIR . '/backup/sql/' . get_uniqid() . '_' . date('YmdHis') . '.db')) {
-                    $this->log('备份数据库成功！');
-                    success('备份数据库成功！', - 1);
-                } else {
-                    $this->log('备份数据库失败！');
-                    error('备份失败！', - 1);
-                }
-                break;
-        }
-    }
-
-    // 备份数据表
-    public function backupTable($tables)
-    {
-        $backdir = date('YmdHis');
-        foreach ($tables as $table) {
-            $sql = '';
-            $sql .= $this->header(); // 备份文件头部说明
-            $sql .= $this->tableSql($table); // 表结构信息
-            $fields = $this->model->getFields($table); // 表字段
-            $field_num = $this->model->getFieldNum($table); // 字段数量
-            $all_data = $this->model->getAll($table); // 读取全部数据
-            $sql .= $this->dataSql($table, $fields, $field_num, $all_data); // 生成语句
-            $filename = $backdir . "/" . get_uniqid() . "_" . $backdir . "_" . $table . '.sql'; // 写入文件
-            $result = $this->writeFile($filename, $sql);
-        }
-        return $result;
-    }
-
-    // 备份整个数据库
-    public function backupDB()
-    {
-        $sql = '';
-        $sql .= $this->header(); // 备份文件头部说明
-        $sql .= $this->dbSql(); // 数据库创建语句
-        
-        $tables = $this->model->getTables(); // 获取所有表
-        foreach ($tables as $table) { // 表结构及数据
-            $sql .= $this->tableSql($table); // 表结构信息
-            $fields = $this->model->getFields($table); // 表字段
-            $field_num = $this->model->getFieldNum($table); // 字段数量
-            $all_data = $this->model->getAll($table); // 读取全部数据
-            if ($all_data) {
-                $sql .= $this->dataSql($table, $fields, $field_num, $all_data); // 生成数据语句
-            }
-            $sql .= '-- --------------------------------------------------------' . PHP_EOL . PHP_EOL;
-        }
-        // 写入文件
-        $filename = get_uniqid() . '_' . date('YmdHis') . '_' . $this->dbauth['dbname'] . '.sql';
-        return $this->writeFile($filename, $sql);
-    }
-
-    // 插入数据库备份基础信息
-    private function header()
-    {
-        $sql = '-- Online Database Management SQL Dump' . PHP_EOL;
-        $sql .= '-- 数据库名: ' . $this->dbauth['dbname'] . PHP_EOL;
-        $sql .= '-- 生成日期: ' . date('Y-m-d H:i:s') . PHP_EOL;
-        $sql .= '-- PHP 版本: ' . phpversion() . PHP_EOL . PHP_EOL;
-        
-        $sql .= 'SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";' . PHP_EOL;
-        $sql .= 'SET time_zone = "+08:00";' . PHP_EOL;
-        $sql .= 'SET NAMES utf8;' . PHP_EOL . PHP_EOL;
-        
-        $sql .= '-- --------------------------------------------------------' . PHP_EOL . PHP_EOL;
-        return $sql;
-    }
-
-    // 数据库创建语句
-    private function dbSql()
-    {
-        $sql = '';
-        $sql .= "--" . PHP_EOL;
-        $sql .= "-- 数据库名 `" . $this->dbauth['dbname'] . '`' . PHP_EOL;
-        $sql .= "--" . PHP_EOL . PHP_EOL;
-        
-        // 如果数据库不存在则创建
-        $sql .= "CREATE DATABASE IF NOT EXISTS `" . $this->dbauth['dbname'] . '` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;' . PHP_EOL;
-        // 选择数据库
-        $sql .= "USE `" . $this->dbauth['dbname'] . "`;" . PHP_EOL . PHP_EOL;
-        $sql .= '-- --------------------------------------------------------' . PHP_EOL . PHP_EOL;
-        return $sql;
-    }
-
-    // 表结构语句
-    private function tableSql($table)
-    {
-        $sql = '';
-        $sql .= "--" . PHP_EOL;
-        $sql .= "-- 表的结构 `" . $table . '`' . PHP_EOL;
-        $sql .= "--" . PHP_EOL . PHP_EOL;
-        
-        $sql .= $this->model->tableStru($table); // 表创建语句
-        return $sql;
-    }
-
-    // 数据语句
-    private function dataSql($table, $fields, $fieldNnum, $data)
-    {
-        if (! $data)
-            return;
-        $sql = '';
-        $sql .= "--" . PHP_EOL;
-        $sql .= "-- 转存表中的数据 `" . $table . "`" . PHP_EOL;
-        $sql .= "--" . PHP_EOL;
-        $sql .= PHP_EOL;
-        
-        // 循环每个字段下面的内容
-        
-        $sql .= "INSERT INTO `" . $table . "` (" . implode(',', $fields) . ") VALUES" . PHP_EOL;
-        $brackets = "(";
-        foreach ($data as $value) {
-            $sql .= $brackets;
-            $comma = "";
-            for ($i = 0; $i < $fieldNnum; $i ++) {
-                $sql .= ($comma . "'" . decode_string($value[$i]) . "'");
-                $comma = ",";
-            }
-            $sql .= ")";
-            $brackets = "," . PHP_EOL . "(";
-        }
-        $sql .= ';' . PHP_EOL . PHP_EOL;
-        return $sql;
-    }
-
-    // 写入文件
-    private function writeFile($filename, $content)
-    {
-        $sqlfile = DOC_PATH . STATIC_DIR . '/backup/sql/' . $filename;
-        check_file($sqlfile, true);
-        if (file_put_contents($sqlfile, $content)) {
-            return true;
-        }
-    }
-
-    // 获取并检查表名称
-    private function getTableList()
-    {
-        $list = post('list');
-        foreach ($list as $key => $value) {
-            if (! preg_match('/^[\w]+$/', $value)) {
-                unset($list[$key]);
-            }
-        }
-        return $list;
-    }
+ 
+ 
 }

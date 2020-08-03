@@ -15,14 +15,7 @@ class DbModel extends Model
     //所有字段
     public function getFields($table)
     {
-        $one_data = parent::one("SELECT * FROM " . $table); // 读取数据
-        $fields = array();
-        if ($one_data) {
-            foreach ($one_data as $key => $value) {
-                $fields[] = $key;
-            }
-        }
-        return $fields;
+         
     }
     //表优化
     public function optimize($tables)

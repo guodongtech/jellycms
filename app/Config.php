@@ -30,6 +30,7 @@ class Config
 		'failover' => [],
 		'port'     => 3306,
 	];
+	public $dbbackup = 'backup/database';
 	public $title = 'JellyCMS';
 	public $subTitle = '北京国栋科技有限公司';
 	public $description = '北京国栋科技有限公司';
