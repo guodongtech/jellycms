@@ -147,17 +147,33 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 				break;
 			case 'backuptables':
 				var data = checkStatus.data;
+				if(data.length==0){
+					layer.msg('请选择需要操作的表');
+					break;
+				}
+				tableNames = []; //清空表数组
 				initconsole();
-				
-				break;
-			case 'backupdatabase':
-				var data = checkStatus.data;
-				var tableNames = new Array();
 				data.forEach(function (item, idnex, array) {
 					tableNames.push(item.Name);
 				})
+				backuptables(tableNames);
+				break;
+			case 'backupdatabase':
+				
+				var data = layui.table.cache['table'];
+				data.forEach(function (item, idnex, array) {
+					tableNames.push(item.Name);
+				})
+				if(data.length==0){
+					layer.msg('请选择需要操作的表');
+					break;
+				}
+				tableNames = []; //清空表数组
 				initconsole();
-
+				data.forEach(function (item, idnex, array) {
+					tableNames.push(item.Name);
+				})
+				backupdatabase(tableNames);
 				break;
 		};
 		form.render();
@@ -169,7 +185,7 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 	function initconsole(){
 		index = layer.open({
 		  type: 1 
-		  ,area: ['666px', '666px']
+		  ,area: ['388px', '388px']
 		  ,title: '进度控制台'
 		  ,maxmin: true //允许全屏最小化
 		  ,content: $('#console').html()
@@ -236,6 +252,67 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 			}
 			else{
 				insert('<li class="red">修复失败:'+name+'</li>');
+				update(index);
+			}
+		}, 'json');
+	}
+	//批量备份表
+	function backuptables(tableNames){
+		if(tableNames.length == 0){
+			insert('<li>任务完成！</li>');
+			update(index);
+			return true;
+		}
+		var start = Date.parse(new Date());//开始时间
+		insert('<li>正在备份:'+tableNames[0]+'</li>');
+		update(index);
+		//单个转数组
+		var tables = [tableNames[0]];
+		$.post('{url:/db/runTableBakup}',{tables:tables},function(data){
+			if(data.code == 1){
+				var end = Date.parse(new Date());//结束时间
+				insert('<li class="green">备份完成:'+tableNames[0]+'。耗时:'+ (end-start) +'ms</li>');
+				update(index);
+				tableNames.splice(0,1);//删除当前元素
+				backuptables(tableNames);
+			}
+			else{
+				insert('<li class="red">备份失败:'+name+'</li>');
+				update(index);
+			}
+		}, 'json');
+	}
+	
+	var thisfilename;
+	var part;	
+	//备份数据库
+	function backupdatabase(tableNames){
+		if(tableNames.length == 0){
+			insert('<li>任务完成！</li>');
+			update(index);
+			return true;
+		}
+		var start = Date.parse(new Date());//开始时间
+		insert('<li>正在备份:'+tableNames[0]+'</li>');
+		update(index);
+		//单个转数组
+		var tables = [tableNames[0]];
+
+		$.post('{url:/db/runDatabaseBackup}',{tables:tables,thisfilename:thisfilename,part:part},function(data){
+			if(data.code == 1){
+				thisfilename = data.thisfilename;
+				if(data.part > part){
+					insert('<li class="red">开始分卷</li>');
+				}
+				part = data.part;
+				var end = Date.parse(new Date());//结束时间
+				insert('<li class="green">备份完成:'+tableNames[0]+'。耗时:'+ (end-start) +'ms</li>');
+				update(index);
+				tableNames.splice(0,1);//删除当前元素
+				backupdatabase(tableNames);
+			}
+			else{
+				insert('<li class="red">备份失败:'+name+'</li>');
 				update(index);
 			}
 		}, 'json');

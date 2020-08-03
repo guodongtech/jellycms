@@ -32,27 +32,4 @@ class DbModel extends Model
 		$result = $this->db->query($sql);
 		return $result;
     }
-
-    //锁表
-    public function lock($tablename, $op = "WRITE")
-    {
-		$sql = "lock tables " . $tablename . " " . $op;
-		$result = $this->db->query($sql);
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    //解锁表
-    public function unlock()
-    {
-		$sql = "unlock tables";
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
