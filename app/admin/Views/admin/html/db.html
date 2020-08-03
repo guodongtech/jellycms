@@ -129,7 +129,21 @@ layui.use(['layer', 'form','table','upload','jquery','element'], function(){
 				layer.close(index);
 			});
 		}else if(obj.event === 'recovery'){
-			
+			layer.confirm('危险操作，真的要还原数据吗？', function(index){
+				layer_loading('正在执行数据库还原');
+				//单个文件转换成数组
+				var files = [obj.data.name];
+				$.post('{url:/db/recovery}',{files:files},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg)
+						top.location.reload();
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				},'json');
+				layer.close(index);
+			});
 		}
 	});
 	//头工具栏事件
@@ -181,7 +195,21 @@ layui.use(['layer', 'form','table','upload','jquery','element'], function(){
 		};
 		form.render();
 	})
+	function layer_loading(msg){
+		var loading = parent.layer.msg(
+		msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
+		{
+			icon: 1,
+			time: 3600000, //1小时后后自动关闭
+			shade: [0.2] //0.1透明度的白色背景
+		});
+		//loading层
+		var index = parent.layer.load(3, {
+			shade: [0.1,'#fff'] //0.1透明度的白色背景
+		});
 
+		return loading;
+	}
 	//执行实例
 	var uploadInst = upload.render({
 		elem: '#upload',

@@ -145,6 +145,89 @@ class Db extends BaseController
 		}
 	}
 	
+	//执行恢复
+	function recovery()
+	{
+		$post = post();
+		$files = $post['files'];
+		foreach($files as $val)
+		{
+			$fileName = $this->dir.'/'.$val;
+			$this->parseSQL($fileName);
+		}
+		$data = [
+			"code" => 1,
+			"msg" => "数据库还原完成",
+		];
+		return json_encode($data);
+	}
+
+	//解析备份文件中的SQL
+	function parseSQL($fileName)
+	{
+		//忽略外键约束
+		$this->db->query("SET FOREIGN_KEY_CHECKS = 0;");
+		$fhandle  = fopen($fileName,'r');
+		while(!feof($fhandle))
+		{
+			$lstr = fgets($fhandle);     //获取指针所在的一行数据
+			//判断当前行存在字符
+			if(isset($lstr[0]) && $lstr[0]!='#')
+			{
+				$prefix = substr($lstr,0,2);  //截取前2字符判断SQL类型
+				switch($prefix)
+				{
+					case '--' :
+					case '//' :
+					{
+						continue 2;
+					}
+
+					case '/*':
+					{
+						if(substr($lstr,-5) == "*/;\r\n" || substr($lstr,-4) == "*/\r\n")
+							continue 2;
+						else
+						{
+							$this->skipComment($fhandle);
+							continue 2;
+						}
+					}
+
+					default :
+					{
+						$sqlArray[] = trim($lstr);
+						if(substr(trim($lstr),-1) == ";")
+						{
+							$sqlStr   = join($sqlArray);
+							$sqlArray = array();
+							$this->db->query($sqlStr);
+							//回调函数
+							$this->actionCallBack($fileName);
+						}
+					}
+				}
+			}
+		}
+		//开启外键约束
+		$this->db->query("SET FOREIGN_KEY_CHECKS = 1;");
+	}
+	//动作执行回调函数
+	function actionCallBack($mess)
+	{
+		//防止超时
+		set_time_limit(60);
+	}
+	//略过注释
+	function skipComment($fhandle)
+	{
+		$lstr = fgets($fhandle,4096);
+		if(substr($lstr,-5) == "*/;\r\n" || substr($lstr,-4) == "*/\r\n")
+			return true;
+		else
+			$this->skipComment($fhandle);
+	}
+	//上传备份文件
 	public function upload(){
 		$file = $this->request->getFile('file');
 		
