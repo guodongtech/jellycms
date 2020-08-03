@@ -155,8 +155,7 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 			case 'backuptables':
 				var data = checkStatus.data;
 				initconsole();
-				//layer_loading('正在处理');
-
+				
 				break;
 			case 'backupdatabase':
 				var data = checkStatus.data;
@@ -164,26 +163,13 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 				data.forEach(function (item, idnex, array) {
 					tableNames.push(item.Name);
 				})
-				layer_loading('正在处理');
+				initconsole();
 
 				break;
 		};
 		form.render();
 	})
-	function layer_loading(msg){
-		var loading = parent.layer.msg(
-		msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
-		{
-			icon: 1,
-			time: 3600000, //1小时后后自动关闭
-			shade: [0.2] //0.1透明度的白色背景
-		});
-		//loading层
-		var index = parent.layer.load(3, {
-			shade: [0.1,'#fff'] //0.1透明度的白色背景
-		});
-		return loading;
-	}
+
 	
 	var index;//控制台句柄
 	//初始化进度控制台 警告：layer.js 添加了content方法不可用官方文件直接替换
