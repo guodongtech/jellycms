@@ -87,7 +87,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">更新包</label>
 						 <div class="layui-input-inline">
-							<input type="text" name="zip_file_path" id="zip_file" value=""  placeholder="上传更新包" class="layui-input">
+							<input type="text" name="zip_file" id="zip_file" value=""  placeholder="上传更新包" class="layui-input">
 						 </div>
 						 <button type="button" class="layui-btn upload" id="zipup" data-des="ico">
 							 <i class="layui-icon"></i>上传更新包
@@ -161,7 +161,7 @@
 			done: function(res){
 				if(res.code == 1){
 					//上传完毕回调
-					$('#form input[name="zip_file_path"]').val(res.data.zip_file_path);
+					$('#form input[name="zip_file"]').val(res.data.zip_file);
 					$('#form input[name="zip_download"]').val(res.data.zip_download);
 					$('#form input[name="zip_file_md5"]').val(res.data.zip_file_md5);
 					parent.layer.msg('上传成功')
