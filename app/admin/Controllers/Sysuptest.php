@@ -24,9 +24,6 @@ class Sysuptest extends BaseController
     	helper('filesystem'); //加载文件系统辅助函数
     	$path = $this->version_path;
     	$folder_list = directory_map($path, 1);
-    	foreach($folder_list as $k=>$v){
-    		$folder_list[$k] = 'allversion'.DIRECTORY_SEPARATOR.'version'.DIRECTORY_SEPARATOR.$v;
-    	}
     	$data['folder_list'] = $folder_list;
     	$data['version_list'] = $version_list;
         return view('sysuptest.html',$data);
@@ -35,7 +32,7 @@ class Sysuptest extends BaseController
     public function edit()
     {
         $post = post();
-		if(!$post['version_num'] || !$post['version_path'] || !$post['prev_version_num'] || !$post['prev_version_path'] || !$post['zip_file_path'] || !$post['zip_download']){
+		if(!$post['version_num'] || !$post['version_path'] || !$post['prev_version_num'] || !$post['prev_version_path'] || !$post['zip_file'] || !$post['zip_download']){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
@@ -134,7 +131,7 @@ class Sysuptest extends BaseController
 				"msg" => "上传成功",
 				"data" => [
 					'zip_download' => $this->server.$newName,
-					'zip_file_path' => $this->zip_path.$newName,
+					'zip_file' => $newName,
 					'zip_file_md5' => md5_file($this->zip_path.$newName),
 				],
 			];
@@ -148,13 +145,13 @@ class Sysuptest extends BaseController
 		// 获取用户要升级的版本信息
 		$version_info = $this->model->getVersionInfo($version);
 
-
+		if(!file_exists($this->zip_path.$version_info['zip_file'])){
+			echo json_encode(['code' => 2, 'msg' => "升级包缺失，请联系技术支持!"]);die;
+		}
 		// 处理更新的文件数据
 	/*step1 解压*/
 		/*解压到更新包的文件夹*/
-        $file_name = explode('\\', $version_info['zip_file_path']);  
-        $file_name = end($file_name);
-        $folder_name = str_replace(".zip", "", $file_name);  // 文件夹
+        $folder_name = str_replace(".zip", "", $version_info['zip_file']);  // 文件夹
         /*--end*/
         /*解压之前，删除已重复的文件夹*/
         $this->delFile($this->pack_path.$folder_name,true);
@@ -162,7 +159,7 @@ class Sysuptest extends BaseController
 
         /*解压文件*/
         $zip = new \ZipArchive();//新建一个ZipArchive的对象
-        if ($zip->open($this->zip_path.$file_name) != true) {
+        if ($zip->open($this->zip_path.$version_info['zip_file']) != true) {
             echo json_encode(['code' => 2, 'msg' => "远程服务器读取数据失败!"]);die;
         }
         $zip->extractTo($this->pack_path.$folder_name.'/');
@@ -172,7 +169,7 @@ class Sysuptest extends BaseController
     	$tree_path = $this->pack_path.$folder_name.DIRECTORY_SEPARATOR.'www';
     	$this->fileTree($file_list,$tree_path);
     /*step3  比对上个版本的原始文件*/ 
-    	$prev_version_path = $this->version_path.$version_info['prev_version_path'].DIRECTORY_SEPARATOR.$version_info['prev_version_num'].DIRECTORY_SEPARATOR;
+    	$prev_version_path = $this->version_path.$version_info['prev_version_path'];
     	foreach($file_list as $k=>$v){
     		if(file_exists($prev_version_path.$v)){
     			$version_list[$k]['filename'] = $v;
