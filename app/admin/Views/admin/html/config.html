@@ -13,6 +13,33 @@
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
 <body class="guodong-body">
+<style>
+.watermark-position .layui-table td, .layui-table th {
+    position: relative;
+    padding: 0;
+	margin:0;
+}
+.watermark-position .layui-form-radio {
+    margin:0;
+    padding:14px 6px;
+    cursor: pointer;
+    font-size: 0;
+	display:flex;
+	justify-content:center;
+}
+.watermark-position .layui-table tbody tr:hover{
+    background-color: transparent;
+}
+.watermark-position .layui-form-radio>i {
+    margin-right: 0;
+    font-size: 22px;
+    color: #c2c2c2;
+}
+
+
+</style>
+
+
 {include:head.html}
 <div class="layui-fluid">
 <div class="layui-row">
@@ -20,69 +47,47 @@
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">基本配置</li>
-	    <li lay-id="t2">邮件通知</li>
-	    <li lay-id="t3">百度接口</li>
-	    <li lay-id="t4">WebAPI</li>
-	    <li lay-id="t5">图片水印</li>
-	    <li lay-id="t6">安全配置</li>
-	    <li lay-id="t7">URL规则</li>
-	    <li lay-id="t8">标题样式</li>
+	    <li lay-id="t2">图片水印</li>
+	    <li lay-id="t3">安全配置</li>
+	    <li lay-id="t4">URL规则</li>
 	  </ul>
 		  <div class="layui-tab-content">
 		  	   <div class="layui-tab-item layui-show">
 		  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-			  	   	   <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-			  	   	   
 			  	   	    <div class="layui-form-item">
 		                     <label class="layui-form-label">网站状态</label>
-		                     <div class="layui-input-block">
-		                     	<input type="radio" name="close_site" value="1" title="关闭">
-								<input type="radio" name="close_site" value="0" checked="checked" title="开启">
+		                     <div class="layui-input-inline">
+		                     	<input type="radio" name="close" value="1" title="关闭">
+								<input type="radio" name="close" value="0" checked="checked" title="开启">
 		                     </div>
 		                </div>
 		                
 			  	   	     <div class="layui-form-item">
 		                     <label class="layui-form-label">关站提示</label>
 		                     <div class="layui-input-block">
-		                     	<textarea name="close_site_note" placeholder="" class="layui-textarea"></textarea>
+		                     	<textarea name="close_tip" placeholder="关站提示" class="layui-textarea"></textarea>
 		                     </div> 
-		                </div>
-		                
-		  	   		 	<div class="layui-form-item">
-		                     <label class="layui-form-label">独立手机版</label>
-		                     <div class="layui-input-block">
-		                     	<input type="radio" name="open_wap" value="1" title="启用">
-								<input type="radio" name="open_wap" value="0" checked="checked" title="禁用">
-								<span class="layui-icon layui-icon-about tips" data-content="使用响应式模板的用户请不要开启！"></span>
-		                     </div>
-		                </div>
-		                
-		                 <div class="layui-form-item">
-		                     <label class="layui-form-label">手机版域名</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="wap_domain" value="" placeholder="如：m.guodong.tech" class="layui-input">
-		                     </div>
 		                </div>
 
 		                <div class="layui-form-item">
-		                     <label class="layui-form-label">动态缓存</label>
-		                     <div class="layui-input-block">
-		                     	<input type="radio" name="tpl_html_cache" value="1" title="启用">
-								<input type="radio" name="tpl_html_cache" value="0" checked="checked" title="禁用">
-		                     	<span class="layui-icon layui-icon-about tips" data-content=""></span>
+		                     <label class="layui-form-label">缓存</label>
+		                     <div class="layui-input-inline">
+		                     	<input type="radio" name="cached" value="1" title="启用">
+								<input type="radio" name="cached" value="0" checked="checked" title="禁用">
 		                     </div>
+							 <div class="layui-form-mid layui-word-aux">缓存</div>
 		                </div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">缓存时间(秒)</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="tpl_html_cache_time" value="900" placeholder="请输入缓存有效期（秒）" class="layui-input">
+		                     <div class="layui-input-inline">
+		                     	<input type="text" name="cache_time" value="900" placeholder="缓存有效期（秒）" class="layui-input">
 		                     </div>
 		                </div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">Gzip</label>
-		                     <div class="layui-input-block">
+		                     <div class="layui-input-inline">
 		                     	<input type="radio" name="gzip" value="1" title="启用">
 								<input type="radio" name="gzip" value="0" checked="checked" title="禁用">
 		                     </div>
@@ -90,45 +95,27 @@
 
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">分页条数</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="pagenum" value="5" placeholder="请输入前端分页数字条显示数量" class="layui-input">
+		                     <div class="layui-input-inline">
+		                     	<input type="text" name="pagenum" value="5" placeholder="列表分页数字条显示数量" class="layui-input">
 		                     </div>
 		                     <div class="layui-form-mid layui-word-aux"></div>
 		                </div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">内链替换</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="content_tags_replace_num" value="" placeholder="默认3次" class="layui-input">
+		                     <div class="layui-input-inline">
+		                     	<input type="text" name="tags_time" value="" placeholder="默认3次" class="layui-input">
 		                     </div>
 		                     <div class="layui-form-mid layui-word-aux"></div>
 		                </div>
-		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">敏感词过滤</label>
 		                     <div class="layui-input-block">
-		                     	<textarea name="content_keyword_replace" placeholder="请输入需要过滤的关键词，多个之间逗号隔开" class="layui-textarea"></textarea>
-		                     	<div class="layui-form-mid layui-word-aux">注：多个敏感词之间用逗号隔开！</div>
+		                     	<textarea name="forbidwords" placeholder="多个之间逗号隔开" class="layui-textarea"></textarea>
+		                     	<div class="layui-form-mid layui-word-aux">注：多个敏感词半角用逗号隔开</div>
 		                     </div>
 		                     
-		                </div>
-		                
-		                		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">系统授权码</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="sn" value="" placeholder="请输入授权码，多个授权码用逗号隔开" class="layui-input">
-		                     </div>
-		                </div>
-		                
-		                 <div class="layui-form-item">
-		                     <label class="layui-form-label">授权码手机</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="sn_user" value="" placeholder="请购买了万能授权码的用户填写" class="layui-input">
-		                     </div>
-		                </div>
-		                
-		                		                
+		                </div>               
 		                <div class="layui-form-item">
 							 <div class="layui-input-block">
 							    <button class="layui-btn" lay-submit="" name="submit" value="basic">立即提交</button>
@@ -138,170 +125,11 @@
 	              </form>
 		  	   </div>
 		  	   
-		  	   <div class="layui-tab-item">
-		  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-			  	   	    <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-			 	   		<div class="layui-form-item">
-			                    <label class="layui-form-label">SMTP服务器</label>
-			                   <div class="layui-input-block">
-			                   	<input type="text" name="smtp_server" value="smtp.qq.com" placeholder="请输入SMTP服务器" class="layui-input">
-			                   </div>
-			             </div>
-				  	   
-			
-			  	   		<div class="layui-form-item">
-			                    <label class="layui-form-label">SMTP端口</label>
-			                   <div class="layui-input-block">
-			                   	<input type="text" name="smtp_port" value="465" placeholder="请输入SMTP端口,一般SSL为465，普通为25" class="layui-input">
-			                   </div>
-			             </div>
-				  	   
-				  	    <div class="layui-form-item">
-			                <label class="layui-form-label">是否为SSL</label>
-			                <div class="layui-input-block">
-			                   	<input type="radio" name="smtp_ssl" value="1" checked="checked" title="是">
-								<input type="radio" name="smtp_ssl" value="0" title="否">
-			           		</div>
-			           </div>
-			           
-			   			<div class="layui-form-item">
-			                  <label class="layui-form-label">邮箱账号</label>
-			                 <div class="layui-input-block">
-			                 	<input type="text" name="smtp_username" value="" placeholder="请输入邮箱账号" class="layui-input">
-			                 </div>
-			            </div>
-			   
-			   			<div class="layui-form-item">
-			                  <label class="layui-form-label">邮箱密码</label>
-			                 <div class="layui-input-block">
-			                 	<input type="password" name="smtp_password" value="" placeholder="请输入邮箱密码或邮箱授权码" class="layui-input">
-			                 </div>
-			            </div>
-			            
-						<div class="layui-form-item">
-			                  <label class="layui-form-label">测试账号</label>
-			                 <div class="layui-input-block">
-			                 	<input type="text" name="smtp_username_test" id="smtp_username_test" value="" placeholder="请输入用于接受测试邮件的账号" class="layui-input">
-			                 </div>
-			            </div>
-		            
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">留言发送邮件</label>
-		                     <div class="layui-input-block">
-		                     	<input type="radio" name="message_send_mail" value="1" checked="checked" title="启用">
-								<input type="radio" name="message_send_mail" value="0" title="禁用">
-		                     </div>
-		                </div>
-		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">表单发送邮件</label>
-		                     <div class="layui-input-block">
-		                     	<input type="radio" name="form_send_mail" value="1" title="启用">
-								<input type="radio" name="form_send_mail" value="0" checked="checked" title="禁用">
-		                     </div>
-		                </div>
-		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">信息接收邮箱</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="message_send_to" value="" placeholder="请输入信息接收邮箱" class="layui-input">
-		                     </div>
-		                </div>
-		                
-						 <div class="layui-form-item">
-							 <div class="layui-input-block">
-							    <button class="layui-btn" lay-submit="" name="submit" value="email">立即提交</button>
-							    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-							    <a href="/adminzt.php?p=/Config/index/action/sendemail" onclick="return sendtest(this,'#smtp_username_test')" class="layui-btn layui-btn-primary">发送测试邮件</a>
-							 </div>
-						</div>
-						<script>
-					    	function sendtest(obj,to){
-					    		$(obj).attr('href',$(obj).attr('href')+'&to='+$(to).val()); 
-					    		return true;
-					    	}
-					    </script>
-	              </form>
-		  	   </div>
-		  	   
-		  	   <div class="layui-tab-item">
-		  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-			  	   	    <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">普通收录token</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="baidu_zz_token" value="" placeholder="请输入普通收录token" class="layui-input">
-		                     </div>
-		                     <span class="layui-icon layui-icon-about tips" data-content="请到百度站长中心获取！"></span>
-		                </div>
-
-		               <div class="layui-form-item">
-		                     <label class="layui-form-label">快速收录token</label>
-		                     <div class="layui-input-block">
-		                     	<input type="text" name="baidu_ks_token" value="" placeholder="请输入快速收录token" class="layui-input">
-		                     </div>
-		                     <span class="layui-icon layui-icon-about tips" data-content="请到百度站长中心获取！"></span>
-		               </div>
-		               
-		           
-		                <div class="layui-form-item">
-							 <div class="layui-input-block">
-							    <button class="layui-btn" lay-submit="" name="submit" value="baidu">立即提交</button>
-							    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-							 </div>
-						</div>
-	              </form>
-		  	   </div>
-		  	   
-		  	   <div class="layui-tab-item">
-		  	   	  <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-		  	   	  	<input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-		  	   		<div class="layui-form-item">
-	                     <label class="layui-form-label">API状态</label>
-	                     <div class="layui-input-block">
-	                     	<input type="radio" name="api_open" value="1" title="启用">
-							<input type="radio" name="api_open" value="0" checked="checked" title="禁用">
-	                     </div>
-	                </div>
-	                
-	                <div class="layui-form-item">
-	                     <label class="layui-form-label">API强制认证</label>
-	                     <div class="layui-input-block">
-	                     	<input type="radio" name="api_auth" value="1" checked="checked" title="启用">
-							<input type="radio" name="api_auth" value="0" title="禁用">
-	                     </div>
-	                </div>
-	                
-	                <div class="layui-form-item">
-	                      <label class="layui-form-label">API认证用户</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="api_appid" value="" placeholder="请输入API认证用户名" class="layui-input">
-	                     </div>
-	                </div>
-	                
-	                 <div class="layui-form-item">
-	                      <label class="layui-form-label">API认证密钥</label>
-	                     <div class="layui-input-block">
-	                     	<input type="password" name="api_secret" value="" placeholder="请输入API认证密钥" class="layui-input">
-	                     </div>
-	                </div>
-	                
-	                <div class="layui-form-item">
-						 <div class="layui-input-block">
-						    <button class="layui-btn" lay-submit="" name="submit" value="api">立即提交</button>
-						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-						 </div>
-					</div>
-				 </form>
-		  	   </div> 
-		  	   
 		  	    <div class="layui-tab-item">
 		  	   	  <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-		  	   	  	<input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
 		  	   		<div class="layui-form-item">
 	                     <label class="layui-form-label">状态</label>
-	                     <div class="layui-input-block">
+	                     <div class="layui-input-inline">
 	                     	<input type="radio" name="watermark_open" value="1" title="启用">
 							<input type="radio" name="watermark_open" value="0" checked="checked" title="禁用">
 	                     </div>
@@ -309,14 +137,14 @@
 	                
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">水印文字</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="watermark_text" value="JellyCMS" placeholder="请输入水印文字，如：JellyCMS" class="layui-input">
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="watermark_text" value="JellyCMS" placeholder="水印文字，如：JellyCMS" class="layui-input">
 	                     </div>
 	                </div>
 					
 					<div class="layui-form-item">
 	                     <label class="layui-form-label">文字字体</label>
-	                     <div class="layui-input-block">
+	                     <div class="layui-input-inline">
 	                     	<input type="text" name="watermark_text_font" id="watermark_text_font" value="" placeholder="请上传水印文字字体" class="layui-input">
 	                     </div>
 	                     <button type="button" class="layui-btn file" data-des="watermark_text_font">
@@ -326,42 +154,53 @@
 	                
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">文字大小</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="watermark_text_size" value="20" placeholder="请输入水印文字大小，如：20" class="layui-input">
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="watermark_text_size" value="20" placeholder="水印文字大小，如：20" class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">文字颜色</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="watermark_text_color" value="100,100,100" placeholder="请输入水印文字颜色，如：100,100,100" class="layui-input">
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="watermark_text_color" placeholder="文字颜色" class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">水印图片</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="watermark_pic" id="watermark_pic" value="/static/images/logo.png" placeholder="请上传水印图片，优先文字水印" class="layui-input">
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="watermark_pic" id="watermark_pic" value="/static/images/logo.png" placeholder="水印图片，优先文字水印" class="layui-input">
 	                     </div>
 	                     <button type="button" class="layui-btn upload" data-des="watermark_pic">
 						 	 <i class="layui-icon"></i>上传图片
 						 </button><input class="layui-upload-file" type="file" accept="image/*" name="upload">
-						 <div id="watermark_pic_box" class="pic"><dl><dt><img src="/static/images/logo.png" data-url="/static/images/logo.png"></dt><dd>删除</dd></dl></div>
 	                </div>
 	                
-	                <div class="layui-form-item">
-	                     <label class="layui-form-label">水印位置</label>
-	                     <div class="layui-input-block">
-	                     	<input type="radio" name="watermark_position" value="1" title="左上">
-	                     	<input type="radio" name="watermark_position" value="2" title="右上">
-							<input type="radio" name="watermark_position" value="3" title="左下">
-	                     	<input type="radio" name="watermark_position" value="4" checked="checked" title="右下">
-	                     	<input type="radio" name="watermark_position" value="5" title="中间">
+	                <div class="layui-form-item watermark-position">
+						<label class="layui-form-label">水印位置</label>
+						<div class="layui-input-inline">
+							<table class="layui-table" lay-size="sm">
+								<tr>
+									<td><input type="radio" name="position" value="1"></td>
+									<td><input type="radio" name="position" value="2"></td>
+									<td><input type="radio" name="position" value="3"></td>
+								</tr>
+								<tr>
+									<td><input type="radio" name="position" value="4"></td>
+									<td><input type="radio" name="position" value="5"></td>
+									<td><input type="radio" name="position" value="6"></td>
+								</tr>
+								<tr>
+									<td><input type="radio" name="position" value="7"></td>
+									<td><input type="radio" name="position" value="8"></td>
+									<td><input type="radio" name="position" value="9"></td>
+								</tr>
+							</table>
 	                     </div>
 	                </div>
 
 	                <div class="layui-form-item">
-						 <div class="layui-input-block">
+						 <div class="layui-input-inline">
 						    <button class="layui-btn" lay-submit="" name="submit" value="watermark">立即提交</button>
 						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						 </div>
@@ -371,11 +210,9 @@
 		  	   
 		  	    <div class="layui-tab-item">
 		  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-			  	   	   <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">后台验证码</label>
-		                     <div class="layui-input-block">
+		                     <div class="layui-input-inline">
 		                     	<input type="radio" name="admin_check_code" value="1" checked="checked" title="启用">
 								<input type="radio" name="admin_check_code" value="0" title="禁用">
 		                     </div>
@@ -383,7 +220,7 @@
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">留言功能</label>
-		                     <div class="layui-input-block">
+		                     <div class="layui-input-inline">
 		                     	<input type="radio" name="message_status" value="1" checked="checked" title="启用">
 								<input type="radio" name="message_status" value="0" title="禁用">
 		                     </div>
@@ -391,7 +228,7 @@
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">留言验证码</label>
-		                     <div class="layui-input-block">
+		                     <div class="layui-input-inline">
 		                     	<input type="radio" name="message_check_code" value="1" checked="checked" title="启用">
 								<input type="radio" name="message_check_code" value="0" title="禁用">
 		                     </div>
@@ -399,7 +236,7 @@
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">留言审核</label>
-		                     <div class="layui-input-block">
+		                     <div class="layui-input-inline">
 		                     	<input type="radio" name="message_verify" value="1" checked="checked" title="启用">
 								<input type="radio" name="message_verify" value="0" title="禁用">
 		                     </div>
@@ -407,7 +244,7 @@
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">表单功能</label>
-		                     <div class="layui-input-block">
+		                     <div class="layui-input-inline">
 		                     	<input type="radio" name="form_status" value="1" checked="checked" title="启用">
 								<input type="radio" name="form_status" value="0" title="禁用">
 		                     </div>
@@ -415,54 +252,44 @@
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">表单验证码</label>
-		                     <div class="layui-input-block">
+		                     <div class="layui-input-inline">
 		                     	<input type="radio" name="form_check_code" value="1" title="启用">
 								<input type="radio" name="form_check_code" value="0" checked="checked" title="禁用">
 		                     </div>
 		                </div>
 		                
 		                <div class="layui-form-item">
-		                     <label class="layui-form-label">登录失败阀值</label>
-		                     <div class="layui-input-block">
-								<input type="text" name="lock_count" value="5" placeholder="请输入登录失败几次后锁定IP，默认5次" class="layui-input">
+		                     <label class="layui-form-label">登录保护</label>
+		                     <div class="layui-input-inline">
+								<input type="text" name="lock_count" value="5" placeholder="登录失败几次后锁定IP，默认5次" class="layui-input">
 		                     </div>
 		                     <div class="layui-form-mid layui-word-aux">次</div>
 		                </div>
 		                
 		                <div class="layui-form-item">
-		                   <label class="layui-form-label">失败锁定时间</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="lock_time" value="900" placeholder="请输入登录异常锁定时间，默认为900秒" class="layui-input">
+		                   <label class="layui-form-label">锁定时间</label>
+		                   <div class="layui-input-inline">
+		                  		<input type="text" name="lock_time" value="900" placeholder="登录异常锁定时间，默认为900秒" class="layui-input">
 		                   </div>
 		                   <div class="layui-form-mid layui-word-aux">秒</div>
 			            </div>
-			            
-			            <div class="layui-form-item">
-		                   <label class="layui-form-label">模板子目录</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="tpl_html_dir" value="html" placeholder="首次请手动移动模板文件到填写的目录！" class="layui-input">
-		                   </div>
-		                   <span class="layui-icon layui-icon-about tips" data-content="一定程度上防盗，如填 html，则默认模板情况下路径为 default/html 目录！"></span>
-			            </div>
-			            
+
 			           <div class="layui-form-item">
 		                     <label class="layui-form-label">IP黑名单</label>
 		                     <div class="layui-input-block">
-		                     	<textarea name="ip_deny" placeholder="请输入需要禁止访问的IP，多个之间逗号隔开，IP地址支持使用/掩码位数模式，如：192.168.1.0/24, 192.168.2.100" class="layui-textarea"></textarea>
+		                     	<textarea name="ip_deny" placeholder="多个之间逗号隔开" class="layui-textarea"></textarea>
 		                     </div> 
-		                     <span class="layui-icon layui-icon-about tips" data-content="请输入需要禁止访问的IP，多个之间逗号隔开，IP地址支持使用/掩码位数模式，如：192.168.1.0/24, 192.168.2.100"></span>
 		                </div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">IP白名单</label>
 		                     <div class="layui-input-block">
-		                     	<textarea name="ip_allow" placeholder="请输入需要允许访问的IP，多个之间逗号隔开，IP地址支持使用/掩码位数模式，如：192.168.1.0/24, 192.168.2.100" class="layui-textarea"></textarea>
+		                     	<textarea name="ip_allow" placeholder="允许访问的IP，多个之间逗号隔开" class="layui-textarea"></textarea>
 		                     </div> 
-		                      <span class="layui-icon layui-icon-about tips" data-content="请输入需要允许访问的IP，多个之间逗号隔开，IP地址支持使用/掩码位数模式，如：192.168.1.0/24,192.168.2.100"></span>
 		                </div>
 		                
 		                <div class="layui-form-item">
-							 <div class="layui-input-block">
+							 <div class="layui-input-inline">
 							    <button class="layui-btn" lay-submit="" name="submit" value="security">立即提交</button>
 							    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 							 </div>
@@ -472,27 +299,23 @@
 		  	   
 		  	   <div class="layui-tab-item">
 		  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-			  	   	   <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">地址模式</label>
 		                     <div class="layui-input-block">
-		                     	<p>
-		                     		<input type="radio" name="url_rule_type" value="1" title="普通模式，类似：/index.php/product/1.html"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>普通模式，类似：/index.php/product/1.html</div></div>
-		                     		<span class="layui-icon layui-icon-about tips" data-content="基本模式需要服务器支持pathinfo,特别是nginx下pathinfo要手动配置！"></span>
-		                     	</p>
-		                     	<p>
-		                     		<input type="radio" name="url_rule_type" value="2" title="伪静态模式，类似：/product/1.html"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>伪静态模式，类似：/product/1.html</div></div>
-		                     		<span class="layui-icon layui-icon-about tips" data-content="伪静态时需要服务器环境的支持，并需要添加伪静态规则！"></span>
-								</p>
-		                     	<p>
-									<input type="radio" name="url_rule_type" value="3" checked="checked" title="兼容模式，类似：/?product/1.html"><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>兼容模式，类似：/?product/1.html</div></div>
-								</p>
+		                     	<div>
+		                     		<input type="radio" name="url_rule_type" value="1" title="普通模式，类似：/index.php/product/1.html">
+								</div>
+		                     	<div>
+		                     		<input type="radio" name="url_rule_type" value="2" title="伪静态模式，类似：/product/1.html">
+								</div>
+		                     	<div>
+									<input type="radio" name="url_rule_type" value="3" title="兼容模式，类似：/?product/1.html">
+								</div>
 		                     </div>
 		                </div>
 		                
 		               <div class="layui-form-item">
-		                     <label class="layui-form-label">栏目显示后缀</label>
+		                     <label class="layui-form-label">URL后缀</label>
 		                     <div class="layui-input-block">
 		                     	<input type="radio" name="url_rule_sort_suffix" value="1" title="启用">
 								<input type="radio" name="url_rule_sort_suffix" value="0" checked="checked" title="禁用">
@@ -500,70 +323,13 @@
 		                </div>
 		                
 		                <div class="layui-form-item">
-							 <div class="layui-input-block">
+							 <div class="layui-input-inline">
 							    <button class="layui-btn" lay-submit="" name="submit" value="urlrule">立即提交</button>
 							    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 							 </div>
 						</div>
 	              </form>
 		  	   </div>
-		  	   
-		  	   <div class="layui-tab-item">
-		  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-			  	   	   <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-
-		             
-		               <div class="layui-form-item">
-		                   <label class="layui-form-label">首页</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="index_title" value="" class="layui-input">
-		                   </div>
-			           </div>
-			           
-			           <div class="layui-form-item">
-		                   <label class="layui-form-label">专题页</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="about_title" value="" class="layui-input">
-		                   </div>
-			           </div>
-			           
-			           <div class="layui-form-item">
-		                   <label class="layui-form-label">列表页</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="list_title" value="" class="layui-input">
-		                   </div>
-			           </div>
-			           
-			           <div class="layui-form-item">
-		                   <label class="layui-form-label">内容页</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="content_title" value="" class="layui-input">
-		                   </div>
-			           </div>
-			           
-			           <div class="layui-form-item">
-		                   <label class="layui-form-label">搜索结果页</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="search_title" value="" class="layui-input">
-		                   </div>
-			           </div>
-			           
-			            <div class="layui-form-item">
-		                   <label class="layui-form-label">其它页</label>
-		                   <div class="layui-input-block">
-		                  		<input type="text" name="other_title" value="" class="layui-input">
-		                   </div>
-			           </div>
-		                
-		                <div class="layui-form-item">
-							 <div class="layui-input-block">
-							    <button class="layui-btn" lay-submit="" name="submit" value="pagetitle">立即提交</button>
-							    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-							 </div>
-						</div>
-	              </form>
-		  	   </div>
-		  	   
 		  </div>
 	 </div>
 </div>
