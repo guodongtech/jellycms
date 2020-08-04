@@ -63,7 +63,7 @@ class UpdateTest extends BaseController
     public function getList()
     {
         $serviceVersionList = $this->serviceVersionList;
-        if($serviceVersionList['code'] == false){
+        if($serviceVersionList === false){
             $data = [
                 "code" => 1,
                 "msg" => '请求远程服务器失败',
@@ -106,7 +106,7 @@ class UpdateTest extends BaseController
     {
         // 远程拉取更新数据 
        $serviceVersionList = $this->serviceVersionList;
-       if($serviceVersionList == false){
+       if($serviceVersionList === false){
             return json_encode(['code' => 1, 'msg' => '请求远程服务器失败']);
        }
        if($serviceVersionList['code'] != 1){
@@ -131,7 +131,7 @@ class UpdateTest extends BaseController
     public function checkAuthority(){
         // 远程拉取更新数据 
        $serviceVersionList = $this->getUpgradeData();
-       if($serviceVersionList == false){
+       if($serviceVersionList === false){
             return json_encode(['code' => 2, 'msg' => '请求远程服务器失败']);
        }
        if($serviceVersionList['code'] != 1){
