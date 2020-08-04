@@ -184,7 +184,7 @@ layui.use(['layer', 'form','table','upload','jquery','element'], function(){
 				})
 				$.post('{url:/db/packdownload}',{files:files},function(data){
 					if(data.code == 1){
-						layer.alert('打包完成，<a href="{url:/db/download/}'+data.filename+'">点击下载</a>');
+						layer.alert('打包完成，<a style="color:red"  href="{url:/db/download/}'+data.filename+'">点击下载</a>');
 						table.reload('table');
 					}
 					else{

@@ -24,6 +24,7 @@ class ContentModel extends Model
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->join('admin', 'admin.id = content.create_user', 'left')
 							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
+							->orderBy('id', 'DESC')
 							->get($limit, $offset)
 							->getResultArray();
 		foreach($res as $key=>$value){

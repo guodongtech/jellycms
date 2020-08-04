@@ -160,7 +160,7 @@ class Menu extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
-			//$this->log('menu', "ID".$post['id']."菜单编辑:".$data['name']);
+			$this->log('menu', "ID:".$post['id'].",菜单编辑状态");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

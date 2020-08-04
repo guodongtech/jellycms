@@ -20,6 +20,7 @@ class SortsModel extends Model
 		$result   = $builder->select('sorts.*, model.name as m_name')
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->where(['sorts.deleted'=>0, 'area_id'=>session('area_id')])
+							->orderBy('id', 'DESC')
 							->get()
 							->getResultArray();
 							

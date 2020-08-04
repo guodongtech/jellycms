@@ -2150,7 +2150,7 @@ layui.define(['laytpl', 'form', 'util'], function (exports) {
         '    line-height: 30px;',
         '    padding: 10px 15px;',
         '    box-sizing: border-box;',
-        '    background-color: #f2f2f2;',
+        '    background-color: #fbfbfb;',
         '    border-bottom: 1px solid #e6e6e6;',
         '}',
 

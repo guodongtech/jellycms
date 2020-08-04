@@ -10,6 +10,7 @@ class SysLogModel extends Model
 		$result   = $builder->select('logs.*, admin.name as create_user')
 							->join('admin', 'admin.id = logs.create_user', 'left')
 							->where(['logs.deleted'=>0])
+							->orderBy('id', 'DESC')
 							->get($limit, $offset)
 							->getResultArray();
         return $result;
