@@ -24,39 +24,10 @@
 	</ul>
 	<div class="layui-tab-content">
 		<div class="layui-tab-item layui-show">
-			<table class="layui-table">
-				<thead>
-					<tr>
-						<th width="30">选择</th>
-						<th>更新文件</th>
-						<th>更新方式</th>
-						<th>与官方原始版本是否一致</th>
-						<th>本地时间</th>
-						<th>更新时间</th>
-					</tr>
-				</thead>
-				<tbody id="upfile">
-				{if: $upgrade_list}
-					{foreach: items=$upgrade_list item=$v}
-					<tr>
-						<td><input type="checkbox" checked="" class="checkbox checkitem" lay-ignore="" name="list" value="/LICENSE"></td>
-						<td>{$v['filename']}</td>
-						<td>{$v['type']}</td>
-						<td>{$v['is_same']}</td>
-						<td>无</td>
-						<td>2020-03-08 23:26:00</td>
-					</tr>
-					{/foreach}
-				{/if}
-					<tr>
-						<td><input type="checkbox" class="checkbox" checked="" lay-ignore="" id="checkall" title="全选"></td>
-						<td colspan="5">总共检测到 {$filecount} 个文件</td>
-					</tr>
-				</tbody>
-			</table>
-			<button class="layui-btn" id="check" data-url="{url: /UpdateTest/check}">重新检查</button>
-			<button class="layui-btn" style="display:none" id="update" data-url="/adminzt.php?p=/Upgrade/update">执行更新</button>
-			<button class="layui-btn" style="" id="down" data-url="/adminzt.php?p=/Upgrade/down">下载更新</button>
+			<table class="layui-hide" id="table" lay-filter="test"></table>
+			<button class="layui-btn" id="check" data-url="">重新检查</button>
+			<!-- <button class="layui-btn" style="display:none" id="update" data-url="">执行更新</button> -->
+			<button class="layui-btn" style="" id="update" data-url="">执行更新</button>
 		</div>
 	  	   
 	  	   <div class="layui-tab-item">
@@ -94,12 +65,29 @@
 	</div>	
 </div>
 </div>
+
 <script src="/static/layui/layui.all.js"></script>
 <script>
 !function(){
   var layer = layui.layer
   ,form = layui.form;
   var $ = layui.jquery;
+  var table = layui.table;
+  table.render({
+		elem: '#table',url:'{url:/updateTest/getList}',
+		// toolbar: '#toolbarDemo',
+		title: '提示',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field:'filename', title:'更新文件'},
+			{field:'type', title:'更新方式'},
+			{field:'is_same', title:'与官方原始版本是否一致'},
+			{field:'update_time', title:'更新时间'},
+		]],
+		// page: true
+	});
 $("#check").on('click',function(){
   	$.post('{url: /UpdateTest/check}',function(data){
 		if(data.code == 1){
@@ -107,31 +95,54 @@ $("#check").on('click',function(){
 		}
 		else{
 			layer.open({
-	        type: 1 //此处以iframe举例
-	        ,title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(当前最新"+data.data.max_version+")"
-	        ,area: ['460px', '260px']
+			skin: 'demo-class'
+	        ,type: 1
+	        ,title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(官方最新"+data.data.max_version+")"
+	        ,area: ['510px', '240px']
 	        ,shade: 0
 	        ,maxmin: true
 	        ,offset: ['250px', '260px']
-	        ,content: data.data.msg
-	        ,btn: ['升级', '忽略']
+	        ,content: "<p class='aaa'>"+data.data.msg+"</p>"
+	        ,btn: ['我知道了']
 	        ,yes: function(){
 	            layer.closeAll();
-	            setTimeout(function(){
-	                checkdir(data); // 请求后台
-	            },200);
-	        }
-	        ,btn2: function(){
-	          layer.closeAll();
-	        }
-	        
-	        ,zIndex: layer.zIndex //重点1
-	        ,success: function(layero){
-	          layer.setTop(layero); //重点2
+	            // setTimeout(function(){
+	            //     checkdir(data); // 请求后台
+	            // },200);
 	        }
 	      });
 		}
 	}, 'json');
+})
+$("#update").on('click',function(){
+	var data = table.checkStatus('table').data;
+	var length = table.checkStatus('table').data.length;
+	var is_all = table.checkStatus('table').isAll;
+	var count = table.cache.table.length;
+	if(length<1){
+		layer.msg("请先选中要升级的文件");
+		return false;
+	}
+	layer.open({
+	  	content: '可升级文件共'+count+'条'+'，已选中'+length+'条，是否确认升级',
+	  	btn: ['确认升级', '取消'],
+	  	yes: function(index, layero){
+	    	checkdir(data);
+	  	},
+	  	btn2: function(index, layero){
+	    	//按钮【按钮二】的回调
+	    
+	    	//return false 开启该代码可禁止点击该按钮关闭
+	  	},
+	  	cancel: function(){ 
+		    //右上角关闭回调
+		    
+		    //return false 开启该代码可禁止点击该按钮关闭
+	  	}
+	});
+ 
+
+  	// checkdir(data);
 })
 /** 
  * 检测升级文件的目录权限
@@ -142,6 +153,7 @@ function checkdir(data) {
         type : "POST",
         url  : "{url: UpdateTest/checkAuthority}",
         timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+        data:{'filelist':data},
         dataType:"json",
         // error: function(request) {
         //     parent.layer.closeAll();
@@ -167,13 +179,12 @@ function checkdir(data) {
  */
 function upgrade(data){
     layer_loading('升级<font id="upgrade_speed">中</font>');
-    var version = data.data.curent_version;
-    var max_version = data.data.max_version;
     var timer = '';
     var speed = 0.01;
     $.ajax({
-        type : "GET",
+        type : "POST",
         url  :  '{url: UpdateTest/Upgrade}',
+        data:{'filelist':data},
         timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
         dataType:"json",
         beforeSend:function(){
@@ -191,7 +202,7 @@ function upgrade(data){
         },
         error: function(request) {
             parent.layer.closeAll();
-            layer.alert("空间超时请稍后再试，或手工升级！", {icon: 2, title:false}, function(){
+            layer.alert("访问超时请稍后再试，或手动升级！", {icon: 2, title:false}, function(){
                 top.location.reload();
             });
         },
@@ -200,7 +211,10 @@ function upgrade(data){
             clearInterval(timer);
             parent.layer.closeAll();
             if(res.code == 1){
-            	layer.msg('更新完成')
+            	layer.msg('更新完成',function(){
+            		top.location.reload();
+            	});
+
             }else{
             	layer.msg(res.msg)
             }

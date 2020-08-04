@@ -38,6 +38,7 @@ class UpdateTest extends BaseController
         $this->prefix = $config->database['DBPrefix'];
         $this->download_path = $this->data_path.'version/download/';
         $this->backup_path = $this->data_path.'version/backup/';
+        $this->serviceVersionList = $this->getUpgradeData();
       //  error_reporting(0);
        // $this->branch = $this->config('upgrade_branch') == '2.X.dev' ? '2.X.dev' : '2.X';
       //  $this->force = $this->config('upgrade_force') ?: 0;
@@ -57,13 +58,30 @@ class UpdateTest extends BaseController
 
     public function index()
     {
-        $serviceVersionList = $this->getUpgradeData();
-        if(empty($serviceVersionList) || !isset($serviceVersionList)){
-            $data['filecount'] = 0;
-             return view('update_test.html',$data);
+        return view('update_test.html');
+    }
+    public function getList()
+    {
+        $serviceVersionList = $this->serviceVersionList;
+        if($serviceVersionList['code'] == false){
+            $data = [
+                "code" => 1,
+                "msg" => '请求远程服务器失败',
+                "data" => '',
+            ];
+            return json_encode($data);
+        }
+        if($serviceVersionList['code'] != 1){
+            $data = [
+                "code" => 1,
+                "msg" => $serviceVersionList['msg'],
+                "data" => '',
+            ];
+            return json_encode($data);
         }
         $upgrade_list = $serviceVersionList['upgrade'];
         foreach($upgrade_list as $k=>$v){
+            $upgrade_list[$k]['update_time'] = $serviceVersionList['update_time'];
             if(!file_exists($this->data_path.$v['filename'])){
                 $upgrade_list[$k]['is_same'] = '';
                 continue;
@@ -75,23 +93,29 @@ class UpdateTest extends BaseController
                 $upgrade_list[$k]['is_same'] = '不一致';
             }
         }
-        $data['upgrade_list'] = $upgrade_list;
-        $data['filecount'] = count($upgrade_list);
-        return view('update_test.html',$data);
+        $data = [
+            "code" => 0,
+            "msg" => "",
+            "data" => $upgrade_list,
+        ];
+        return json_encode($data);
     }
     
     // 检查更新
     public function check()
     {
         // 远程拉取更新数据 
-       $serviceVersionList = $this->getUpgradeData();
+       $serviceVersionList = $this->serviceVersionList;
        if($serviceVersionList == false){
-            return json_encode(['code' => 1, 'msg' => '无法连接远程数据库']);
+            return json_encode(['code' => 1, 'msg' => '请求远程服务器失败']);
+       }
+       if($serviceVersionList['code'] != 1){
+            return json_encode(['code' => 1, 'msg' => $serviceVersionList['msg']]);
        }
         // print_r($serviceVersionList);die;
         if(!empty($serviceVersionList))
         {
-            $data['msg'] = "小提示：系统更新不会涉及前台模板及网站数据等。<br>升级将覆盖部分文件，系统会自动备份源文件在data/backup目录下";
+            $data['msg'] = "<style>.clear {text-indent:25px;font-size: 14px;line-height: 24px;}</style><div class='clear'><p>小提示：</p><p>1、系统更新不会涉及前台模板及网站数据等。</p><p>2、升级将覆盖部分文件，系统会自动备份源文件在version/backup目录下</p><p>3、升级时，请先选中要升级的文件，点击【执行更新】</p></div>";
             $data['curent_version'] = $this->curent_version; //当前版本
             $data['target_version'] = $serviceVersionList['target_version']; // 目标版本
             $data['max_version'] = $serviceVersionList['max_version'];  // 最新版本
@@ -108,10 +132,13 @@ class UpdateTest extends BaseController
         // 远程拉取更新数据 
        $serviceVersionList = $this->getUpgradeData();
        if($serviceVersionList == false){
-            return json_encode(['code' => 2, 'msg' => '无法连接远程数据库']);
+            return json_encode(['code' => 2, 'msg' => '请求远程服务器失败']);
        }
+       if($serviceVersionList['code'] != 1){
+            return json_encode(['code' => 2, 'msg' => $serviceVersionList['msg']]);
+       }
+        $serviceVersionList['upgrade'] = post('filelist');
         $filelist = $serviceVersionList['upgrade'];
-
         $dirs = array();
         $i = -1;
         foreach($filelist as $filename)
@@ -183,15 +210,17 @@ class UpdateTest extends BaseController
             return json_encode(['code' => 0, 'msg' => "请联系空间商，开启 php.ini 中的php-zip扩展"]);
         }
 
-        $serviceVersionList = @file_get_contents($this->upgrade_url);
+        $serviceVersionList = $this->serviceVersionList;
         if (false === $serviceVersionList) {
             return json_encode(['code' => 0, 'msg' => "无法连接远程升级服务器！"]);
         } else {
-            $serviceVersionList = json_decode($serviceVersionList,true);
             if (empty($serviceVersionList)) {
                 return json_encode(['code' => 0, 'msg' => "当前没有可升级的版本！"]);
             }
         }
+        // 放入选中文件
+        $serviceVersionList['upgrade'] = post('filelist');
+
         clearstatcache(); // 清除文件夹权限缓存
         if (!is_writeable($this->version_txt_path)) {
             return json_encode(['code' => 0, 'msg' => '文件'.$this->version_txt_path.' 不可写，不能升级!!!']);
@@ -206,6 +235,12 @@ class UpdateTest extends BaseController
         $DownFileName = explode('/', $serviceVersionList['down_url']);    
         $DownFileName = end($DownFileName);
         $folderName = str_replace(".zip", "", $DownFileName);  // 文件夹
+
+        // 将所有文件放进一维数组，解压时用
+        $zip_file_list = array();
+        foreach($serviceVersionList['upgrade'] as $k=>$v){
+            $zip_file_list[] = 'www/'.$v['filename'];
+        }
         /*--end*/
         /*解压之前，删除已重复的文件夹*/
         $this->delFile($this->download_path.$folderName);
@@ -216,9 +251,12 @@ class UpdateTest extends BaseController
         if ($zip->open($this->download_path.$DownFileName) != true) {
             return json_encode(['code' => 0, 'msg' => "升级包读取失败!"]);
         }
-        $zip->extractTo($this->download_path.$folderName.'/');//解压缩到在当前路径下backup文件夹内
+        // for($i; $i<$zip->numFiles;$i++){
+        //     echo $zip->getNameIndex($i)."<br>";
+        // }
+        // die;
+        $zip->extractTo($this->download_path.$folderName.'/',$zip_file_list);//解压缩到在当前路径下backup文件夹内
         $zip->close();//关闭处理的zip文件
-
         /*--end*/
         /*升级之前，备份涉及的源文件*/
         $upgrade = $serviceVersionList['upgrade'];
@@ -281,7 +319,6 @@ class UpdateTest extends BaseController
         //     } 
         // }
         /*--end*/
-
         /*修改版本文件 version.txt*/
         $r = $this->ciMkdir(dirname($this->version_txt_path));
         if ($r) {

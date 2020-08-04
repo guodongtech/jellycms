@@ -120,12 +120,36 @@ class Sysuptest extends BaseController
 			}
 			$newName = $version.'.zip';
 			$uploadPath = $this->zip_path;
+			// $this->ciMkdir($uploadPath);
 			if(file_exists($uploadPath.$newName)){
 				@unlink($uploadPath.$newName);
 			}
 			//创建目录并设置权限
 			$file->move($uploadPath, $newName);
-			
+			/*解压到更新包的文件夹*/
+	        $folder_name = $version;  // 文件夹
+	        /*解压之前，删除已重复的文件夹*/
+	        $this->delFile($this->pack_path.$folder_name,true);
+	        /*解压文件*/
+	        $zip = new \ZipArchive();//新建一个ZipArchive的对象
+	        if ($zip->open($this->zip_path.$newName) != true) {
+	        	$data = [
+					"code" => 0,
+					"msg" => '读取压缩文件失败',
+				];
+				return json_encode($data);
+	        }
+	        if(!$this->ciMkdir($this->pack_path.$folder_name)){
+	        	$data = [
+					"code" => 0,
+					"msg" => '创建解压目录失败',
+				];
+				return json_encode($data);
+	        }
+	        $zip->extractTo($this->pack_path.$folder_name.'/');
+	        $zip->close();//关闭处理的zip文件
+	        /*--end*/
+
 			$data = [
 				"code" => 1,
 				"msg" => "上传成功",
@@ -142,33 +166,24 @@ class Sysuptest extends BaseController
 	public function checkInfo($version){
 		// 获取当前最高版本
 		$max_version = $this->model->getMaxVersion();
+		if($version == $max_version){
+			echo json_encode(['code' => 2, 'msg' => "已是最新版本"]);die;
+		}
 		// 获取用户要升级的版本信息
 		$version_info = $this->model->getVersionInfo($version);
+		if(empty($version_info)){
+			echo json_encode(['code' => 2, 'msg' => "没有检测到需要更新的内容，或联系技术支持"]);die;
+		}
 
 		if(!file_exists($this->zip_path.$version_info['zip_file'])){
 			echo json_encode(['code' => 2, 'msg' => "升级包缺失，请联系技术支持!"]);die;
 		}
 		// 处理更新的文件数据
-	/*step1 解压*/
-		/*解压到更新包的文件夹*/
         $folder_name = str_replace(".zip", "", $version_info['zip_file']);  // 文件夹
-        /*--end*/
-        /*解压之前，删除已重复的文件夹*/
-        $this->delFile($this->pack_path.$folder_name,true);
-        /*--end*/
-
-        /*解压文件*/
-        $zip = new \ZipArchive();//新建一个ZipArchive的对象
-        if ($zip->open($this->zip_path.$version_info['zip_file']) != true) {
-            echo json_encode(['code' => 2, 'msg' => "远程服务器读取数据失败!"]);die;
-        }
-        $zip->extractTo($this->pack_path.$folder_name.'/');
-        $zip->close();//关闭处理的zip文件
-        /*--end*/
-    /*step2  获取更新包里的文件路径*/  
+    /*step1  获取更新包里的文件路径*/  
     	$tree_path = $this->pack_path.$folder_name.DIRECTORY_SEPARATOR.'www';
     	$this->fileTree($file_list,$tree_path);
-    /*step3  比对上个版本的原始文件*/ 
+    /*step2  比对上个版本的原始文件*/ 
     	$prev_version_path = $this->version_path.$version_info['prev_version_path'];
     	foreach($file_list as $k=>$v){
     		if(file_exists($prev_version_path.$v)){
@@ -178,25 +193,23 @@ class Sysuptest extends BaseController
     		}else{
     			$version_list[$k]['filename'] = $v;
     			$version_list[$k]['type'] = "新增";
+    			$version_list[$k]['curent_file_md5'] = '';
     		}
     	}
-    /*step4  获取sql文件名*/ 
+    /*step3  获取sql文件名*/ 
     	helper('filesystem'); //加载文件系统辅助函数
     	$sql_file = get_filenames($this->pack_path.$folder_name.DIRECTORY_SEPARATOR.'sql');
-    	if(empty($sql_file) || count($sql_file)>1){
-    		echo json_encode(['code' => 2, 'msg' => "远程服务器读取数据失败!"]);die;
-    	}else{
-    		$sql_file = $sql_file[0];
+    	if(count($sql_file)>0){
+    		$data['sql_file'] = $sql_file[0];
     	}
     /*  end  */ 
     	// 整合数据
+    	$data['code'] = 1;
     	$data['target_version'] = $version_info['version_num'];
     	$data['max_version'] = $max_version;
     	$data['down_url'] = $version_info['zip_download'];
     	$data['zip_file_md5'] = $version_info['zip_file_md5'];
-    	$data['sql_file'] = $sql_file;
     	$data['upgrade'] = $version_list;
-    	$data['status'] = 1;
     	$data['create_time'] = $version_info['create_time'];
     	$data['update_time'] = $version_info['update_time'];
     	echo json_encode($data);die;
@@ -249,5 +262,22 @@ class Sysuptest extends BaseController
 	    }
 	    $mydir->close();
 	}
+	    /**
+     * 递归创建目录
+     *
+     * @param string $path 目录路径，不带反斜杠
+     * @param intval $purview 目录权限码
+     * @return boolean
+     */
+    function ciMkdir($path, $purview = 0777)
+    {
+        if (!is_dir($path)) {
+            $this->ciMkdir(dirname($path), $purview);
+            if (!mkdir($path, $purview)) {
+                return false;
+            }
+        }
+        return true;
+    }
     
 }

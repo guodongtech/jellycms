@@ -38,12 +38,12 @@ class SysuptestModel extends Model
 		return $result;
 	}
     public function getMaxVersion(){
-		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where deleted=0 order by id desc limit 1";
+		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where deleted=0 and status=1 order by id desc limit 1";
 		$result = $this->db->query($sql)->getRowArray();
 		return $result['version_num'];
 	}
 	public function getVersionInfo($version){
-		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where deleted=0 and prev_version_num = '".$version."'";
+		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where deleted=0 and status=1 and prev_version_num = '".$version."'";
 		$result = $this->db->query($sql)->getRowArray();
 		return $result;
 	}
