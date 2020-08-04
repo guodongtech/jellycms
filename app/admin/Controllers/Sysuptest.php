@@ -162,6 +162,92 @@ class Sysuptest extends BaseController
 			return json_encode($data);
 		}
 	}
+	public function uploadVersionFile()
+	{
+		$version = post('version_num');
+		if(empty($version) || !isset($version)){
+			$data = [
+				"code" => 0,
+				"msg" => '请先填写版本号',
+			];
+			return json_encode($data);
+		}
+		$file = $this->request->getFile('file');
+		if (! $file->isValid())
+		{
+			$data = [
+				"code" => 0,
+				"msg" => $file->getError(),
+			];
+			return json_encode($data);
+		}else{ //移动文件
+	        $folder_name = $version;  // 目标文件夹
+			$name = $file->getName();
+			$suffix = end(explode('.',$name));
+			if($suffix != 'zip'){
+				$data = [
+					"code" => 0,
+					"msg" => '文件不合法',
+				];
+				return json_encode($data);
+			}
+			$newName = $version.'.zip';
+			$uploadPath = $this->version_path;
+			// $this->ciMkdir($uploadPath);
+			if(file_exists($uploadPath.$newName)){
+				@unlink($uploadPath.$newName);
+			}
+			//创建目录并设置权限
+			$file->move($uploadPath, $newName);
+			
+	        /*解压之前，删除已重复的文件夹*/
+	        $this->delFile($this->version_path.$folder_name,true);
+	        /*解压文件*/
+	        $zip = new \ZipArchive();//新建一个ZipArchive的对象
+	        if ($zip->open($this->version_path.$newName) != true) {
+	        	$data = [
+					"code" => 0,
+					"msg" => '读取压缩文件失败',
+				];
+				return json_encode($data);
+	        }
+	        if(!$this->ciMkdir($this->version_path.$folder_name)){
+	        	$data = [
+					"code" => 0,
+					"msg" => '创建解压目录失败',
+				];
+				return json_encode($data);
+	        }
+	        $zip->extractTo($this->version_path.$folder_name.'/');
+	        $zip->close();//关闭处理的zip文件
+	        /*--end*/
+	        // 上传成功 写入数据库
+	        if(isset($post['id']) && !empty($post['id'])){
+	        	$re['id'] = $$post['id'];
+	        }
+	        $re['version_num'] = $version;
+	        $re['version_path'] = $folder_name.DIRECTORY_SEPARATOR;
+	        $res = $this->model->edit($re);
+	        if($res < 1){
+	        	$data = [
+					"code" => 0,
+					"msg" => '写库失败',
+				];
+				return json_encode($data);
+	        }
+	        // 删除zip文件
+	        @unlink($uploadPath.$newName);
+
+			$data = [
+				"code" => 1,
+				"msg" => "上传成功",
+				"data" => [
+					'version_path' => $folder_name.DIRECTORY_SEPARATOR,
+				],
+			];
+			return json_encode($data);
+		}
+	}
 	// 对外输出
 	public function checkInfo($version){
 		// 获取当前最高版本

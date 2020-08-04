@@ -32,12 +32,12 @@ class UpdateTest extends BaseController
     {
         $config = new \Config\Config();
         $this->data_path = FCPATH;
-        $this->version_txt_path = $this->data_path.'version/conf/version.txt'; // 版本文件路径
+        $this->version_txt_path = $this->data_path.'version'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'version.txt'; // 版本文件路径
         $this->curent_version = $this->getCmsVersion();
         $this->upgrade_url = 'http://www.jellycms.com/admin.php/Sysuptest/checkinfo/'.$this->curent_version;  //先随便写一个
         $this->prefix = $config->database['DBPrefix'];
-        $this->download_path = $this->data_path.'version/download/';
-        $this->backup_path = $this->data_path.'version/backup/';
+        $this->download_path = $this->data_path.'version'.DIRECTORY_SEPARATOR.'download'.DIRECTORY_SEPARATOR;
+        $this->backup_path = $this->data_path.'version'.DIRECTORY_SEPARATOR.'backup'.DIRECTORY_SEPARATOR;
         $this->serviceVersionList = $this->getUpgradeData();
       //  error_reporting(0);
        // $this->branch = $this->config('upgrade_branch') == '2.X.dev' ? '2.X.dev' : '2.X';
@@ -53,6 +53,9 @@ class UpdateTest extends BaseController
             return false;
         }
         $serviceVersionList = json_decode($serviceVersionList,true);
+        if(!is_array($serviceVersionList)){
+            return false;
+        }
         return $serviceVersionList;
     }
 
