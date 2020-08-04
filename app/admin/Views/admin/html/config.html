@@ -14,12 +14,12 @@
 </head>
 <body class="guodong-body">
 <style>
-.watermark-position .layui-table td, .layui-table th {
+.water-position .layui-table td, .layui-table th {
     position: relative;
     padding: 0;
 	margin:0;
 }
-.watermark-position .layui-form-radio {
+.water-position .layui-form-radio {
     margin:0;
     padding:14px 6px;
     cursor: pointer;
@@ -27,18 +27,48 @@
 	display:flex;
 	justify-content:center;
 }
-.watermark-position .layui-table tbody tr:hover{
+.water-position .layui-table tbody tr:hover{
     background-color: transparent;
 }
-.watermark-position .layui-table tbody tr td:hover{
+.water-position .layui-table tbody tr td:hover{
         background-color: #f2f2f2;
 }
-.watermark-position .layui-table tbody tr td .layui-form-radioed{
+.water-position .layui-table tbody tr td .layui-form-radioed{
         background-color: #f2f2f2;
 }
-.watermark-position .layui-form-radio>i {
+.water-position .layui-form-radio>i {
     margin-right: 0;
     font-size: 22px;
+}
+
+.layui-upload-list dl {
+    width: 92px;
+    height: 92px;
+    margin: 0 10px 10px 0;
+	position:relative;
+}
+.layui-upload-list dl  img{
+    width: 92px;
+    height: 92px;
+}
+.layui-upload-list dl dd{
+    position:absolute;
+	top:0;
+	right:0;
+	font-size:14px;
+	color:#f00;
+	cursor:pointer;
+}
+.layui-colorpicker {
+    padding: 3px !important;
+	line-height:18px !important;
+}
+.layui-textarea {
+    min-height: 100px;
+    height: auto;
+    line-height: 14px;
+    padding: 6px 10px;
+    resize: vertical;
 }
 </style>
 {include:head.html}
@@ -58,8 +88,9 @@
 			  	   	    <div class="layui-form-item">
 		                     <label class="layui-form-label">网站状态</label>
 		                     <div class="layui-input-inline">
-		                     	<input type="radio" name="web_status" value="0" title="关闭">
 								<input type="radio" name="web_status" value="1" checked="checked" title="开启">
+		                     	<input type="radio" name="web_status" value="0" title="关闭">
+
 		                     </div>
 		                </div>
 		                
@@ -76,7 +107,7 @@
 		                     	<input type="radio" name="cached" value="1" title="启用">
 								<input type="radio" name="cached" value="0" checked="checked" title="禁用">
 		                     </div>
-							 <div class="layui-form-mid layui-word-aux">缓存</div>
+							 <div class="layui-form-mid layui-word-aux">开启缓存，将降低服务器性能消耗，增加负载能力</div>
 		                </div>
 		                
 		                <div class="layui-form-item">
@@ -100,7 +131,7 @@
 		                     <div class="layui-input-inline">
 		                     	<input type="text" name="pagenum" value="5" placeholder="列表分页数字条显示数量" class="layui-input">
 		                     </div>
-		                     <div class="layui-form-mid layui-word-aux">列表分页数字条显示数量</div>
+		                     <div class="layui-form-mid layui-word-aux">列表分页数字条显示数量，建议使用寄数值，当前页会显示在中间位置。</div>
 		                </div>
 		                
 		                <div class="layui-form-item">
@@ -132,55 +163,56 @@
 		  	   		<div class="layui-form-item">
 	                     <label class="layui-form-label">状态</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="radio" name="watermark_status" value="1" title="启用">
-							<input type="radio" name="watermark_status" value="0" checked="checked" title="禁用">
+	                     	<input type="radio" name="water_status" value="1" title="启用">
+							<input type="radio" name="water_status" value="0" checked="checked" title="禁用">
 	                     </div>
+						<div class="layui-form-mid layui-word-aux">水印功能只在内容页上传图片有效</div>
 	                </div>
 	                
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">水印文字</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="watermark_text" value="JellyCMS" placeholder="水印文字，如：JellyCMS" class="layui-input">
+	                     	<input type="text" name="water_text" value="JellyCMS" placeholder="水印文字，如：JellyCMS" class="layui-input">
 	                     </div>
 	                </div>
 					
 					<div class="layui-form-item">
 	                     <label class="layui-form-label">文字字体</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="watermark_text_font" id="watermark_text_font" value="" placeholder="请上传水印文字字体" class="layui-input">
+	                     	<input type="text" name="water_font" id="water-font-input" value="" placeholder="请上传水印文字字体" class="layui-input">
 	                     </div>
-	                     <button type="button" class="layui-btn file">
-						 	 <i class="layui-icon"></i>上传字体
-						 </button>
+							<button type="button" class="layui-btn" id="water-font">
+							  <i class="layui-icon">&#xe67c;</i>上传字体
+							</button>
 	                </div>
 	                
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">文字大小</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="watermark_text_size" value="20" placeholder="水印文字大小，如：20" class="layui-input">
+	                     	<input type="text" name="water_text_size" value="20" placeholder="水印文字大小，如：20" class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">文字颜色</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="watermark_text_color" placeholder="文字颜色" class="layui-input">
+	                     	<input type="text" name="water_color" id="water-color-input" placeholder="文字颜色" class="layui-input">
 	                     </div>
+						 <span id="water-color"></span>
 	                </div>
 	                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">水印图片</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="watermark_pic" id="watermark_pic" value="/static/images/logo.png" placeholder="水印图片，优先文字水印" class="layui-input">
-							<div class="layui-form-mid layui-word-aux">水印图片，优先文字水印</div>
+	                     	<input type="text" name="water_pic" id="water_pic" value="" placeholder="水印图片，优先文字水印" class="layui-input">
+							<div class="layui-form-mid layui-word-aux">优先文字水印,如需使用图片水印请将"水印文字"清空</div>
 						</div>
-	                     <button type="button" class="layui-btn upload">
-						 	 <i class="layui-icon"></i>上传图片
-						 </button>
-						
+							<button type="button" class="layui-btn" id="water-pic">
+							  <i class="layui-icon">&#xe67c;</i>上传图片
+							</button>
 	                </div>
 	                
-	                <div class="layui-form-item watermark-position">
+	                <div class="layui-form-item water-position">
 						<label class="layui-form-label">水印位置</label>
 						<div class="layui-input-inline">
 							<table class="layui-table" lay-size="sm">
@@ -233,8 +265,8 @@
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">留言验证码</label>
 		                     <div class="layui-input-inline">
-		                     	<input type="radio" name="message_check_code" value="1" checked="checked" title="启用">
-								<input type="radio" name="message_check_code" value="0" title="禁用">
+		                     	<input type="radio" name="message_ver_code" value="1" checked="checked" title="启用">
+								<input type="radio" name="message_ver_code" value="0" title="禁用">
 		                     </div>
 		                </div>
 		                
@@ -257,8 +289,8 @@
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">表单验证码</label>
 		                     <div class="layui-input-inline">
-		                     	<input type="radio" name="form_check_code" value="1" title="启用">
-								<input type="radio" name="form_check_code" value="0" checked="checked" title="禁用">
+		                     	<input type="radio" name="form_ver_code" value="1" title="启用">
+								<input type="radio" name="form_ver_code" value="0" checked="checked" title="禁用">
 		                     </div>
 		                </div>
 		                
@@ -281,14 +313,14 @@
 			           <div class="layui-form-item">
 		                     <label class="layui-form-label">IP黑名单</label>
 		                     <div class="layui-input-block">
-		                     	<textarea name="ip_deny" placeholder="多个IP以半角用逗号隔开" class="layui-textarea"></textarea>
+		                     	<textarea name="blackip" placeholder="多个IP以半角用逗号隔开" class="layui-textarea"></textarea>
 		                     </div> 
 		                </div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">IP白名单</label>
 		                     <div class="layui-input-block">
-		                     	<textarea name="ip_allow" placeholder="多个IP以半角用逗号隔开" class="layui-textarea"></textarea>
+		                     	<textarea name="whiteip" placeholder="多个IP以半角用逗号隔开" class="layui-textarea"></textarea>
 		                     </div> 
 		                </div>
 		                
@@ -307,13 +339,13 @@
 							 <label class="layui-form-label">地址模式</label>
 							 <div class="layui-input-block">
 								<div>
-									<input type="radio" name="url_rule_type" value="1" title="普通模式，如：/index.php/news/1.html">
+									<input type="radio" name="url_rule" value="1" title="普通模式，如：/index.php/news/1.html">
 								</div>
 								<div>
-									<input type="radio" name="url_rule_type" value="2" title="伪静态模式，如：/news/1.html">
+									<input type="radio" name="url_rule" value="2" title="伪静态模式，如：/news/1.html">
 								</div>
 								<div>
-									<input type="radio" name="url_rule_type" value="3" title="兼容模式，如：/?news/1.html">
+									<input type="radio" name="url_rule" value="3" title="兼容模式，如：/?news/1.html">
 								</div>
 							 </div>
 						</div>
@@ -346,31 +378,76 @@
 !function(){
 	var layer = layui.layer,
 	form = layui.form;
-	var table = layui.table;
 	var element = layui.element;
 	var $ = layui.jquery;
+	var upload = layui.upload;
+	var colorpicker = layui.colorpicker;
 	   $.ajax({
 			url:"{url:/config/getdata}", //请求的服务端地址
 			type:"post",
 			dataType:"json",
 			success:function(data){
 				if(data.code == 1){
-					console.log(data.data)
-					loadData(data.data, 'form')
+					loadData(data.data, 'form');
 					form.render();
+					$('.layui-colorpicker-trigger-span').css('background',$('#water-color-input').val());
 				}
 				else{
-					layer.msg(data.msg)
+					//layer.msg(data.msg)
 				}  
 			},
 			error:function(){
-			  layer.msg('error'); //错误处理
+			  //layer.msg('error'); //错误处理
 			}
 		});
 
+		//执行实例
+		var uploadInst = upload.render({
+			elem: '#water-pic',
+			url: '{url:/upload/uploadFile}',
+			before: function(obj){
+			  //预读本地文件示例，不支持ie8
+			  obj.preview(function(index, file, result){
+				$('.preview img').attr('src', result); //图片链接（base64）
+			  });
+			},
+			done: function(res){
+				//上传完毕回调
+				$('input[name="water_pic"]').val(res.data.path);
+				layer.msg('上传成功')
+			},
+			error: function(){
+				//请求异常回调
+			}
+		})
 	
+		//执行实例
+		var uploadInst = upload.render({
+			elem: '#water-font',
+			url: '{url:/upload/uploadFile}',
+			accept:'file',
+			done: function(res){
+				//上传完毕回调
+				$('input[name="water_font"]').val(res.data.path);
+				layer.msg('上传成功')
+			},
+			error: function(){
+				//请求异常回调
+			}
+		})
 	
-	
+		colorpicker.render({
+			elem: '#water-color'
+			,predefine: true // 开启预定义颜色
+			,color: $('input[name="water_color"]').val()
+			,alpha: true
+			,format: 'rgb'
+			,done: function(color){
+			  $('input[name="water_color"]').val(color);
+			  form.render();
+			}
+		});	
+	form.render();
 	form.on('submit(submit)', function(data){
 	   var url = $(this).parents('form').prop('action');
 	   $.ajax({
@@ -381,9 +458,6 @@
 			success:function(data){
 				if(data.code == 1){
 					layer.msg(data.msg)
-					setTimeout(function (){
-						window.location.reload();
-					}, 1000);
 				}
 				else{
 					layer.msg(data.msg)
