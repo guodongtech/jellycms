@@ -160,20 +160,4 @@ class FormField extends BaseController
 		}
 		return json_encode($rdata);
     }
-	public function test(){
-			$fields = array(
-				'blog_title'       => array(
-				'type'           => 'varchar',
-				'constraint'     => 20,
-				'null'           => TRUE,
-				)
-			);
-			if(!$this->model->addField($fields, 5)){
-				$rdata = [
-					"code" => 0,
-					"msg" => "创建字段失败",
-				];
-				return json_encode($rdata);
-			}	
-	}
 }

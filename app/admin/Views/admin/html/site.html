@@ -32,28 +32,28 @@
                      	<input type="text" name="title" value="{$site.title}" placeholder="请输入站点标题" class="layui-input">
                      </div>
                 </div>
-                
+
                 <div class="layui-form-item">
                      <label class="layui-form-label">副标题</label>
                      <div class="layui-input-block">
                      	<input type="text" name="subtitle" value="{$site.subtitle}" placeholder="请输入站点副标题" class="layui-input">
                      </div>
                 </div>
-                
+
                 <div class="layui-form-item">
                      <label class="layui-form-label">域名</label>
                      <div class="layui-input-inline">
                      	<input type="text" name="domain" value="{$site.domain}" placeholder="请输入站点域名" class="layui-input">
                      </div>
                 </div>
-                
+
                 <div class="layui-form-item">
                      <label class="layui-form-label">关键字</label>
                      <div class="layui-input-block">
                      	<input type="text" name="keywords" value="{$site.keywords}" placeholder="请输入站点关键字" class="layui-input">
                      </div>
                 </div>
-                
+
                 <div class="layui-form-item">
                      <label class="layui-form-label">描述</label>
                      <div class="layui-input-block">
@@ -79,6 +79,7 @@
 					 	 <i class="layui-icon"></i>上传图片
 					 </button> 
                 </div>
+				
                 <div class="layui-form-item">
                      <label class="layui-form-label">订阅号</label>
                      <div class="layui-input-inline">
@@ -88,6 +89,7 @@
 					 	 <i class="layui-icon"></i>上传图片
 					 </button> 
                 </div>
+				
                 <div class="layui-form-item">
                      <label class="layui-form-label">二维码</label>
                      <div class="layui-input-inline">
@@ -97,35 +99,14 @@
 					 	 <i class="layui-icon"></i>上传图片
 					 </button> 
                 </div>
-                
+
                 <div class="layui-form-item">
                      <label class="layui-form-label">备案</label>
                      <div class="layui-input-inline">
                      	<input type="text" name="icp" value="{$site.icp}" placeholder="请输入站点备案" class="layui-input">
                      </div>
                 </div>
-                
-<!--                 <div class="layui-form-item">
-				    <label class="layui-form-label">PC模板</label>
-				    <div class="layui-input-inline">
-						<select name="pctheme">
-							{foreach:items = $themeList key=$k item=$v}
-							<option {if:$site['pctheme']==$v}selected{/if} value="{$v}">{$v}</option>
-							{/foreach}
-						</select>
-				    </div>
-				 </div>    
-                <div class="layui-form-item">
-				    <label class="layui-form-label">手机模板</label>
-				    <div class="layui-input-inline">
-						<select name="mobiletheme">
-							{foreach:items = $themeList key=$k item=$v}
-							<option {if:$site['mobiletheme']==$v}selected{/if} value="{$v}">{$v}</option>
-							{/foreach}
-						</select>
-				    </div>
-				 </div> -->
-				 
+
 				 <div class="layui-form-item">
                      <label class="layui-form-label">统计代码</label>
                      <div class="layui-input-block">
@@ -139,14 +120,14 @@
                      	<textarea name="copyright" placeholder="请输入版权信息" class="layui-textarea">{$site.copyright}</textarea>
                      </div>
                 </div>
-				
+
 				<div class="layui-form-item">
 					 <div class="layui-input-block">
 					    <button class="layui-btn" id="submit" type="submit">立即提交</button>
 					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 					 </div>
 				</div>
-				 
+
 	  		</form>
 	  	</div>
 	  </div>
