@@ -3,33 +3,34 @@ namespace App\Models;
 use CodeIgniter\Model;
 class SysLogModel extends Model
 {
-/* 	protected $table      = 'logs';
-	protected $primaryKey = 'id';
-	protected $returnType = 'array';
-	protected $useSoftDeletes = true;
-	protected $deletedField  = 'deleted';
-	protected $allowedFields = [ '*'];
-	protected $useTimestamps = false;
-	protected $validationRules    = [];
-	protected $validationMessages = [];
-	protected $skipValidation     = false; */
     public function getList($page, $limit)
     {
-		$sql = "SELECT * FROM ".$this->db->prefixTable('logs')." where deleted =0 limit ".($page-1)*$limit.",{$limit} ";
-		$result = $this->db->query($sql)->getResultArray();
+		$offset = ($page-1)*$limit;
+		$builder = $this->db->table('logs');
+		$result   = $builder->select('logs.*, admin.name as create_user')
+							->join('admin', 'admin.id = logs.create_user', 'left')
+							->where(['logs.deleted'=>0])
+							->get($limit, $offset)
+							->getResultArray();
         return $result;
     }
     public function getCount()
     {
-		$sql = "SELECT count(1) as num FROM ".$this->db->prefixTable('logs')."  ";
-		$result = $this->db->query($sql)->getFirstRow();
-        return $result->num;
+		$builder = $this->db->table('logs');
+		$total = $builder->select('id')
+							->where(['deleted'=>0])
+							->countAllResults(false);
+        return $total;
     }
- 
+	public function log($data){
+		$builder = $this->db->table('logs');
+		return $builder->insert($data);
+	}
 
     public function clear()
     {
-		$sql = "update ".$this->db->prefixTable('logs')." set deleted=1";
-		return $this->db->query($sql);
+		$builder = $this->db->table('logs');
+		$builder->set('deleted', '1');
+		return $builder->update();
     }
 }

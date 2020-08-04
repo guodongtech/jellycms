@@ -12,16 +12,14 @@ class SysLog extends BaseController
     }
     public function index()
     {
-
         return view('logs.html');
     }
+	//获取日志列表
     public function getList()
     {	
 		$page = get('page')?get('page'):1;
 		$limit = get('limit')?get('limit'):10;
-		
 		$list = $this->model->getList($page, $limit);
-
 		$data = [
 			"code" => 0,
 			"msg" => "",
@@ -30,21 +28,35 @@ class SysLog extends BaseController
 		];
 		return json_encode($data);
     }
-  
+	//记录日志
+	public function log($name, $description){
+		$data = [
+			'name' => $name,
+			'description' => $description,
+			'ip' => $this->request->getIPAddress(),
+			'os' => $this->request->getUserAgent()->getPlatform(),
+			'browser' => $this->request->getUserAgent()->getBrowser(),
+			'mobile' => $this->request->getUserAgent()->getMobile(),
+			'create_user' => $this->session->id,
+			'create_time' => date('Y-m-d H:i:s',time()),
+			'deleted' => 0,
+		];
+		$this->model->log($data);
+	}
     public function clear()
     {
 		if($this->model->clear()){
+			$this->log('syslog-clear', '清空日志');
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
 			];
-			return json_encode($rdata);			
 		}else{
 			$rdata = [
 				"code" => 0,
 				"msg" => "操作失败",
 			];
-			return json_encode($rdata);
 		}
+		return json_encode($rdata);
     }
 }

@@ -167,6 +167,9 @@
     font-size: inherit;
     line-height: inherit;
   }
+.ew-tree-table-cell-content .fa::before{
+	margin-right:8px;
+}
 .guodong-body{
 	background:#f5f5f5;
 }

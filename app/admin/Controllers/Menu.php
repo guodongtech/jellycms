@@ -65,6 +65,7 @@ class Menu extends BaseController
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
 		if($this->model->edit($data)){
+			$this->log('menu', '菜单添加/编辑:'.$data['name']);
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -93,6 +94,7 @@ class Menu extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
+			$this->log('menu', '菜单添加/编辑:'.$data['name']);
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -128,6 +130,7 @@ class Menu extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log('menu', '菜单删除:'.$data['name']);
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -157,6 +160,7 @@ class Menu extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			//$this->log('menu', "ID".$post['id']."菜单编辑:".$data['name']);
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

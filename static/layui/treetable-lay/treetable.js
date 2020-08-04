@@ -928,8 +928,8 @@ layui.define(['laytpl', 'form', 'util'], function (exports) {
         ].join('');
 
         if ($td) $td.html(cell);
-
         var html = '<td';
+        if (col.event) html += (' lay-event="' + col.event + '"');
         if (col.field) html += (' data-field="' + col.field + '"');
         if (col.edit) html += (' data-edit="' + col.edit + '"');
         if (col.type) html += (' data-type="' + col.type + '"');
@@ -1800,8 +1800,11 @@ layui.define(['laytpl', 'form', 'util'], function (exports) {
         '    border: 1px solid #e6e6e6;',
         '    border-bottom: none;',
         '    border-right: none;',
+        '    box-sizing: content-box;',
         '}',
-
+		'.ew-tree-table-cell{',
+		   ' box-sizing: border-box;',
+		'}',
         '.ew-tree-table:before, .ew-tree-table:after, .ew-tree-table .ew-tree-table-head:after {',
         '    content: "";',
         '    background-color: #e6e6e6;',
@@ -1820,7 +1823,13 @@ layui.define(['laytpl', 'form', 'util'], function (exports) {
         '    height: 1px;',
         '    left: 0;',
         '}',
-
+		'.layui-form-switch {',
+		   ' position: relative;',
+		   ' height: 25px;',
+		   ' line-height: 25px;',
+			'min-width: 35px;',
+		   ' padding: 0 5px;',
+		'}',
         '.ew-tree-table .layui-table {',
         '    margin: 0;',
         '    position: relative;',

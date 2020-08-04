@@ -60,5 +60,20 @@ class BaseController extends Controller
 		//连接数据库
 		$this->db = \Config\Database::connect();
 	}
-
+	//记录日志
+	public function log($name, $description){
+		$data = [
+			'name' => $name,
+			'description' => $description,
+			'ip' => $this->request->getIPAddress(),
+			'os' => $this->request->getUserAgent()->getPlatform(),
+			'browser' => $this->request->getUserAgent()->getBrowser(),
+			'mobile' => $this->request->getUserAgent()->getMobile(),
+			'create_user' => $this->session->id,
+			'create_time' => date('Y-m-d H:i:s',time()),
+			'deleted' => 0,
+		];
+		$builder = $this->db->table('logs');
+		return $builder->insert($data);
+	}
 }
