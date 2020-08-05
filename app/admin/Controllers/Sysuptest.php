@@ -32,7 +32,7 @@ class Sysuptest extends BaseController
     public function edit()
     {
         $post = post();
-		if(!$post['version_num'] || !$post['version_path'] || !$post['prev_version_num'] || !$post['prev_version_path'] || !$post['zip_file'] || !$post['zip_download']){
+		if(!$post['version_num'] || !$post['version_path'] || !$post['prev_version_num'] || !$post['prev_version_path'] || !$post['zip_file'] || !$post['zip_download'] || !$post['description']){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
@@ -64,7 +64,6 @@ class Sysuptest extends BaseController
 				];
 				return json_encode($rdata);	
 			}
-			$data['create_time'] = date('Y-m-d H:i:s',time());
 		}
 		if($this->model->edit($data)){
 			$rdata = [
@@ -90,9 +89,65 @@ class Sysuptest extends BaseController
 		];
 		return json_encode($data);
     }
+    public function del()
+    {
+		$id = post('id');
+		if(!$id){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $id,
+			'deleted' => 1,
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);		
+    }
+    public function switch()
+    {
+		$post = post();
+		$allowSwitch = ['status'];
+		if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $post['id'],
+			$post['switchName'] => (int)$post['switchValue'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
+    }
     public function uploadFile()
 	{
-		$version = post('version_num');
+		$post = post();
+		$version = $post['version_num'];
 		if(empty($version) || !isset($version)){
 			$data = [
 				"code" => 0,
@@ -100,6 +155,24 @@ class Sysuptest extends BaseController
 			];
 			return json_encode($data);
 		}
+		// 检查版本
+		$check = $this->model->checkEdit($post);
+		if(!$post['id'] && count($check)>0){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
+			];
+			return json_encode($data);
+		}
+
+		if($post['id']>0 && count($check)>0 && $post['id']!=$check[0]['id']){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
+			];
+			return json_encode($data);
+		}
+
 		$file = $this->request->getFile('file');
 		if (! $file->isValid())
 		{
@@ -164,11 +237,28 @@ class Sysuptest extends BaseController
 	}
 	public function uploadVersionFile()
 	{
-		$version = post('version_num');
+		$post = post();
+		$version = $post['version_num'];
 		if(empty($version) || !isset($version)){
 			$data = [
 				"code" => 0,
 				"msg" => '请先填写版本号',
+			];
+			return json_encode($data);
+		}
+		// 检查版本
+		$check = $this->model->checkEdit($post);
+		if(!$post['id'] && count($check)>0){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
+			];
+			return json_encode($data);
+		}
+		if($post['id']>0 && count($check)>0 && $post['id']!=$check[0]['id']){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
 			];
 			return json_encode($data);
 		}
@@ -222,11 +312,12 @@ class Sysuptest extends BaseController
 	        $zip->close();//关闭处理的zip文件
 	        /*--end*/
 	        // 上传成功 写入数据库
-	        if(isset($post['id']) && !empty($post['id'])){
-	        	$re['id'] = $$post['id'];
+	        if($post['id']){
+	        	$re['id'] = $post['id'];
 	        }
 	        $re['version_num'] = $version;
 	        $re['version_path'] = $folder_name.DIRECTORY_SEPARATOR;
+	        $re['create_time'] = date('Y-m-d H:i:s',time());
 	        $res = $this->model->edit($re);
 	        if($res < 1){
 	        	$data = [
@@ -270,11 +361,11 @@ class Sysuptest extends BaseController
     	$tree_path = $this->pack_path.$folder_name.DIRECTORY_SEPARATOR.'www';
     	$this->fileTree($file_list,$tree_path);
     /*step2  比对上个版本的原始文件*/ 
-    	$prev_version_path = $this->version_path.$version_info['prev_version_path'];
+    	$prev_version_path = $this->version_path.$version_info['prev_version_path'].'www'.DIRECTORY_SEPARATOR;
     	foreach($file_list as $k=>$v){
     		if(file_exists($prev_version_path.$v)){
     			$version_list[$k]['filename'] = $v;
-    			$version_list[$k]['type'] = "覆盖";
+    			$version_list[$k]['type'] = "<font color='red'>覆盖</font>";
     			$version_list[$k]['curent_file_md5'] = md5_file($prev_version_path.$v);
     		}else{
     			$version_list[$k]['filename'] = $v;
@@ -292,6 +383,8 @@ class Sysuptest extends BaseController
     	// 整合数据
     	$data['code'] = 1;
     	$data['target_version'] = $version_info['version_num'];
+    	$data['description'] = $version_info['description'];
+    	$data['intro'] = "<p>小提示：</p><p>1、系统更新不会涉及前台模板及网站数据等。</p><p>2、升级将覆盖部分文件，系统会自动备份源文件在version/backup目录下</p><p>3、升级时，请先选中要升级的文件，点击【执行更新】</p>";
     	$data['max_version'] = $max_version;
     	$data['down_url'] = $version_info['zip_download'];
     	$data['zip_file_md5'] = $version_info['zip_file_md5'];

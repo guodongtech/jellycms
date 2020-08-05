@@ -107,6 +107,13 @@
 							<input type="radio" name="status" value="0" title="不开启" checked="">
 						</div>
 					</div>
+
+					<div class="layui-form-item">
+						 <label class="layui-form-label">更新内容</label>
+						 <div class="layui-input-block">
+							<textarea id="description" name="description"></textarea>
+						 </div>
+					</div>
 		  	   		 <div class="layui-form-item">
 						 <div class="layui-input-inline">
 							<button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
@@ -116,10 +123,8 @@
 				</form>
 	  	   	</div>
 	  	   	<div class="layui-tab-item">
-	  	   		<form action="{url:/Sysuptest/edit}" method="post" id="form" class="layui-form" lay-filter="u-version-form">
+	  	   		<form action="{url:/Sysuptest/edit}" method="post" id="form2" class="layui-form" lay-filter="u-version-form">
 		  	   		<input type="hidden" name="id" value=""> 
-		  	   		<input type="hidden" name="version_num" value=""> 
-		  	   		<input type="hidden" name="version_path" value=""> 
 		  	   		<div class="layui-form-item">
 						<label class="layui-form-label">
 							版本号
@@ -129,12 +134,12 @@
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label">更新包</label>
+						<label class="layui-form-label">版本文件</label>
 						 <div class="layui-input-inline">
 							<input type="text" name="version_path" id="up_zip_file" value=""  placeholder="上传新版本" class="layui-input">
 						 </div>
 						 <button type="button" class="layui-btn upload" id="versionup" data-des="ico">
-							 <i class="layui-icon"></i>上传新版本
+							 <i class="layui-icon"></i>上传CMS版本
 						 </button>
 					</div>
 		  	   	</form>
@@ -146,7 +151,10 @@
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
 <script src="/static/js/loadData.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
 <script>
+var ue = UE.getEditor('description');
 !function(){
 	var layer = layui.layer,
 	form = layui.form;
@@ -155,18 +163,18 @@
 	var element = layui.element;
 	var upload = layui.upload;
 	form.render();
-	
 	table.render({
 		elem: '#table',url:'{url:/Sysuptest/getList}',
 		// toolbar: '#toolbarDemo',
 		title: '提示',
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
+		id:"table",
 		cols: [[
 			{type: 'checkbox', fixed: 'left'},
 			{field:'version_num', title:'版本号'},
 			{field:'version_path', title:'版本路径	/allversion/version/'},
-			{field:'status', title:'状态', width:90, event: 'switch', templet: function(res){
+			{field:'status', title:'状态',event: 'switch', templet: function(res){
 				if(res.status == 1){
 					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
 				}else{
@@ -179,6 +187,7 @@
 			{field:'upgrade_file', title:'更新的文件', hide:true},
 			{field:'zip_download', title:'下载路径', hide:true},
 			{field:'zip_file_md5', title:'文件md5', hide:true},
+			{field:'description', title:'更新详情', hide:false},
 			{fixed:'right', title:'操作', toolbar: '#barDemo', width:140}
 		]],
 		// page: true
@@ -188,12 +197,29 @@
 			elem: '#zipup',
 			url: '{url: Sysuptest/uploadFile}',
 			accept:'file',
+			exts: 'zip',
 			data:{
 				version_num:function(){
 					return form.val("version-form").version_num;
+				},
+				id:function(){
+					return form.val("version-form").id;
 				}
 			},
+			before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+			    layer_loading('升级<font id="upload_speed">中</font>');
+
+			},
+			progress:function(value){//上传进度回调 value进度值
+                $('#upload_speed', window.parent.document).html(value+'%');
+            },
+            error: function(request) {
+            	parent.layer.closeAll();
+	            layer.msg('请求超时');
+	            return false;
+	        },
 			done: function(res){
+				parent.layer.closeAll();
 				if(res.code == 1){
 					//上传完毕回调
 					$('#form input[name="zip_file"]').val(res.data.zip_file);
@@ -210,49 +236,83 @@
 			elem: '#versionup',
 			url: '{url: Sysuptest/uploadVersionFile}',
 			accept:'file',
+			exts: 'zip',
 			data:{
 				version_num:function(){
 					return form.val("u-version-form").version_num;
+				},
+				id:function(){
+					return form.val("u-version-form").id;
 				}
 			},
+			before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+			    layer_loading('升级<font id="upload_speed">中</font>');
+
+			},
+			progress:function(value){//上传进度回调 value进度值
+                $('#upload_speed', window.parent.document).html(value+'%');
+            },
+            error: function(request) {
+            	parent.layer.closeAll();
+	            layer.msg('请求超时');
+	            return false;
+	        },
 			done: function(res){
+				parent.layer.closeAll();
 				if(res.code == 1){
 					//上传完毕回调
 					$('#form input[name="version_path"]').val(res.data.version_path);
-					parent.layer.msg('上传成功')
+					layer.msg('上传成功');
+					table.reload("table");
+					element.tabChange('tab', 't1');
 				}else{
-					parent.layer.msg(res.msg)
+					layer.msg(res.msg);
 				}
 			},
+
+			
 		})
 	//监听行工具事件
 	table.on('tool(test)', function(obj){
 		var data = obj.data;
 		if(obj.event === 'del'){
-			// layer.confirm('真的删除行么', function(index){
-			// 	$.post('{url:/sysuser/del}',{id:obj.data.id},function(data){
-			// 		if(data.code == 1){
-			// 			layer.msg(data.msg)
-			// 			obj.del();
-			// 		}
-			// 		else{
-			// 			layer.msg(data.msg)
-			// 		}
-			// 	}, 'json');
-			// });
+			layer.confirm('删除后用户将无法更新至该版本，是否删除', function(index){
+				$.post('{url: Sysuptest/del}',{id:obj.data.id},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg)
+						obj.del();
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+			});
 		}else if(obj.event === 'edit'){
 				$('#form')[0].reset(); //重置表单
 				loadData(obj.data, '#form')
+				UE.getEditor('description').setContent(obj.data.description);
 				form.render();
 				element.tabChange('tab', 't2');
 			
 		}else if(obj.event === 'upload'){
-			console.log(obj.data)
 				$('#form')[0].reset(); //重置表单
-				loadData(obj.data, '#form')
+				loadData(obj.data, '#form2')
 				form.render();
 				element.tabChange('tab', 't3');
 			
+		}else if(obj.event === 'switch'){
+				var switchName = $(this).find('input[type="checkbox"]').attr("name");
+				var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+				switchValue = Number(switchValue);
+				$.post('{url:/Sysuptest/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+					if(data.code == 1){
+						//layer.msg(data.msg)
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+				form.render();
 		}
 	});
 	// 表单提交
@@ -268,7 +328,8 @@ form.on('submit(submit)', function(data){
                 var layer = layui.layer;
                 var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
                     if(data.url){
-                        window.location.href=data.url;
+                    	table.reload("table");
+                        element.tabChange('tab', 't1');
                     }
                 });
             });  
@@ -279,7 +340,22 @@ form.on('submit(submit)', function(data){
     });
    return false;
 });
-	
+
+function layer_loading(msg){
+    var loading = parent.layer.msg(
+    msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
+    {
+        icon: 1,
+        time: 3600000, //1小时后后自动关闭
+        shade: [0.2] //0.1透明度的白色背景
+    });
+    //loading层
+    var index = parent.layer.load(3, {
+        shade: [0.1,'#fff'] //0.1透明度的白色背景
+    });
+
+    return loading;
+}
 }();
 </script>
 </body>

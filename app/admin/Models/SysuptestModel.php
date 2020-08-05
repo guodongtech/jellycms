@@ -33,7 +33,7 @@ class SysuptestModel extends Model
         }
 	}
 	public function checkEdit($data){
-		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where version_num='".$data['version_num']."' and deleted=0";
+		$sql = "SELECT id FROM ".$this->db->prefixTable('sysup')." where version_num='".$data['version_num']."' and deleted=0";
 		$result = $this->db->query($sql)->getResultArray();
 		return $result;
 	}
