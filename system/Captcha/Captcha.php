@@ -2,7 +2,7 @@
 namespace CodeIgniter\Captcha;
 class Captcha {
     protected $config = array(
-        'seKey'     =>  'Zell Dincht',   // 验证码加密密钥
+        'seKey'     =>  'Jelly CMS',   // 验证码加密密钥
         'codeSet'   =>  '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',             // 验证码字符集合
         'expire'    =>  1800,            // 验证码过期时间（s）
         'useZh'     =>  false,           // 使用中文验证码
