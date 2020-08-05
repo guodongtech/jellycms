@@ -123,7 +123,7 @@
 				</form>
 	  	   	</div>
 	  	   	<div class="layui-tab-item">
-	  	   		<form action="{url:/Sysuptest/edit}" method="post" id="form" class="layui-form" lay-filter="u-version-form">
+	  	   		<form action="{url:/Sysuptest/edit}" method="post" id="form2" class="layui-form" lay-filter="u-version-form">
 		  	   		<input type="hidden" name="id" value=""> 
 		  	   		<div class="layui-form-item">
 						<label class="layui-form-label">
@@ -134,12 +134,12 @@
 						</div>
 					</div>
 					<div class="layui-form-item">
-						<label class="layui-form-label">更新包</label>
+						<label class="layui-form-label">版本文件</label>
 						 <div class="layui-input-inline">
 							<input type="text" name="version_path" id="up_zip_file" value=""  placeholder="上传新版本" class="layui-input">
 						 </div>
 						 <button type="button" class="layui-btn upload" id="versionup" data-des="ico">
-							 <i class="layui-icon"></i>上传新版本
+							 <i class="layui-icon"></i>上传CMS版本
 						 </button>
 					</div>
 		  	   	</form>
@@ -171,6 +171,7 @@ var ue = UE.getEditor('description');
 		title: '提示',
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
+		id:"table",
 		cols: [[
 			{type: 'checkbox', fixed: 'left'},
 			{field:'version_num', title:'版本号'},
@@ -201,6 +202,9 @@ var ue = UE.getEditor('description');
 			data:{
 				version_num:function(){
 					return form.val("version-form").version_num;
+				},
+				id:function(){
+					return form.val("version-form").id;
 				}
 			},
 			done: function(res){
@@ -232,7 +236,9 @@ var ue = UE.getEditor('description');
 				if(res.code == 1){
 					//上传完毕回调
 					$('#form input[name="version_path"]').val(res.data.version_path);
-					parent.layer.msg('上传成功')
+					parent.layer.msg('上传成功');
+					table.reload("table");
+					element.tabChange('tab', 't1');
 				}else{
 					parent.layer.msg(res.msg)
 				}
@@ -262,7 +268,7 @@ var ue = UE.getEditor('description');
 			
 		}else if(obj.event === 'upload'){
 				$('#form')[0].reset(); //重置表单
-				loadData(obj.data, '#form')
+				loadData(obj.data, '#form2')
 				form.render();
 				element.tabChange('tab', 't3');
 			
@@ -294,7 +300,8 @@ form.on('submit(submit)', function(data){
                 var layer = layui.layer;
                 var index = layer.msg(data.msg,{icon:data.code,offset:['30%', '30%']},function(){
                     if(data.url){
-                        window.location.href=data.url;
+                    	table.reload("table");
+                        element.tabChange('tab', 't1');
                     }
                 });
             });  

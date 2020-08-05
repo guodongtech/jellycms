@@ -146,7 +146,8 @@ class Sysuptest extends BaseController
     }
     public function uploadFile()
 	{
-		$version = post('version_num');
+		$post = post();
+		$version = $post['version_num'];
 		if(empty($version) || !isset($version)){
 			$data = [
 				"code" => 0,
@@ -154,6 +155,24 @@ class Sysuptest extends BaseController
 			];
 			return json_encode($data);
 		}
+		// 检查版本
+		$check = $this->model->checkEdit($post);
+		if(!$post['id'] && count($check)>0){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
+			];
+			return json_encode($data);
+		}
+
+		if($post['id']>0 && count($check)>0 && $post['id']!=$check[0]['id']){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
+			];
+			return json_encode($data);
+		}
+
 		$file = $this->request->getFile('file');
 		if (! $file->isValid())
 		{
@@ -218,11 +237,28 @@ class Sysuptest extends BaseController
 	}
 	public function uploadVersionFile()
 	{
-		$version = post('version_num');
+		$post = post();
+		$version = $post['version_num'];
 		if(empty($version) || !isset($version)){
 			$data = [
 				"code" => 0,
 				"msg" => '请先填写版本号',
+			];
+			return json_encode($data);
+		}
+		// 检查版本
+		$check = $this->model->checkEdit($post);
+		if(!$post['id'] && count($check)>0){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
+			];
+			return json_encode($data);
+		}
+		if($post['id']>0 && count($check)>0 && $post['id']!=$check[0]['id']){
+			$data = [
+				"code" => 0,
+				"msg" => '该版本已存在',
 			];
 			return json_encode($data);
 		}
@@ -276,8 +312,8 @@ class Sysuptest extends BaseController
 	        $zip->close();//关闭处理的zip文件
 	        /*--end*/
 	        // 上传成功 写入数据库
-	        if(post('id')>0 && !empty(post('id'))){
-	        	$re['id'] = post('id');
+	        if($post['id']){
+	        	$re['id'] = $post['id'];
 	        }
 	        $re['version_num'] = $version;
 	        $re['version_path'] = $folder_name.DIRECTORY_SEPARATOR;
