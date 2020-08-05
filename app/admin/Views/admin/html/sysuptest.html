@@ -118,8 +118,6 @@
 	  	   	<div class="layui-tab-item">
 	  	   		<form action="{url:/Sysuptest/edit}" method="post" id="form" class="layui-form" lay-filter="u-version-form">
 		  	   		<input type="hidden" name="id" value=""> 
-		  	   		<input type="hidden" name="version_num" value=""> 
-		  	   		<input type="hidden" name="version_path" value=""> 
 		  	   		<div class="layui-form-item">
 						<label class="layui-form-label">
 							版本号
@@ -213,6 +211,9 @@
 			data:{
 				version_num:function(){
 					return form.val("u-version-form").version_num;
+				},
+				id:function(){
+					return form.val("u-version-form").id;
 				}
 			},
 			done: function(res){

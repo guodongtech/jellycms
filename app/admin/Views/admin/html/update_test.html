@@ -97,16 +97,18 @@ $("#check").on('click',function(){
 		}
 		else{
 			layer.open({
-			skin: 'demo-class'
-	        ,type: 1
-	        ,title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(官方最新"+data.data.max_version+")"
-	        ,area: ['510px', '240px']
-	        ,shade: 0
-	        ,maxmin: true
-	        ,offset: ['250px', '260px']
-	        ,content: "<p class='aaa'>"+data.data.msg+"</p>"
-	        ,btn: ['我知道了']
-	        ,yes: function(){
+			skin: 'demo-class',
+			type: 1,
+			title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(官方最新"+data.data.max_version+")",
+			area: 'auto',
+			maxWidth: '550',
+			maxHeight: '510',
+			shade: 0,
+			maxmin: true,
+			offset: ['160px', '300px'],
+			content: "<p>"+data.data.msg+"</p>",
+			btn: ['我知道了'],
+			yes: function(){
 	            layer.closeAll();
 	            // setTimeout(function(){
 	            //     checkdir(data); // 请求后台

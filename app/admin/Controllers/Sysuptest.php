@@ -64,7 +64,6 @@ class Sysuptest extends BaseController
 				];
 				return json_encode($rdata);	
 			}
-			$data['create_time'] = date('Y-m-d H:i:s',time());
 		}
 		if($this->model->edit($data)){
 			$rdata = [
@@ -222,11 +221,12 @@ class Sysuptest extends BaseController
 	        $zip->close();//关闭处理的zip文件
 	        /*--end*/
 	        // 上传成功 写入数据库
-	        if(isset($post['id']) && !empty($post['id'])){
-	        	$re['id'] = $$post['id'];
+	        if(post('id')>0 && !empty(post('id'))){
+	        	$re['id'] = post('id');
 	        }
 	        $re['version_num'] = $version;
 	        $re['version_path'] = $folder_name.DIRECTORY_SEPARATOR;
+	        $re['create_time'] = date('Y-m-d H:i:s',time());
 	        $res = $this->model->edit($re);
 	        if($res < 1){
 	        	$data = [
@@ -270,11 +270,11 @@ class Sysuptest extends BaseController
     	$tree_path = $this->pack_path.$folder_name.DIRECTORY_SEPARATOR.'www';
     	$this->fileTree($file_list,$tree_path);
     /*step2  比对上个版本的原始文件*/ 
-    	$prev_version_path = $this->version_path.$version_info['prev_version_path'];
+    	$prev_version_path = $this->version_path.$version_info['prev_version_path'].'www'.DIRECTORY_SEPARATOR;
     	foreach($file_list as $k=>$v){
     		if(file_exists($prev_version_path.$v)){
     			$version_list[$k]['filename'] = $v;
-    			$version_list[$k]['type'] = "覆盖";
+    			$version_list[$k]['type'] = "<font color='red'>覆盖</font>";
     			$version_list[$k]['curent_file_md5'] = md5_file($prev_version_path.$v);
     		}else{
     			$version_list[$k]['filename'] = $v;
@@ -292,6 +292,7 @@ class Sysuptest extends BaseController
     	// 整合数据
     	$data['code'] = 1;
     	$data['target_version'] = $version_info['version_num'];
+    	$data['description'] = $version_info['description'];
     	$data['max_version'] = $max_version;
     	$data['down_url'] = $version_info['zip_download'];
     	$data['zip_file_md5'] = $version_info['zip_file_md5'];
