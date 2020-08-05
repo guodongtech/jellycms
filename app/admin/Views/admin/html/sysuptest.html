@@ -148,7 +148,6 @@
 	</div>	
 </div>
 </div>
-
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
 <script src="/static/js/loadData.js"></script>
@@ -164,7 +163,6 @@ var ue = UE.getEditor('description');
 	var element = layui.element;
 	var upload = layui.upload;
 	form.render();
-	
 	table.render({
 		elem: '#table',url:'{url:/Sysuptest/getList}',
 		// toolbar: '#toolbarDemo',
@@ -199,6 +197,7 @@ var ue = UE.getEditor('description');
 			elem: '#zipup',
 			url: '{url: Sysuptest/uploadFile}',
 			accept:'file',
+			exts: 'zip',
 			data:{
 				version_num:function(){
 					return form.val("version-form").version_num;
@@ -207,7 +206,20 @@ var ue = UE.getEditor('description');
 					return form.val("version-form").id;
 				}
 			},
+			before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+			    layer_loading('升级<font id="upload_speed">中</font>');
+
+			},
+			progress:function(value){//上传进度回调 value进度值
+                $('#upload_speed', window.parent.document).html(value+'%');
+            },
+            error: function(request) {
+            	parent.layer.closeAll();
+	            layer.msg('请求超时');
+	            return false;
+	        },
 			done: function(res){
+				parent.layer.closeAll();
 				if(res.code == 1){
 					//上传完毕回调
 					$('#form input[name="zip_file"]').val(res.data.zip_file);
@@ -224,6 +236,7 @@ var ue = UE.getEditor('description');
 			elem: '#versionup',
 			url: '{url: Sysuptest/uploadVersionFile}',
 			accept:'file',
+			exts: 'zip',
 			data:{
 				version_num:function(){
 					return form.val("u-version-form").version_num;
@@ -232,17 +245,32 @@ var ue = UE.getEditor('description');
 					return form.val("u-version-form").id;
 				}
 			},
+			before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+			    layer_loading('升级<font id="upload_speed">中</font>');
+
+			},
+			progress:function(value){//上传进度回调 value进度值
+                $('#upload_speed', window.parent.document).html(value+'%');
+            },
+            error: function(request) {
+            	parent.layer.closeAll();
+	            layer.msg('请求超时');
+	            return false;
+	        },
 			done: function(res){
+				parent.layer.closeAll();
 				if(res.code == 1){
 					//上传完毕回调
 					$('#form input[name="version_path"]').val(res.data.version_path);
-					parent.layer.msg('上传成功');
+					layer.msg('上传成功');
 					table.reload("table");
 					element.tabChange('tab', 't1');
 				}else{
-					parent.layer.msg(res.msg)
+					layer.msg(res.msg);
 				}
 			},
+
+			
 		})
 	//监听行工具事件
 	table.on('tool(test)', function(obj){
@@ -312,7 +340,22 @@ form.on('submit(submit)', function(data){
     });
    return false;
 });
-	
+
+function layer_loading(msg){
+    var loading = parent.layer.msg(
+    msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
+    {
+        icon: 1,
+        time: 3600000, //1小时后后自动关闭
+        shade: [0.2] //0.1透明度的白色背景
+    });
+    //loading层
+    var index = parent.layer.load(3, {
+        shade: [0.1,'#fff'] //0.1透明度的白色背景
+    });
+
+    return loading;
+}
 }();
 </script>
 </body>
