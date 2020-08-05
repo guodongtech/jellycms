@@ -81,6 +81,7 @@
 	    <li lay-id="t2">图片水印</li>
 	    <li lay-id="t3">安全配置</li>
 	    <li lay-id="t4">URL规则</li>
+	    <li lay-id="t5">系统私有化设置</li>
 	  </ul>
 		  <div class="layui-tab-content">
 		  	   <div class="layui-tab-item layui-show">
@@ -113,7 +114,7 @@
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">缓存时间(秒)</label>
 		                     <div class="layui-input-inline">
-		                     	<input type="text" name="cache_time" value="900" placeholder="缓存时间（秒）" class="layui-input">
+		                     	<input type="text" name="cache_time" value="888" placeholder="缓存时间（秒）" class="layui-input">
 		                     </div>
 		                </div>
 		                
@@ -179,7 +180,7 @@
 					<div class="layui-form-item">
 	                     <label class="layui-form-label">文字字体</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="water_font" id="water-font-input" value="" placeholder="请上传水印文字字体" class="layui-input">
+	                     	<input type="text" name="water_font" id="water-font-input" value="" placeholder="水印文字字体" class="layui-input">
 	                     </div>
 							<button type="button" class="layui-btn" id="water-font">
 							  <i class="layui-icon">&#xe67c;</i>上传字体
@@ -189,7 +190,7 @@
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">文字大小</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="water_text_size" value="20" placeholder="水印文字大小，如：20" class="layui-input">
+	                     	<input type="text" name="water_text_size" value="18" placeholder="水印字体大小，如：18" class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -305,7 +306,7 @@
 		                <div class="layui-form-item">
 		                   <label class="layui-form-label">锁定时间</label>
 		                   <div class="layui-input-inline">
-		                  		<input type="text" name="lock_time" value="900" placeholder="登录异常锁定时间，默认为900秒" class="layui-input">
+		                  		<input type="text" name="lock_time" value="888" placeholder="登录异常锁定时间，默认为888秒" class="layui-input">
 		                   </div>
 		                   <div class="layui-form-mid layui-word-aux">秒</div>
 			            </div>
@@ -358,6 +359,107 @@
 							 </div>
 						</div>
 							
+						<div class="layui-form-item">
+							 <div class="layui-input-block">
+								<button lay-submit lay-filter="submit" class="layui-btn">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							 </div>
+						</div>
+					</form>
+		  	   </div>		  	   
+		  	   <div class="layui-tab-item">
+		  	   	   <form action="{url:/config/edit}" method="post" id="console-config" class="layui-form">
+ 		                <div class="layui-form-item">
+		                   <label class="layui-form-label">系统名称</label>
+		                   <div class="layui-input-inline">
+		                  		<input type="text" name="systemname" value="JellyCMS" placeholder="系统名称" class="layui-input">
+		                   </div>
+		                   <div class="layui-form-mid layui-word-aux">在遵守MIT授权协议及JellyCMS补充协议基础上，允许您重新定义系统名称</div>
+			            </div>
+ 		                <div class="layui-form-item">
+		                   <label class="layui-form-label">功能动画</label>
+		                   <div class="layui-input-inline">
+								<select name="animate">
+									<option value="0">请选择</option>	 
+										<optgroup label="吸引注意力">
+										  <option value="bounce">bounce</option>
+										  <option value="flash">flash</option>
+										  <option value="pulse">pulse</option>
+										  <option value="rubberBand">rubberBand</option>
+										  <option value="shake">shake</option>
+										  <option value="swing">swing</option>
+										  <option value="tada">tada</option>
+										  <option value="wobble">wobble</option>
+										</optgroup>
+
+										<optgroup label="跳跃式进入">
+										  <option value="bounceIn">bounceIn</option>
+										  <option value="bounceInDown">bounceInDown</option>
+										  <option value="bounceInLeft">bounceInLeft</option>
+										  <option value="bounceInRight">bounceInRight</option>
+										  <option value="bounceInUp">bounceInUp</option>
+										</optgroup>
+
+										<optgroup label="淡入">
+										  <option value="fadeIn">fadeIn</option>
+										  <option value="fadeInDown">fadeInDown</option>
+										  <option value="fadeInDownBig">fadeInDownBig</option>
+										  <option value="fadeInLeft">fadeInLeft</option>
+										  <option value="fadeInLeftBig">fadeInLeftBig</option>
+										  <option value="fadeInRight">fadeInRight</option>
+										  <option value="fadeInRightBig">fadeInRightBig</option>
+										  <option value="fadeInUp">fadeInUp</option>
+										  <option value="fadeInUpBig">fadeInUpBig</option>
+										</optgroup>
+
+										<optgroup label="潜入">
+										  <option value="flip">flip</option>
+										  <option value="flipInX">flipInX</option>
+										  <option value="flipInY">flipInY</option>
+										</optgroup>
+
+										<optgroup label="快速">
+										  <option value="lightSpeedIn">lightSpeedIn</option>
+										</optgroup>
+
+										<optgroup label="旋转进入">
+										  <option value="rotateIn">rotateIn</option>
+										  <option value="rotateInDownLeft">rotateInDownLeft</option>
+										  <option value="rotateInDownRight">rotateInDownRight</option>
+										  <option value="rotateInUpLeft">rotateInUpLeft</option>
+										  <option value="rotateInUpRight">rotateInUpRight</option>
+										</optgroup>
+
+										<optgroup label="滑动进入">
+										  <option value="slideInUp">slideInUp</option>
+										  <option value="slideInDown">slideInDown</option>
+										  <option value="slideInLeft">slideInLeft</option>
+										  <option value="slideInRight">slideInRight</option>
+										</optgroup>
+										
+										<optgroup label="放大进入">
+										  <option value="zoomIn">zoomIn</option>
+										  <option value="zoomInDown">zoomInDown</option>
+										  <option value="zoomInLeft">zoomInLeft</option>
+										  <option value="zoomInRight">zoomInRight</option>
+										  <option value="zoomInUp">zoomInUp</option>
+										</optgroup>
+
+										<optgroup label="其它">
+										  <option value="hinge">hinge</option>
+										  <option value="rollIn">rollIn</option>
+										</optgroup>
+									  </select>
+		                   </div>
+		                   <div class="layui-form-mid layui-word-aux">请选择动画效果</div>
+			            </div>
+		                
+			  	   	     <div class="layui-form-item">
+		                     <label class="layui-form-label">版权声明</label>
+		                     <div class="layui-input-block">
+		                     	<textarea name="copyright" placeholder="版权声明" class="layui-textarea">版权声明</textarea>
+		                     </div> 
+		                </div>
 						<div class="layui-form-item">
 							 <div class="layui-input-block">
 								<button lay-submit lay-filter="submit" class="layui-btn">立即提交</button>
