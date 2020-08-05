@@ -118,7 +118,7 @@ class UpdateTest extends BaseController
         // print_r($serviceVersionList);die;
         if(!empty($serviceVersionList))
         {
-            $data['msg'] = "<style>.clear {text-indent:25px;font-size: 14px;line-height: 24px;}</style><div class='clear'><p>小提示：</p><p>1、系统更新不会涉及前台模板及网站数据等。</p><p>2、升级将覆盖部分文件，系统会自动备份源文件在version/backup目录下</p><p>3、升级时，请先选中要升级的文件，点击【执行更新】</p><p>本次更新内容：</p>".$serviceVersionList['description']."</div>";
+            $data['msg'] = "<style>.clear {text-indent:25px;font-size: 14px;line-height: 24px;}</style><div class='clear'>".$serviceVersionList['intro'].$serviceVersionList['description']."</div>";
             $data['curent_version'] = $this->curent_version; //当前版本
             $data['target_version'] = $serviceVersionList['target_version']; // 目标版本
             $data['max_version'] = $serviceVersionList['max_version'];  // 最新版本

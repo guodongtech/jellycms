@@ -293,6 +293,7 @@ class Sysuptest extends BaseController
     	$data['code'] = 1;
     	$data['target_version'] = $version_info['version_num'];
     	$data['description'] = $version_info['description'];
+    	$data['intro'] = "<p>小提示：</p><p>1、系统更新不会涉及前台模板及网站数据等。</p><p>2、升级将覆盖部分文件，系统会自动备份源文件在version/backup目录下</p><p>3、升级时，请先选中要升级的文件，点击【执行更新】</p>";
     	$data['max_version'] = $max_version;
     	$data['down_url'] = $version_info['zip_download'];
     	$data['zip_file_md5'] = $version_info['zip_file_md5'];
