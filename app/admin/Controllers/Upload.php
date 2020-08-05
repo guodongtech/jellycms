@@ -26,7 +26,7 @@ class Upload extends BaseController
 			$newDateFolder = date('Ymd', time());
 			//不管如何伪装，getMimeType()已将能判断出的类型排除了，也就是不可能出现生成xx.php的情况。
 			$newName = $file->getRandomName();
-			//防止CI生成.php文件，此处没有可能性。但还是再处理一遍
+			//防止CI生成.php文件，此处没有可能性不大。但还是再处理一遍
 			if(strpos($newName, '.php')){
 				$data = [
 					"code" => 0,

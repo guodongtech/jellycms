@@ -55,7 +55,9 @@ canvas{z-index:-1;position:absolute;}
 	form = layui.form;
 	var table = layui.table;
 	var $ = layui.jquery;
-	
+	if(top.location != self.location){  
+		   window.parent.location.reload()
+	 }
 	
 }();	
 $(document).ready(function() {
