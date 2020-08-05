@@ -7,7 +7,8 @@
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
 <meta content="webkit" name="renderer">
 <meta content="#F55D54" name="theme-color">
-<title>{$GLOBALS.title}-{$GLOBALS.version}-{$GLOBALS.subtitle}</title>
+<title>{$GLOBALS.systemname}-version{$GLOBALS.version}-{$GLOBALS.syscompany}</title>
+<meta content='{$GLOBALS.sysdescription}' name='description'>
 <link href="/favicon.ico" rel="icon">
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
@@ -90,7 +91,7 @@
 		</aside>
 		<div class="main-nav">
 			<div class="gd-logo">
-				<a href="/admin.php/home"><img src="/static/images/logo.png" height="30">{$GLOBALS.title}<span class="layui-badge layui-bg-gray">{$GLOBALS.version}</span>	</a>
+				<a href="/admin.php/home"><img src="{$GLOBALS.syslogo}" title="{$GLOBALS.systemname}" height="30">{$GLOBALS.systemname}<span class="layui-badge layui-bg-gray">{$GLOBALS.version}</span>	</a>
 				
 				{if:count($arealist)>1}
 				<div class="layui-input-inline sys-op">

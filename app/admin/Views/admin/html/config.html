@@ -7,7 +7,8 @@
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
 <meta content="webkit" name="renderer">
 <meta content="#F55D54" name="theme-color">
-<title>{$GLOBALS.title}-{$GLOBALS.version}-{$GLOBALS.subtitle}</title>
+<title>{$GLOBALS.systemname}-version{$GLOBALS.version}-{$GLOBALS.syscompany}</title>
+<meta content='{$GLOBALS.sysdescription}' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
@@ -393,6 +394,13 @@
 		                   <div class="layui-form-mid layui-word-aux">在遵守MIT授权协议及JellyCMS补充协议基础上，允许您重新定义系统名称</div>
 			            </div>
  		                <div class="layui-form-item">
+		                   <label class="layui-form-label">公司名</label>
+		                   <div class="layui-input-inline">
+		                  		<input type="text" name="syscompany" placeholder="系统名称" class="layui-input">
+		                   </div>
+		                   <div class="layui-form-mid layui-word-aux">在遵守MIT授权协议及JellyCMS补充协议基础上，允许您重新定义系统名称</div>
+			            </div>
+ 		                <div class="layui-form-item">
 		                   <label class="layui-form-label">功能动画</label>
 		                   <div class="layui-input-inline">
 								<select name="animate">
@@ -466,9 +474,26 @@
 										</optgroup>
 									  </select>
 		                   </div>
-		                   <div class="layui-form-mid layui-word-aux">请选择动画效果</div>
+		                   <div class="layui-form-mid layui-word-aux">动画效果将影响后台所有功能表单</div>
 			            </div>
-		                
+						<div class="layui-form-item">
+							 <label class="layui-form-label">系统LOGO</label>
+							 <div class="layui-input-inline">
+								<input type="text" name="syslogo" id="syslogo-input" value="" placeholder="系统LOGO" class="layui-input">
+								<div class="layui-form-mid layui-word-aux">系统LOGO将在登录页及后台显示</div>
+							</div>
+								<button type="button" class="layui-btn" id="syslogo">
+								  <i class="layui-icon">&#xe67c;</i>上传图片
+								</button>
+						</div>
+			  	   	     <div class="layui-form-item">
+		                     <label class="layui-form-label">系统描述</label>
+		                     <div class="layui-input-block">
+		                     	<textarea name="sysdescription" placeholder="系统描述" class="layui-textarea"></textarea>
+								<div class="layui-form-mid layui-word-aux">系统描述将在后台页面description标签里设置</div>
+		                     </div> 
+							 
+		                </div>
 			  	   	     <div class="layui-form-item">
 		                     <label class="layui-form-label">版权声明</label>
 		                     <div class="layui-input-block">
@@ -533,6 +558,19 @@
 			done: function(res){
 				//上传完毕回调
 				$('input[name="water_pic"]').val(res.data.path);
+				layer.msg('上传成功')
+			},
+			error: function(){
+				//请求异常回调
+			}
+		})
+		//执行实例
+		var uploadInst = upload.render({
+			elem: '#syslogo',
+			url: '{url:/upload/uploadFile}',
+			done: function(res){
+				//上传完毕回调
+				$('input[name="syslogo"]').val(res.data.path);
 				layer.msg('上传成功')
 			},
 			error: function(){

@@ -54,9 +54,6 @@ class BaseController extends Controller
 
 		//后台信息
 		$jellyConfig =  new \Config\config();
-		$GLOBALS['title'] = $jellyConfig->title;
-		$GLOBALS['subtitle'] = $jellyConfig->subTitle;
-		$GLOBALS['description'] = $jellyConfig->description;
 		$GLOBALS['version'] = $jellyConfig->version;
 		//连接数据库
 		$this->db = \Config\Database::connect();

@@ -3,7 +3,7 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 use \App\Models\LoginModel;
 use \App\Models\AreaModel;
-class Login extends Controller
+class Login extends Base
 {
 
     private $model;
