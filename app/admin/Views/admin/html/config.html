@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/static/css/main.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" media="screen" href="/static/css/animate.min.css">
 </head>
 <body class="guodong-body">
 <style>
@@ -72,9 +73,8 @@
 }
 </style>
 {include:head.html}
-<div class="layui-fluid">
+<div class="layui-fluid animated {$GLOBALS.animate}">
 <div class="layui-row">
-
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">基本配置</li>
@@ -458,7 +458,9 @@
 		                     <label class="layui-form-label">版权声明</label>
 		                     <div class="layui-input-block">
 		                     	<textarea name="copyright" placeholder="版权声明" class="layui-textarea">版权声明</textarea>
+								<div class="layui-form-mid layui-word-aux">设置版权，将显示在底部</div>
 		                     </div> 
+							 
 		                </div>
 						<div class="layui-form-item">
 							 <div class="layui-input-block">
@@ -559,7 +561,10 @@
 			dataType:"json",
 			success:function(data){
 				if(data.code == 1){
-					layer.msg(data.msg)
+					layer.msg(data.msg);
+					setTimeout(function (){
+						window.location.reload();
+					}, 300);
 				}
 				else{
 					layer.msg(data.msg)

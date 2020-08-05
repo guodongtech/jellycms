@@ -9,6 +9,7 @@ class BaseController extends Controller
 {
 	protected $helpers = [];
 	public $session;
+	public $sysConfig;
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
 	{
 		//禁止直接访问后台控制器
@@ -59,6 +60,17 @@ class BaseController extends Controller
 		$GLOBALS['version'] = $jellyConfig->version;
 		//连接数据库
 		$this->db = \Config\Database::connect();
+		
+		//读取系统配置
+		$builder = $this->db->table('config');
+		$sysConfig   = $builder->select('*')
+							->where(['deleted'=>0])
+							->get()
+							->getResultArray();
+		foreach($sysConfig as $key=>$value){
+			$GLOBALS[$value['name']] = $value['value'];
+		}
+		
 	}
 	//记录日志
 	public function log($name, $description){
@@ -76,4 +88,18 @@ class BaseController extends Controller
 		$builder = $this->db->table('logs');
 		return $builder->insert($data);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
