@@ -107,6 +107,13 @@
 							<input type="radio" name="status" value="0" title="不开启" checked="">
 						</div>
 					</div>
+
+					<div class="layui-form-item">
+						 <label class="layui-form-label">更新内容</label>
+						 <div class="layui-input-block">
+							<textarea id="description" name="description"></textarea>
+						 </div>
+					</div>
 		  	   		 <div class="layui-form-item">
 						 <div class="layui-input-inline">
 							<button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
@@ -141,10 +148,14 @@
 	</div>	
 </div>
 </div>
+
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
 <script src="/static/js/loadData.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
 <script>
+var ue = UE.getEditor('description');
 !function(){
 	var layer = layui.layer,
 	form = layui.form;
@@ -164,7 +175,7 @@
 			{type: 'checkbox', fixed: 'left'},
 			{field:'version_num', title:'版本号'},
 			{field:'version_path', title:'版本路径	/allversion/version/'},
-			{field:'status', title:'状态', width:90, event: 'switch', templet: function(res){
+			{field:'status', title:'状态',event: 'switch', templet: function(res){
 				if(res.status == 1){
 					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
 				}else{
@@ -177,6 +188,7 @@
 			{field:'upgrade_file', title:'更新的文件', hide:true},
 			{field:'zip_download', title:'下载路径', hide:true},
 			{field:'zip_file_md5', title:'文件md5', hide:true},
+			{field:'description', title:'更新详情', hide:false},
 			{fixed:'right', title:'操作', toolbar: '#barDemo', width:140}
 		]],
 		// page: true
@@ -230,30 +242,43 @@
 	table.on('tool(test)', function(obj){
 		var data = obj.data;
 		if(obj.event === 'del'){
-			// layer.confirm('真的删除行么', function(index){
-			// 	$.post('{url:/sysuser/del}',{id:obj.data.id},function(data){
-			// 		if(data.code == 1){
-			// 			layer.msg(data.msg)
-			// 			obj.del();
-			// 		}
-			// 		else{
-			// 			layer.msg(data.msg)
-			// 		}
-			// 	}, 'json');
-			// });
+			layer.confirm('删除后用户将无法更新至该版本，是否删除', function(index){
+				$.post('{url: Sysuptest/del}',{id:obj.data.id},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg)
+						obj.del();
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+			});
 		}else if(obj.event === 'edit'){
 				$('#form')[0].reset(); //重置表单
 				loadData(obj.data, '#form')
+				UE.getEditor('description').setContent(obj.data.description);
 				form.render();
 				element.tabChange('tab', 't2');
 			
 		}else if(obj.event === 'upload'){
-			console.log(obj.data)
 				$('#form')[0].reset(); //重置表单
 				loadData(obj.data, '#form')
 				form.render();
 				element.tabChange('tab', 't3');
 			
+		}else if(obj.event === 'switch'){
+				var switchName = $(this).find('input[type="checkbox"]').attr("name");
+				var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+				switchValue = Number(switchValue);
+				$.post('{url:/Sysuptest/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+					if(data.code == 1){
+						//layer.msg(data.msg)
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+				form.render();
 		}
 	});
 	// 表单提交

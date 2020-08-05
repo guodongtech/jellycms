@@ -32,7 +32,7 @@ class Sysuptest extends BaseController
     public function edit()
     {
         $post = post();
-		if(!$post['version_num'] || !$post['version_path'] || !$post['prev_version_num'] || !$post['prev_version_path'] || !$post['zip_file'] || !$post['zip_download']){
+		if(!$post['version_num'] || !$post['version_path'] || !$post['prev_version_num'] || !$post['prev_version_path'] || !$post['zip_file'] || !$post['zip_download'] || !$post['description']){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
@@ -88,6 +88,61 @@ class Sysuptest extends BaseController
 			"data" => $list,
 		];
 		return json_encode($data);
+    }
+    public function del()
+    {
+		$id = post('id');
+		if(!$id){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $id,
+			'deleted' => 1,
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);		
+    }
+    public function switch()
+    {
+		$post = post();
+		$allowSwitch = ['status'];
+		if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
+			$rdata = [
+				"code" => 0,
+				"msg" => "参数不足",
+			];
+			return json_encode($rdata);
+		}
+		$data = [
+			'id' => $post['id'],
+			$post['switchName'] => (int)$post['switchValue'],
+		];
+		if($this->model->edit($data)){
+			$rdata = [
+				"code" => 1,
+				"msg" => "操作成功",
+			];
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "操作失败",
+			];
+		}
+		return json_encode($rdata);
     }
     public function uploadFile()
 	{
