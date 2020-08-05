@@ -76,7 +76,7 @@
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">
-							上一版本号
+							上一版本
 						</label>
 						<div class="layui-input-inline">
 	                     	 <select name="prev_version_num" lay-verify="required">
@@ -99,7 +99,7 @@
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">
-							是否开启更新
+							开启更新
 						</label>
 						<div class="layui-input-inline">
 							<input type="radio" name="status" value="1" title="开启">
@@ -165,13 +165,20 @@
 			{type: 'checkbox', fixed: 'left'},
 			{field:'version_num', title:'版本号'},
 			{field:'version_path', title:'版本路径	/allversion/version/'},
-			{field:'status', title:'是否开启更新'},
+			{field:'status', title:'状态', width:90, event: 'switch', templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status"  lay-skin="switch" lay-text="ON|OFF">';
+				}
+				
+			}},
 			{field:'prev_version_num', title:'上一版版本号', hide:true},
 			{field:'prev_version_path', title:'上一版版本路径', hide:true},
 			{field:'upgrade_file', title:'更新的文件', hide:true},
 			{field:'zip_download', title:'下载路径', hide:true},
 			{field:'zip_file_md5', title:'文件md5', hide:true},
-			{fixed:'right', title:'操作', toolbar: '#barDemo'}
+			{fixed:'right', title:'操作', toolbar: '#barDemo', width:140}
 		]],
 		// page: true
 	});

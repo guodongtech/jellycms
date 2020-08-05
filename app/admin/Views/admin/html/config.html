@@ -71,6 +71,22 @@
     padding: 6px 10px;
     resize: vertical;
 }
+.layui-colorpicker-main-input div.layui-inline {
+    float: left;
+    margin-right: 0px;
+    font-size: 14px;
+}
+.layui-colorpicker-pre {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom:2px 6px;
+    cursor: pointer;
+}
+.layui-colorpicker-pre:nth-child(11n+1) {
+    margin-left: 6px;
+}
 </style>
 {include:head.html}
 <div class="layui-fluid animated {$GLOBALS.animate}">
@@ -380,7 +396,7 @@
 		                   <label class="layui-form-label">功能动画</label>
 		                   <div class="layui-input-inline">
 								<select name="animate">
-									<option value="0">请选择</option>	 
+									<option value="">无</option>	 
 										<optgroup label="吸引注意力">
 										  <option value="bounce">bounce</option>
 										  <option value="flash">flash</option>
@@ -446,7 +462,6 @@
 										</optgroup>
 
 										<optgroup label="其它">
-										  <option value="hinge">hinge</option>
 										  <option value="rollIn">rollIn</option>
 										</optgroup>
 									  </select>
