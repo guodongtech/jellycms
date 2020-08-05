@@ -15,7 +15,7 @@ class Login extends Base
     {
         $this->model = new LoginModel();
         $this->areaModel = new AreaModel();
-		$this->captcha = new \App\Libraries\Captcha();
+		$this->captcha = new  \CodeIgniter\Captcha\Captcha();
 		$this->session = \Config\Services::session();
     }
     public function index()
