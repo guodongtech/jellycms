@@ -462,6 +462,7 @@ class Db extends BaseController
 			return json_encode($data);
 		}else{ //移动文件
 			//$newName = $file->getRandomName(); //此方法会自动更改后缀，此处不能用
+			//强制改后缀，防止上传php文件
 			$newName = date('Ymd_His');
 			$uploadPath = $this->dir;
 			//创建目录并设置权限

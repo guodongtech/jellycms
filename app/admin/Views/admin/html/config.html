@@ -198,10 +198,12 @@
 	                     <label class="layui-form-label">文字字体</label>
 	                     <div class="layui-input-inline">
 	                     	<input type="text" name="water_font" id="water-font-input" value="" placeholder="水印文字字体" class="layui-input">
-	                     </div>
+	                     <div class="layui-form-mid layui-word-aux">请上传.ttf格式的字体包</div>
+						 </div>
 							<button type="button" class="layui-btn" id="water-font">
 							  <i class="layui-icon">&#xe67c;</i>上传字体
 							</button>
+							
 	                </div>
 	                
 	                <div class="layui-form-item">
@@ -567,6 +569,8 @@
 		//执行实例
 		var uploadInst = upload.render({
 			elem: '#syslogo',
+			accept:'file',
+			acceptMime: 'image/jpg, image/png',
 			url: '{url:/upload/uploadFile}',
 			done: function(res){
 				//上传完毕回调
@@ -583,10 +587,16 @@
 			elem: '#water-font',
 			url: '{url:/upload/uploadFile}',
 			accept:'file',
+			exts: 'ttf',
 			done: function(res){
-				//上传完毕回调
-				$('input[name="water_font"]').val(res.data.path);
-				layer.msg('上传成功')
+			console.log(res)
+				if(res.code == 1){
+					//上传完毕回调
+					$('input[name="water_font"]').val(res.data.path);
+					layer.msg(res.msg);			
+				}else{
+					layer.msg(res.msg)	
+				}
 			},
 			error: function(){
 				//请求异常回调
