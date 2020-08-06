@@ -219,30 +219,30 @@
 		};
 		form.render();
 	});	
-form.on('submit(submit)', function(data){
-   var url = $("#form").attr('action');
-   $.ajax({
-        url:url, //请求的服务端地址
-        data:data.field,
-        type:"post",
-        dataType:"json",
-        success:function(data){
-			if(data.code == 1){
-				layer.msg(data.msg)
-				setTimeout(function (){
-					window.location.reload();
-				}, 1000);
+	form.on('submit(submit)', function(data){
+	   var url = $("#form").attr('action');
+	   $.ajax({
+			url:url, //请求的服务端地址
+			data:data.field,
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+					setTimeout(function (){
+						window.location.reload();
+					}, 1000);
+				}
+				else{
+					layer.msg(data.msg)
+				}  
+			},
+			error:function(){
+			  layer.msg('error'); //错误处理
 			}
-			else{
-				layer.msg(data.msg)
-			}  
-        },
-        error:function(){
-          layer.msg('error'); //错误处理
-        }
-    });
-   return false;
-});
+		});
+	   return false;
+	});
 }();
 </script>
 </body>

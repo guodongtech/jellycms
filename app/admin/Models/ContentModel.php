@@ -14,11 +14,14 @@ class ContentModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = false;
 	protected $protectFields = false;
-
-    public function getList($model_id, $page, $limit)
+	//获取指定model下的内容列表
+    public function getList($keyword, $model_id, $page, $limit)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('content');
+		if($keyword){
+			$builder->like('content.title', $keyword);
+		}
 		$res   = $builder->select('content.*, model.urlname as m_urlname, model.id as model_id, sorts.urlname as urlname, sorts.name as sort_name, admin.name as create_user')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->join('model', 'model.id = sorts.model_id', 'left')
@@ -30,9 +33,44 @@ class ContentModel extends Model
 		foreach($res as $key=>$value){
 			$res[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'], $value['id'])):url(array($value['m_urlname'],$value['id']));
 		}
-		$total = $builder->select('id')
+		$builder = $this->db->table('content');
+		if($keyword){
+			$builder->like('content.title', $keyword);
+		}
+		$total = $builder->select('content.id')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
+							->countAllResults(false);					
+        $result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
+    }
+	//获取指定model下的内容列表
+    public function getListBySortsId($keyword, $sorts, $page, $limit)
+    {
+		$offset = ($page-1)*$limit;
+		$builder = $this->db->table('content');
+		if($keyword){
+			$builder->like('content.title', $keyword);
+		}
+		$res   = $builder->select('content.*, model.urlname as m_urlname, model.id as model_id, sorts.urlname as urlname, sorts.name as sort_name, admin.name as create_user')
+							->join('sorts', 'sorts.id = content.sorts_id', 'left')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->join('admin', 'admin.id = content.create_user', 'left')
+							->where(['content.deleted'=>0, 'sorts.id'=>$sorts])
+							->orderBy('id', 'DESC')
+							->get($limit, $offset)
+							->getResultArray();
+		foreach($res as $key=>$value){
+			$res[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'], $value['id'])):url(array($value['m_urlname'],$value['id']));
+		}
+		$builder = $this->db->table('content');
+		if($keyword){
+			$builder->like('content.title', $keyword);
+		}
+		$total = $builder->select('content.id')
+							->join('sorts', 'sorts.id = content.sorts_id', 'left')
+							->where(['content.deleted'=>0, 'sorts.id'=>$sorts])
 							->countAllResults(false);					
         $result['list'] = $res;
         $result['total'] = $total;

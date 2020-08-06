@@ -49,10 +49,10 @@
 							</select>
 						</div>
 						<div class="layui-input-inline" style="width:200px;">
-							<input type="text" name="keywords" placeholder="输入关键词" class="layui-input">
+							<input type="text" name="keyword" placeholder="输入关键词" class="layui-input">
 						</div>
 						<div class="layui-input-inline">
-							<button class="layui-btn" id="submit" type="submit">搜索</button>
+							<button lay-submit lay-filter="submit" class="layui-btn">搜索</button>
 							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						</div>
 					</form>
@@ -62,7 +62,6 @@
 						<button type="button" class="layui-btn layui-btn-sm" title="编辑" lay-event="edit"><i class="layui-icon"></i></button>
 						<button type="button" class="layui-btn layui-btn-sm" title="浏览" lay-event="browse"><i class="layui-icon"></i></button>
 						<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" title="删除" lay-event="del"><i class="layui-icon"></i></button>
-						
 					</div>
 				</script>  
 	  	   </div>
@@ -260,6 +259,44 @@
 		};
 		form.render();
 	});
+	
+form.on('submit(submit)', function(data){
+	// var url = $("#form").attr('action');
+	var sorts = $('#form select[name=sorts] option:selected').val();
+	console.log(sorts)
+	var keyword = $("#form input[name=keyword]").val();
+	if(!sorts){
+		//按模型搜
+		table.reload('table', {
+			url: '{url:/content/getList/}{$model_id}',
+			where: { //设定异步数据接口的额外参数，任意设
+				keyword: keyword,
+			},
+			page: {
+				curr: 1 //重新从第 1 页开始
+			},
+		}); //只重载数据   
+		
+	}else{
+		//按分类搜索
+		table.reload('table', {
+			url: '{url:/content/getListBySortsId/}',
+			where: { //设定异步数据接口的额外参数，任意设
+				keyword:  $("#form input[name=keyword]").val(),
+				sorts:sorts,
+			},
+			page: {
+				curr: 1 //重新从第 1 页开始
+			}
+		}); //只重载数据   
+	}
+	$('#form select[name=sorts]').val(sorts);
+	$("#form input[name=keyword]").val(keyword);
+	form.render();
+	return false;
+});
+
+	
 }();
 </script>
 </body>
