@@ -53,8 +53,10 @@
 							</div>
 						</script>
 						<script type="text/html" id="barDemo">
-							<a class="layui-btn layui-btn-xs" {data-id} lay-event="edit">编辑</a>
-							<a class="layui-btn layui-btn-danger {data-id} layui-btn-xs" lay-event="del">删除</a>
+							<div class="layui-btn-group">
+								<button type="button" class="layui-btn layui-btn-sm" title="编辑" lay-event="edit"><i class="layui-icon"></i></button>
+								<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" title="删除" lay-event="del"><i class="layui-icon"></i></button>
+							</div>
 						</script>
 
 
@@ -125,7 +127,7 @@
 			{field:'area_id', title:'区域', width:120,hide:true},
 			{field:'area_name', title:'区域', width:120},
 			{field:'sorting', title:'排序', width:80, edit: 'text'},
-			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:110}
 		]],
 		page: true
 	});
