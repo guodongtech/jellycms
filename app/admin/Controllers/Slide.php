@@ -16,7 +16,7 @@ class Slide extends BaseController
 
     public function index()
     {
-		$groupList = $this->groupModel->getList();
+		$groupList = $this->groupModel->getList($this->session->area_id);
 		$data = [
 			"groupList" => $groupList,
 		];
@@ -27,7 +27,7 @@ class Slide extends BaseController
 		$get = $this->request->getGet();
 		isset($get['page'])?$page = $get['page']:$page = 1;
 		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
-		$res = $this->model->getList($page, $limit);
+		$res = $this->model->getList($page, $limit, $this->session->area_id);
 		$data = [
 			"code" => 0,
 			"msg" => "",
@@ -49,11 +49,13 @@ class Slide extends BaseController
 		$data = $post;
 		if(!$post['id']){
 			unset($data['id']);
+			$data['area_id'] = $this->session->area_id;
 			$data['create_user'] = $this->session->id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
 			$data['deleted'] = 0;
 		}else{
+			$data['area_id'] = $this->session->area_id;
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}

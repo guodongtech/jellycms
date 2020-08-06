@@ -24,7 +24,7 @@ class SlideGroup extends BaseController
     }
     public function getList()
     {
-		$list = $this->model->getList();
+		$list = $this->model->getList($this->session->area_id);
 		$data = [
 			"code" => 0,
 			"msg" => "",

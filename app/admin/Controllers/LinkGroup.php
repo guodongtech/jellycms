@@ -25,7 +25,7 @@ class LinkGroup extends BaseController
 		$get = $this->request->getGet();
 		isset($get['page'])?$page = $get['page']:$page = 1;
 		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
-		$res = $this->model->getList($page, $limit);
+		$res = $this->model->getList($page, $limit, $this->session->area_id);
 		$data = [
 			"code" => 0,
 			"msg" => "",

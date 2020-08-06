@@ -14,19 +14,19 @@ class LinkModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = true;
 	protected $protectFields = false;
-    public function getList($page, $limit)
+    public function getList($page, $limit, $area_id)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('link');
 		$res   = $builder->select('link.*, link_group.name as group_name')
 							->join('link_group', 'link_group.id = link.group_id', 'left')
-							->where(['link.deleted'=>0,'link.status'=>1])
+							->where(['link.deleted'=>0,'link.status'=>1, 'link.area_id'=>$area_id])
 							->get($limit, $offset)
 							->getResultArray();
 							
 		$total = $builder->select('link.*, link_group.name as group_name')
 							->join('link_group', 'link_group.id = link.group_id', 'left')
-							->where(['link.deleted'=>0,'link.status'=>1])
+							->where(['link.deleted'=>0,'link.status'=>1, 'link.area_id'=>$area_id])
 							->countAllResults(false);					
         $result['list'] = $res;
         $result['total'] = $total;

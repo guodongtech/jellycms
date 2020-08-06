@@ -37,7 +37,7 @@ class Content extends BaseController
 		$keyword = $get['keyword'];
 		isset($get['page'])?$page = $get['page']:$page = 1;
 		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
-		$res = $this->model->getList($keyword, $model_id, $page, $limit);
+		$res = $this->model->getList($keyword, $model_id, $page, $limit, $this->session->area_id);
 		$data = [
 			"code" => 0,
 			"msg" => "",
@@ -53,7 +53,7 @@ class Content extends BaseController
 		$sorts = $get['sorts'];
 		isset($get['page'])?$page = $get['page']:$page = 1;
 		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
-		$res = $this->model->getListBySortsId($keyword, $sorts, $page, $limit);
+		$res = $this->model->getListBySortsId($keyword, $sorts, $page, $limit, $this->session->area_id);
 		$data = [
 			"code" => 0,
 			"msg" => "",
@@ -118,9 +118,11 @@ class Content extends BaseController
 		}
 		if(!$data['id']){
 			$data['create_user'] = $this->session->id;
+			$data['area_id'] = $this->session->area_id;
 			$data['create_time'] = date('Y-m-d H:i:s',time());
 			$data['status'] = 1;
 		}else{
+			$data['area_id'] = $this->session->area_id;
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}

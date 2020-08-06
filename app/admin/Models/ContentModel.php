@@ -15,7 +15,7 @@ class ContentModel extends Model
 	protected $skipValidation     = false;
 	protected $protectFields = false;
 	//获取指定model下的内容列表  搜索关键词不区分大小写
-    public function getList($keyword, $model_id, $page, $limit)
+    public function getList($keyword, $model_id, $page, $limit, $area_id)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('content');
@@ -26,7 +26,7 @@ class ContentModel extends Model
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->join('admin', 'admin.id = content.create_user', 'left')
-							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
+							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id, 'sorts.area_id'=>$area_id])
 							->orderBy('id', 'DESC')
 							->get($limit, $offset)
 							->getResultArray();
@@ -39,14 +39,14 @@ class ContentModel extends Model
 		}
 		$total = $builder->select('content.id')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
-							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id])
+							->where(['content.deleted'=>0, 'sorts.model_id'=>$model_id, 'sorts.area_id'=>$area_id])
 							->countAllResults(false);					
         $result['list'] = $res;
         $result['total'] = $total;
 		return $result;
     }
 	//获取指定sortsID下的内容列表 搜索关键词不区分大小写
-    public function getListBySortsId($keyword, $sorts, $page, $limit)
+    public function getListBySortsId($keyword, $sorts, $page, $limit, $area_id)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('content');
@@ -57,7 +57,7 @@ class ContentModel extends Model
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->join('admin', 'admin.id = content.create_user', 'left')
-							->where(['content.deleted'=>0, 'sorts.id'=>$sorts])
+							->where(['content.deleted'=>0, 'sorts.id'=>$sorts, 'sorts.area_id'=>$area_id])
 							->orderBy('id', 'DESC')
 							->get($limit, $offset)
 							->getResultArray();
@@ -70,7 +70,7 @@ class ContentModel extends Model
 		}
 		$total = $builder->select('content.id')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
-							->where(['content.deleted'=>0, 'sorts.id'=>$sorts])
+							->where(['content.deleted'=>0, 'sorts.id'=>$sorts, 'sorts.area_id'=>$area_id])
 							->countAllResults(false);					
         $result['list'] = $res;
         $result['total'] = $total;

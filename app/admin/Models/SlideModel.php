@@ -15,19 +15,19 @@ class SlideModel extends Model
 	protected $skipValidation     = true;
 	protected $protectFields = false;
     // 获取列表
-    public function getList($page, $limit)
+    public function getList($page, $limit, $area_id)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('slide');
 		$res   = $builder->select('slide.*, slide_group.name as group_name')
 							->join('slide_group', 'slide_group.id = slide.group_id', 'left')
-							->where(['slide.deleted'=>0,'slide.status'=>1])
+							->where(['slide.deleted'=>0,'slide.status'=>1, 'slide.area_id'=>$area_id])
 							->get($limit, $offset)
 							->getResultArray();
 							
 		$total = $builder->select('slide.*, slide_group.name as group_name')
 							->join('slide_group', 'slide_group.id = slide.group_id', 'left')
-							->where(['slide.deleted'=>0,'slide.status'=>1])
+							->where(['slide.deleted'=>0,'slide.status'=>1, 'slide.area_id'=>$area_id])
 							->countAllResults(false);					
         $result['list'] = $res;
         $result['total'] = $total;

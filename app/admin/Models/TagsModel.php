@@ -15,15 +15,15 @@ class TagsModel extends Model
 	protected $skipValidation     = true;
 	protected $protectFields = false;
     // 获取内链列表
-    public function getList($page, $limit)
+    public function getList($page, $limit, $area_id)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('tags');
 		$res   = $builder->select('*')
-							->where(['deleted'=>0])
+							->where(['deleted'=>0, 'area_id'=>$area_id])
 							->get($limit, $offset)
 							->getResultArray();
-		$total = $builder->select('*')->where(['deleted'=>0])
+		$total = $builder->select('*')->where(['deleted'=>0, 'area_id'=>$area_id])
 							->countAllResults(false);	
 		$result['list'] = $res;
         $result['total'] = $total;
