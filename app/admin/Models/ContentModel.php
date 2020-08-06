@@ -14,13 +14,13 @@ class ContentModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = false;
 	protected $protectFields = false;
-	//获取指定model下的内容列表
+	//获取指定model下的内容列表  搜索关键词不区分大小写
     public function getList($keyword, $model_id, $page, $limit)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('content');
 		if($keyword){
-			$builder->like('content.title', $keyword);
+			$builder->like('content.title', $keyword, 'both', true, false);
 		}
 		$res   = $builder->select('content.*, model.urlname as m_urlname, model.id as model_id, sorts.urlname as urlname, sorts.name as sort_name, admin.name as create_user')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
@@ -35,7 +35,7 @@ class ContentModel extends Model
 		}
 		$builder = $this->db->table('content');
 		if($keyword){
-			$builder->like('content.title', $keyword);
+			$builder->like('content.title', $keyword, 'both', true, false);
 		}
 		$total = $builder->select('content.id')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
@@ -45,13 +45,13 @@ class ContentModel extends Model
         $result['total'] = $total;
 		return $result;
     }
-	//获取指定model下的内容列表
+	//获取指定sortsID下的内容列表 搜索关键词不区分大小写
     public function getListBySortsId($keyword, $sorts, $page, $limit)
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('content');
 		if($keyword){
-			$builder->like('content.title', $keyword);
+			$builder->like('content.title', $keyword, 'both', true, false);
 		}
 		$res   = $builder->select('content.*, model.urlname as m_urlname, model.id as model_id, sorts.urlname as urlname, sorts.name as sort_name, admin.name as create_user')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
@@ -66,7 +66,7 @@ class ContentModel extends Model
 		}
 		$builder = $this->db->table('content');
 		if($keyword){
-			$builder->like('content.title', $keyword);
+			$builder->like('content.title', $keyword, 'both', true, false);
 		}
 		$total = $builder->select('content.id')
 							->join('sorts', 'sorts.id = content.sorts_id', 'left')
