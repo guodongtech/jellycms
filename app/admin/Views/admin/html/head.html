@@ -1,8 +1,11 @@
 <div class="layui-card layadmin-header">
 	<div class="layui-breadcrumb layui-input-inline" lay-filter="breadcrumb" style="visibility: visible;">
-		<a lay-href="">主页</a><span lay-separator="">/</span>
-		<a><cite>设置</cite></a><span lay-separator="">/</span>
-		<a><cite>我的密码</cite></a>
+		<a lay-href="">主页</a>
+		{set:$position = getPosition()}
+		{foreach:items = $position key=$k item=$v}
+		<span lay-separator="">/</span><a><cite>{$v.name}</cite></a>
+		{/foreach}
+		
 	</div>
 <!-- 	<div class="layui-input-inline">
 		<form action="" method="post" class="layui-form">

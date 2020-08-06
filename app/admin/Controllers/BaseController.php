@@ -66,8 +66,7 @@ class BaseController extends Controller
 							->getResultArray();
 		foreach($sysConfig as $key=>$value){
 			$GLOBALS[$value['name']] = $value['value'];
-		}
-		
+		}	
 	}
 	//记录日志
 	public function log($name, $description){
@@ -85,18 +84,5 @@ class BaseController extends Controller
 		$builder = $this->db->table('logs');
 		return $builder->insert($data);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

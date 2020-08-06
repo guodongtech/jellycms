@@ -141,3 +141,37 @@ function getTree($list,$pid=0,$itemprefix = '') {
     }
     return  $arr;
 }
+
+//获取后台面包屑导航
+function getPosition(){
+	$uri = service('uri');
+	$db = db_connect();
+	//获取当前菜单信息
+	$currentPath = '/'.$uri->getPath();
+	$builder = $db->table('menu');
+	$res = $builder->select('id')
+					->where(['url'=>$currentPath])
+					->get()
+					->getRowArray();
+	$pos = 	getMenu($res['id']);
+	return $pos;
+}
+	
+function getMenu($id){
+	static $result = array();
+	$db = db_connect();
+	$builder = $db->table('menu');
+	$res = $builder->select('pid, name')
+					->where(['id'=>$id])
+					->get()
+					->getRowArray();
+	$result[]['name'] = $res['name'];					
+	if($res['pid']){
+		getMenu($res['pid']);
+	}else{
+		$result = array_reverse($result);
+	}
+	return $result;				
+}
+
+

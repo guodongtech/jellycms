@@ -20,7 +20,6 @@ class Login extends Base
     }
     public function index()
     {	
-		//$this->session->destroy();exit;
 		//已登录用户跳转回后台首页
 		if($this->session->id>0){
 			Header("Location: /".ADMINNAME."/home/"); 
