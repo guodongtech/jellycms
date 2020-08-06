@@ -113,7 +113,7 @@
 					<ul>
 					{form:name=comment num=3 pid=$form['id'] value=form2}
 						<li>
-							<div class="user-info">
+							<div class="user-info sub">
 								<img src="{$form2.icon}">
 								<div>
 									<em>{$form2.nickname}</em>
@@ -137,7 +137,7 @@
 		<div class="recommend">
 			<h3>——  推荐内容  ——</h3>
 			<ul class="recommend-list">
-			{list:num=3 id=5 where=isrecommend eq 1,pic neq '' order=id desc}
+			{list:num=3 id=5 where=pic neq '' order=id desc}
 			<li>
 				<div class="item wow zoomIn">
 					<div class="item-pic">

@@ -242,7 +242,8 @@
 				if(!data.length){
 					layer.msg('请选择要操作的数据');
 					break;
-				}
+				}			
+			layer.confirm('真的删除行么', function(index){
 				$.each(data, function(i, n){
 					ids.unshift(n.id)
 				})
@@ -255,6 +256,8 @@
 						layer.msg(data.msg)
 					}
 				}, 'json');
+				
+				});
 			break;
 		};
 		form.render();
