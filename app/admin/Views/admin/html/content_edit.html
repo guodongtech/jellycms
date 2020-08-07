@@ -172,6 +172,14 @@ span[contenteditable]:empty:before {
 								</div>
 							</div>
 							{/if}
+							{if:$v['type']=="editor"}
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">{$v.description}</label>
+			                     <div class="layui-input-block">
+									<textarea id="{$v.name}" class="jelly-editor" name="{$v.name}"></textarea>
+								 </div>
+			                </div>
+							{/if}
 							{if:$v['type']=="text"}
 							<div class="layui-form-item">
 								<div class="layui-inline">
@@ -188,7 +196,7 @@ span[contenteditable]:empty:before {
 								<div class="layui-input-inline">
 									<input type="text" name="{$v.name}" placeholder="上传缩略图" class="layui-input">
 								</div>
-								<button type="button" class="layui-btn upload watermark" id="pic"><i class="layui-icon"></i>上传图片</button> 
+								<button type="button" class="layui-btn jelly-upload" data-accept='images' data-input='{$v.name}'><i class="layui-icon"></i>上传图片</button> 
 								<div id="ico_box" class="pic addedit"></div>
 							</div>
 							{/if}
@@ -198,8 +206,7 @@ span[contenteditable]:empty:before {
 								<div class="layui-input-inline">
 									<input type="text" name="{$v.name}" placeholder="上传文件" class="layui-input">
 								</div>
-								<button type="button" class="layui-btn upload watermark"><i class="layui-icon"></i>上传文件</button> 
-								<div id="ico_box" class="pic addedit"></div>
+								<button type="button" class="layui-btn jelly-upload" data-accept='file' data-input='{$v.name}'><i class="layui-icon"></i>上传文件</button> 
 							</div>
 							{/if}
 							{if:$v['type']=="input"}
@@ -232,12 +239,21 @@ span[contenteditable]:empty:before {
 							<div class="layui-form-item">
 								<label class="layui-form-label">{$v.description}</label>
 								<div class="layui-input-inline" style="width: 120px;">
-									<input type="text" name="{$v.name}" placeholder="请选择颜色" class="layui-input" id="test-form-input">
+									<input type="text" name="{$v.name}" id="{$v.name}-input" placeholder="选择颜色" class="layui-input">
 								</div>
 								<div class="layui-inline" style="left: -11px;">
-									<div id="test-form"></div>
+									<div id="{$v.name}" class='jelly-colorpicker'></div>
 								</div>
 							</div>
+							{/if}
+							{if:$v['type']=="date"}
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">{$v.description}</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="{$v.name}" id="{$v.name}" placeholder="选择时间" class="layui-input jelly-date">
+			                     </div>
+			                     <div class="layui-form-mid layui-word-aux"></div>
+			                </div>
 							{/if}
 						{/foreach}
 			                <div class="layui-form-item">
@@ -263,7 +279,7 @@ span[contenteditable]:empty:before {
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">内容</label>
 			                     <div class="layui-input-block">
-									<textarea id="container" name="content"></textarea>
+									<textarea id="container" class="jelly-editor" name="content"></textarea>
 								 </div>
 			                </div>
 
@@ -274,7 +290,7 @@ span[contenteditable]:empty:before {
 			                     <div class="layui-input-inline">
 			                     	<input type="text" name="pic" value="" placeholder="上传缩略图" class="layui-input">
 			                     </div>
-			                     <button type="button" class="layui-btn upload watermark" id="pic">
+			                     <button type="button" class="layui-btn jelly-upload" data-accept='images' data-input='pic'>
 								 	 <i class="layui-icon"></i>上传图片
 								 </button> 
 								 <div id="ico_box" class="pic addedit"></div>
@@ -327,7 +343,7 @@ span[contenteditable]:empty:before {
 									<input type="text" name="color" placeholder="标题颜色" class="layui-input" id="title-color-input">
 								</div>
 								<div class="layui-inline" style="left: -11px;">
-									<div id="title-color"></div>
+									<div id="title-color" class='jelly-colorpicker'></div>
 								</div>
 							</div>
 			                 
@@ -348,7 +364,7 @@ span[contenteditable]:empty:before {
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">定时发布</label>
 			                     <div class="layui-input-inline">
-			                     	<input type="text" name="date" value="" readonly="" placeholder="选择发布时间" class="layui-input datetime" lay-key="1">
+			                     	<input type="text" name="date" id="date" placeholder="选择发布时间" class="layui-input jelly-date">
 			                     </div>
 			                     <div class="layui-form-mid layui-word-aux">满足条件，在最近一次请求时会触发发布动作</div>
 			                </div>
@@ -358,7 +374,7 @@ span[contenteditable]:empty:before {
 		                		<div class="layui-input-inline">
 			                     	<input type="text" name="otherfile" placeholder="上传附件" class="layui-input">
 			                     </div>
-			                     <button type="button" class="layui-btn" id="otherfile">
+			                     <button type="button" class="layui-btn jelly-upload" data-accept='file' data-input='otherfile'>
 								 	 <i class="layui-icon"></i>上传附件
 								 </button>
 			                </div>
@@ -412,24 +428,18 @@ span[contenteditable]:empty:before {
 	var element = layui.element;
 	var $ = layui.jquery;
 	var upload = layui.upload;
-	var colorpicker = layui.colorpicker;
-
-  //表单赋值
-	colorpicker.render({
-		elem: '#title-color'
-		,color: '#1c97f5'
-		,change: function(color){
-			$('#title-color-input').val(color);
-		}
-	});
-	
+	var laydate = layui.laydate;
+	var colorpicker  = layui.colorpicker ;
 	{if:$id}
 	//动态回填表单
 	$.post('{url:/content/getContent}',{id:{$id}},function(data){
 		if(data.code == 1){
 			loadData(data.content, '#form');
 			form.render();
-			$('.layui-colorpicker-trigger-span').css('background',$('#title-color-input').val());
+			$('.jelly-colorpicker').each(function(i){
+				$(this).find('.layui-colorpicker-trigger-span').css('background',$('#'+$(this).attr('id')+'-input').val());
+			})
+			
 			//处理多图
 			if(pics = $('#form input[name="pics"]').val()){
 				$('.pics-wrap').show('slow');
@@ -439,30 +449,70 @@ span[contenteditable]:empty:before {
 					$('#form #pics-preview ul').append('<li><img class="layui-upload-img" src="'+ pics[i] +'" /><span contenteditable=true placeholder="图片标题">'+ pictitles[i] +'</span><i class="fa fa-trash-o" aria-hidden="true"></i></li>');
 				}
 			}
-			var ue = UE.getEditor('container');
+			initeditor();//初始化所有编辑器
 		}
 		else{
 			layer.msg(data.msg)
 		}
 	},'json');
-	
 	{else:}
-	var ue = UE.getEditor('container');
+	initeditor();//初始化所有编辑器
 	{/if}
-	
-	//执行实例
-	var uploadInst = upload.render({
-		elem: '#pic',
-		url: '{url:/upload/uploadFile}',
-		done: function(res){
-			//上传完毕回调
-			$('#form input[name="pic"]').val(res.data.path);
-			layer.msg('上传成功')
-		},
-		error: function(){
-			//请求异常回调
-		}
-	})	
+	//在表单回填完成后，对所有编辑器做初始化
+	function initeditor(){
+		$('.jelly-editor').each(function(i){
+			UE.getEditor($(this).attr('id'));
+		})
+	}
+
+	//所有上传 绑定事件  参数：exts: 'zip|rar|7z' 即代表只允许上传压缩格式的文件。如果 accept 未设定，那么限制的就是图片的文件格式
+	//data-exts='' data-accept='file' data-input='要赋值的INPUT'
+	$('.jelly-upload').each(function(i){
+		var accept = $(this).attr('data-accept');
+		var exts = $(this).attr('data-exts');
+		//执行实例
+		upload.render({
+			elem: $(this),
+			accept:accept,
+			exts:exts,
+			url: '{url:/upload/uploadFile}',
+			done: function(res){
+				//上传完毕回调
+				this.item.parents('form').find('input[name="'+this.item.attr('data-input')+'"]').val(res.data.path);
+				layer.msg('上传成功')
+			},
+			error: function(){
+				//请求异常回调
+			}
+		})
+	})
+
+
+	//所有 日期 绑定事件
+	$('.jelly-date').each(function(i){
+		laydate.render({ 
+			elem: '#'+$(this).attr('id'),
+			type: 'datetime',
+			format: 'yyyy-MM-dd HH:mm:ss',
+			done: function(value, date){
+				//this.item.val(value);
+			}
+		});
+	})
+	//所有 拾色器 绑定事件
+	$('.jelly-colorpicker').each(function(i){
+		colorpicker.render({
+			elem: '#'+$(this).attr('id'),  //绑定元素
+			done: function(color){
+				$(this.elem + '-input').val(color);
+			}
+		});
+	})
+
+
+
+
+ 
 	//执行实例 多图上传
 	var pics=new Array();
 	var pictitles=new Array();
@@ -490,44 +540,31 @@ span[contenteditable]:empty:before {
 			//请求异常回调
 		}
 	})
-	//执行实例 上传文件
-	var uploadInst = upload.render({
-		elem: '#otherfile',
-		accept:"file",
-		url: '{url:/upload/uploadFile}',
-		done: function(res){
-			//上传完毕回调
-			$('#form input[name="otherfile"]').val(res.data.path);
-			layer.msg('上传成功')
-		},
-		error: function(){
-			//请求异常回调
-		}
-	})
+ 
 }();
 //删除图片
- $("body").on("click",".layui-upload-list ul li i",function(){
-	$(this).parents('li').remove();
-	//重新为表单赋值
-	var pics=new Array();
-	var pictitles=new Array();
-	$('.layui-upload-list ul li img').each(function(i){
-		pics[i]=$(this).attr('src');
-	})
-	$('#form input[name="pics"]').val(pics.toString());
-	
-	$('.layui-upload-list ul li span').each(function(i){
-		pictitles[i]=$(this).html();
-	})
-	$('#form input[name="pictitles"]').val(pictitles.toString());
-	if($('.layui-upload-list ul li').length == 0){
-		$('.pics-wrap').hide('slow');
-		$('#form input[name="pics"]').val('')
-		$('#form input[name="pictitles"]').val('')
-	}
-	layer.msg('已删除');
+$("body").on("click",".layui-upload-list ul li i",function(){
+$(this).parents('li').remove();
+//重新为表单赋值
+var pics=new Array();
+var pictitles=new Array();
+$('.layui-upload-list ul li img').each(function(i){
+	pics[i]=$(this).attr('src');
+})
+$('#form input[name="pics"]').val(pics.toString());
+
+$('.layui-upload-list ul li span').each(function(i){
+	pictitles[i]=$(this).html();
+})
+$('#form input[name="pictitles"]').val(pictitles.toString());
+if($('.layui-upload-list ul li').length == 0){
+	$('.pics-wrap').hide('slow');
+	$('#form input[name="pics"]').val('')
+	$('#form input[name="pictitles"]').val('')
+}
+layer.msg('已删除');
 });
- $("body").on("focusout",".layui-upload-list ul li span",function(e){
+$("body").on("focusout",".layui-upload-list ul li span",function(e){
 	var pictitles=new Array();
 	$('.layui-upload-list ul li span').each(function(i){
 		pictitles[i]=$(this).html();
