@@ -178,6 +178,7 @@ class Content extends BaseController
 			//复制记录
 			$content = $this->model->getCopyContent($value);
 			unset($content['id']);//释放ID，添加记录
+			$content['sorts_id'] = $sorts_id;
 			if($this->model->edit($content)){
 				$success++;
 			}
