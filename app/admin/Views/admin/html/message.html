@@ -25,17 +25,19 @@
 	    <a href = "{url:/message/index/}{$v['table_name']}"><li {if:$v["table_name"] == $table_name}class="layui-this"{/if}>{$v['name']}</li></a>
 	    {/foreach}
 	  </ul>
-	  <div class="layui-tab-content">
-	  	   <div class="layui-tab-item layui-show">
-	  	   			<table class="layui-hide" id="table" lay-filter="test"></table>
-	  	   			<script type="text/html" id="barDemo">
-						{if: $issystem == 1}
-						<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
-						<a class="layui-btn layui-btn-xs" lay-event="reply">回复</a>
-						{/if}
-						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-					</script>
-	  	 </div>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<table class="layui-hide" id="table" lay-filter="test"></table>
+			<script type="text/html" id="barDemo">
+				<div class="layui-btn-group">
+				{if: $issystem == 1}
+					<button type="button" class="layui-btn layui-btn-sm" title="审核" lay-event="check">审核</button>
+					<button type="button" class="layui-btn layui-btn-sm" title="回复" lay-event="reply">回复</button>
+				{/if}
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" title="删除" lay-event="del"><i class="layui-icon"></i></button>
+				</div>
+			</script>
+		</div>
 	</div>
 		
 	 
