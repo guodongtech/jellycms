@@ -85,7 +85,7 @@
 			</div>
 			<div class="bottom-nav">
 				<ul>
-					<li><i class="fa fa-th" title="应用市场"></i></li>
+					<li class="app-market"><i class="fa fa-th" title="应用市场"></i></li>
 				</ul>
 			</div>
 		</aside>
@@ -134,6 +134,20 @@
 !function(){
 	var layer = layui.layer,form = layui.form;
 	var element = layui.element;
+	var layer = layui.layer;
+	var $ = layui.jquery;
+	$('.app-market').click(function(){
+		var app = layer.open({
+			type: 2,
+			maxmin:true,
+			full:true,
+			area: ['888px', '666px'],
+			title:'应用市场',
+			content: '//www.guodong.tech'
+		}); 
+		
+		layer.full(app);
+	})
 	form.on('select(switch)', function(data){
 		$.post('{url:/home/switch}',{area_id:data.value},function(data){
 			if(data.code == 1){
