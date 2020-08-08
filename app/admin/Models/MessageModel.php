@@ -101,4 +101,22 @@ class MessageModel extends Model
                             ->getResultArray();
         return $result;
     }
+     // 获取待审核留言
+    public function getMessageCount()
+    {
+        $builder = $this->db->table('form_message');
+        $result   = $builder->select('*')
+                            ->where(['checked'=>0,'deleted'=>0])
+                            ->countAllResults(false);
+        return $result;
+    }
+     // 获取待审核评论
+    public function getCommentCount()
+    {
+        $builder = $this->db->table('form_comment');
+        $result   = $builder->select('*')
+                            ->where(['checked'=>0,'deleted'=>0])
+                            ->countAllResults(false);
+        return $result;
+    }
 }
