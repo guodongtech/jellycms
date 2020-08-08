@@ -3,6 +3,7 @@ namespace App\Controllers;
 use \App\Models\HomeModel;
 use \App\Models\MenuModel;
 use \App\Models\AreaModel;
+use \App\Models\MessageModel;
 class Home extends BaseController
 {    
 	private $model;
@@ -11,6 +12,7 @@ class Home extends BaseController
         $this->model = new HomeModel();
         $this->areaModel = new AreaModel();
         $this->MenuModel = new MenuModel();
+        $this->MessageModel = new MessageModel();
     }
 	public function index()
 	{	
@@ -49,7 +51,13 @@ class Home extends BaseController
 		// 取快捷显示栏内容
 		$fast_menu = $this->MenuModel->getFastMenu();
 		$fast_menu = array_chunk($fast_menu,8);
+		// 待审评论 留言
+		$message_check_count = $this->MessageModel->getMessageCount();
+		$comment_check_count = $this->MessageModel->getCommentCount();
+		
 		$data['fast_menu'] = $fast_menu;
+		$data['message_check_count'] = $message_check_count;
+		$data['comment_check_count'] = $comment_check_count;
 		return view('welcome.html',$data);
 	}
 }
