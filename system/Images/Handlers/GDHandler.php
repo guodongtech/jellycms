@@ -327,7 +327,8 @@ class GDHandler extends BaseHandler
 				{
 					throw ImageException::forInvalidImageCreate(lang('images.gifNotSupported'));
 				}
-
+				imagealphablending($this->resource, false);
+				imagesavealpha($this->resource, true);
 				if (! @imagegif($this->resource, $target))
 				{
 					throw ImageException::forSaveFailed();
@@ -349,7 +350,8 @@ class GDHandler extends BaseHandler
 				{
 					throw ImageException::forInvalidImageCreate(lang('images.pngNotSupported'));
 				}
-
+				imagealphablending($this->resource, false);
+				imagesavealpha($this->resource, true);
 				if (! @imagepng($this->resource, $target))
 				{
 					throw ImageException::forSaveFailed();
