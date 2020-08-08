@@ -39,7 +39,6 @@ function parseSQL($fileName,$mysql_link)
 
 	//与前端交互的频率(数值与频率成反比,0表示关闭交互)
 	$waitTimes  = 5;
-
 	$percent   = 0;
 	$fhandle   = fopen($fileName,'r');
 	$firstLine = fgets($fhandle);
@@ -166,7 +165,6 @@ function sqlCallBack($sql,$error,$percent)
 function install_sql()
 {
 	global $db_pre;
-
 	//安装配置信息
 	$db_address   = url_get('db_address');
 	$db_user      = url_get('db_user');
@@ -187,11 +185,11 @@ function install_sql()
 		showProgress(array('isError' => true,'message' => 'mysql链接失败'.$mysql_link->connect_errno));
 	}
 
-	
+	showProgress(array('isError' => false,'message' => '数据库连接成功','percent' => 0));
 
 	if($install_type == 'all')
 	{
-		$sqlTest_file = ROOT_PATH.'./install/jelly_test.sql';
+		$sqlTest_file = ROOT_PATH.'./install/jelly_all.sql';
 		if(!file_exists($sqlTest_file))
 		{
 			showProgress(array('isError' => true,'message' => '测试数据的SQL文件'.basename($sqlTest_file).'不存在'));
@@ -222,6 +220,7 @@ function install_sql()
 		{
 			showProgress(array('isError' => true,'message' => '用户权限受限，创建'.$db_name.'数据库失败，请手动创建数据表'));
 		}
+		showProgress(array('isError' => false,'message' => '创建数据库成功','percent' => 0));
 		$mysql_link->select_db($db_name);
 	}
 
@@ -237,14 +236,13 @@ function install_sql()
 		parseSQL($sql_file,$mysql_link);
 	}
 	$mysql_link->query("SET FOREIGN_KEY_CHECKS = 1;");
-
 	//插入管理员数据
 	$adminSql = 'insert into `'.$db_pre.'admin` (`name`,`password`,`role_id`,`create_time`) values ("'.$admin_user.'","'.md5($admin_pwd).'",1,"'.date('Y-m-d H:i:s').'")';
 	if(!$mysql_link->query($adminSql))
 	{
 		showProgress(array('isError' => true,'message' => '创建管理员失败'.$mysql_link->error,'percent' => 0.9));
 	}
-
+	showProgress(array('isError' => false,'message' => '写入配置文件','percent' => 0.9));
 	//写入配置文件
 	$configDefFile = ROOT_PATH.'./app/config_default.php';
 	$configFile    = ROOT_PATH.'./app/Config.php';
@@ -268,7 +266,7 @@ function install_sql()
 	{
 		showProgress(array('isError' => true,'message' => '更新配置文件失败','percent' => 0.9));
 	}
-
+	showProgress(array('isError' => false,'message' => '配置文件写入成功','percent' => 0.9));
 	//admin.php首页
 	$admin_file = ROOT_PATH.'./admin.php';
 	$admin_content = '<?php
@@ -323,10 +321,6 @@ $app->run();';
 	{
 		showProgress(array('isError' => true,'message' => 'index.php页面出错','percent' => 0.9));
 	}
-
-
-
-
 	//执行完毕
 	showProgress(array('isError' => false,'message' => '安装完成','percent' => 1));
 }
@@ -334,6 +328,7 @@ $app->run();';
 //输出json数据
 function showProgress($return_info)
 {
+	echo str_repeat(" ", 1024 * 4);//人为将缓冲数据扩充到4k
 	echo '<script type="text/javascript">parent.update_progress('.JSON::encode($return_info).');</script>';
 	flush();
 	if($return_info['isError'] == true)

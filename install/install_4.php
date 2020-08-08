@@ -28,14 +28,21 @@ if(!$is_success)
 				<li id="step_4" class="current"><span>4</span>安装完成</li>
 			</ul>
 			<div class="log_box">
-				<h2><img src="images/guide_4.gif" width="83" height="17" /></h2>
-
+				<h2>安装完成</h2>
 				<div class="gray_box">
 					<div class="box clearfix">
 						<p class="red"><img src="images/error.gif" width="16" height="15" />警告：</p>
 						<p class="red intent">为了增强安全性，您必须删除'install'文件夹和自述文件。</p>
-						<a class="go_index f_l" href="../index.php"></a>
-						<a class="go_admin f_r" href="../admin.php"></a>
+						<a class="go_index f_l" href="../index.php">
+							<h2>访问前台</h2>
+							<p>体验您全新网站前台</p>
+							<button type="button" >立即体验</button>
+						</a>
+						<a class="go_admin f_r" href="../admin.php">
+							<h2>访问后台</h2>
+							<p>您可以登录后台管理您的网站</p>
+							<button type="button" >立即登录</button>
+						</a>
 					</div>
 				</div>
 			</div>

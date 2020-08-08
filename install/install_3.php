@@ -31,121 +31,113 @@
 
 					<div class="gray_box">
 						<div class="box">
-						
-						
-						
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">数据库地址</label>
-		<div class="layui-input-block">
-			<input type="text" name='db_address' value='localhost:3306'  autocomplete="off" placeholder="数据库地址" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux">MYSQL数据库的地址，本地默认：localhost:3306</div>
-</div>
-								
-						
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">数据库名称</label>
-		<div class="layui-input-block">
-			<input type="text" name='db_name' autocomplete="off" placeholder="数据库名称" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux">
-		<label class="error" id='db_name_label' style='display:none'>
-			<img src="images/failed.png" width="16" height="15" />请填写正确的数据库名称
-		</label>
-		请填写正确的数据库名称
-	</div>
-</div>						
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">账户</label>
-		<div class="layui-input-block">
-			<input type="text" name='db_user' autocomplete="off" placeholder="账户" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux">强烈建议使用 root 账户</div>
-</div>					
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">密码</label>
-		<div class="layui-input-block">
-			<input type="password" name='db_pwd' autocomplete="off" placeholder="密码" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux"></div>
-</div>				
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">数据库表前缀</label>
-		<div class="layui-input-block">
-			<input type="text" value='jelly_' name='db_pre' autocomplete="off" placeholder="数据库表前缀" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux">
-	<label class="error" id='db_pre_label' style='display:none'>
-		<img src="images/failed.png" width="16" height="15" />
-		请填写正确的表前缀字符
-	</label>
-	</div>
-</div>
-						
- 
-<div class="layui-form-item">
-	<div class="layui-input-block m-left">
-<p id='right_p' style='display:none'><img src="images/success.png" width="19" height="18" />数据库连接正确</p>
-<p id='error_p' style='display:none'><img src="images/failed.png" width="16" height="16" /><span id="errorInfo">数据库连接不正确</span></p>
-		<button type="button" class="layui-btn" onclick="check_mysql();">立即检测</button>
-	</div>
-</div>
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">数据库地址</label>
+									<div class="layui-input-block">
+										<input type="text" name='db_address' value='localhost:3306'  autocomplete="off" placeholder="数据库地址" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux">MYSQL数据库的地址，本地默认：localhost:3306</div>
+							</div>
+															
+													
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">数据库名称</label>
+									<div class="layui-input-block">
+										<input type="text" name='db_name' autocomplete="off" placeholder="数据库名称" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux">
+									<label class="error" id='db_name_label' style='display:none'>
+										<img src="images/failed.png" width="16" height="15" />请填写正确的数据库名称
+									</label>
+									请填写正确的数据库名称
+								</div>
+							</div>						
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">账户</label>
+									<div class="layui-input-block">
+										<input type="text" name='db_user' autocomplete="off" placeholder="账户" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux">强烈建议使用 root 账户</div>
+							</div>					
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">密码</label>
+									<div class="layui-input-block">
+										<input type="password" name='db_pwd' autocomplete="off" placeholder="密码" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux"></div>
+							</div>				
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">数据库表前缀</label>
+									<div class="layui-input-block">
+										<input type="text" value='jelly_' name='db_pre' autocomplete="off" placeholder="数据库表前缀" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux">
+								<label class="error" id='db_pre_label' style='display:none'>
+									<img src="images/failed.png" width="16" height="15" />
+									请填写正确的表前缀字符
+								</label>
+								</div>
+							</div>
+													
+							 
+							<div class="layui-form-item">
+								<div class="layui-input-block m-left">
+							<p id='right_p' style='display:none'><img src="images/success.png" width="19" height="18" />数据库连接正确</p>
+							<p id='error_p' style='display:none'><img src="images/failed.png" width="16" height="16" /><span id="errorInfo">数据库连接不正确</span></p>
+									<button type="button" class="layui-btn" onclick="check_mysql();">立即检测</button>
+								</div>
+							</div>
 
 							<hr />
-
-
-
-
-
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">管理员账户</label>
-		<div class="layui-input-block">
-			<input type="text" name='admin_user' value="admin" autocomplete="off" placeholder="管理员账户" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux">
-		<label class="error" id='admin_user_label' style='display:none'>
-			<img src="images/failed.png" width="16" height="15" />
-		</label>
-	</div>
-</div>
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">密码</label>
-		<div class="layui-input-block">
-			<input type="password" name='admin_pwd' autocomplete="off" placeholder="密码" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux">
-		<label class="error" id='admin_pwd_label' style='display:none'>
-			<img src="images/failed.png" width="16" height="15" />密码格式不正确，字符在4-12个之间
-		</label>
-	</div>
-</div>
-<div class="layui-form-item">
-	<div class='item-c'>
-		<label class="layui-form-label">再次确认</label>
-		<div class="layui-input-block">
-			<input type="password" name='admin_repwd' autocomplete="off" placeholder="再次确认" class="layui-input">
-		</div>
-	</div>
-	<div class="layui-form-mid layui-word-aux">
-		<label class="error" id='admin_repwd_label' style='display:none'>
-			<img src="images/failed.png" width="16" height="15" />密码格式不正确，字符在4-12个之间
-		</label>
-	</div>
-</div>
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">管理员账户</label>
+									<div class="layui-input-block">
+										<input type="text" name='admin_user' value="admin" autocomplete="off" placeholder="管理员账户" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux">
+									<label class="error" id='admin_user_label' style='display:none'>
+										<img src="images/failed.png" width="16" height="15" />
+									</label>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">密码</label>
+									<div class="layui-input-block">
+										<input type="password" name='admin_pwd' autocomplete="off" placeholder="密码" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux">
+									<label class="error" id='admin_pwd_label' style='display:none'>
+										<img src="images/failed.png" width="16" height="15" />密码格式不正确，字符在4-12个之间
+									</label>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class='item-c'>
+									<label class="layui-form-label">再次确认</label>
+									<div class="layui-input-block">
+										<input type="password" name='admin_repwd' autocomplete="off" placeholder="再次确认" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-mid layui-word-aux">
+									<label class="error" id='admin_repwd_label' style='display:none'>
+										<img src="images/failed.png" width="16" height="15" />密码格式不正确，字符在4-12个之间
+									</label>
+								</div>
+							</div>
  
 
 							<hr />
@@ -157,7 +149,7 @@
 							<div id='install_state' style='display:none'>
 								<strong>安装进度</strong>
 								<label>正在安装,请稍后...</label>
-								<div class="loading"><img src="./images/loading.gif" style='width:500px;height:15px' /></div>
+								<div class="loading"><img src="./images/loading.gif" style='width:100%;height:15px' /></div>
 							</div>
 
 						</div>
@@ -192,6 +184,7 @@
 		else
 		{
 			$('#install_state label').removeClass('red_box');
+			$('#install_state .loading img').css({width:obj.percent*100+'%'});
 		}
 
 		$('#install_state label').html(obj.message);

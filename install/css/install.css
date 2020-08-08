@@ -16,9 +16,6 @@ a:link,a:visited {
 	text-decoration:none;
 	color:#333
 }
-a:hover,a:active {
-	text-decoration:underline;
-}
 body {
 	font:12px/1.5 "宋体",Arial,Helvetica,sans-serif;
 	color:black;
@@ -35,6 +32,9 @@ hr {
 	border:none;
 	border-top:1px solid #e4e4e4;
 	overflow:hidden;
+	margin-bottom:28px;
+	margin-top:28px;
+	display:block;
 }
 .t_c {
 	text-align:center
@@ -179,7 +179,7 @@ input:hover, textarea:hover {
     border-color: #D2D2D2!important;
 }
 
-input,textarea {
+.item-c input,textarea {
     display: block;
     width: 100%;
     padding-left: 10px;
@@ -190,7 +190,7 @@ input,textarea {
 input:hover, textarea:hover {
     border-color: #D2D2D2!important;
 }
-input,select, textarea {
+.item-c input,select, textarea {
     height: 38px;
     line-height: 1.3;
     line-height: 38px\9;
@@ -420,11 +420,25 @@ table.form_table_gray .logo {
 	width:252px;
 	height:127px;
 	margin:35px 8px 30px;
-	background:url(../images/box_bg.gif)
+	background:#eee;
+	padding:19px 26px;
+
 }
-.go_admin {
-	background-position:0 -127px;
+.go_index h2,.go_admin h2 {
+	color:#f76f10;
+	font-size:20px;
+	margin-bottom:8px;
 }
+.go_index button,.go_admin button {
+    width: 127px;
+    height: 33px;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    background: #009688;
+}
+
 .foot {
 	padding:10px 0;
 	text-align:center;
@@ -439,10 +453,11 @@ table.nobg th,table.nobg td {
 	background:none
 }
 .loading {
-	width:250px;
-	height:23px;
+	width:100%;
+	height:16px;
 	position:relative;
 	margin-top:8px;
+	background:#eee;
 }
 .loading img {
 	position:absolute;
