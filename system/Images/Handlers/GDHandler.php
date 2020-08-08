@@ -381,7 +381,7 @@ class GDHandler extends BaseHandler
 	 */
 	protected function createImage(string $path = '', string $imageType = '')
 	{
-		if ($this->resource !== null)
+		if ($this->resource !== null && $path !='')
 		{
 			return $this->resource;
 		}
@@ -520,6 +520,60 @@ class GDHandler extends BaseHandler
 
 		$this->textOverlay($text, $options);
 	}
+	protected function _imageWaterMark(string $waterImage, array $options = [])
+	{
+		$waterImageSrc = $this->createImage($waterImage);
+		$waterImageWidth = imagesx($waterImageSrc);
+		$waterImageHeight = imagesy($waterImageSrc);
+		$srcWidth = $this->image()->origWidth;
+		$srcHeight = $this->image()->origHeight;
+		if(($srcWidth/$srcHeight) > ($waterImageWidth/$waterImageHeight)){
+			$smallHeight = $srcHeight * $options['proportion'];
+			$smallWidth = ($waterImageWidth/$waterImageHeight) * $smallHeight;
+		}else{
+			$smallWidth = $srcWidth * $options['proportion'];
+			$smallHeight = ($waterImageWidth/$waterImageHeight) * $smallWidth;
+		}
+		if ($options['vAlign'] === 'bottom')
+		{
+			$options['vOffset'] = $options['vOffset'] * -1;
+		}
+
+		if ($options['hAlign'] === 'right')
+		{
+			$options['hOffset'] = $options['hOffset'] * -1;
+		}
+		// Set base X and Y axis values
+		$xAxis = $options['hOffset'] + $options['padding'];
+		$yAxis = $options['vOffset'] + $options['padding'];
+
+		// Set vertical alignment
+		if ($options['vAlign'] === 'middle')
+		{
+			// Don't apply padding when you're in the middle of the image.
+			$yAxis += ($this->image()->origHeight - $smallHeight) / 2 - $options['padding'];
+		}
+		elseif ($options['vAlign'] === 'bottom')
+		{
+			$yAxis = $this->image()->origHeight - $smallHeight - $yAxis;
+		}
+
+		// Set horizontal alignment
+		if ($options['hAlign'] === 'right')
+		{
+			$xAxis += $this->image()->origWidth - $smallWidth  -  $options['padding'];
+		}
+		elseif ($options['hAlign'] === 'center')
+		{
+			$xAxis += floor($this->image()->origWidth - $smallWidth)/ 2;
+		}
+
+		$options['xAxis'] = $xAxis;
+		$options['yAxis'] = $yAxis;
+ 
+
+		$this->imageOverlay($waterImage, $options);
+	}
 
 	//--------------------------------------------------------------------
 
@@ -562,6 +616,32 @@ class GDHandler extends BaseHandler
 			imagestring($src, $options['fontSize'], $xAxis, $yAxis, $text, $color);
 		}
 
+		$this->resource = $src;
+	}
+	protected function imageOverlay(string $waterImage, array $options = [])
+	{
+		$src = $this->createImage();
+		$waterImageSrc = $this->createImage($waterImage);
+		$opacity = ($options['opacity'] * 127);
+ 
+		$srcWidth = imagesx($src);
+		$srcHeight = imagesy($src);
+		//按原始图片尺寸调整水印大小
+		$waterImageWidth = imagesx($waterImageSrc);
+		$waterImageHeight = imagesy($waterImageSrc);
+		if(($srcWidth/$srcHeight) > ($waterImageWidth/$waterImageHeight)){
+			$smallHeight = $srcHeight * $options['proportion'];
+			$smallWidth = ($waterImageWidth/$waterImageHeight) * $smallHeight;
+		}else{
+			$smallWidth = $srcWidth * $options['proportion'];
+			$smallHeight = ($waterImageWidth/$waterImageHeight) * $smallWidth;
+		}
+		$small = imagecreatetruecolor($smallWidth,$smallHeight);
+		$color=imagecolorallocate($small,255,255,255); 
+		imagecolortransparent($small,$color); 
+		imagefill($small,0,0,$color); 
+		imagecopyresampled($small,$waterImageSrc,0,0,0,0,$smallWidth,$smallHeight,$waterImageWidth,$waterImageHeight);
+		imagecopymerge($src, $small, $options['xAxis'], $options['yAxis'], 0, 0, $smallWidth, $smallHeight, $opacity);
 		$this->resource = $src;
 	}
 

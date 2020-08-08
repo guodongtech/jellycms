@@ -29,57 +29,28 @@ III有限担保和免责声明
 MIT LICENCE原文
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. [1] 
-
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 Jellycms software license agreement is applicable to all language users
-
 Copyright (c) 2015, www.jellycms.cn All rights reserved.
-
 Thank you for choosing Beijing Guodong technology enterprise information series software products. Hope that jellycms can provide a powerful and efficient enterprise information system solution for your site.
-
 Jellycms is a 100% open source enterprise information management software, which is called jellycms content management system software.
-
 Beijing Guodong Technology Co., Ltd. is the developer of jellycms series software products, and supports the copyright and trademark rights of jellycms software products in accordance with the law.
-
 User: regardless of personal or organizational structure, use (including for the purpose of learning and Research), whether it is profitable or not, you must read this License Agreement carefully. Only when you understand, agree and abide by the relevant terms and conditions of this agreement, can you start to install and use the software.
-
 This License Agreement is applicable and only applicable to jellycms version. Beijing Guodong Technology Co., Ltd. has the right of final interpretation of this License Agreement.
-
-
-
 Beijing Guodong Technology Co., Ltd. supplementary agreement on amendment of jellycms content management system software agreement
-
 I obligations of authorized person
-
 1. Copyright notice and license notice must be included in the software and all copies of the software.
-
 2. The authorized person has the right to use, copy, modify, merge, publish, distribute, re license and sell the software and its copies.
-
 3. The authorized person may modify the authorization clause as appropriate according to the needs of the procedure.
-
 4. You must use the jellycms software for commercial purposes subject to the restrictions and restrictions set forth in this License Agreement.
 
-
-
 II restrictions and restrictions
-
 1. The copyright information at the bottom of the software, such as powered by jellycms, must be reserved before being licensed and connected to https://www.jellycms.cn 。
-
 2. It is not allowed to lease, sell, mortgage or issue sublicense to the software or its associated license.
-
 3. If you fail to comply with the terms and conditions of this agreement, your authorization will be terminated, and the licensed rights will be withdrawn, and you will bear corresponding legal liabilities.
 
-
-
-
 III limited warranty and Disclaimer
-
 1. The software and the accompanying documents are provided without any express or implied indemnity or guarantee.
-
 2. If users use the software voluntarily, they must understand the risks of using the software before using it. We do not promise to use the software in any form, and we do not assume any responsibility for the problems caused by using the software.
-
 3. We are not responsible for the articles or information in the site constructed by the software.
-
-
-
 Once you start to install jellycms, you will be deemed to fully understand and accept the terms of this agreement. Any behavior beyond the scope of this agreement will directly violate this License Agreement and constitute infringement. We have the right to terminate the authorization at any time, order to stop the damage, and reserve the right to investigate the relevant responsibilities.

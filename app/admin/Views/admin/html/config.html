@@ -221,6 +221,14 @@
 	                     </div>
 						 <span id="water-color"></span>
 	                </div>
+	                <div class="layui-form-item">
+	                      <label class="layui-form-label">透明度</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="water_opacity" id="water-color-input" placeholder="透明度" class="layui-input">
+							
+						 </div>
+						 <div class="layui-form-mid layui-word-aux">0-1之间的小数，数值越大越颜色越浅</div>
+	                </div>
 	                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">水印图片</label>
@@ -228,29 +236,36 @@
 	                     	<input type="text" name="water_pic" id="water_pic" value="" placeholder="水印图片，优先文字水印" class="layui-input">
 							<div class="layui-form-mid layui-word-aux">优先文字水印,如需使用图片水印请将"水印文字"清空</div>
 						</div>
-							<button type="button" class="layui-btn" id="water-pic">
-							  <i class="layui-icon">&#xe67c;</i>上传图片
-							</button>
+						<button type="button" class="layui-btn" id="water-pic">
+						  <i class="layui-icon">&#xe67c;</i>上传图片
+						</button>
 	                </div>
-	                
+	                <div class="layui-form-item">
+	                      <label class="layui-form-label">水印比例</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="water_proportion" id="water-color-input" placeholder="水印比例" class="layui-input">
+							
+						 </div>
+						 <div class="layui-form-mid layui-word-aux">图片水印与上传图片比例，0-1之间的小数</div>
+	                </div>
 	                <div class="layui-form-item water-position">
 						<label class="layui-form-label">水印位置</label>
 						<div class="layui-input-inline">
 							<table class="layui-table" lay-size="sm">
 								<tr>
-									<td><input type="radio" name="position" value="1"></td>
-									<td><input type="radio" name="position" value="2"></td>
-									<td><input type="radio" name="position" value="3"></td>
+									<td><input type="radio" name="water_position" value="top-left"></td>
+									<td><input type="radio" name="water_position" value="top"></td>
+									<td><input type="radio" name="water_position" value="top-right"></td>
 								</tr>
 								<tr>
-									<td><input type="radio" name="position" value="4"></td>
-									<td><input type="radio" name="position" value="5"></td>
-									<td><input type="radio" name="position" value="6"></td>
+									<td><input type="radio" name="water_position" value="left"></td>
+									<td><input type="radio" name="water_position" value="center"></td>
+									<td><input type="radio" name="water_position" value="right"></td>
 								</tr>
 								<tr>
-									<td><input type="radio" name="position" value="7"></td>
-									<td><input type="radio" name="position" value="8"></td>
-									<td><input type="radio" name="position" value="9"></td>
+									<td><input type="radio" name="water_position" value="bottom-left"></td>
+									<td><input type="radio" name="water_position" value="bottom"></td>
+									<td><input type="radio" name="water_position" value="bottom-right"></td>
 								</tr>
 							</table>
 	                     </div>
@@ -608,8 +623,6 @@
 			elem: '#water-color'
 			,predefine: true // 开启预定义颜色
 			,color: $('input[name="water_color"]').val()
-			,alpha: true
-			,format: 'rgb'
 			,done: function(color){
 			  $('input[name="water_color"]').val(color);
 			  form.render();

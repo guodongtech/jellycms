@@ -130,6 +130,14 @@ abstract class BaseHandler implements ImageHandlerInterface
 		'shadowColor'  => '000000',
 		'shadowOffset' => 3,
 	];
+	protected $imageDefaults = [
+		'opacity'      => 1.0,
+		'vAlign'       => 'bottom',
+		'hAlign'       => 'center',
+		'vOffset'      => 0,
+		'hOffset'      => 0,
+		'padding'      => 0,
+	];
 
 	/**
 	 * Temporary image used by the different engines.
@@ -500,6 +508,15 @@ abstract class BaseHandler implements ImageHandlerInterface
 
 		return $this;
 	}
+	//add image watermark
+	public function imageWaterMark(string $waterImage, array $options = [])
+	{
+		$options                = array_merge($this->imageDefaults, $options);
+
+		$this->_imageWaterMark($waterImage, $options);
+
+		return $this;
+	}
 
 	//--------------------------------------------------------------------
 
@@ -510,6 +527,7 @@ abstract class BaseHandler implements ImageHandlerInterface
 	 * @param array  $options
 	 */
 	protected abstract function _text(string $text, array $options = []);
+	protected abstract function _imageWaterMark(string $waterImage, array $options = []);
 
 	//--------------------------------------------------------------------
 
