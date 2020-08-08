@@ -57,7 +57,14 @@ class MenuModel extends Model
 							->getResultArray();
         return $result;
 	}
-
+	public function getFastMenu(){
+		$builder = $this->db->table('menu');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0, 'is_fast'=>1, 'pid'>0])
+							->get()
+							->getResultArray();
+        return $result;
+	}
 
 
 

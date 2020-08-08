@@ -46,6 +46,10 @@ class Home extends BaseController
 	}
 	public function welcome()
 	{
-		return view('welcome.html');
+		// 取快捷显示栏内容
+		$fast_menu = $this->MenuModel->getFastMenu();
+		$fast_menu = array_chunk($fast_menu,8);
+		$data['fast_menu'] = $fast_menu;
+		return view('welcome.html',$data);
 	}
 }
