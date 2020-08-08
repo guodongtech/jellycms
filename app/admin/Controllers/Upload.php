@@ -26,7 +26,7 @@ class Upload extends BaseController
 			$newDateFolder = date('Ymd', time());
 			//不管如何伪装，getMimeType()已将能判断出的类型排除了，也就是不可能出现生成xx.php的情况。
 			$newName = $file->getRandomName();
-			//防止CI生成.php文件，此处没有可能性不大。但还是再处理一遍
+			//防止CI生成.php文件，此处可能性不大。但还是再处理一遍
 			if(strpos($newName, '.php')){
 				$data = [
 					"code" => 0,
@@ -37,6 +37,19 @@ class Upload extends BaseController
 			$uploadPath = FCPATH.'/static/upload/'.$newDateFolder;
 			//创建目录并设置权限
 			$file->move($uploadPath, $newName);
+			//移动完后处理水印
+			if($GLOBALS['water_status']){
+				$image = Config\Services::image();
+				//优先处理文字水印
+				if($GLOBALS['water_text'] !== ''){
+					
+				}
+				
+			}
+			
+			
+			
+			
 			$name = $file->getName();
 			$data = [
 				"code" => 1,

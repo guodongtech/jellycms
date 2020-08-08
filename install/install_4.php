@@ -18,14 +18,14 @@ if(!$is_success)
 </head>
 <body>
 <div class="container">
-	<div class="head"><img src="images/logo.gif" width="354" height="53" alt="JellyCMS安装向导" /></div>
+	<div class="head"><img src="images/logo.png" width="354" height="53" alt="JellyCMS安装向导" />安装向导</div>
 	<div class="ins_box clearfix">
 		<div class="cont clearfix">
 			<ul class="step">
-				<li id="step_1"></li>
-				<li id="step_2"></li>
-				<li id="step_3"></li>
-				<li id="step_4" class="current"></li>
+				<li id="step_1"><span>1</span>许可协议</li>
+				<li id="step_2"><span>2</span>系统检测</li>
+				<li id="step_3"><span>3</span>系统配置</li>
+				<li id="step_4" class="current"><span>4</span>安装完成</li>
 			</ul>
 			<div class="log_box">
 				<h2><img src="images/guide_4.gif" width="83" height="17" /></h2>
@@ -40,9 +40,9 @@ if(!$is_success)
 				</div>
 			</div>
 		</div>
-		<span class="l"></span><span class="r"></span><span class="b_l"></span><span class="b_r"></span>
+		
 	</div>
-	<div class="foot"><a href="http://www.aircheng.com">关于我们</a>|<a href="http://www.aircheng.com">官方网站</a>|<a href="http://www.aircheng.com">联系我们</a>|<a href="">©2005-2020</a></div>
+	<div class="foot"><a href="https://www.jellycms.cn">关于我们</a>|<a href="https://www.jellycms.cn">官方网站</a>|<a href="https://www.jellycms.cn">联系我们</a>|<a href="">©2015-2020</a></div>
 </div>
 </body>
 </html>

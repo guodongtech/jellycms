@@ -10,18 +10,17 @@
 </head>
 <body>
 <div class="container">
-	<div class="head"><img src="images/logo.gif" width="354" height="53" alt="JellyCMS安装向导" /></div>
+	<div class="head"><img src="images/logo.png" width="354" height="53" alt="JellyCMS安装向导" />安装向导</div>
 	<div class="ins_box clearfix">
 		<div class="cont clearfix">
 			<ul class="step">
-				<li id="step_1" class="current"></li>
-				<li id="step_2"></li>
-				<li id="step_3"></li>
-				<li id="step_4"></li>
+				<li id="step_1" class="current"><span>1</span>许可协议</li>
+				<li id="step_2"><span>2</span>系统检测</li>
+				<li id="step_3"><span>3</span>系统配置</li>
+				<li id="step_4"><span>4</span>安装完成</li>
 			</ul>
 			<div class="log_box">
-				<h2><img src="images/guide_1.gif" width="203" height="15" /></h2>
-
+				<h2>欢迎使用JellyCMS安装向导</h2>
 				<div class="red_box" style='display:none' id='error_div'>
 					<img src="images/error.gif" width="16" height="15" />
 					请认真阅读并同意以上条款
@@ -41,18 +40,17 @@
 						}
 						else
 						{
-							echo "本地协议不存在，请访问： <a href='http://www.aircheng.com' target='_blank'>http://www.aircheng.com</a> 阅读相关协议";
+							echo "本地协议不存在，请访问： <a href='https://www.jellycms.cn' target='_blank'>https://www.jellycms.cn</a> 阅读相关协议";
 						}
 						?>
 					</div>
 				</div>
-				<p class="agree"><label><input type="checkbox" id='agree' /> 我同意上述条款和条件</label></p>
+				<p class="agree"><label><input type="checkbox" id='agree' /><span class="label"><i>我同意上述条款和条件</i></span></label></p>
 			</div>
-			<p class="operate"><input class="next" type="button" onclick="check_license();" /></p>
+			<p class="operate"><button class="next" type="button" onclick="check_license();" >下一步</button></p>
 		</div>
-		<span class="l"></span><span class="r"></span><span class="b_l"></span><span class="b_r"></span>
 	</div>
-	<div class="foot"><a href="http://www.aircheng.com">关于我们</a>|<a href="http://www.aircheng.com">官方网站</a>|<a href="http://www.aircheng.com">联系我们</a>|<a href="">©2005-2020</a></div>
+	<div class="foot"><a href="https://www.jellycms.cn">关于我们</a>|<a href="https://www.jellycms.cn">官方网站</a>|<a href="https://www.jellycms.cn">联系我们</a>|<a href="">©2015-2020</a></div>
 </div>
 
 <script type='text/javascript'>

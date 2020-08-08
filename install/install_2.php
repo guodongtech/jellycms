@@ -13,26 +13,26 @@ $checkObj = new checkConfig();
 </head>
 <body>
 <div class="container">
-	<div class="head"><img src="images/logo.gif" width="354" height="53" alt="JellyCMS安装向导" /></div>
+	<div class="head"><img src="images/logo.png" width="354" height="53" alt="JellyCMS安装向导" />安装向导</div>
 	<div class="ins_box clearfix">
 		<div class="cont clearfix">
 			<ul class="step">
-				<li id="step_1"></li>
-				<li id="step_2" class="current"></li>
-				<li id="step_3"></li>
-				<li id="step_4"></li>
+				<li id="step_1"><span>1</span>许可协议</li>
+				<li id="step_2" class="current"><span>2</span>系统检测</li>
+				<li id="step_3"><span>3</span>系统配置</li>
+				<li id="step_4"><span>4</span>安装完成</li>
 			</ul>
 			<div class="log_box">
-				<h2><img src="images/guide_2.gif" width="112" height="15" /></h2>
+				<h2>系统及目录检测</h2>
 
 				<div class="green_box" style='display:none' id='right_div'>
-					<img src="images/right.gif" width="19" height="18" />
+					<img src="images/success.png" width="19" height="18" />
 					您的系统配置是有效的，单击下一步继续！
 				</div>
 
 				<div class="red_box" style='display:none' id='error_div'>
-					<img src="images/error.gif" width="16" height="15" />
-					您的系统配置不具备安装JellyCMS软件，有疑问可以访问：<a href='http://bbs.aircheng.com' target='_blank'>http://bbs.aircheng.com</a>
+					<img src="images/error.png" width="16" height="15" />
+					您的系统配置不具备安装JellyCMS软件，有疑问可以访问：<a href='https://bbs.guodong.tech/' target='_blank'>https://bbs.guodong.tech/</a>
 				</div>
 
 				<div class="gray_box">
@@ -40,14 +40,14 @@ $checkObj = new checkConfig();
 						<strong>PHP版本及环境设置</strong>
 						<?php //phpversion检查
 						$phpVersion_pass = $checkObj->c_phpVersion();?>
-						<p><img src="images/<?php echo $phpVersion_pass ? 'success' : 'failed';?>.gif" width="16" height="16" />PHP <?php echo $checkObj->getPHPVersion();?></p>
+						<p><img src="images/<?php echo $phpVersion_pass ? 'success' : 'failed';?>.png" width="16" height="16" />PHP <?php echo $checkObj->getPHPVersion();?></p>
 
 						<?php //phpini检查
 						$phpiniArray = $checkObj->c_phpIni();
 						foreach($phpiniArray as $key => $val)
 						{
 						?>
-						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.gif" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
+						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.png" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
 						<?php
 						}
 						?>
@@ -58,7 +58,7 @@ $checkObj = new checkConfig();
 						foreach($mustExtensionArray as $key => $val)
 						{
 						?>
-						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.gif" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
+						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.png" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
 						<?php
 						}
 						?>
@@ -69,7 +69,7 @@ $checkObj = new checkConfig();
 						foreach($mustFunctionArray as $key => $val)
 						{
 						?>
-						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.gif" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
+						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.png" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
 						<?php
 						}
 						?>
@@ -80,7 +80,7 @@ $checkObj = new checkConfig();
 						foreach($recomExtensionArray as $key => $val)
 						{
 						?>
-						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.gif" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
+						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.png" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
 						<?php
 						}
 						?>
@@ -91,7 +91,7 @@ $checkObj = new checkConfig();
 						foreach($writeableArray as $key => $val)
 						{
 						?>
-						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.gif" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
+						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.png" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
 						<?php
 						}
 						?>
@@ -102,7 +102,7 @@ $checkObj = new checkConfig();
 						foreach($readableArray as $key => $val)
 						{
 						?>
-						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.gif" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
+						<p><img src="images/<?php echo $val ? 'success' : 'failed';?>.png" width="16" height="16" /><?php echo $key;?><?php if(!$val){?><label><?php echo configInfo($key);?></label><?php }?></p>
 						<?php
 						}
 						?>
@@ -112,13 +112,13 @@ $checkObj = new checkConfig();
 
 			</div>
 			<p class="operate">
-				<input class="return" type="button" onclick="window.location.href = 'index.php?act=install';" />
-				<input class="next" type="button" onclick="check_config();" />
+				<button class="return" type="button" onclick="window.location.href = 'index.php?act=install';">返回</button>
+				<button class="next" type="button" onclick="check_config();">下一步</button>
 			</p>
 		</div>
-		<span class="l"></span><span class="r"></span><span class="b_l"></span><span class="b_r"></span>
+		
 	</div>
-	<div class="foot"><a href="http://www.aircheng.com">关于我们</a>|<a href="http://www.aircheng.com">官方网站</a>|<a href="http://www.aircheng.com">联系我们</a>|<a href="">©2005-2020</a></div>
+	<div class="foot"><a href="https://www.jellycms.cn">关于我们</a>|<a href="https://www.jellycms.cn">官方网站</a>|<a href="https://www.jellycms.cn">联系我们</a>|<a href="">©2015-2020</a></div>
 </div>
 
 <script type='text/javascript'>

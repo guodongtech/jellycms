@@ -11,89 +11,149 @@
 </head>
 <body>
 <div class="container">
-	<div class="head"><img src="images/logo.gif" width="354" height="53" alt="JellyCMS安装向导" /></div>
+	<div class="head"><img src="images/logo.png" width="354" height="53" alt="JellyCMS安装向导" />安装向导</div>
 	<div class="ins_box clearfix">
 		<div class="cont clearfix">
 			<ul class="step">
-				<li id="step_1"></li>
-				<li id="step_2"></li>
-				<li id="step_3" class="current"></li>
-				<li id="step_4"></li>
+				<li id="step_1"><span>1</span>许可协议</li>
+				<li id="step_2"><span>2</span>系统检测</li>
+				<li id="step_3" class="current"><span>3</span>系统配置</li>
+				<li id="step_4"><span>4</span>安装完成</li>
 			</ul>
-
 			<form action='index.php?act=install_sql' method='post' target="install_iframe" onsubmit="return check_form();">
 				<div class="log_box">
-					<h2><img src="images/guide_3.gif" width="82" height="15" /></h2>
+					<h2>数据库配置</h2>
 
 					<div class="red_box" style='display:none' id='error_div'>
-						<img src="images/error.gif" width="16" height="15" />
+						<img src="images/error.png" width="16" height="15" />
 						安装发生错误：<label></label>
 					</div>
 
 					<div class="gray_box">
 						<div class="box">
-							<table class="form_table">
-								<col width="100px" />
-								<col />
-								<tr>
-									<th>数据库地址</th><td><input class="gray" type="text" name='db_address' value='localhost:3306' /><br /><label>MYSQL数据库的地址，本地默认：localhost:3306</label></td>
-								</tr>
-								<tr>
-									<th>数据库名称</th><td><input class="gray" type="text" name='db_name' /><br /><label class="error" id='db_name_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />请填写正确的数据库名称</label></td>
-								</tr>
-								<tr>
-									<th>账户</th><td><input class="gray" type="text" name='db_user' value='root' /><br /><label>强烈建议使用 root 账户</label></td>
-								</tr>
-								<tr>
-									<th>密码</th><td><input class="gray" type="password" name='db_pwd' /></td>
-								</tr>
-								<tr>
-									<th>数据库表前缀</th>
-									<td><input class="gray" type="text" value='jelly_' name='db_pre' /><br /><label class="error" id='db_pre_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />请填写正确的表前缀字符</label></td>
-								</tr>
-								<tr>
-									<th></th><td><input class="check" type="button" onclick="check_mysql();" /></td>
-								</tr>
-							</table>
+						
+						
+						
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">数据库地址</label>
+		<div class="layui-input-block">
+			<input type="text" name='db_address' value='localhost:3306'  autocomplete="off" placeholder="数据库地址" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux">MYSQL数据库的地址，本地默认：localhost:3306</div>
+</div>
+								
+						
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">数据库名称</label>
+		<div class="layui-input-block">
+			<input type="text" name='db_name' autocomplete="off" placeholder="数据库名称" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux">
+		<label class="error" id='db_name_label' style='display:none'>
+			<img src="images/failed.png" width="16" height="15" />请填写正确的数据库名称
+		</label>
+		请填写正确的数据库名称
+	</div>
+</div>						
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">账户</label>
+		<div class="layui-input-block">
+			<input type="text" name='db_user' autocomplete="off" placeholder="账户" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux">强烈建议使用 root 账户</div>
+</div>					
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">密码</label>
+		<div class="layui-input-block">
+			<input type="password" name='db_pwd' autocomplete="off" placeholder="密码" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux"></div>
+</div>				
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">数据库表前缀</label>
+		<div class="layui-input-block">
+			<input type="text" value='jelly_' name='db_pre' autocomplete="off" placeholder="数据库表前缀" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux">
+	<label class="error" id='db_pre_label' style='display:none'>
+		<img src="images/failed.png" width="16" height="15" />
+		请填写正确的表前缀字符
+	</label>
+	</div>
+</div>
+						
+ 
+<div class="layui-form-item">
+	<div class="layui-input-block m-left">
+<p id='right_p' style='display:none'><img src="images/success.png" width="19" height="18" />数据库连接正确</p>
+<p id='error_p' style='display:none'><img src="images/failed.png" width="16" height="16" /><span id="errorInfo">数据库连接不正确</span></p>
+		<button type="button" class="layui-btn" onclick="check_mysql();">立即检测</button>
+	</div>
+</div>
 
-							<p id='right_p' style='display:none'><img src="images/right.gif" width="19" height="18" />数据库连接正确</p>
-							<p id='error_p' style='display:none'><img src="images/failed.gif" width="16" height="16" /><span id="errorInfo">数据库连接不正确</span></p>
 							<hr />
 
-							<table class="form_table">
-								<col width="100px" />
-								<col />
-								<tr>
-									<th>管理员账户</th>
-									<td>
-										<input class="gray" type="text" name='admin_user' value='admin' /><br />
-										<label class="error" id='admin_user_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />密码格式不正确，字符在4-12个之间</label>
-									</td>
-								</tr>
-								<tr>
-									<th>密码</th>
-									<td>
-										<input class="gray" type="password" name='admin_pwd' /><br />
-										<label class="error" id='admin_pwd_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />密码格式不正确，字符在6-16个之间</label>
-									</td>
-								</tr>
-								<tr>
-									<th>再次确认</th>
-									<td>
-										<input class="gray" type="password" name='admin_repwd' /><br />
-										<label class="error" id='admin_repwd_label' style='display:none'><img src="images/failed.gif" width="16" height="15" />二次密码输入的不一致</label>
-									</td>
-								</tr>
-							</table>
+
+
+
+
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">管理员账户</label>
+		<div class="layui-input-block">
+			<input type="text" name='admin_user' value="admin" autocomplete="off" placeholder="管理员账户" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux">
+		<label class="error" id='admin_user_label' style='display:none'>
+			<img src="images/failed.png" width="16" height="15" />
+		</label>
+	</div>
+</div>
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">密码</label>
+		<div class="layui-input-block">
+			<input type="password" name='admin_pwd' autocomplete="off" placeholder="密码" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux">
+		<label class="error" id='admin_pwd_label' style='display:none'>
+			<img src="images/failed.png" width="16" height="15" />密码格式不正确，字符在4-12个之间
+		</label>
+	</div>
+</div>
+<div class="layui-form-item">
+	<div class='item-c'>
+		<label class="layui-form-label">再次确认</label>
+		<div class="layui-input-block">
+			<input type="password" name='admin_repwd' autocomplete="off" placeholder="再次确认" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-mid layui-word-aux">
+		<label class="error" id='admin_repwd_label' style='display:none'>
+			<img src="images/failed.png" width="16" height="15" />密码格式不正确，字符在4-12个之间
+		</label>
+	</div>
+</div>
+ 
 
 							<hr />
 
 							<strong>安装选择</strong>
-							<label><input class="radio" type="radio" name='install_type' value='all' />带测试数据版本【<a href="http://www.aircheng.com/notice/107-iwebshop" target="_blank" style="color:red">必须提前手动下载商品图片包108MB</a>】</label><br />
+							<label><input class="radio" type="radio" name='install_type' value='all' />带测试数据版本【<a href="https://www.jellycms.cn/" target="_blank" style="color:red">下载</a>】</label><br />
 							<label><input class="radio" type="radio" name='install_type' checked="checked" value='simple' />绿色纯净版本</label>
-							
 							<hr />
-
 							<div id='install_state' style='display:none'>
 								<strong>安装进度</strong>
 								<label>正在安装,请稍后...</label>
@@ -103,12 +163,15 @@
 						</div>
 					</div>
 				</div>
-				<p class="operate"><input class="return" type="button" onclick="window.location.href = 'index.php?act=install_2';" /><input class="next" type="submit" value='' /></p>
+				<p class="operate">
+					<button class="return" type="button" onclick="window.location.href = 'index.php?act=install_2';" >返回</button>
+					<button class="next" type="submit" value='' >下一步</button>
+				</p>
 			</form>
 		</div>
-		<span class="l"></span><span class="r"></span><span class="b_l"></span><span class="b_r"></span>
+		
 	</div>
-	<div class="foot"><a href="http://www.aircheng.com">关于我们</a>|<a href="http://www.aircheng.com">官方网站</a>|<a href="http://www.aircheng.com">联系我们</a>|<a href="">©2005-2020</a></div>
+	<div class="foot"><a href="https://www.jellycms.cn">关于我们</a>|<a href="https://www.jellycms.cn">官方网站</a>|<a href="https://www.jellycms.cn">联系我们</a>|<a href="">©2015-2020</a></div>
 </div>
 
 <iframe name='install_iframe' style='width:0px;height:0px;display:none' src='#'></iframe>

@@ -4,7 +4,7 @@ error_reporting(0);
 //安装保护
 if(file_exists(ROOT_PATH.'./install/install.lock'))
 {
-	die('IWebShop is installed, install.loc file is exists');
+	die('JellyCMS is installed, install.loc file is exists');
 }
 
 //类的自动加载
