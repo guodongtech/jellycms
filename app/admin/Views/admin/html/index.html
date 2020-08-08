@@ -114,7 +114,7 @@
 			<ul id="menu{$v1['id']}">
 			{foreach:items = $mlist key=$k2 item=$v2}
 			{if:$v2['pid'] == $v1['id']}
-				<li data-url="/{echo:ADMINNAME}{$v2['url']}"><i class="fa {$v2['icon']}"></i>{$v2['name']}</li>
+				<li class="menu{$v2['id']}" data-url="/{echo:ADMINNAME}{$v2['url']}"><i class="fa {$v2['icon']}"></i>{$v2['name']}</li>
 			{/if}
 			{/foreach}
 			</ul>

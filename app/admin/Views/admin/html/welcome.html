@@ -46,27 +46,14 @@
 		<div class="layui-card-header">快捷方式</div>
 		<div class="layui-card-body">
 			<div class="layui-carousel layadmin-carousel layadmin-shortcut">
-			<div carousel-item>
+			<div carousel-item id='fast-menu'>
+				{foreach:items=$fast_menu key=$k item=$v}
 				<ul class="layui-row layui-col-space10">
-					<li class="layui-col-xs3"><a lay-href="home/homepage1.html"><i class="layui-icon layui-icon-console"></i><cite>主页一</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="home/homepage2.html"><i class="layui-icon layui-icon-chart"></i><cite>主页二</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="component/layer/list.html"><i class="layui-icon layui-icon-template-1"></i><cite>弹层</cite></a></li>
-					<li class="layui-col-xs3"><a layadmin-event="im"><i class="layui-icon layui-icon-chat"></i><cite>聊天</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="component/progress/index.html"><i class="layui-icon layui-icon-find-fill"></i><cite>进度条</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="app/workorder/list.html"><i class="layui-icon layui-icon-survey"></i><cite>工单</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="user/user/list.html"><i class="layui-icon layui-icon-user"></i><cite>用户</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/system/website.html"><i class="layui-icon layui-icon-set"></i><cite>设置</cite></a></li>
+					{foreach:items=$v item=$vv}
+					<li class="layui-col-xs3" menu-pid="menu{$vv['pid']}" menu-id="menu{$vv['id']}"><a lay-href="/{echo:ADMINNAME}{$vv['url']}"><i style="font-size: 30px;" class="fa {$vv['icon']}"></i><cite>{$vv['name']}</cite></a></li>
+					{/foreach}
 				</ul>
-				<ul class="layui-row layui-col-space10">
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-					<li class="layui-col-xs3"><a lay-href="set/user/info.html"><i class="layui-icon layui-icon-set"></i><cite>我的资料</cite></a></li>
-				</ul>
+				{/foreach}
 				</div>
 			</div>
 		</div>
@@ -220,6 +207,7 @@
 <script src="/static/layui/layui.all.js"></script>
 <script src="/static/js/wow.min.js"></script>
 <script>
+
 var wow = new WOW({
     boxClass: 'wow',
     animateClass: 'animated',
@@ -229,6 +217,7 @@ var wow = new WOW({
 });
 wow.init();
 !function(){
+
   var layer = layui.layer
   var element = layui.element;
   var table = layui.table;
@@ -426,11 +415,13 @@ $(document).ready(function (){
 	})
 
 
+	$('#fast-menu li').on('click',function(){
+		var menuid = $(this).attr("menu-id");
+		var menupid = $(this).attr("menu-pid");
+		parent.$('.'+menupid,parent.document).trigger('click');
+		parent.$('.'+menuid,parent.document).trigger('click');
+	})
 
-
-
-
-  
 });
 </script>
 </body>
