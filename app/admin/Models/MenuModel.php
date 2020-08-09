@@ -65,7 +65,14 @@ class MenuModel extends Model
 							->getResultArray();
         return $result;
 	}
-
+	public function getMessageMenu(){
+		$builder = $this->db->table('menu');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0,'pid'>0,'controller'=>'Message','action'=>'index'])
+							->get()
+							->getRowArray();
+        return $result;
+	}
 
 
 

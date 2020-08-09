@@ -64,10 +64,10 @@
 		<div class="layui-card-header">待办事项</div>
 		<div class="layui-card-body">
 			<div class="layui-carousel layadmin-carousel layadmin-backlog">
-				<div carousel-item>
+				<div carousel-item id="message-note">
 					<ul class="layui-row layui-col-space10">
-						<li class="layui-col-xs6"><a lay-href="" class="layadmin-backlog-body"><h3>待审评论</h3><p><cite>{$comment_check_count}</cite></p></a></li>
-						<li class="layui-col-xs6"><a lay-href="" class="layadmin-backlog-body"><h3>待审留言</h3><p><cite>{$message_check_count}</cite></p></a></li>
+						<li class="layui-col-xs6" menu-pid="menu{$message_menu['pid']}" menu-id="menu{$message_menu['id']}"><a href="{url: Message/index/comment}" lay-href="" class="layadmin-backlog-body"><h3>待审评论</h3><p><cite>{$comment_check_count}</cite></p></a></li>
+						<li class="layui-col-xs6" menu-pid="menu{$message_menu['pid']}" menu-id="menu{$message_menu['id']}"><a href="{url: Message/index/message}" lay-href="" class="layadmin-backlog-body"><h3>待审留言</h3><p><cite>{$message_check_count}</cite></p></a></li>
 					</ul>
 
 					<!-- <ul class="layui-row layui-col-space10">
@@ -414,11 +414,14 @@ $(document).ready(function (){
 	})
 
 
-	$('#fast-menu li').on('click',function(){
+	$('#fast-menu li,#message-note li').on('click',function(){
 		var menuid = $(this).attr("menu-id");
 		var menupid = $(this).attr("menu-pid");
 		parent.$('.'+menupid,parent.document).trigger('click');
 		parent.$('.'+menuid,parent.document).trigger('click');
+		if(!"{$message_menu}"){
+			$('#message-note a').removeAttr('href');
+		}
 	})
 
 });

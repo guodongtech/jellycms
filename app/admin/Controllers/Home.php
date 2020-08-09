@@ -54,10 +54,13 @@ class Home extends BaseController
 		// 待审评论 留言
 		$message_check_count = $this->MessageModel->getMessageCount();
 		$comment_check_count = $this->MessageModel->getCommentCount();
-		
+		$message_menu = $this->MenuModel->getMessageMenu();
+
 		$data['fast_menu'] = $fast_menu;
 		$data['message_check_count'] = $message_check_count;
 		$data['comment_check_count'] = $comment_check_count;
+		$data['message_menu'] = $message_menu;
+		
 		return view('welcome.html',$data);
 	}
 }
