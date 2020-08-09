@@ -2,7 +2,7 @@
 namespace App\Controllers;
 use \App\Models\SysLogModel;
 use \config;
-class UpdateTest extends BaseController
+class Upgrade extends BaseController
 {
 
     // 服务器地址  获取更新内容
@@ -34,7 +34,7 @@ class UpdateTest extends BaseController
         $this->rootPath = FCPATH;
         $this->versionPath = $this->rootPath.'version'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'version.txt'; // 版本文件路径
         $this->currentVersion = $this->getCmsVersion();
-		$this->upgradeUrl = 'http://localhost/admin.php/Sysuptest/checkUpgrade/'.$this->currentVersion;  //先随便写一个
+		$this->upgradeUrl = 'http://cms-demo.guodong.tech/index.php/upgrade/check/'.$this->currentVersion;
         $this->prefix = $config->database['DBPrefix'];
         $this->downloadPath = $this->rootPath.'version'.DIRECTORY_SEPARATOR.'download'.DIRECTORY_SEPARATOR;
         $this->backupPath = $this->rootPath.'version'.DIRECTORY_SEPARATOR.'backup'.DIRECTORY_SEPARATOR;
@@ -45,7 +45,8 @@ class UpdateTest extends BaseController
     }
     public function getList()
     {
-        $serverResult = $this->getUpgradeData;
+        $serverResult = $this->getUpgradeData();
+		print_r($serverResult);
         if($serverResult === false){
             $data = [
                 "code" => 0,
@@ -78,24 +79,24 @@ class UpdateTest extends BaseController
         }
         $data = [
             "code" => 0,
-            "msg" => "",
+            "msg" => $serverResult['msg'],
             "data" => $upgradeList,
         ];
         return json_encode($data);
     }
-    // 远程拉取更新数据 
+    // 获取官方更新数据 
     public function getUpgradeData(){
-        $url = $this->upgradeUrl; 
+      $url = $this->upgradeUrl; 
         $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
-        $serverResult = @file_get_contents($url,false,$context);
-        if($serverResult == false){
+        $result = @file_get_contents($url,false,$context);
+        if($result == false){
             return false;
         }
-        $serverResult = json_decode($serverResult,true);
-        if(!is_array($serverResult)){
+        $result = json_decode($result,true);
+        if(!is_array($result)){
             return false;
         }
-        return $serverResult;
+        return $result;
     }
     // 检查更新
     public function check()
@@ -108,7 +109,7 @@ class UpdateTest extends BaseController
        if($serverResult['code'] != 1){
             return json_encode(['code' => 1, 'msg' => $serverResult['msg']]);
        }
-        // print_r($serverResult);die;
+
         if(!empty($serverResult))
         {
             $data['msg'] = "<style>.clear {text-indent:25px;font-size: 14px;line-height: 24px;}</style><div class='clear'>".$serverResult['intro'].$serverResult['description']."</div>";

@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
-use \App\Models\SysuptestModel;
-class Sysuptest extends BaseController
+use \App\Models\UpgradeManageModel;
+class UpgradeManage extends BaseController
 {
 
     private $model;
@@ -13,7 +13,7 @@ class Sysuptest extends BaseController
     	$this->zip_path = $this->static_path.'allversion'.DIRECTORY_SEPARATOR.'package'.DIRECTORY_SEPARATOR.'zip'.DIRECTORY_SEPARATOR;  // zip存放目录
     	$this->pack_path = $this->static_path.'allversion'.DIRECTORY_SEPARATOR.'package'.DIRECTORY_SEPARATOR.'package'.DIRECTORY_SEPARATOR;  // 解压包存放目录
     	$this->version_path = $this->static_path.'allversion'.DIRECTORY_SEPARATOR.'version'.DIRECTORY_SEPARATOR;  // 所有版本产品存放目录
-    	$this->model = new SysuptestModel();
+    	$this->model = new UpgradeManageModel();
         
     }
     public function index()
@@ -339,61 +339,7 @@ class Sysuptest extends BaseController
 			return json_encode($data);
 		}
 	}
-	// 对外输出
-	public function checkUpgrade($version){
-		// 获取当前最高版本
-		$max_version = $this->model->getMaxVersion();
-		if($version == $max_version){
-			return json_encode(['code' => 2, 'msg' => "已是最新版本"]);
-		}
-		// 获取用户要升级的版本信息
-		$version_info = $this->model->getVersionInfo($version);
-		if(empty($version_info)){
-			return json_encode(['code' => 2, 'msg' => "没有检测到需要更新的内容，或联系技术支持"]);
-		}
 
-		if(!file_exists($this->zip_path.$version_info['zip_file'])){
-			return json_encode(['code' => 2, 'msg' => "升级包缺失，请联系技术支持!"]);
-		}
-		// 处理更新的文件数据
-        $folder_name = str_replace(".zip", "", $version_info['zip_file']);  // 文件夹
-    /*step1  获取更新包里的文件路径*/  
-    	$tree_path = $this->pack_path.$folder_name.DIRECTORY_SEPARATOR.'www';
-    	$this->fileTree($file_list,$tree_path);
-    /*step2  比对上个版本的原始文件*/ 
-    	$prev_version_path = $this->version_path.$version_info['prev_version_path'].'www'.DIRECTORY_SEPARATOR;
-    	foreach($file_list as $k=>$v){
-    		if(file_exists($prev_version_path.$v)){
-    			$version_list[$k]['filename'] = $v;
-    			$version_list[$k]['type'] = "<font color='red'>覆盖</font>";
-    			$version_list[$k]['curent_file_md5'] = md5_file($prev_version_path.$v);
-    		}else{
-    			$version_list[$k]['filename'] = $v;
-    			$version_list[$k]['type'] = "新增";
-    			$version_list[$k]['curent_file_md5'] = '';
-    		}
-    	}
-    /*step3  获取sql文件名*/ 
-    	helper('filesystem'); //加载文件系统辅助函数
-    	$sql_file = get_filenames($this->pack_path.$folder_name.DIRECTORY_SEPARATOR.'sql');
-    	if(count($sql_file)>0){
-    		$data['sql_file'] = $sql_file[0];
-    	}
-    /*  end  */ 
-    	// 整合数据
-    	$data['code'] = 1;
-    	$data['target_version'] = $version_info['version_num'];
-    	$data['description'] = $version_info['description'];
-    	$data['intro'] = "<p>小提示：</p><p>1、系统更新不会涉及前台模板及网站数据等。</p><p>2、升级将覆盖部分文件，系统会自动备份源文件在version/backup目录下</p><p>3、升级时，请先选中要升级的文件，点击【执行更新】</p>";
-    	$data['max_version'] = $max_version;
-    	$data['down_url'] = $version_info['zip_download'];
-    	$data['zip_file_md5'] = $version_info['zip_file_md5'];
-    	$data['upgrade'] = $version_list;
-    	$data['create_time'] = $version_info['create_time'];
-    	$data['update_time'] = $version_info['update_time'];
-    	return json_encode($data);
-
-	}
 	/**
      * 递归删除文件夹
      *

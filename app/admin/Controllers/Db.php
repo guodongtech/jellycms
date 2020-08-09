@@ -80,7 +80,7 @@ class Db extends BaseController
 		foreach($files as $key=>$value)
 		{
 			//带路径信息的文件名为非法操作 不报错，直接返回
-			if(stripos($value,'/')){
+			if(stripos($value,'/') !==false||stripos($value,'\\') !==false){
 				return false;
 			}
 			//只允许删除sql zip文件

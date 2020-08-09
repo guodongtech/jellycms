@@ -1,18 +1,8 @@
 <?php
 namespace App\Models;
 use CodeIgniter\Model;
-class SysuptestModel extends Model
+class UpgradeManageModel extends Model
 {
- // 	protected $table      = 'sysup';
-	// protected $primaryKey = 'id';
-	// protected $returnType = 'array';
-	// protected $useSoftDeletes = true;
-	// protected $deletedField  = 'deleted';
-	// protected $allowedFields = [ '*'];
-	// protected $useTimestamps = false;
-	// protected $validationRules    = [];
-	// protected $validationMessages = [];
-	// protected $skipValidation     = false; 
     public function getList()
     {
 		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where deleted=0";
