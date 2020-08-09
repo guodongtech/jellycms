@@ -6,16 +6,16 @@ class UpdateTest extends BaseController
 {
 
     // 服务器地址  获取更新内容
-    private $upgrade_url;
+    private $upgradeUrl;
 
     // 当前版本
-    private $curent_version;
+    private $currentVersion;
     // 版本文件路径
-    private $version_txt_path;
+    private $versionPath;
     // 下载到
-    private $download_path;
+    private $downloadPath;
     // 备份到
-    private $backup_path;
+    private $backupPath;
     // 更新分支
     private $branch;
 
@@ -31,98 +31,91 @@ class UpdateTest extends BaseController
     public function __construct()
     {
         $config = new \Config\Config();
-        $this->data_path = FCPATH;
-        $this->version_txt_path = $this->data_path.'version'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'version.txt'; // 版本文件路径
-        $this->curent_version = $this->getCmsVersion();
-        $this->upgrade_url = 'http://www.jellycms.com/admin.php/Sysuptest/checkinfo/'.$this->curent_version;  //先随便写一个
+        $this->rootPath = FCPATH;
+        $this->versionPath = $this->rootPath.'version'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'version.txt'; // 版本文件路径
+        $this->currentVersion = $this->getCmsVersion();
+		$this->upgradeUrl = 'http://localhost/admin.php/Sysuptest/checkUpgrade/'.$this->currentVersion;  //先随便写一个
         $this->prefix = $config->database['DBPrefix'];
-        $this->download_path = $this->data_path.'version'.DIRECTORY_SEPARATOR.'download'.DIRECTORY_SEPARATOR;
-        $this->backup_path = $this->data_path.'version'.DIRECTORY_SEPARATOR.'backup'.DIRECTORY_SEPARATOR;
-        $this->serviceVersionList = $this->getUpgradeData();
-      //  error_reporting(0);
-       // $this->branch = $this->config('upgrade_branch') == '2.X.dev' ? '2.X.dev' : '2.X';
-      //  $this->force = $this->config('upgrade_force') ?: 0;
-        //$this->revise = $this->config('revise_version') ?: 0;
+        $this->downloadPath = $this->rootPath.'version'.DIRECTORY_SEPARATOR.'download'.DIRECTORY_SEPARATOR;
+        $this->backupPath = $this->rootPath.'version'.DIRECTORY_SEPARATOR.'backup'.DIRECTORY_SEPARATOR;
     }
-    // 远程拉取更新数据 
-    public function getUpgradeData(){
-        $url = $this->upgrade_url; 
-        $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
-        $serviceVersionList = @file_get_contents($url,false,$context);
-        if($serviceVersionList == false){
-            return false;
-        }
-        $serviceVersionList = json_decode($serviceVersionList,true);
-        if(!is_array($serviceVersionList)){
-            return false;
-        }
-        return $serviceVersionList;
-    }
-
     public function index()
     {
         return view('update_test.html');
     }
     public function getList()
     {
-        $serviceVersionList = $this->serviceVersionList;
-        if($serviceVersionList === false){
+        $serverResult = $this->getUpgradeData;
+        if($serverResult === false){
             $data = [
-                "code" => 1,
+                "code" => 0,
                 "msg" => '请求远程服务器失败',
                 "data" => '',
             ];
             return json_encode($data);
         }
-        if($serviceVersionList['code'] != 1){
+        if($serverResult['code'] != 1){
             $data = [
-                "code" => 1,
-                "msg" => $serviceVersionList['msg'],
+                "code" => 0,
+                "msg" => $serverResult['msg'],
                 "data" => '',
             ];
             return json_encode($data);
         }
-        $upgrade_list = $serviceVersionList['upgrade'];
-        foreach($upgrade_list as $k=>$v){
-            $upgrade_list[$k]['update_time'] = $serviceVersionList['update_time'];
-            if(!file_exists($this->data_path.$v['filename'])){
-                $upgrade_list[$k]['is_same'] = '';
+        $upgradeList = $serverResult['upgrade'];
+        foreach($upgradeList as $k=>$v){
+            $upgradeList[$k]['update_time'] = $serverResult['update_time'];
+            if(!file_exists($this->rootPath.$v['filename'])){
+                $upgradeList[$k]['is_same'] = '';
                 continue;
             }
             // 校验文件MD5
-            if(md5_file($this->data_path.$v['filename']) == $v['curent_file_md5']){
-                $upgrade_list[$k]['is_same'] = '一致';
+            if(md5_file($this->rootPath.$v['filename']) == $v['curent_file_md5']){
+                $upgradeList[$k]['is_same'] = '一致';
             }else{
-                $upgrade_list[$k]['is_same'] = '不一致';
+                $upgradeList[$k]['is_same'] = '不一致';
             }
         }
         $data = [
             "code" => 0,
             "msg" => "",
-            "data" => $upgrade_list,
+            "data" => $upgradeList,
         ];
         return json_encode($data);
     }
-    
+    // 远程拉取更新数据 
+    public function getUpgradeData(){
+        $url = $this->upgradeUrl; 
+        $context = stream_context_set_default(array('http' => array('timeout' => 5,'method'=>'GET')));
+        $serverResult = @file_get_contents($url,false,$context);
+        if($serverResult == false){
+            return false;
+        }
+        $serverResult = json_decode($serverResult,true);
+        if(!is_array($serverResult)){
+            return false;
+        }
+        return $serverResult;
+    }
     // 检查更新
     public function check()
     {
         // 远程拉取更新数据 
-       $serviceVersionList = $this->serviceVersionList;
-       if($serviceVersionList === false){
+       $serverResult = $this->updateList;
+       if($serverResult === false){
             return json_encode(['code' => 1, 'msg' => '请求远程服务器失败']);
        }
-       if($serviceVersionList['code'] != 1){
-            return json_encode(['code' => 1, 'msg' => $serviceVersionList['msg']]);
+       if($serverResult['code'] != 1){
+            return json_encode(['code' => 1, 'msg' => $serverResult['msg']]);
        }
-        // print_r($serviceVersionList);die;
-        if(!empty($serviceVersionList))
+        // print_r($serverResult);die;
+        if(!empty($serverResult))
         {
-            $data['msg'] = "<style>.clear {text-indent:25px;font-size: 14px;line-height: 24px;}</style><div class='clear'>".$serviceVersionList['intro'].$serviceVersionList['description']."</div>";
-            $data['curent_version'] = $this->curent_version; //当前版本
-            $data['target_version'] = $serviceVersionList['target_version']; // 目标版本
-            $data['max_version'] = $serviceVersionList['max_version'];  // 最新版本
-            $data['upgrade'] = $serviceVersionList['upgrade']; //文件列表
+            $data['msg'] = "<style>.clear {text-indent:25px;font-size: 14px;line-height: 24px;}</style><div class='clear'>".$serverResult['intro'].$serverResult['description']."</div>";
+            $data['currentVersion'] = $this->currentVersion; //当前版本
+            $data['target_version'] = $serverResult['target_version']; // 目标版本
+            $data['max_version'] = $serverResult['max_version'];  // 最新版本
+            $data['upgrade'] = $serverResult['upgrade']; //文件列表
             /*--end*/
             return json_encode(['code' => 2, 'data' => $data]);
         }
@@ -133,15 +126,15 @@ class UpdateTest extends BaseController
     */
     public function checkAuthority(){
         // 远程拉取更新数据 
-       $serviceVersionList = $this->getUpgradeData();
-       if($serviceVersionList === false){
+       $serverResult = $this->getUpgradeData();
+       if($serverResult === false){
             return json_encode(['code' => 2, 'msg' => '请求远程服务器失败']);
        }
-       if($serviceVersionList['code'] != 1){
-            return json_encode(['code' => 2, 'msg' => $serviceVersionList['msg']]);
+       if($serverResult['code'] != 1){
+            return json_encode(['code' => 2, 'msg' => $serverResult['msg']]);
        }
-        $serviceVersionList['upgrade'] = post('filelist');
-        $filelist = $serviceVersionList['upgrade'];
+        $serverResult['upgrade'] = post('filelist');
+        $filelist = $serverResult['upgrade'];
         $dirs = array();
         $i = -1;
         foreach($filelist as $filename)
@@ -213,61 +206,61 @@ class UpdateTest extends BaseController
             return json_encode(['code' => 0, 'msg' => "请联系空间商，开启 php.ini 中的php-zip扩展"]);
         }
 
-        $serviceVersionList = $this->serviceVersionList;
-        if (false === $serviceVersionList) {
+        $serverResult = $this->updateList;
+        if (false === $serverResult) {
             return json_encode(['code' => 0, 'msg' => "无法连接远程升级服务器！"]);
         } else {
-            if (empty($serviceVersionList)) {
+            if (empty($serverResult)) {
                 return json_encode(['code' => 0, 'msg' => "当前没有可升级的版本！"]);
             }
         }
         // 放入选中文件
-        $serviceVersionList['upgrade'] = post('filelist');
+        $serverResult['upgrade'] = post('filelist');
 
         clearstatcache(); // 清除文件夹权限缓存
-        if (!is_writeable($this->version_txt_path)) {
-            return json_encode(['code' => 0, 'msg' => '文件'.$this->version_txt_path.' 不可写，不能升级!!!']);
+        if (!is_writeable($this->versionPath)) {
+            return json_encode(['code' => 0, 'msg' => '文件'.$this->versionPath.' 不可写，不能升级!!!']);
         }
         /*--end*/
         /* 下载更新包到backup/download*/
-        $result = $this->downloadFile($serviceVersionList['down_url'], $serviceVersionList['zip_file_md5']);
+        $result = $this->downloadFile($serverResult['down_url'], $serverResult['zip_file_md5']);
         if (!isset($result['code']) || $result['code'] != 1) {
             return json_encode($result);
         }
         /*解压到更新包的文件夹*/
-        $DownFileName = explode('/', $serviceVersionList['down_url']);    
+        $DownFileName = explode('/', $serverResult['down_url']);    
         $DownFileName = end($DownFileName);
         $folderName = str_replace(".zip", "", $DownFileName);  // 文件夹
 
         // 将所有文件放进一维数组，解压时用
         $zip_file_list = array();
-        foreach($serviceVersionList['upgrade'] as $k=>$v){
+        foreach($serverResult['upgrade'] as $k=>$v){
             $zip_file_list[] = 'www/'.$v['filename'];
         }
         /*--end*/
         /*解压之前，删除已重复的文件夹*/
-        $this->delFile($this->download_path.$folderName);
+        $this->delFile($this->downloadPath.$folderName);
         /*--end*/
 
         /*解压文件*/
         $zip = new \ZipArchive();//新建一个ZipArchive的对象
-        if ($zip->open($this->download_path.$DownFileName) != true) {
+        if ($zip->open($this->downloadPath.$DownFileName) != true) {
             return json_encode(['code' => 0, 'msg' => "升级包读取失败!"]);
         }
         // for($i; $i<$zip->numFiles;$i++){
         //     echo $zip->getNameIndex($i)."<br>";
         // }
         // die;
-        $zip->extractTo($this->download_path.$folderName.'/',$zip_file_list);//解压缩到在当前路径下backup文件夹内
+        $zip->extractTo($this->downloadPath.$folderName.'/',$zip_file_list);//解压缩到在当前路径下backup文件夹内
         $zip->close();//关闭处理的zip文件
         /*--end*/
         /*升级之前，备份涉及的源文件*/
-        $upgrade = $serviceVersionList['upgrade'];
+        $upgrade = $serverResult['upgrade'];
         if (!empty($upgrade) && is_array($upgrade)) {
             foreach ($upgrade as $key => $val) {
-                $source_file = $this->data_path.$val['filename'];
+                $source_file = $this->rootPath.$val['filename'];
                 if (file_exists($source_file)) {
-                    $destination_file = $this->backup_path.$this->curent_version.'_jelly/'.$val['filename'];
+                    $destination_file = $this->backupPath.$this->currentVersion.'_jelly/'.$val['filename'];
                     $this->ciMkdir(dirname($destination_file));
                     $copy_bool = @copy($source_file, $destination_file);
                     if (false == $copy_bool) {
@@ -279,10 +272,10 @@ class UpdateTest extends BaseController
         /*--end*/
 
         /*升级的 sql文件*/
-        if(!empty($serviceVersionList['sql_file']))
+        if(!empty($serverResult['sql_file']))
         {
             //读取数据文件
-            $sqlpath = $this->download_path.$folderName.'/sql/'.trim($serviceVersionList['sql_file']);
+            $sqlpath = $this->downloadPath.$folderName.'/sql/'.trim($serverResult['sql_file']);
             $execute_sql = file_get_contents($sqlpath);
             $sqlFormat = $this->sql_split($execute_sql, $this->prefix);
             /**
@@ -308,10 +301,10 @@ class UpdateTest extends BaseController
         } 
         /*--end*/
         // 递归复制文件夹 
-        $copy_data = $this->recurseCopy($this->download_path.$folderName.'/www', rtrim($this->data_path, '/'), $folderName);
+        $copy_data = $this->recurseCopy($this->downloadPath.$folderName.'/www', rtrim($this->rootPath, '/'), $folderName);
         /*覆盖自定义后台入口文件*/
         // $login_php = 'admin.php';
-        // $rootLoginFile = $this->download_path.$folderName.'/www/'.$login_php;
+        // $rootLoginFile = $this->downloadPath.$folderName.'/www/'.$login_php;
         // if (file_exists($rootLoginFile)) {
         //     $adminbasefile = preg_replace('/^(.*)\/([^\/]+)$/i', '$2', request()->baseFile());
         //     if ($login_php != $adminbasefile && is_writable($this->root_path.$adminbasefile)) {
@@ -323,10 +316,10 @@ class UpdateTest extends BaseController
         // }
         /*--end*/
         /*修改版本文件 version.txt*/
-        $r = $this->ciMkdir(dirname($this->version_txt_path));
+        $r = $this->ciMkdir(dirname($this->versionPath));
         if ($r) {
-            $fp = fopen($this->version_txt_path, "w+") or die("请设置" . $this->version_txt_path . "的权限为777");
-            $web_version = $serviceVersionList['target_version'];
+            $fp = fopen($this->versionPath, "w+") or die("请设置" . $this->versionPath . "的权限为777");
+            $web_version = $serverResult['target_version'];
             $ver         = !empty($web_version) ? $web_version : $ver;
             if (fwrite($fp, $ver)) {
                 fclose($fp);
@@ -335,7 +328,7 @@ class UpdateTest extends BaseController
         /*--end*/   
 
         /*删除下载的升级包*/
-        $ziplist = glob($this->download_path.'*.zip');
+        $ziplist = glob($this->downloadPath.'*.zip');
         @array_map('unlink', $ziplist);
         /*--end*/
         // 推送回服务器  记录升级成功
@@ -353,7 +346,7 @@ class UpdateTest extends BaseController
     {
         $downFileName = explode('/', $fileUrl);
         $downFileName = end($downFileName);
-        $saveDir = $this->download_path.$downFileName; // 保存目录
+        $saveDir = $this->downloadPath.$downFileName; // 保存目录
         $this->ciMkdir(dirname($saveDir));
         $content = @file_get_contents($fileUrl, 0, null, 0, 1);
         if (false === $content) {                 
@@ -405,17 +398,17 @@ class UpdateTest extends BaseController
     public function getCmsVersion()
     {
         $ver              = '3.8.0';
-        $version_txt_path = $this->version_txt_path;
-        if (file_exists($version_txt_path)) {
-            $fp      = fopen($version_txt_path, 'r');
-            $content = @fread($fp, filesize($version_txt_path));
+        $versionPath = $this->versionPath;
+        if (file_exists($versionPath)) {
+            $fp      = fopen($versionPath, 'r');
+            $content = @fread($fp, filesize($versionPath));
             fclose($fp);
             $ver = $content ? $content : $ver;
             // echo $ver;die;
         } else {
-            $r = $this->ciMkdir(dirname($version_txt_path));
+            $r = $this->ciMkdir(dirname($versionPath));
             if ($r) {
-                $fp = fopen($version_txt_path, "w+") or die("请设置" . $version_txt_path . "的权限为777");
+                $fp = fopen($versionPath, "w+") or die("请设置" . $versionPath . "的权限为777");
                 // 读缓存 数据库 暂时写死
                 $web_version = '3.8.1';
                 $ver         = !empty($web_version) ? $web_version : $ver;
@@ -479,7 +472,7 @@ class UpdateTest extends BaseController
      * @param intval $purview 目录权限码
      * @return boolean
      */
-    function ciMkdir($path, $purview = 0777)
+    function ciMkdir($path, $purview = 0644)
     {
         if (!is_dir($path)) {
             $this->ciMkdir(dirname($path), $purview);

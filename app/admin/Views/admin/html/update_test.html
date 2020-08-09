@@ -88,7 +88,7 @@
 			{field:'is_same', title:'与官方原始版本是否一致'},
 			{field:'update_time', title:'更新时间'},
 		]],
-		// page: true
+		page: false
 	});
 $("#check").on('click',function(){
   	$.post('{url: /UpdateTest/check}',function(data){

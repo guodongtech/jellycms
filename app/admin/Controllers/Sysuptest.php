@@ -340,20 +340,20 @@ class Sysuptest extends BaseController
 		}
 	}
 	// 对外输出
-	public function checkInfo($version){
+	public function checkUpgrade($version){
 		// 获取当前最高版本
 		$max_version = $this->model->getMaxVersion();
 		if($version == $max_version){
-			echo json_encode(['code' => 2, 'msg' => "已是最新版本"]);die;
+			return json_encode(['code' => 2, 'msg' => "已是最新版本"]);
 		}
 		// 获取用户要升级的版本信息
 		$version_info = $this->model->getVersionInfo($version);
 		if(empty($version_info)){
-			echo json_encode(['code' => 2, 'msg' => "没有检测到需要更新的内容，或联系技术支持"]);die;
+			return json_encode(['code' => 2, 'msg' => "没有检测到需要更新的内容，或联系技术支持"]);
 		}
 
 		if(!file_exists($this->zip_path.$version_info['zip_file'])){
-			echo json_encode(['code' => 2, 'msg' => "升级包缺失，请联系技术支持!"]);die;
+			return json_encode(['code' => 2, 'msg' => "升级包缺失，请联系技术支持!"]);
 		}
 		// 处理更新的文件数据
         $folder_name = str_replace(".zip", "", $version_info['zip_file']);  // 文件夹
@@ -391,7 +391,7 @@ class Sysuptest extends BaseController
     	$data['upgrade'] = $version_list;
     	$data['create_time'] = $version_info['create_time'];
     	$data['update_time'] = $version_info['update_time'];
-    	echo json_encode($data);die;
+    	return json_encode($data);
 
 	}
 	/**
