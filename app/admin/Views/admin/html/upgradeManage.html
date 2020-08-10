@@ -206,16 +206,7 @@ var ue = UE.getEditor('description');
 		}
 		$.post('{url:/upgradeManage/generateDetail}',{zipfile:zipfile},function(data){
 			if(data.code == 1){
-				//处理换行
-				
 				$('#detail').val(data.data)
-			　//　$.each(data.data,function(idx,obj)
-			　　//{
-					//$('#detail').html(obj.name);
-					//$('#detail').prepend(obj.name);
-					//console.log(obj.name)
-
-			　//　});
 				layer.msg(data.msg)
 			}
 			else{
@@ -223,11 +214,6 @@ var ue = UE.getEditor('description');
 			}
 		}, 'json');
 	})
-	
-	
-	
-	
-	
 	
 	// 表单提交
 	form.on('submit(submit)', function(data){

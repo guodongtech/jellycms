@@ -184,22 +184,4 @@ class UpgradeManage extends BaseController
 		return json_encode($data);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
