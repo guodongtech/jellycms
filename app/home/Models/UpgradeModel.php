@@ -27,7 +27,5 @@ class UpgradeModel extends Model
 							->getRowArray();
         return $result;
 	}
-	
-	
 }
 

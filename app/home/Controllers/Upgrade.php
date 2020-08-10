@@ -1,12 +1,11 @@
 <?php namespace App\Controllers;
 use  \App\Models\UpgradeModel;
-
 class Upgrade extends BaseController
 {    
 	private $model;
     public function __construct()
     {
-		$this->downDomain = 'http://down.jellycms.cn/';
+		$this->downDomain = 'http://update.jellycms.cn/';
 		$this->model = new UpgradeModel();
     }
 	public function check($version){
@@ -19,7 +18,7 @@ class Upgrade extends BaseController
 			return json_encode($rdata);
 		}
 		$result = $this->model->checkAvailableMax($version);
-		//无可用更新 但返回最新版本
+		//无可用更新 但返回最新版本提醒
 		if(empty($result)){
 			$rdata = [
 				"code" => 0,
