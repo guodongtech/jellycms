@@ -26,7 +26,7 @@ class UpgradeManage extends BaseController
     	$folder_list = directory_map($path, 1);
     	$data['folder_list'] = $folder_list;
     	$data['version_list'] = $version_list;
-        return view('sysuptest.html',$data);
+        return view('upgradeManage.html',$data);
     }
 
     public function edit()

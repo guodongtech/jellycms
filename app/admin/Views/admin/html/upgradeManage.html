@@ -164,7 +164,7 @@ var ue = UE.getEditor('description');
 	var upload = layui.upload;
 	form.render();
 	table.render({
-		elem: '#table',url:'{url:/Sysuptest/getList}',
+		elem: '#table',url:'{url:/upgradeManage/getList}',
 		// toolbar: '#toolbarDemo',
 		title: '提示',
 		layEvent: 'LAYTABLE_TIPS',
@@ -195,7 +195,7 @@ var ue = UE.getEditor('description');
 	//执行实例
 		var uploadInst = upload.render({
 			elem: '#zipup',
-			url: '{url: Sysuptest/uploadFile}',
+			url: '{url: /upgradeManage/uploadFile}',
 			accept:'file',
 			exts: 'zip',
 			data:{
@@ -234,7 +234,7 @@ var ue = UE.getEditor('description');
 		//执行实例
 		var uploadInst2 = upload.render({
 			elem: '#versionup',
-			url: '{url: Sysuptest/uploadVersionFile}',
+			url: '{url: /upgradeManage/uploadVersionFile}',
 			accept:'file',
 			exts: 'zip',
 			data:{
@@ -277,7 +277,7 @@ var ue = UE.getEditor('description');
 		var data = obj.data;
 		if(obj.event === 'del'){
 			layer.confirm('删除后用户将无法更新至该版本，是否删除', function(index){
-				$.post('{url: Sysuptest/del}',{id:obj.data.id},function(data){
+				$.post('{url: /upgradeManage/del}',{id:obj.data.id},function(data){
 					if(data.code == 1){
 						layer.msg(data.msg)
 						obj.del();
@@ -304,7 +304,7 @@ var ue = UE.getEditor('description');
 				var switchName = $(this).find('input[type="checkbox"]').attr("name");
 				var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
 				switchValue = Number(switchValue);
-				$.post('{url:/Sysuptest/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+				$.post('{url:/upgradeManage/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 					if(data.code == 1){
 						//layer.msg(data.msg)
 					}

@@ -41,12 +41,11 @@ class Upgrade extends BaseController
     }
     public function index()
     {
-        return view('update_test.html');
+        return view('upgrade.html');
     }
     public function getList()
     {
         $serverResult = $this->getUpgradeData();
-		print_r($serverResult);
         if($serverResult === false){
             $data = [
                 "code" => 0,

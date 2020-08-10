@@ -1,0 +1,247 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>{$GLOBALS.systemname}-version{$GLOBALS.version}-{$GLOBALS.syscompany}</title>
+<meta content='{$GLOBALS.sysdescription}' name='description'>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/static/css/main.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" media="screen" href="/static/css/animate.min.css">
+</head>
+<body class="guodong-body">
+{include:head.html}
+<div class="layui-fluid animated {$GLOBALS.animate}">
+<div class="layui-row">
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
+	<ul class="layui-tab-title">
+		<li class="layui-this" lay-id="t1">在线更新</li>
+		<li lay-id="t2">更新设置</li>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<table class="layui-hide" id="table" lay-filter="test"></table>
+			<button class="layui-btn" id="check" data-url="">重新检查</button>
+			<!-- <button class="layui-btn" style="display:none" id="update" data-url="">执行更新</button> -->
+			<button class="layui-btn" style="" id="update" data-url="">执行更新</button>
+		</div>
+	  	   
+	  	   <div class="layui-tab-item">
+	  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
+	  	   	   	   <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
+	  	   	   	   
+	  	   	   	   <div class="layui-form-item">
+	                     <label class="layui-form-label">更新分支</label>
+	                     <div class="layui-input-inline">
+	                     	 <select name="upgrade_branch">
+				             	<option value="2.X" selected="">2.X 稳定版</option>
+				             	<option value="2.X.dev">2.X 测试版</option>
+				             </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="2.X 稳定版" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="2.X" class="layui-this">2.X 稳定版</dd><dd lay-value="2.X.dev" class="">2.X 测试版</dd></dl></div>
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">强制文件同步</label>
+	                     <div class="layui-input-block">
+	                        <input type="hidden" name="upgrade_force" value="0"><!-- 默认0 -->
+	                     	<input type="checkbox" name="upgrade_force" value="1" lay-skin="switch" lay-text="开启|关闭"><div class="layui-unselect layui-form-switch" lay-skin="_switch"><em>关闭</em><i></i></div>
+	                     </div>
+	                    <div class="layui-form-mid layui-word-aux">适用有部分文件更新失败或检查文件与官方一致性。</div>
+	                </div>
+	                
+		            <div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit="" name="submit" value="upgrade">保存</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重选</button>
+						 </div>
+					</div>
+	           </form>
+	  	   </div>
+	  </div>
+	</div>	
+</div>
+</div>
+
+<script src="/static/layui/layui.all.js"></script>
+<script>
+!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  var $ = layui.jquery;
+  var table = layui.table;
+  table.render({
+		elem: '#table',url:'{url:/upgrade/getList}',
+		// toolbar: '#toolbarDemo',
+		title: '提示',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{type: 'checkbox', fixed: 'left'},
+			{field:'filename', title:'更新文件'},
+			{field:'type', title:'更新方式'},
+			{field:'is_same', title:'与官方原始版本是否一致'},
+			{field:'update_time', title:'更新时间'},
+		]],
+		page: false
+	});
+$("#check").on('click',function(){
+  	$.post('{url: /upgrade/check}',function(data){
+		if(data.code == 1){
+			layer.msg(data.msg)
+		}
+		else{
+			layer.open({
+			skin: 'demo-class',
+			type: 1,
+			title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(官方最新"+data.data.max_version+")",
+			area: 'auto',
+			maxWidth: '550',
+			maxHeight: '510',
+			shade: 0,
+			maxmin: true,
+			offset: ['160px', '300px'],
+			content: "<p>"+data.data.msg+"</p>",
+			btn: ['我知道了'],
+			yes: function(){
+	            layer.closeAll();
+	            // setTimeout(function(){
+	            //     checkdir(data); // 请求后台
+	            // },200);
+	        }
+	      });
+		}
+	}, 'json');
+})
+$("#update").on('click',function(){
+	var data = table.checkStatus('table').data;
+	var length = table.checkStatus('table').data.length;
+	var is_all = table.checkStatus('table').isAll;
+	var count = table.cache.table.length;
+	if(length<1){
+		layer.msg("请先选中要升级的文件");
+		return false;
+	}
+	layer.open({
+	  	content: '可升级文件共'+count+'条'+'，已选中'+length+'条，是否确认升级',
+	  	btn: ['确认升级', '取消'],
+	  	yes: function(index, layero){
+	    	checkdir(data);
+	  	},
+	  	btn2: function(index, layero){
+	    	//按钮【按钮二】的回调
+	    
+	    	//return false 开启该代码可禁止点击该按钮关闭
+	  	},
+	  	cancel: function(){ 
+		    //右上角关闭回调
+		    
+		    //return false 开启该代码可禁止点击该按钮关闭
+	  	}
+	});
+ 
+
+  	// checkdir(data);
+})
+/** 
+ * 检测升级文件的目录权限
+ */
+function checkdir(data) {
+    layer_loading('检测系统');
+    $.ajax({
+        type : "POST",
+        url  : "{url: /upgrade/checkAuthority}",
+        timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+        data:{'filelist':data},
+        dataType:"json",
+        // error: function(request) {
+        //     parent.layer.closeAll();
+        //     parent.layer.alert("检测不通过，可能被服务器防火墙拦截，请添加白名单，或者联系技术协助！", {icon: 2, title:false}, function(){
+        //         top.location.reload();
+        //     });
+        // },
+        success: function(res) {
+            layer.closeAll();
+            if (1 == res.code) {
+            	// 开始升级
+                upgrade(data);
+            } else {
+                //提示框
+                layer.msg(res.msg)
+            }
+        }
+    }); 
+}
+
+/** 
+ * 升级系统
+ */
+function upgrade(data){
+    layer_loading('升级<font id="upgrade_speed">中</font>');
+    var timer = '';
+    var speed = 0.01;
+    $.ajax({
+        type : "POST",
+        url  :  '{url: upgrade/Upgrade}',
+        data:{'filelist':data},
+        timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
+        dataType:"json",
+        beforeSend:function(){
+            timer = setInterval(function(){
+                random = Math.floor(Math.random()*89+10);
+                random = random.toString();
+                random = '1.' + random;
+                speed = speed + parseFloat(random);
+                speed = Math.floor(speed * 100) / 100;
+                if (speed >= 98) {
+                    speed = 98;
+                }
+                $('#upgrade_speed').html(speed+'%');
+            }, 500);
+        },
+        error: function(request) {
+            parent.layer.closeAll();
+            layer.alert("访问超时请稍后再试，或手动升级！", {icon: 2, title:false}, function(){
+                top.location.reload();
+            });
+        },
+        success: function(res) {
+            $('#upgrade_speed').html('100%');
+            clearInterval(timer);
+            parent.layer.closeAll();
+            if(res.code == 1){
+            	layer.msg('更新完成',function(){
+            		top.location.reload();
+            	});
+
+            }else{
+            	layer.msg(res.msg)
+            }
+        }
+    });
+}
+function layer_loading(msg){
+    var loading = parent.layer.msg(
+    msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
+    {
+        icon: 1,
+        time: 3600000, //1小时后后自动关闭
+        shade: [0.2] //0.1透明度的白色背景
+    });
+    //loading层
+    var index = parent.layer.load(3, {
+        shade: [0.1,'#fff'] //0.1透明度的白色背景
+    });
+
+    return loading;
+}
+  //layer.msg('Hello World');
+}();
+</script>
+</body>
+</html>
