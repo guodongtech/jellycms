@@ -4,16 +4,30 @@ use CodeIgniter\Model;
 
 class UpgradeModel extends Model
 {
-    public function getMaxVersion(){
-		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where deleted=0 and status=1 order by id desc limit 1";
-		$result = $this->db->query($sql)->getRowArray();
-		return $result['version_num'];
+	//检查最新可用版本信息
+    public function checkAvailableMax($version)
+    {
+		//必须加 and 1=1否则CI会加上is null。 返回空数组，则无可用更新
+		$builder = $this->db->table('upgrade_manage');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0])
+							->where("FIND_IN_SET('$version',fit_versions) and 1=1")
+							->orderBy('name', 'DESC')							
+							->get()
+							->getRowArray();
+        return $result;
+    }
+	//获取最新版本信息
+	public function getMax(){
+		$builder = $this->db->table('upgrade_manage');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0])
+							->orderBy('name', 'DESC')
+							->get()
+							->getRowArray();
+        return $result;
 	}
-	public function getVersionInfo($version){
-		$sql = "SELECT * FROM ".$this->db->prefixTable('sysup')." where deleted=0 and status=1 and prev_version_num = '".$version."'";
-		$result = $this->db->query($sql)->getRowArray();
-		return $result;
-	}
+	
 	
 }
 
