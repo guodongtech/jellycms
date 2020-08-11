@@ -26,43 +26,38 @@
 	</ul>
 	<div class="layui-tab-content">
 		<div class="layui-tab-item layui-show">
+			<p class="layui-elem-quote" id="version-description">无可用更新</p>    
 			<table class="layui-hide" id="table" lay-filter="test"></table>
 			<button class="layui-btn" id="check" data-url="">重新检查</button>
 			<!-- <button class="layui-btn" style="display:none" id="update" data-url="">执行更新</button> -->
 			<button class="layui-btn" style="" id="update" data-url="">执行更新</button>
 		</div>
 	  	   
-	  	   <div class="layui-tab-item">
-	  	   	   <form action="/adminzt.php?p=/Config/index" method="post" class="layui-form">
-	  	   	   	   <input type="hidden" name="formcheck" value="735e9186ded790c8cde1f1e35f288c23"> 
-	  	   	   	   
-	  	   	   	   <div class="layui-form-item">
-	                     <label class="layui-form-label">更新分支</label>
-	                     <div class="layui-input-inline">
-	                     	 <select name="upgrade_branch">
-				             	<option value="2.X" selected="">2.X 稳定版</option>
-				             	<option value="2.X.dev">2.X 测试版</option>
-				             </select><div class="layui-unselect layui-form-select"><div class="layui-select-title"><input type="text" placeholder="请选择" value="2.X 稳定版" readonly="" class="layui-input layui-unselect"><i class="layui-edge"></i></div><dl class="layui-anim layui-anim-upbit"><dd lay-value="2.X" class="layui-this">2.X 稳定版</dd><dd lay-value="2.X.dev" class="">2.X 测试版</dd></dl></div>
-	                     </div>
-	                </div>
-	                
-	                <div class="layui-form-item">
-	                     <label class="layui-form-label">强制文件同步</label>
-	                     <div class="layui-input-block">
-	                        <input type="hidden" name="upgrade_force" value="0"><!-- 默认0 -->
-	                     	<input type="checkbox" name="upgrade_force" value="1" lay-skin="switch" lay-text="开启|关闭"><div class="layui-unselect layui-form-switch" lay-skin="_switch"><em>关闭</em><i></i></div>
-	                     </div>
-	                    <div class="layui-form-mid layui-word-aux">适用有部分文件更新失败或检查文件与官方一致性。</div>
-	                </div>
-	                
-		            <div class="layui-form-item">
-						 <div class="layui-input-block">
-						    <button class="layui-btn" lay-submit="" name="submit" value="upgrade">保存</button>
-						    <button type="reset" class="layui-btn layui-btn-primary">重选</button>
-						 </div>
+		<div class="layui-tab-item">
+			<form action="" method="post" class="layui-form">
+				<div class="layui-form-item">
+					<label class="layui-form-label">临时目录</label>
+					<div class="layui-input-inline">
+						<input type="text" name="upgradetemp" lay-verify="required|en" placeholder="临时目录" class="layui-input">
 					</div>
-	           </form>
-	  	   </div>
+					<div class="layui-form-mid layui-word-aux">升级文件临时存放目录。起始目录/runtime/upgrade/</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">备份目录</label>
+					<div class="layui-input-inline">
+						<input type="text" name="upgradetemp" lay-verify="required|en" placeholder="备份目录" class="layui-input">
+					</div>
+					<div class="layui-form-mid layui-word-aux">升级前，系统会把升级文件备份到此目录。起始目录/runtime/backup/</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit="" name="submit" value="upgrade">保存</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
 	  </div>
 	</div>	
 </div>
@@ -83,41 +78,18 @@
 		icon: 'layui-icon-tips',
 		cols: [[
 			{type: 'checkbox', fixed: 'left'},
-			{field:'filename', title:'更新文件'},
-			{field:'type', title:'更新方式'},
-			{field:'is_same', title:'与官方原始版本是否一致'},
-			{field:'update_time', title:'更新时间'},
+			{field:'name', title:'更新文件'},
+			{field:'description', title:'更新说明'},
+			{field:'type', title:'更新方式',width:100},
+			{field:'datetime', title:'更新时间',width:160},
 		]],
-		page: false
+		page: false,  done: function(res, curr, count){
+		$('#version-description').html(res.msg + ':<b>'+ res.name+ '</b>-' + res.create_time +res.description);
+	  }
 	});
-$("#check").on('click',function(){
-  	$.post('{url: /upgrade/check}',function(data){
-		if(data.code == 1){
-			layer.msg(data.msg)
-		}
-		else{
-			layer.open({
-			skin: 'demo-class',
-			type: 1,
-			title: '系统更新'+ data.data.curent_version +'->'+ data.data.target_version+"(官方最新"+data.data.max_version+")",
-			area: 'auto',
-			maxWidth: '550',
-			maxHeight: '510',
-			shade: 0,
-			maxmin: true,
-			offset: ['160px', '300px'],
-			content: "<p>"+data.data.msg+"</p>",
-			btn: ['我知道了'],
-			yes: function(){
-	            layer.closeAll();
-	            // setTimeout(function(){
-	            //     checkdir(data); // 请求后台
-	            // },200);
-	        }
-	      });
-		}
-	}, 'json');
-})
+	$("#check").on('click',function(){
+		table.reload('table');
+	})
 $("#update").on('click',function(){
 	var data = table.checkStatus('table').data;
 	var length = table.checkStatus('table').data.length;

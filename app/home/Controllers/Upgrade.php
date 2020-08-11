@@ -28,12 +28,28 @@ class Upgrade extends BaseController
 		}
 		
 		$filePath = str_replace('\\', '/',$result['zipfile']);
+		$detailArray = explode("\n", $result['detail']);
+		foreach($detailArray as $key=>$value){
+			$detailArray[$key] = explode(',', $value);
+			$detailArray[$key]['name'] = $detailArray[$key][0];
+			unset($detailArray[$key][0]);
+			$detailArray[$key]['type'] = $detailArray[$key][1];
+			unset($detailArray[$key][1]);
+			$detailArray[$key]['description'] = $detailArray[$key][2];
+			unset($detailArray[$key][2]);
+			$detailArray[$key]['datetime'] = $result['create_time'];
+		}
+		//print_r($detailArray);
 		//返回更新信息
 		$rdata = [
 			"code" => 0,
 			"msg" => "有可用更新",
-			"detail" => $result['detail'],
+			"data" => $detailArray,
+			"count" => count($detailArray),
 			"md5" => $result['md5'],
+			"create_time" => $result['create_time'],
+			"name" => 'v'.$result['name'],
+			"description" => $result['description'],
 			"download" => $this->downDomain.$filePath,
 		];
 		return json_encode($rdata);

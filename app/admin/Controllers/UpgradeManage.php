@@ -158,18 +158,53 @@ class UpgradeManage extends BaseController
 		$post = post();
 		$zipfile = $post['zipfile'];
 		$list = [];
-		if(class_exists('ZipArchive'))
-		{
-			$zip = zip_open(FCPATH.$zipfile);
-			$i = 0;
-			while($zipfile=zip_read($zip)){
-				$list[]['name'] = zip_entry_name($zipfile);
-				$contents = zip_entry_read($zipfile);//取内容
-				zip_entry_close($zipfile);
+ 
+		$zip = zip_open(FCPATH.$zipfile);
+		$i = 0;
+		while($zipfile=zip_read($zip)){
+			$fileName = zip_entry_name($zipfile);
+			//排除空文件及文件夹
+			if(strpos($fileName, '.')){
+				$list[]['name'] = $fileName;
 			}
-			zip_close($zip);
+			//$contents = zip_entry_read($zipfile);//取内容
+			//$list[]['md5'] = md5($contents);
+			zip_entry_close($zipfile);
 		}
-		
+		zip_close($zip);
+		//解压
+/* 		if(class_exists('ZipArchive'))
+		{
+			if(!file_exists(FCPATH.$zipfile)){
+				$data = [
+					"code" => 0,
+					"msg" => "文件不存在",
+				];	
+				return json_encode($data);
+			}
+			$zip = new \ZipArchive();
+			if(!$zip->open(FCPATH.$zipfile)){
+				$data = [
+					"code" => 1,
+					"msg" => "打开ZIP文件失败",
+				];	
+				return json_encode($data);
+			}
+			if(!$zip->extractTo(FCPATH.'/static/upgrade/upzip/')){
+				$zip->close();
+				$data = [
+					"code" => 0,
+					"msg" => "解压失败",
+				];	
+				return json_encode($data);
+			}
+			$zip->close();
+		}
+		//处理文件
+		helper('filesystem');
+		$map = get_filenames(FCPATH.'/static/upgrade/upzip/');
+	 */
+
 		$strDetail = '';
 		//在客户端再判断一次。解压后判断MD5。不存在的文件改成添加。只要要更新的文件至少是覆盖操作。
 		foreach($list as $key=>$value){
