@@ -29,7 +29,6 @@
 			<p class="layui-elem-quote" id="version-description">无可用更新</p>    
 			<table class="layui-hide" id="table" lay-filter="test"></table>
 			<button class="layui-btn" id="check" data-url="">重新检查</button>
-			<!-- <button class="layui-btn" style="display:none" id="update" data-url="">执行更新</button> -->
 			<button class="layui-btn" style="" id="update" data-url="">执行更新</button>
 		</div>
 	  	   
@@ -62,14 +61,23 @@
 	</div>	
 </div>
 </div>
-
-<script src="/static/layui/layui.all.js"></script>
+<div id="console" style="display:none;">
+	<div class="console" contenteditable=true>
+		<ul id="console-content">
+			<li class="green">表gd_user完成</li>
+			<li class="red">服务器返回时间0.7S</li>
+		</ul>
+	</div>
+</div>
+<script src="/static/layui/layui.js"></script>
+<!-- layer模块增加了content方法，不要用官方文件直接替换 -->
 <script>
-!function(){
-  var layer = layui.layer
-  ,form = layui.form;
-  var $ = layui.jquery;
-  var table = layui.table;
+layui.use(['layer', 'form','table','jquery','element'], function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var $ = layui.jquery;
   table.render({
 		elem: '#table',url:'{url:/upgrade/getList}',
 		// toolbar: '#toolbarDemo',
@@ -87,133 +95,106 @@
 		$('#version-description').html(res.msg + ':<b>'+ res.name+ '</b>-' + res.create_time +res.description);
 	  }
 	});
+	//检查更新
 	$("#check").on('click',function(){
 		table.reload('table');
 	})
-$("#update").on('click',function(){
-	var data = table.checkStatus('table').data;
-	var length = table.checkStatus('table').data.length;
-	var is_all = table.checkStatus('table').isAll;
-	var count = table.cache.table.length;
-	if(length<1){
-		layer.msg("请先选中要升级的文件");
-		return false;
+	//执行更新
+	$("#update").on('click',function(){
+		var data = table.checkStatus('table').data;
+		var length = table.checkStatus('table').data.length;
+		var is_all = table.checkStatus('table').isAll;
+		var count = table.cache.table.length;
+		if(length<1){
+			layer.msg("请先选中要升级的文件");
+			return false;
+		}
+		layer.open({
+			content: '可升级文件共'+count+'条'+'，已选中'+length+'条，是否确认升级',
+			btn: ['确认升级', '取消'],
+			yes: function(index, layero){
+				upgradeAction(data);
+			},
+			btn2: function(index, layero){
+
+			},
+			cancel: function(){ 
+
+			}
+		});
+	})
+	
+	//更新操作
+	function upgradeAction(data){
+		initconsole();
 	}
-	layer.open({
-	  	content: '可升级文件共'+count+'条'+'，已选中'+length+'条，是否确认升级',
-	  	btn: ['确认升级', '取消'],
-	  	yes: function(index, layero){
-	    	checkdir(data);
-	  	},
-	  	btn2: function(index, layero){
-	    	//按钮【按钮二】的回调
-	    
-	    	//return false 开启该代码可禁止点击该按钮关闭
-	  	},
-	  	cancel: function(){ 
-		    //右上角关闭回调
-		    
-		    //return false 开启该代码可禁止点击该按钮关闭
-	  	}
-	});
- 
+	
+	//执行权限检测
+	function executeCheckAuth(){
+		
+	}
+	//执行下载
+	function executeDownload(){
+		
+	}
+	//执行解压
+	function executeUnzip(){
+		
+	}
+	//执行文件备份 文件
+	function executeBackup(){
+		
+	}
+	
+	//执行更新 文件 数据库
+	function executeUpgrade(){
+		
+	}
+	
+	
+	
 
-  	// checkdir(data);
-})
-/** 
- * 检测升级文件的目录权限
- */
-function checkdir(data) {
-    layer_loading('检测系统');
-    $.ajax({
-        type : "POST",
-        url  : "{url: /upgrade/checkAuthority}",
-        timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
-        data:{'filelist':data},
-        dataType:"json",
-        // error: function(request) {
-        //     parent.layer.closeAll();
-        //     parent.layer.alert("检测不通过，可能被服务器防火墙拦截，请添加白名单，或者联系技术协助！", {icon: 2, title:false}, function(){
-        //         top.location.reload();
-        //     });
-        // },
-        success: function(res) {
-            layer.closeAll();
-            if (1 == res.code) {
-            	// 开始升级
-                upgrade(data);
-            } else {
-                //提示框
-                layer.msg(res.msg)
-            }
-        }
-    }); 
-}
+	var index;//控制台句柄
+	//初始化进度控制台 警告：layer.js 添加了content方法不可用官方文件直接替换
+	function initconsole(){
+		index = layer.open({
+		  type: 1 
+		  ,area: ['388px', '388px']
+		  ,title: '进度控制台'
+		  ,maxmin: true //允许全屏最小化
+		  ,content: $('#console').html()
+		});
+		clear(index);
+		insert('<li>控制台初始化完成</li>');
+		update(index);
+	}
 
-/** 
- * 升级系统
- */
-function upgrade(data){
-    layer_loading('升级<font id="upgrade_speed">中</font>');
-    var timer = '';
-    var speed = 0.01;
-    $.ajax({
-        type : "POST",
-        url  :  '{url: upgrade/Upgrade}',
-        data:{'filelist':data},
-        timeout : 360000, //超时时间设置，单位毫秒 设置了 1小时
-        dataType:"json",
-        beforeSend:function(){
-            timer = setInterval(function(){
-                random = Math.floor(Math.random()*89+10);
-                random = random.toString();
-                random = '1.' + random;
-                speed = speed + parseFloat(random);
-                speed = Math.floor(speed * 100) / 100;
-                if (speed >= 98) {
-                    speed = 98;
-                }
-                $('#upgrade_speed').html(speed+'%');
-            }, 500);
-        },
-        error: function(request) {
-            parent.layer.closeAll();
-            layer.alert("访问超时请稍后再试，或手动升级！", {icon: 2, title:false}, function(){
-                top.location.reload();
-            });
-        },
-        success: function(res) {
-            $('#upgrade_speed').html('100%');
-            clearInterval(timer);
-            parent.layer.closeAll();
-            if(res.code == 1){
-            	layer.msg('更新完成',function(){
-            		top.location.reload();
-            	});
+	//插入消息
+	function insert(str){
+		$('#console-content').prepend(str);
+	}
+	//更新控制台消息
+	function update(index){
+		layer.content($('#console').html(), index) 
+	}
+	//清空控制台消息
+	function clear(index){
+		$('#console-content').html('');
+		layer.content('', index);
+	}
 
-            }else{
-            	layer.msg(res.msg)
-            }
-        }
-    });
-}
-function layer_loading(msg){
-    var loading = parent.layer.msg(
-    msg+'...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请勿刷新页面', 
-    {
-        icon: 1,
-        time: 3600000, //1小时后后自动关闭
-        shade: [0.2] //0.1透明度的白色背景
-    });
-    //loading层
-    var index = parent.layer.load(3, {
-        shade: [0.1,'#fff'] //0.1透明度的白色背景
-    });
 
-    return loading;
-}
-  //layer.msg('Hello World');
-}();
+
+
+
+
+
+
+
+
+
+
+});
 </script>
 </body>
 </html>
