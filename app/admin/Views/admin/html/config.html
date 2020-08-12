@@ -224,8 +224,8 @@
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">透明度</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="water_opacity" id="water-color-input" placeholder="透明度" class="layui-input">
-							
+	                     	<input type="text" name="water_opacity" id="water-opacity-input" placeholder="透明度" class="layui-input">
+							<div id="water-opacity" class="water-opacity-slider"></div>
 						 </div>
 						 <div class="layui-form-mid layui-word-aux">0-1之间的小数，数值越大越颜色越浅</div>
 	                </div>
@@ -243,8 +243,8 @@
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">水印比例</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="water_proportion" id="water-color-input" placeholder="水印比例" class="layui-input">
-							
+	                     	<input type="text" name="water_proportion" id="water-proportion-input" placeholder="水印比例" class="layui-input">
+							<div id="water-proportion" class="water-proportion-slider"></div>
 						 </div>
 						 <div class="layui-form-mid layui-word-aux">图片水印与上传图片比例，0-1之间的小数</div>
 	                </div>
@@ -543,91 +543,122 @@
 	var element = layui.element;
 	var $ = layui.jquery;
 	var upload = layui.upload;
+	var slider = layui.slider;
 	var colorpicker = layui.colorpicker;
-	   $.ajax({
-			url:"{url:/config/getdata}", //请求的服务端地址
-			type:"post",
-			dataType:"json",
-			success:function(data){
-				if(data.code == 1){
-					loadData(data.data, 'form');
-					form.render();
-					$('.layui-colorpicker-trigger-span').css('background',$('#water-color-input').val());
-				}
-				else{
-					//layer.msg(data.msg)
-				}  
-			},
-			error:function(){
-			  //layer.msg('error'); //错误处理
-			}
-		});
+	var ins1 = slider.render({
+		elem: '#water-opacity',
+		min: 0,
+		max: 10,
+		setTips: function(value){
+			return value/10;
+		},
+		change: function(value){
+			$('#water-opacity-input').val(value);
+		},
+		//input:true
+	});
+	var ins2 = slider.render({
+		elem: '#water-proportion',
+		min: 0,
+		max: 10,
+		setTips: function(value){
+			return value/10;
+		},
+		change: function(value){
+			$('#water-proportion-input').val(value);
+		},
+		//input:true
+	});
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#water-pic',
+		url: '{url:/upload/uploadFile}',
+		before: function(obj){
+		  //预读本地文件示例，不支持ie8
+		  obj.preview(function(index, file, result){
+			$('.preview img').attr('src', result); //图片链接（base64）
+		  });
+		},
+		done: function(res){
+			//上传完毕回调
+			$('input[name="water_pic"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#syslogo',
+		accept:'file',
+		acceptMime: 'image/jpg, image/png',
+		url: '{url:/upload/uploadFile}',
+		done: function(res){
+			//上传完毕回调
+			$('input[name="syslogo"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
 
-		//执行实例
-		var uploadInst = upload.render({
-			elem: '#water-pic',
-			url: '{url:/upload/uploadFile}',
-			before: function(obj){
-			  //预读本地文件示例，不支持ie8
-			  obj.preview(function(index, file, result){
-				$('.preview img').attr('src', result); //图片链接（base64）
-			  });
-			},
-			done: function(res){
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#water-font',
+		url: '{url:/upload/uploadFile}',
+		accept:'file',
+		exts: 'ttf',
+		done: function(res){
+		console.log(res)
+			if(res.code == 1){
 				//上传完毕回调
-				$('input[name="water_pic"]').val(res.data.path);
-				layer.msg('上传成功')
-			},
-			error: function(){
-				//请求异常回调
+				$('input[name="water_font"]').val(res.data.path);
+				layer.msg(res.msg);			
+			}else{
+				layer.msg(res.msg)	
 			}
-		})
-		//执行实例
-		var uploadInst = upload.render({
-			elem: '#syslogo',
-			accept:'file',
-			acceptMime: 'image/jpg, image/png',
-			url: '{url:/upload/uploadFile}',
-			done: function(res){
-				//上传完毕回调
-				$('input[name="syslogo"]').val(res.data.path);
-				layer.msg('上传成功')
-			},
-			error: function(){
-				//请求异常回调
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
+
+	colorpicker.render({
+		elem: '#water-color',
+		predefine: true,
+		color: $('input[name="water_color"]').val(),
+		done: function(color){
+			$('input[name="water_color"]').val(color);
+			form.render();
+		}
+	});	
+
+	$.ajax({
+		url:"{url:/config/getdata}", //请求的服务端地址
+		type:"post",
+		dataType:"json",
+		success:function(data){
+			if(data.code == 1){
+				loadData(data.data, 'form');
+				$('.layui-colorpicker-trigger-span').css('background',$('#water-color-input').val());
+				ins1.setValue($('#water-opacity-input').val()*10);
+				//补丁
+				$('#water-opacity .layui-slider-bar').css('width',$('#water-opacity-input').val()*100+'%');
+				ins2.setValue($('#water-proportion-input').val()*10); 
+				//补丁
+				$('#water-proportion .layui-slider-bar').css('width',$('#water-proportion-input').val()*100+'%');
+				form.render();
 			}
-		})
-	
-		//执行实例
-		var uploadInst = upload.render({
-			elem: '#water-font',
-			url: '{url:/upload/uploadFile}',
-			accept:'file',
-			exts: 'ttf',
-			done: function(res){
-			console.log(res)
-				if(res.code == 1){
-					//上传完毕回调
-					$('input[name="water_font"]').val(res.data.path);
-					layer.msg(res.msg);			
-				}else{
-					layer.msg(res.msg)	
-				}
-			},
-			error: function(){
-				//请求异常回调
-			}
-		})
-	
-		colorpicker.render({
-			elem: '#water-color'
-			,predefine: true // 开启预定义颜色
-			,color: $('input[name="water_color"]').val()
-			,done: function(color){
-			  $('input[name="water_color"]').val(color);
-			  form.render();
-			}
-		});	
+			else{
+				//layer.msg(data.msg)
+			}  
+		},
+		error:function(){
+		  //layer.msg('error'); //错误处理
+		}
+	});
 	form.render();
 	form.on('submit(submit)', function(data){
 	   var url = $(this).parents('form').prop('action');
