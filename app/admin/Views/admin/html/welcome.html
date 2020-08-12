@@ -87,6 +87,7 @@
 				<div id="echart1" class="echart"></div>
 				<div id="echart2" class="echart"></div>
 				<div id="echart3" class="echart"></div>
+				<div id="echart4" class="echart"></div>
 			</div>
 		</div>
 	</div>
@@ -277,6 +278,7 @@ wow.init();
 </script>
   
 <script src="https://cdn.staticfile.org/echarts/4.8.0/echarts.min.js"></script>
+<script src="/static/echarts/china.js"></script>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
 <script src="/static/js/macarons.js"></script>
 <script type="text/javascript">
@@ -405,12 +407,98 @@ $(document).ready(function (){
 			data: [200, 300, 400, 610, 150, 270, 380]
 		}]
 	})
+	// 先用来生成测试数据
+	function randomData() {  
+	     return Math.round(Math.random()*500);  
+	} 
+	var mydata = [  
+		    {name: '北京',value: '100' },{name: '天津',value: randomData() },  
+		    {name: '上海',value: randomData() },{name: '重庆',value: randomData() },  
+		    {name: '河北',value: randomData() },{name: '河南',value: randomData() },  
+		    {name: '云南',value: randomData() },{name: '辽宁',value: randomData() },  
+		    {name: '黑龙江',value: randomData() },{name: '湖南',value: randomData() },  
+		    {name: '安徽',value: randomData() },{name: '山东',value: randomData() },  
+		    {name: '新疆',value: randomData() },{name: '江苏',value: randomData() },  
+		    {name: '浙江',value: randomData() },{name: '江西',value: randomData() },  
+		    {name: '湖北',value: randomData() },{name: '广西',value: randomData() },  
+		    {name: '甘肃',value: randomData() },{name: '山西',value: randomData() },  
+		    {name: '内蒙古',value: randomData() },{name: '陕西',value: randomData() },  
+		    {name: '吉林',value: randomData() },{name: '福建',value: randomData() },  
+		    {name: '贵州',value: randomData() },{name: '广东',value: randomData() },  
+		    {name: '青海',value: randomData() },{name: '西藏',value: randomData() },  
+		    {name: '四川',value: randomData() },{name: '宁夏',value: randomData() },  
+		    {name: '海南',value: randomData() },{name: '台湾',value: randomData() },  
+		    {name: '香港',value: randomData() },{name: '澳门',value: randomData() },
+		    {name: '南海诸岛',value: randomData()}  
+	    ];
+	var optionMap = {  
+                backgroundColor: '#FFFFFF',  
+                title: {  
+                    text: '全国地图大数据',  
+                    subtext: '',  
+                    x:'center'  
+                },  
+                tooltip : {  
+                    trigger: 'item'  
+                },  
+                
+                //左侧小导航图标
+                visualMap: {
+		            min: 0,
+		            max: 500,
+		            text: ['High', 'Low'],
+		            realtime: false,
+		            calculable: true,
+		            inRange: {
+		                color: ['lightskyblue', 'yellow', 'orangered']
+		            }
+		        },
+		        toolbox: {
+		            show: true,
+		            orient: 'vertical',
+		            left: 'right',
+		            top: 'center',
+		            feature: {
+		                dataView: {readOnly: false},
+		                restore: {},
+		                saveAsImage: {}
+		            }
+		        },
+                //配置属性
+                series: [{  
+                    name: '数据',  
+                    type: 'map',  
+                    mapType: 'china',   
+                    roam: false,  
+                    zoom: 1.25,
+                    label: {  
+                        normal: {  
+                            show: true  //省份名称  
+                        },  
+                        emphasis: {  
+                            show: false  
+                        }  
+                    },  
+                    data:mydata  //数据
+                }]  
+        }; 
+        var echart4 = echarts.init(document.getElementById('echart4'), 'macarons');
+        //使用制定的配置项和数据显示图表
+        echart4.setOption(optionMap);
+
+
+
+
+
+
+
 	$(window).resize(function(){
 		$('.echart').css({width:$('#charts').width(), height:$('#charts').height()});//设置大小
 		//重绘echart
 		echart1.resize();
 		echart2.resize();
 		echart3.resize();
+		echart4.resize();
 	})
 
 
