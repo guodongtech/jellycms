@@ -67,7 +67,14 @@ class Upgrade extends BaseController
 			}
 		}
 		if(!file_exists($versionFile)){
-			return false;
+            $config = new \Config\Config();
+            // 从配置中取版本号
+            $version = $config->version;
+            // 创建目录
+            mkdir($versionPath,0644,true);
+			// 写入版本文件
+            write_file($versionPath.'version_'.mt_rand().'.txt', $version);//创建新的版本文件 用随机数防止恶意请求
+            return $version;
 		}
 		return file_get_contents($versionFile); 
 	}
@@ -167,19 +174,13 @@ class Upgrade extends BaseController
 		//要备份的文件不在更新列表里，返回错误
 		$p = array_column($post['data'], 'name');
 		$sr = array_column($result['data'], 'name');
-		foreach($p as $key=>$value){
-			if(!in_array($value, $sr)){
-				$rdata = [
-					"code" => 0,
-					"msg" => "非法操作",
-				];
-				return json_encode($rdata);
-			}
-		}
 		//直接读取压缩包
 		$zip = zip_open($this->upgradeFolder.$result['name'].'.zip');
 		while($zipfile=zip_read($zip)){
 			$fileName = zip_entry_name($zipfile);
+            if(!in_array($fileName, $p) && strpos($fileName, '.') && strpos($fileName, '.sql') == false){
+                continue;
+            }
 			//文件夹不存在，创建文件夹权限 0755
 			if(!is_dir(dirname(FCPATH.$fileName))){
 				mkdir(dirname(FCPATH.$fileName), 0755,true);
