@@ -37,16 +37,16 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">临时目录</label>
 					<div class="layui-input-inline">
-						<input type="text" name="upgradetemp" lay-verify="required|en" placeholder="临时目录" class="layui-input">
+						<input type="text" name="upgradetemp" value="/runtime/upgrade" lay-verify="required|en" placeholder="临时目录" class="layui-input">
 					</div>
-					<div class="layui-form-mid layui-word-aux">升级文件临时存放目录。起始目录/runtime/upgrade/</div>
+					<div class="layui-form-mid layui-word-aux">升级文件临时存放目录。起始目录/runtime/upgrade</div>
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">备份目录</label>
 					<div class="layui-input-inline">
-						<input type="text" name="upgradetemp" lay-verify="required|en" placeholder="备份目录" class="layui-input">
+						<input type="text" name="upgradetemp" value="/runtime/upgrade/backup" lay-verify="required|en" placeholder="备份目录" class="layui-input">
 					</div>
-					<div class="layui-form-mid layui-word-aux">升级前，系统会把升级文件备份到此目录。起始目录/runtime/backup/</div>
+					<div class="layui-form-mid layui-word-aux">升级前，系统会把升级文件备份到此目录。起始目录/runtime/upgrade/backup/</div>
 				</div>
 
 				<div class="layui-form-item">

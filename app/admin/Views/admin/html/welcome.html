@@ -50,7 +50,7 @@
 				{foreach:items=$fast_menu key=$k item=$v}
 				<ul class="layui-row layui-col-space10">
 					{foreach:items=$v item=$vv}
-					<li class="layui-col-xs3" menu-pid="menu{$vv['pid']}" menu-id="menu{$vv['id']}"><a lay-href="/{echo:ADMINNAME}{$vv['url']}"><i style="font-size: 30px;" class="fa {$vv['icon']}"></i><cite>{$vv['name']}</cite></a></li>
+					<li class="layui-col-xs3" menu-pid="menu{$vv['pid']}" menu-id="menu{$vv['id']}"><a lay-href="/{echo:ADMINNAME}{$vv['url']}"><i class="fa {$vv['icon']}"></i><cite>{$vv['name']}</cite></a></li>
 					{/foreach}
 				</ul>
 				{/foreach}

@@ -193,6 +193,22 @@
 .console .red{
 	color: #ff3300!important;
 }
+#fast-menu ul li{
+	padding:20px;
+}
+#fast-menu ul li:hover{
+	background:#eee;
+	color:#52c018!important;
+}
+#fast-menu ul li:hover  a cite{
+	color:#52c018!important;
+}
+#fast-menu ul li i{
+	font-size:20px;
+}
+.layadmin-shortcut li cite {
+    top: 8px;
+}
 .layui-layer-page .layui-layer-content {
      padding-top: 0px; 
 }
