@@ -64,7 +64,7 @@
 <div id="console" style="display:none;">
 	<div class="console" contenteditable=true>
 		<ul id="console-content">
-			<li class="green">表gd_user完成</li>
+			<li class="green">完成</li>
 			<li class="red">服务器返回时间0.7S</li>
 		</ul>
 	</div>
@@ -91,7 +91,8 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 			{field:'type', title:'更新方式',width:100},
 			{field:'datetime', title:'更新时间',width:160},
 		]],
-		page: false,  done: function(res, curr, count){
+		page: false,
+		done: function(res, curr, count){
 		$('#version-description').html(res.msg + ':<b>'+ res.name+ '</b>-' + res.create_time +res.description);
 	  }
 	});
@@ -113,42 +114,69 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 			content: '可升级文件共'+count+'条'+'，已选中'+length+'条，是否确认升级',
 			btn: ['确认升级', '取消'],
 			yes: function(index, layero){
-				upgradeAction(data);
-			},
-			btn2: function(index, layero){
-
-			},
-			cancel: function(){ 
-
+				layer.close(index)
+				upgradeAction();
 			}
 		});
 	})
 	
 	//更新操作
-	function upgradeAction(data){
+	function upgradeAction(){
 		initconsole();
+		insert('<li>执行权限检测</li>');
+		executeCheckAuth();
 	}
 	
 	//执行权限检测
 	function executeCheckAuth(){
-		
+		$.post('{url:/upgrade/checkAuth}',{},function(data){
+			if(data.code == 1){
+				insert('<li class="green">权限检测完成</li>');
+				insert('<li>执行更新包下载</li>');
+				executeDownload();
+			}
+			else{
+				insert('<li class="red">权限检测失败</li>');
+			}
+		}, 'json');
 	}
 	//执行下载
 	function executeDownload(){
-		
-	}
-	//执行解压
-	function executeUnzip(){
-		
+		$.post('{url:/upgrade/download}',{},function(data){
+			if(data.code == 1){
+				insert('<li class="green">更新包下载完成</li>');
+				executeBackup();
+			}
+			else{
+				insert('<li class="red">更新包下载失败</li>');
+			}
+		}, 'json');
 	}
 	//执行文件备份 文件
 	function executeBackup(){
-		
+		var data = table.checkStatus('table').data;
+		$.post('{url:/upgrade/backup}',{data:data},function(data){
+			if(data.code == 1){
+				insert('<li class="green">备份完成</li>');
+				executeUpgrade();
+			}
+			else{
+				insert('<li class="red">备份失败</li>');
+			}
+		}, 'json');
 	}
 	
 	//执行更新 文件 数据库
 	function executeUpgrade(){
-		
+		var data = table.checkStatus('table').data;
+		$.post('{url:/upgrade/upgrade}',{data:data},function(data){
+			if(data.code == 1){
+				insert('<li class="green">升级完成</li>');
+			}
+			else{
+				insert('<li class="red">升级失败</li>');
+			}
+		}, 'json');
 	}
 	
 	
@@ -158,20 +186,20 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 	//初始化进度控制台 警告：layer.js 添加了content方法不可用官方文件直接替换
 	function initconsole(){
 		index = layer.open({
-		  type: 1 
-		  ,area: ['388px', '388px']
-		  ,title: '进度控制台'
-		  ,maxmin: true //允许全屏最小化
-		  ,content: $('#console').html()
+		  type: 1,
+		  area: ['388px', '388px'],
+		  title: '进度控制台',
+		  maxmin: true,
+		  content: $('#console').html()
 		});
 		clear(index);
 		insert('<li>控制台初始化完成</li>');
-		update(index);
 	}
 
 	//插入消息
 	function insert(str){
 		$('#console-content').prepend(str);
+		update(index);
 	}
 	//更新控制台消息
 	function update(index){
@@ -182,18 +210,6 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 		$('#console-content').html('');
 		layer.content('', index);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 });
 </script>
 </body>

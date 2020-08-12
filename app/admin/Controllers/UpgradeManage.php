@@ -208,7 +208,7 @@ class UpgradeManage extends BaseController
 		$strDetail = '';
 		//在客户端再判断一次。解压后判断MD5。不存在的文件改成添加。只要要更新的文件至少是覆盖操作。
 		foreach($list as $key=>$value){
-			$strDetail = $strDetail.$value['name'].",覆盖,说明 \n";
+			$strDetail = $strDetail.$value['name'].",覆盖,无 \n";
 		}
 		$data = [
 			"code" => 1,

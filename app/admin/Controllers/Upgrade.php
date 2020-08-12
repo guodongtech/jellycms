@@ -4,10 +4,13 @@ use \App\Models\SysLogModel;
 use \config;
 class Upgrade extends BaseController
 {
- 
+	private $upgradeFolder;
+	private $prefix;
     public function __construct()
     {
+		$this->upgradeFolder = WRITEPATH.'upgrade/'.date('Ymd').'/';
         $config = new \Config\Config();
+		$this->prefix = $config->database['DBPrefix'];
     }
     public function index()
     {
@@ -15,14 +18,14 @@ class Upgrade extends BaseController
     }
     public function getList()
     {
-       return  $serverResult = $this->getUpgradeDetail();
-		///return json_decode($serverResult, true);
+		$serverResult = $this->getUpgradeDetail();
+		return  $serverResult;
     }
     //获取官方更新数据 
     public function getUpgradeDetail(){
 		$version = $this->currentVersion();
-		$url = 'https://upgrade.jellycms.cn/index.php/upgrade/check/'.$version;
-	   $header = array(
+		$url = 'http://www.jellycms.cn/index.php/upgrade/check/'.$version;
+		$header = array(
 		   'Accept: application/json',
 		);
 		$curl = curl_init();
@@ -68,5 +71,171 @@ class Upgrade extends BaseController
 		}
 		return file_get_contents($versionFile); 
 	}
+	//权限检测 只设置/runtime/upgrade/ 目录的读写权限 0644 没有目录则创建
+	public function checkAuth(){
+		$backupPath = $this->upgradeFolder;
+		if(!is_dir($backupPath)){
+			mkdir($backupPath,0644,true);
+		}else{
+			chmod($backupPath,0644);
+		}
+		$rdata = [
+			"code" => 1,
+			"msg" => "已经是最新版本",
+		];
+		return json_encode($rdata);
+	}
+	
+	public function download(){
+		$serverResult = $this->getUpgradeDetail();
+		$result = json_decode($serverResult, true);
+		$url = $result['download'];
+		$filePath = $this->upgradeFolder.$result['name'].'.zip';
+		//初始化
+		$curl = curl_init();
+		//设置抓取的url
+		curl_setopt($curl, CURLOPT_URL, $url);
+		//打开文件描述符
+		$fp = fopen ($filePath, 'w+');
+		curl_setopt($curl, CURLOPT_FILE, $fp);
+		//执行命令
+		curl_exec($curl);
+		//关闭URL请求
+		curl_close($curl);
+		//关闭文件描述符
+		fclose($fp);
+		if(is_file($filePath) && md5_file($filePath) == $result['md5']){
+			$rdata = [
+				"code" => 1,
+				"msg" => "下载完成",
+			];			
+		}else{
+			$rdata = [
+				"code" => 0,
+				"msg" => "下载失败",
+			];
+		}
+		return json_encode($rdata);
+	}
+	//备份文件
+	public function backup(){
+		$post = post();
+		$filesArray = $post['data'];
+		$serverResult = $this->getUpgradeDetail();
+		$result = json_decode($serverResult, true);
+		//要备份的文件不在更新列表里，返回错误
+		$p = array_column($post['data'], 'name');
+		$sr = array_column($result['data'], 'name');
+		foreach($p as $key=>$value){
+			if(!in_array($value, $sr)){
+				$rdata = [
+					"code" => 0,
+					"msg" => "非法操作",
+				];
+				return json_encode($rdata);
+			}
+		}
+		
+		foreach($filesArray as $key=>$value){
+			$file = $value['name'];
+			//文件存在则备份 不存在则忽略
+			if(is_file(FCPATH.$file)){
+				if(!is_dir(dirname($this->upgradeFolder.'backup/'.$file))){
+					mkdir(dirname($this->upgradeFolder.'backup/'.$file),0644,true);
+				}
+				if(!copy(FCPATH.$file, $this->upgradeFolder.'backup/'.$file)){
+					$rdata = [
+						"code" => 0,
+						"msg" => "备份失败:".FCPATH.$file,
+					];
+					return json_encode($rdata);
+				}
+			}
+		}
+		$rdata = [
+			"code" => 1,
+			"msg" => "备份成功",
+		];
+		return json_encode($rdata);
+	}
+	//更新
+	public function upgrade(){
+		$post = post();
+		$filesArray = $post['data'];
+		$serverResult = $this->getUpgradeDetail();
+		$result = json_decode($serverResult, true);
+		//要备份的文件不在更新列表里，返回错误
+		$p = array_column($post['data'], 'name');
+		$sr = array_column($result['data'], 'name');
+		foreach($p as $key=>$value){
+			if(!in_array($value, $sr)){
+				$rdata = [
+					"code" => 0,
+					"msg" => "非法操作",
+				];
+				return json_encode($rdata);
+			}
+		}
+		//直接读取压缩包
+		$zip = zip_open($this->upgradeFolder.$result['name'].'.zip');
+		while($zipfile=zip_read($zip)){
+			$fileName = zip_entry_name($zipfile);
+			//文件夹不存在，创建文件夹权限 0755
+			if(!is_dir(dirname(FCPATH.$fileName))){
+				mkdir(dirname(FCPATH.$fileName), 0755,true);
+			}
+			//排除.sql和目录
+			if(strpos($fileName, '.') && strpos($fileName, '.sql') == false){
+				$contents = zip_entry_read($zipfile);//取内容
+				//echo md5($contents)."\n";
+				$fp = fopen (FCPATH.$fileName, 'w+');
+				fwrite($fp, $contents);
+				fclose($fp);
+				//echo md5(file_get_contents(FCPATH.$fileName))."\n";  //内容MD5一致
+			}else{
+				//执行数据库升级
+				$execute_sql = zip_entry_read($zipfile);
+				$sqlFormat = $this->sql_split($execute_sql, $this->prefix);
+			}
+			zip_entry_close($zipfile);
+		}
+		zip_close($zip);
+		//升级成功，记录当前版本号
+		$versionPath = WRITEPATH.'version/';
+		helper('filesystem');
+		delete_files($versionPath);//删除版本记录文件夹里的所有文件
+		write_file($versionPath.'version_'.mt_rand().'.txt', $result['name']);//创建新的版本文件 用随机数防止恶意请求
+		$rdata = [
+			"code" => 1,
+			"msg" => "备份成功",
+		];
+		return json_encode($rdata);
+	}
+	//数据库升级
+    private function sql_split($sql, $tablepre) {
 
+        if ($tablepre != "gd_")
+            $sql = str_replace("`gd_", '`'.$tablepre, $sql);
+              
+        $sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
+        
+        $sql = str_replace("\r", "\n", $sql);
+        $ret = array();
+        $num = 0;
+        $queriesarray = explode(";\n", trim($sql));
+        unset($sql);
+        foreach ($queriesarray as $query) {
+            $ret[$num] = '';
+            $queries = explode("\n", trim($query));
+            $queries = array_filter($queries);
+            foreach ($queries as $query) {
+                $str1 = substr($query, 0, 1);
+                if ($str1 != '#' && $str1 != '-')
+                    $ret[$num] .= $query;
+            }
+            $num++;
+        }
+        return $ret;
+    }
+	
 }
