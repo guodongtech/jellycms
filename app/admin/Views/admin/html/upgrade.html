@@ -93,7 +93,12 @@ layui.use(['layer', 'form','table','jquery','element'], function(){
 		]],
 		page: false,
 		done: function(res, curr, count){
-		$('#version-description').html(res.msg + ':<b>'+ res.name+ '</b>-' + res.create_time +res.description);
+			if(res.code == 0){
+				$('#version-description').html(res.msg + ':<b>'+ res.name+ '</b>-' + res.create_time +res.description);
+			}else{
+				$('#version-description').html(res.msg);
+			}
+				
 	  }
 	});
 	//检查更新
