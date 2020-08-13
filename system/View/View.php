@@ -349,7 +349,7 @@ class View implements RendererInterface
 			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		} */
 		//前面已完成中间解析，正式解析标签
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company|statistics)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 替换循环标签里的变量 如：{nav: pid=[nav:id]}
@@ -702,6 +702,24 @@ class View implements RendererInterface
 						$id = '$sort["id"]';
 					}
 					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPics('.$id.', $num='.$num.',"'.$from.'") as $key=>$pics){?>';
+				}
+				case 'statistics:':
+				{
+					$attr = $this->getAttrs($matches[4]);
+					// isset($attr['content_id'])? $content_id=$attr['content_id']:$content_id = 0;
+					// isset($attr['sort_id'])? $sort_id=$attr['sort_id']:$sort_id = 0;
+					$sort_id = '$sorts['.'id'.']';
+					$content_id = '$contents['.'id'.']';
+					if(!isset($attr['sort_id'])){
+						$sort_id = 0;
+					}
+					if(!isset($attr['content_id'])){
+						$content_id = 0;
+					}
+					$str = "<script src='/static/js/jquery-3.4.1.min.js'></script><script>var content_id=".$content_id."; var sort_id=".$sort_id.";$.post('index.php/statistics/index',{sort_id:sort_id,content_id:content_id},function(result){console.log(result)});</script>";
+					$str1 = '<?php echo "';
+					$str2 = '"; ?>';
+					return $str1.$str.$str2;
 				}
 				default:
 				{
