@@ -16,78 +16,7 @@
 </head>
 <body class="guodong-body">
 <style>
-.water-position .layui-table td, .layui-table th {
-    position: relative;
-    padding: 0;
-	margin:0;
-}
-.water-position .layui-form-radio {
-    margin:0;
-    padding:14px 6px;
-    cursor: pointer;
-    font-size: 0;
-	display:flex;
-	justify-content:center;
-}
-.water-position .layui-table tbody tr:hover{
-    background-color: transparent;
-}
-.water-position .layui-table tbody tr td:hover{
-        background-color: #f2f2f2;
-}
-.water-position .layui-table tbody tr td .layui-form-radioed{
-        background-color: #f2f2f2;
-}
-.water-position .layui-form-radio>i {
-    margin-right: 0;
-    font-size: 22px;
-}
 
-.layui-upload-list dl {
-    width: 92px;
-    height: 92px;
-    margin: 0 10px 10px 0;
-	position:relative;
-}
-.layui-upload-list dl  img{
-    width: 92px;
-    height: 92px;
-}
-.layui-upload-list dl dd{
-    position:absolute;
-	top:0;
-	right:0;
-	font-size:14px;
-	color:#f00;
-	cursor:pointer;
-}
-.layui-colorpicker {
-    padding: 3px !important;
-	line-height:18px !important;
-}
-.layui-textarea {
-    min-height: 100px;
-    height: auto;
-    line-height: 14px;
-    padding: 6px 10px;
-    resize: vertical;
-}
-.layui-colorpicker-main-input div.layui-inline {
-    float: left;
-    margin-right: 0px;
-    font-size: 14px;
-}
-.layui-colorpicker-pre {
-    width: 20px;
-    height: 20px;
-    border-radius: 2px;
-    display: inline-block;
-    margin-bottom:2px 6px;
-    cursor: pointer;
-}
-.layui-colorpicker-pre:nth-child(11n+1) {
-    margin-left: 6px;
-}
 </style>
 {include:head.html}
 <div class="layui-fluid animated {$GLOBALS.animate}">
@@ -219,8 +148,14 @@
 	                     <div class="layui-input-inline">
 	                     	<input type="text" name="water_color" id="water-color-input" placeholder="文字颜色" class="layui-input">
 	                     </div>
-						 <span id="water-color"></span>
+								<div class="layui-inline" style="left: -11px;">
+									<div  id="water-color"></div>
+								</div>
 	                </div>
+					
+ 
+
+					
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">透明度</label>
 	                     <div class="layui-input-inline">
