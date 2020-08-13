@@ -168,6 +168,35 @@ class Upload extends BaseController
 			
 			//创建目录并设置权限
 			$file->move($uploadPath, $newName);
+			$name = $file->getName();
+			$waterImage = $uploadPath.'/'.$name;
+			//移动完后处理水印
+			if($GLOBALS['water_status']&&strpos($mineType, 'image') !== FALSE){
+				$position = $this->calcCropCoords($GLOBALS['water_position']);
+				//优先处理文字水印
+				if($GLOBALS['water_text'] !== ''){
+					$image = \Config\Services::image()->withFile($waterImage);
+					$image->text($GLOBALS['water_text'], [
+								'color'      => $GLOBALS['water_color'],
+								'opacity'    => $GLOBALS['water_opacity'],
+								'withShadow' => false,
+								'hAlign'     => $position['hAlign'],
+								'vAlign'     => $position['vAlign'],
+								'fontSize'   => 20,
+								'fontPath'   => FCPATH.$GLOBALS['water_font'],
+							])->save($waterImage);
+				}else if($GLOBALS['water_pic'] !== ''){
+					$image = \Config\Services::image()->withFile($waterImage);
+					$image->imageWaterMark(FCPATH.$GLOBALS['water_pic'], [
+						'opacity'    => $GLOBALS['water_opacity'],
+						'hAlign'     => $position['hAlign'],
+						'vAlign'     => $position['vAlign'],
+						'proportion'     => $GLOBALS['water_proportion'],
+					])->save($waterImage);
+		
+				}
+				
+			}
 			$result = [
                 'state' => 'SUCCESS',
                 'url' => "/".$uploadPath.'/'.$newName,
