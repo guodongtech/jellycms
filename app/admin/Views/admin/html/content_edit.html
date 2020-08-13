@@ -365,6 +365,14 @@
 		$('.jelly-editor').each(function(i){
 			UE.getEditor($(this).attr('id'));
 		})
+		UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+		UE.Editor.prototype.getActionUrl = function(action) {
+		    if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo') {
+		    	return '{url:/Upload/ueUpload}/' + action;
+		    } else {
+		        return this._bkGetActionUrl.call(this, action);
+		    }
+		};
 	}
 
 	//所有上传 绑定事件  参数：exts: 'zip|rar|7z' 即代表只允许上传压缩格式的文件。如果 accept 未设定，那么限制的就是图片的文件格式

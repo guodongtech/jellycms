@@ -109,6 +109,14 @@
 <script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
 <script>
 var ue = UE.getEditor('description');
+UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+UE.Editor.prototype.getActionUrl = function(action) {
+    if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo') {
+    	return '{url:/Upload/ueUpload}/' + action;
+    } else {
+        return this._bkGetActionUrl.call(this, action);
+    }
+};
 !function(){
 	var layer = layui.layer,
 	form = layui.form;
