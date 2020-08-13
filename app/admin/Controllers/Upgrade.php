@@ -208,7 +208,7 @@ class Upgrade extends BaseController
 		write_file($versionPath.'version_'.mt_rand().'.txt', $result['name']);//创建新的版本文件 用随机数防止恶意请求
 		$rdata = [
 			"code" => 1,
-			"msg" => "备份成功",
+			"msg" => "升级成功",
 		];
 		return json_encode($rdata);
 	}
