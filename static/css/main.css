@@ -454,6 +454,21 @@ span[contenteditable]:empty:before {
 .layui-colorpicker-pre:nth-child(11n+1) {
     margin-left: 6px;
 }
+.wow{
+	opacity:0;
+}
+.animated{
+	opacity:1 !important;
+}
+.delay1{
+	animation-delay:0.1s;
+}
+.delay3{
+	animation-delay:0.3s;
+}
+.delay5{
+	animation-delay:0.5s;
+}
  body#console{
 	 display:flex;
     flex-direction: column;
