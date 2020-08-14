@@ -63,6 +63,22 @@
 		                     	<input type="text" name="cache_time" value="888" placeholder="缓存时间（秒）" class="layui-input">
 		                     </div>
 		                </div>
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">统计清除</label>
+		                     <div class="layui-input-inline">
+		                     	<input type="radio" name="stactics_status" value="1" title="启用">
+								<input type="radio" name="stactics_status" value="0" checked="checked" title="禁用">
+		                     </div>
+							 <div class="layui-form-mid layui-word-aux">统计数据量太多，会导致查询及统计速度变慢，建议启用自动清除功能</div>
+		                </div>
+		                
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">统计阈值</label>
+		                     <div class="layui-input-inline">
+		                     	<input type="text" name="max_stactics" value="10" placeholder="万条" class="layui-input">
+		                     </div>
+							  <div class="layui-form-mid layui-word-aux">万条。具体数量请按数据库性能调整。满足此条件将自动重置访问统计表</div>
+		                </div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">Gzip</label>
