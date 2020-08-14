@@ -31,7 +31,7 @@ class ContentModel extends Model
 							->get($limit, $offset)
 							->getResultArray();
 		foreach($res as $key=>$value){
-			$res[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'], $value['id'])):url(array($value['m_urlname'],$value['id']));
+			$res[$key]['link'] = $value['urlname']!=''?$GLOBALS['self_path'].url(array($value['urlname'], $value['id'])):$GLOBALS['self_path'].url(array($value['m_urlname'],$value['id']));
 		}
 		$builder = $this->db->table('content');
 		if($keyword){
