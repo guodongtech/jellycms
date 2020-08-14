@@ -9,6 +9,10 @@ define("AUTHTHEME", true); //自动切换移动端模板
 define("ENTRANCE", basename(__FILE__));  //当前脚本名
 // Path to the front controller (this file)
 define("FCPATH", __DIR__ . DIRECTORY_SEPARATOR);
+// 文件相对于网站根目录的位置地址
+$self_path = substr(htmlentities($_SERVER['PHP_SELF']), 0, strpos(htmlentities($_SERVER['PHP_SELF']), ENTRANCE));
+$GLOBALS['self_path']  = rtrim($self_path,"/");
+
 $pathsPath = FCPATH . "app/home/Config/Paths.php";
 require FCPATH . "app/Config.php"; //引入主配置文件
 chdir(__DIR__);

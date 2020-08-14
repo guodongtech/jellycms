@@ -25,7 +25,7 @@ class SingleModel extends Model
 							
 		
 		foreach($result as $key=>$value){
-			$result[$key]['link'] = $value['urlname']!=''?url(array($value['urlname'])):url(array($value['m_urlname'].'_'.$value['id']));
+			$result[$key]['link'] = $value['urlname']!=''?$GLOBALS['self_path'].url(array($value['urlname'])):$GLOBALS['self_path'].url(array($value['m_urlname'].'_'.$value['id']));
 		}
         return $result;
     }

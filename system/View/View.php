@@ -474,7 +474,7 @@ class View implements RendererInterface
 				}
                 case 'webroot:':
                 {
-                	return '<?php echo "/'.$matches[4].'";?>';
+                	return '<?php echo "'.$GLOBALS['self_path'].'/'.$matches[4].'";?>';
                 }
                 case 'company:':
                 {
@@ -751,7 +751,7 @@ class View implements RendererInterface
      */
 	public function Url($str)
 	{	
-		$url = '/'.ADMINNAME.$str;
+		$url = $GLOBALS['self_path'].'/'.ADMINNAME.$str;
 		return $url;
 	}
     /**

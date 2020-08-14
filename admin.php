@@ -8,6 +8,10 @@ if (phpversion() < $minPHPVersion)
 define('AUTH', true);
 define('ADMINNAME', basename(__FILE__));  //当前脚本名 菜单URL前缀
 define('ENTRANCE', basename(__FILE__));  //当前脚本名 替换ADMINNAME
+// 文件相对于网站根目录的位置地址
+$self_path = substr(htmlentities($_SERVER['PHP_SELF']), 0, strpos(htmlentities($_SERVER['PHP_SELF']), ENTRANCE));
+$GLOBALS['self_path']  = rtrim($self_path,"/");
+
 unset($minPHPVersion);
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 $pathsPath = FCPATH . 'app/admin/Config/Paths.php';

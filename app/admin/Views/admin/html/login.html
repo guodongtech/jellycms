@@ -9,15 +9,15 @@
 <meta content="#F55D54" name="theme-color">
 <title>{$GLOBALS.systemname}-version{$GLOBALS.version}-{$GLOBALS.syscompany}</title>
 <meta content='{$GLOBALS.sysdescription}' name='description'>
-<link rel="stylesheet" href="/static/layui/css/layui.css">
-<link rel="stylesheet" media="screen" href="/static/css/main.css">
-<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="{$GLOBALS.self_path}/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="{$GLOBALS.self_path}/static/css/main.css">
+<link rel="stylesheet" href="{$GLOBALS.self_path}/static/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{$GLOBALS.self_path}/static/css/style.css">
 <style>
 body{height:100%;background:#16a085  !important;overflow:hidden;}
 canvas{z-index:-1;position:absolute;}
 </style>
-<script src="/static/js/jquery.js"></script>
+<script src="{$GLOBALS.self_path}/static/js/jquery.js"></script>
 </head>
 <body class="guodong-body">
 <form method="post" id='form'>
@@ -47,8 +47,8 @@ canvas{z-index:-1;position:absolute;}
 	</dd>
 </dl>
 </form>
-<script src="/static/layui/layui.all.js"></script>
-<script src="/static/js/Particleground.js"></script>
+<script src="{$GLOBALS.self_path}/static/layui/layui.all.js"></script>
+<script src="{$GLOBALS.self_path}/static/js/Particleground.js"></script>
 <script>
 !function(){
 	var layer = layui.layer,

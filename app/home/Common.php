@@ -35,11 +35,11 @@ function post(){
 	$agent = $request->getUserAgent();
 	if ($agent->isMobile())
 	{
-		$themePath = '/'.$config->homeViewName.'/'.$config->mobileTheme.'/';
+		$themePath = $GLOBALS['self_path'].'/'.$config->homeViewName.'/'.$config->mobileTheme.'/';
 	}
 	else
 	{
-		$themePath = '/'.$config->homeViewName.'/'.$config->theme.'/';
+		$themePath = $GLOBALS['self_path'].'/'.$config->homeViewName.'/'.$config->theme.'/';
 	}
 		
 	return $themePath;
