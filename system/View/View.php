@@ -705,21 +705,10 @@ class View implements RendererInterface
 				}
 				case 'statistics:':
 				{
-					$attr = $this->getAttrs($matches[4]);
-					// isset($attr['content_id'])? $content_id=$attr['content_id']:$content_id = 0;
-					// isset($attr['sort_id'])? $sort_id=$attr['sort_id']:$sort_id = 0;
-					$sort_id = '$sorts['.'id'.']';
-					$content_id = '$contents['.'id'.']';
-					if(!isset($attr['sort_id'])){
-						$sort_id = 0;
-					}
-					if(!isset($attr['content_id'])){
-						$content_id = 0;
-					}
-					$str = "<script src='/static/js/jquery-3.4.1.min.js'></script><script>var content_id=".$content_id."; var sort_id=".$sort_id.";$.post('index.php/statistics/index',{sort_id:sort_id,content_id:content_id},function(result){console.log(result)});</script>";
-					$str1 = '<?php echo "';
-					$str2 = '"; ?>';
-					return $str1.$str.$str2;
+					$sorts_id = '<?php echo $sorts["id"]>0?$sorts["id"]:0; ?>';
+					$content_id = '<?php echo $contents["id"]>0?$contents["id"]:0; ?>';
+					$str = '<script src="/index.php/Statistics/index/'.$sorts_id.'/'.$content_id.'"></script>';
+					return $str;
 				}
 				default:
 				{

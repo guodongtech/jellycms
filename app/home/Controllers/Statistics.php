@@ -13,20 +13,27 @@ class Statistics extends BaseController
 	{
 		$this->model = new StatisticsModel();
 	}
-	public function index()
+	public function index($sort_id, $content_id)
 	{	
-		$post = post();
 		$data = [
 			'ip' => $this->request->getIPAddress(),
 			'os' => $this->request->getUserAgent()->getPlatform(),
 			'browser' => $this->request->getUserAgent()->getBrowser(),
 			'start_time' => date('Y-m-d H:i:s',time()),
+			'content_id' => $content_id,
+			'sort_id' => $sort_id,
 		];
-		$data = array_merge($data,$post);
-		// return json_encode($post);
-		$this->model->addData($data);
+		$insertId = $this->model->addData($data);
+		$script = 'window.onbeforeunload = function(){var id='.$insertId.'; var url="/index.php/Statistics/end/"+id; navigator.sendBeacon(url);};';
+		return $script;
+	}
+	public function end($id)
+	{	
+		$post = post();
+		$data = [
+			'end_time' => date('Y-m-d H:i:s',time()),
+		];
+		$this->model->updateData($data, $id);
 		return true;
 	}
-	 
-
 }
