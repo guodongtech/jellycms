@@ -4,14 +4,14 @@ use CodeIgniter\Model;
 
 class StatisticsModel extends Model
 {
-	//检查最新可用版本信息
+	//添加统计
     public function addData($data)
     {
 		$builder = $this->db->table('statistics');
 		$builder->insert($data);
         return $this->db->insertID();
     }
-	//检查最新可用版本信息
+	//更新退出时间
     public function updateData($data, $id)
     {
 		$builder = $this->db->table('statistics');
