@@ -19,6 +19,7 @@ class Statistics extends BaseController
 			'ip' => $this->request->getIPAddress(),
 			'os' => $this->request->getUserAgent()->getPlatform(),
 			'browser' => $this->request->getUserAgent()->getBrowser(),
+			'spider' => $this->request->getUserAgent()->getRobot(),
 			'start_time' => date('Y-m-d H:i:s',time()),
 			'content_id' => $content_id,
 			'sort_id' => $sort_id,
