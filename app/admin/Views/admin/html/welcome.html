@@ -65,10 +65,11 @@
 	<div class="layui-card-body">
 		<div class="layui-carousel layadmin-carousel layadmin-dataview" id="charts" data-anim="fade" lay-filter="LAY-index-dataview">
 			<div carousel-item>
+				<div id="echart4" class="echart"></div>
 				<div id="echart1" class="echart"></div>
 				<div id="echart2" class="echart"></div>
 				<div id="echart3" class="echart"></div>
-				<div id="echart4" class="echart"></div>
+				
 			</div>
 		</div>
 	</div>
@@ -415,14 +416,13 @@ $(document).ready(function (){
 	var optionMap = {  
 		backgroundColor: '#FFFFFF',  
 		title: {  
-			text: '全国用户访问统计',  
-			subtext: '',  
+			text: '全国区域访问统计',  
+			subtext: '精准统计',  
 			x:'center'  
 		},  
 		tooltip : {  
 			trigger: 'item'  
-		},  
-		
+		},
 		//左侧小导航图标
 		visualMap: {
 			min: 0,
@@ -432,7 +432,7 @@ $(document).ready(function (){
 			realtime: false,
 			calculable: true,
 			inRange: {
-				color: ['#089a8d', 'white']
+				color: ['#089a8d', '#d8fbfb']
 			}
 		},
 		toolbox: {
@@ -441,43 +441,40 @@ $(document).ready(function (){
 			left: 'right',
 			top: 'center',
 			feature: {
-				dataView: {readOnly: false},
 				restore: {},
-				saveAsImage: {}
+				saveAsImage: {},
 			}
 		},
-		itemStyle: {
-			normal:{
-				borderColor: 'rgba(0, 0, 0, 0.5)'
-			},
-			emphasis:{
-				areaColor: '#ffffff',
-				shadowOffsetX: 0,
-				shadowOffsetY: 0,
-				shadowBlur: 0,
-				borderWidth: 0,
-			}
-		},
-	
 		//配置属性
 		series: [{  
-			name: '数据',  
+			name: '访问',  
 			type: 'map',  
 			mapType: 'china',   
 			roam: false,  
-			zoom: 1.25,
+			zoom: 1.18,
 			label: {  
 				normal: {  
 					show: true , //省份名称  
 					fontSize:'10',
-                        color: '#d87a80'
+                    textStyle: {color: "#d87a80"}
 				},  
 				emphasis: {
 					label: {
 						show: !0
 					}
 				}
-			},		
+			},
+			itemStyle: {
+				normal: {
+					borderWidth: .18,//区域边框宽度
+					borderColor: '#eee',//区域边框颜色
+					areaColor:"#fe994e",//区域颜色
+
+				},
+				emphasis: {
+					areaColor:"#fe994e",
+				}
+            },
 			data:mydata  //数据
 		}]  
         }; 
