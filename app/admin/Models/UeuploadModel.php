@@ -102,7 +102,7 @@ class UeuploadModel extends Model
         }
 
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
+        if (!file_exists($dirname) && !mkdir($dirname, 0644, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
             return;
         } else if (!is_writeable($dirname)) {
@@ -124,7 +124,7 @@ class UeuploadModel extends Model
      */
     private function upBase64()
     {
-        $base64Data = $_POST[$this->fileField];
+        $base64Data = $this->request->getPost($this->fileField);
         $img = base64_decode($base64Data);
 
         $this->oriName = $this->config['oriName'];
@@ -142,7 +142,7 @@ class UeuploadModel extends Model
         }
 
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
+        if (!file_exists($dirname) && !mkdir($dirname, 0644, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
             return;
         } else if (!is_writeable($dirname)) {
@@ -213,7 +213,7 @@ class UeuploadModel extends Model
         }
 
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
+        if (!file_exists($dirname) && !mkdir($dirname, 0644, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
             return;
         } else if (!is_writeable($dirname)) {
