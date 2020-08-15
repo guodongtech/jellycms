@@ -14,7 +14,7 @@ class StatisticsModel extends Model
         $time_list = array_column($res, 'time');
         $list = array();
         for($i=0; $i<24; $i++){
-        	$one_hour = date("Y-m-d H:00:00",strtotime("-".$i." hour"));
+        	$one_hour = date("Y-m-d H:00:00",strtotime("-".($i-1)." hour"));
         	if(!in_array($one_hour, $time_list)){
         		$list[] = ['time'=>$one_hour,'count'=>0,'uv'=>0,'hour'=>date("H:00",strtotime($one_hour))];
         	}
@@ -65,7 +65,7 @@ class StatisticsModel extends Model
         $list = array();
         foreach($list_tmp as $k=>$v){
         	for($i=0; $i<24; $i++){
-	        	$one_hour = date("Y-m-d H:00:00",strtotime("-".$i." hour"));
+	        	$one_hour = date("Y-m-d H:00:00",strtotime("-".($i-1)." hour"));
 	        	if(!in_array($one_hour, $time_list[$k])){
 	        		$list[$k][] = ['name'=>$k,'count'=>0,'hour'=>date("H:00",strtotime($one_hour))];
 	        	}else{
@@ -73,7 +73,7 @@ class StatisticsModel extends Model
 	        	}
 	        }
         }
-        $hour_list = array_reverse((array_column(end($list), 'hour')));
+        $hour_list = array_reverse(array_column(end($list), 'hour'));
         foreach($list as $k=>$v){
         	$count_list = array_column($v, 'count');
         	$data[] = ['name'=>$k,'type'=>'line','stack'=>'总量','data'=>$count_list];
