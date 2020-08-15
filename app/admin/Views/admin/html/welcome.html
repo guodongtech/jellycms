@@ -270,7 +270,8 @@ $(document).ready(function (){
 	$('.echart').css({width:$('#charts').width(), height:$('#charts').height()});
 	// 基于准备好的dom，初始化echarts实例
 	var echart1 = echarts.init(document.getElementById('echart1'), 'macarons');
-	$.get('{url:/Statistics/todayVisit}', function(pv) {
+	$.get('{url:/Statistics/todayVisit}', function(data) {
+		console.log(data)
 		echart1.setOption({
 		title: {
 			text: "今日流量趋势",
@@ -288,7 +289,7 @@ $(document).ready(function (){
 		xAxis: [{
 			type: "category",
 			boundaryGap: !1,
-			data: ["06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"]
+			data: data.hour
 		}],
 		yAxis: [{
 			type: "value"
@@ -304,7 +305,7 @@ $(document).ready(function (){
 					}
 				}
 			},
-			data: pv
+			data: data.count
 		},
 		{
 			name: "UV",
