@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 use \App\Models\StatisticsModel;
-
+use CodeIgniter;
 class Statistics extends BaseController
 {
 	private $model;
@@ -24,4 +24,10 @@ class Statistics extends BaseController
 		$data = $this->model->allSpider();
 		return json_encode($data);
 	}
+	// ip分布
+	public function allIp(){
+		$data = $this->model->allIp();
+		return json_encode($data);
+	}
+
 }
