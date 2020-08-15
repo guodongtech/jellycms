@@ -41,6 +41,18 @@ class BaseController extends Controller
 		//--------------------------------------------------------------------
 		// E.g.:
 		 $this->session = \Config\Services::session();
+		//连接数据库
+		$this->db = \Config\Database::connect();
+		
+		//读取系统配置
+		$builder = $this->db->table('config');
+		$sysConfig   = $builder->select('*')
+							->where(['deleted'=>0])
+							->get()
+							->getResultArray();
+		foreach($sysConfig as $key=>$value){
+			$GLOBALS[$value['name']] = $value['value'];
+		}	
 	}
 
 }

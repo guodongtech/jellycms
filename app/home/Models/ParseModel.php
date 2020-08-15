@@ -210,7 +210,7 @@ class ParseModel extends Model
 		$pagebar['numlist'] = $numlist;
 		$pagebar['select'] = 1;
 		//中间循环分页
-		$pageNum = 5;
+		$pageNum = $GLOBALS['pagenum'];
 		//设置起点 起点位置要保证当前页在中间位置
 		if(($page-intval($pageNum/2))<1 || $totalPage<=$pageNum){
 			$start = 1;

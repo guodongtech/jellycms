@@ -33,6 +33,14 @@ class Login extends Base
     }
     public function act()
     {
+		//锁定期处理
+		if((time() - $this->session->lockTime) <= 0){
+			$data = [
+				"code" => 0,
+				"msg" => ($this->session->lockTime - time())."秒后解锁",
+			];
+			return json_encode($data);
+		}
 		$name = post('name');
 		$password = post('password');
 		$passwordMd5 = md5($password);
@@ -70,10 +78,22 @@ class Login extends Base
 				"msg" => "验证通过",
 			];
 		}else{
-			$data = [
-				"code" => 0,
-				"msg" => "账号或密码错误",
-			];			
+			//错误次数加1
+			$countFalse = isset($this->session->countFalse)?$this->session->countFalse:0;
+			$this->session->set('countFalse',$countFalse + 1);
+			if($this->session->countFalse >= $GLOBALS['lock_count']){
+				$this->session->set('lockTime',time() + $GLOBALS['lock_time']);//设置解锁时间
+				$data = [
+					"code" => 0,
+					"msg" => "错误次数太多，已被锁定999秒",
+				];
+			}else{
+				$data = [
+					"code" => 0,
+					"msg" => "账号或密码错误",
+				];
+			}
+
 		}
 		return json_encode($data);
     }
