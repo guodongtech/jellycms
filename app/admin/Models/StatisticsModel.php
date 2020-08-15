@@ -4,6 +4,7 @@ use CodeIgniter\Model;
 
 class StatisticsModel extends Model
 {
+	// pv uv
 	public function todayVisit(){
         $now = date("Y-m-d H:00:00",strtotime("+1 hour"));
         $pass = date("Y-m-d H:00:00",strtotime("-23 hour"));
@@ -29,13 +30,19 @@ class StatisticsModel extends Model
         $data = ['count'=>$count,'hour'=>$hour,'uv'=>$uv];
         return $data;
     }
+    // 浏览器
     public function allBrowser(){
-        $sql = "select browser as name,count(browser) as value from ".$this->db->prefixTable('statistics')." where browser!='' group by browser order by value desc limit 6";
+        $sql = "select browser as name,count(browser) as value from ".$this->db->prefixTable('statistics')." where browser!='' group by browser order by value desc";
         $res = $this->db->query($sql)->getResultArray();
         $count = array_sum(array_column($res, 'value'));
         $total = $this->db->table($this->db->prefixTable('statistics'))->countAll();
         $else_browser = $total-$count;
         $res[] = ['name'=>'其他浏览器','value'=>$else_browser];
-        return $res;
+        $browser_name = array_column($res, 'name');
+        $data['list'] = $res;
+        $data['browser_name'] = $browser_name;
+        return $data;
     }
+    // 
+
 }

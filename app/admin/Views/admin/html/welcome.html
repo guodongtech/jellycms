@@ -339,14 +339,14 @@ $(document).ready(function (){
 			legend: {
 				orient: "vertical",
 				x: "left",
-				data: ["Chrome", "Firefox", "IE 8.0", "Safari", "其它浏览器"]
+				data: data.browser_name
 			},
 			series: [{
 				name: "访问来源",
 				type: "pie",
 				radius: "55%",
 				center: ["50%", "50%"],
-				data: data
+				data: data.list
 			}]
 		})
 	},'json')
