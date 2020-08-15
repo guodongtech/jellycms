@@ -5,12 +5,28 @@ use CodeIgniter\Model;
 class StatisticsModel extends Model
 {
 	public function todayVisit(){
-        $today = date("Y-m-d");
-        $tomorrow = date("Y-m-d",strtotime("+1 day"));
-        $sql = "select t.*,IFNULL(s.count,0) as count from ".$this->db->prefixTable('statistics_hour')." t left join (SELECT HOUR(start_time)as h,FLOOR(MINUTE(start_time)/30) as m, COUNT(*) as count  FROM ".$this->db->prefixTable('statistics')." WHERE start_time between '".$today."' and '".$tomorrow."' GROUP BY FLOOR(MINUTE(start_time)/30),HOUR(start_time) ORDER BY h,m) as s on t.hour=s.h and t.minute=s.m order by t.hour,t.minute";
+        $now = date("Y-m-d H:00:00",strtotime("+1 hour"));
+        $pass = date("Y-m-d H:00:00",strtotime("-23 hour"));
+        $sql = "SELECT DATE_FORMAT( start_time, '%Y-%m-%d %H:00:00' ) AS time,DATE_FORMAT( start_time, '%H:00' ) AS hour, COUNT(*) AS count FROM ".$this->db->prefixTable('statistics')." where start_time between '".$pass."' and '".$now."' GROUP BY time ORDER BY time";
         $res = $this->db->query($sql)->getResultArray();
-        $count = array_column($res, 'count');
-        return $count;
+        // 处理数据
+        $time_list = array_column($res, 'time');
+        $list = array();
+        for($i=0; $i<24; $i++){
+        	$one_hour = date("Y-m-d H:00:00",strtotime("-".$i." hour"));
+        	if(!in_array($one_hour, $time_list)){
+        		$list[] = ['time'=>$one_hour,'count'=>0,'hour'=>date("H:00",strtotime($one_hour))];
+        	}
+        }
+        $list = array_merge($res,$list);
+        // 排序
+        $time = array_column($list, 'time');
+        array_multisort($time,SORT_ASC,$list);
+        // 取出排序后的数据
+        $count = array_column($list, 'count');
+        $hour = array_column($list, 'hour');
+        $data = ['count'=>$count,'hour'=>$hour];
+        return $data;
     }
     public function allBrowser(){
         $sql = "select browser as name,count(browser) as value from ".$this->db->prefixTable('statistics')." where browser!='' group by browser order by value desc limit 6";
