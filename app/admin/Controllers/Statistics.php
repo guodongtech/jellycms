@@ -19,4 +19,9 @@ class Statistics extends BaseController
 		$data = $this->model->allBrowser();
 		return json_encode($data);
 	}
+	// 搜索引擎
+	public function allSpider(){
+		$data = $this->model->allSpider();
+		return json_encode($data);
+	}
 }
