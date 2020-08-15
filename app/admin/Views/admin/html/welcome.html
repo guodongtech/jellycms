@@ -271,7 +271,6 @@ $(document).ready(function (){
 	// 基于准备好的dom，初始化echarts实例
 	var echart1 = echarts.init(document.getElementById('echart1'), 'macarons');
 	$.get('{url:/Statistics/todayVisit}', function(data) {
-		console.log(data)
 		echart1.setOption({
 		title: {
 			text: "今日流量趋势",
@@ -318,7 +317,7 @@ $(document).ready(function (){
 					}
 				}
 			},
-			//data: [11, 22, 33, 44, 55, 66, 333, 3333, 5555, 12666, 3333, 333, 666, 1188, 2666, 3888, 6666, 4222, 3999, 2888, 1777, 966, 655, 555, 333, 222, 311, 699, 588, 277, 166, 99, 88, 77]
+			data: data.uv
 		}]
 	})
 	},'json')

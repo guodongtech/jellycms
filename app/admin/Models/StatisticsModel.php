@@ -7,7 +7,7 @@ class StatisticsModel extends Model
 	public function todayVisit(){
         $now = date("Y-m-d H:00:00",strtotime("+1 hour"));
         $pass = date("Y-m-d H:00:00",strtotime("-23 hour"));
-        $sql = "SELECT DATE_FORMAT( start_time, '%Y-%m-%d %H:00:00' ) AS time,DATE_FORMAT( start_time, '%H:00' ) AS hour, COUNT(*) AS count FROM ".$this->db->prefixTable('statistics')." where start_time between '".$pass."' and '".$now."' GROUP BY time ORDER BY time";
+        $sql = "SELECT DATE_FORMAT( start_time, '%Y-%m-%d %H:00:00' ) AS time,DATE_FORMAT( start_time, '%H:00' ) AS hour, COUNT(*) AS count,COUNT(distinct ip) AS uv FROM ".$this->db->prefixTable('statistics')." where start_time between '".$pass."' and '".$now."' GROUP BY time ORDER BY time";
         $res = $this->db->query($sql)->getResultArray();
         // 处理数据
         $time_list = array_column($res, 'time');
@@ -15,7 +15,7 @@ class StatisticsModel extends Model
         for($i=0; $i<24; $i++){
         	$one_hour = date("Y-m-d H:00:00",strtotime("-".$i." hour"));
         	if(!in_array($one_hour, $time_list)){
-        		$list[] = ['time'=>$one_hour,'count'=>0,'hour'=>date("H:00",strtotime($one_hour))];
+        		$list[] = ['time'=>$one_hour,'count'=>0,'uv'=>0,'hour'=>date("H:00",strtotime($one_hour))];
         	}
         }
         $list = array_merge($res,$list);
@@ -25,7 +25,8 @@ class StatisticsModel extends Model
         // 取出排序后的数据
         $count = array_column($list, 'count');
         $hour = array_column($list, 'hour');
-        $data = ['count'=>$count,'hour'=>$hour];
+        $uv = array_column($list, 'uv');
+        $data = ['count'=>$count,'hour'=>$hour,'uv'=>$uv];
         return $data;
     }
     public function allBrowser(){
