@@ -73,7 +73,7 @@ class StatisticsModel extends Model
 	        	}
 	        }
         }
-        $hour_list = array_column(end($list), 'hour');
+        $hour_list = array_reverse((array_column(end($list), 'hour')));
         foreach($list as $k=>$v){
         	$count_list = array_column($v, 'count');
         	$data[] = ['name'=>$k,'type'=>'line','stack'=>'总量','data'=>$count_list];
