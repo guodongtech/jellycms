@@ -85,7 +85,7 @@ class Login extends Base
 				$this->session->set('lockTime',time() + $GLOBALS['lock_time']);//设置解锁时间
 				$data = [
 					"code" => 0,
-					"msg" => "错误次数太多，已被锁定999秒",
+					"msg" => "错误次数太多，已被锁定".$GLOBALS['lock_time']."秒",
 				];
 			}else{
 				$data = [
