@@ -214,5 +214,18 @@ class UserAgents extends BaseConfig
 		'ia_archiver'          => 'Alexa Crawler',
 		'MJ12bot'              => 'Majestic-12',
 		'Uptimebot'            => 'Uptimebot',
+		'360Spider'            => '360',
+		'Sosospider'            => 'soso',
+		'googlebot-mobile'            => 'googlebot mobile',
+		'googlebot-image'            => 'googlebot image',
+		'YoudaoBot'            => 'Youdao',
+		'YodaoBot'            => 'Youdao',
+		'Sogou News Spider'            => 'Sogou',
+		'Sogou web spider'            => 'Sogou',
+		'Sogou inst spider'            => 'Sogou',
+		'Sogou spider2'            => 'Sogou',
+		'Sogou News Spider'            => 'Sogou',
+		'Sogou Orion spider'            => 'Sogou',
+		'Sogou blog'            => 'Sogou',
 	];
 }
