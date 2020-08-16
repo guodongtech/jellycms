@@ -114,10 +114,89 @@ class UeuploadModel extends Model
         if (!(move_uploaded_file($file["tmp_name"], $this->filePath) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
         } else { //移动成功
+			$this->water($this->filePath, $this->fileType);
             $this->stateInfo = $this->stateMap[0];
         }
     }
+	private function water($waterImage, $ext){
+		$allowFiles = [".png", ".jpg", ".jpeg", ".gif", ".bmp"];
+		if(!in_array($ext, $allowFiles)) return;
+		//移动完后处理水印
+		if($GLOBALS['water_status'] ){
+			$position = $this->calcCropCoords($GLOBALS['water_position']);
+			//优先处理文字水印
+			if($GLOBALS['water_text'] !== ''){
+				$image = \Config\Services::image()->withFile($waterImage);
+				$image->text($GLOBALS['water_text'], [
+							'color'      => $GLOBALS['water_color'],
+							'opacity'    => $GLOBALS['water_opacity'],
+							'withShadow' => false,
+							'hAlign'     => $position['hAlign'],
+							'vAlign'     => $position['vAlign'],
+							'fontSize'   => 20,
+							'fontPath'   => FCPATH.$GLOBALS['water_font'],
+						])->save($waterImage);
+			}else if($GLOBALS['water_pic'] !== ''){
+				$image = \Config\Services::image()->withFile($waterImage);
+				$image->imageWaterMark(FCPATH.$GLOBALS['water_pic'], [
+					'opacity'    => $GLOBALS['water_opacity'],
+					'hAlign'     => $position['hAlign'],
+					'vAlign'     => $position['vAlign'],
+					'proportion'     => $GLOBALS['water_proportion'],
+				])->save($waterImage);
+	
+			}
+			
+		}
+	}
+	private function calcCropCoords($position)
+	{
+		$position = strtolower($position);
+		switch ($position)
+		{
+			case 'top-left':
+				$hAlign = 'left';
+				$vAlign = 'top';
+				break;
+			case 'top':
+				$hAlign = 'center';
+				$vAlign = 'top';
+				break;
+			case 'top-right':
+				$hAlign = 'right';
+				$vAlign = 'top';
+				break;
+			case 'left':
+				$hAlign = 'left';
+				$vAlign = 'middle';
+				break;
+			case 'center':
+				$hAlign = 'center';
+				$vAlign = 'middle';
+				break;
+			case 'right':
+				$hAlign = 'right';
+				$vAlign = 'middle';
+				break;
+			case 'bottom-left':
+				$hAlign = 'left';
+				$vAlign = 'bottom';
+				break;
+			case 'bottom':
+				$hAlign = 'center';
+				$vAlign = 'bottom';
+				break;
+			case 'bottom-right':
+				$hAlign = 'right';
+				$vAlign = 'bottom';
+				break;
+		}
 
+		return [
+			'hAlign' => $hAlign,
+			'vAlign' => $vAlign,
+		];
+	}
     /**
      * 处理base64编码的图片上传
      * @return mixed

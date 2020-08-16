@@ -67,7 +67,6 @@ class Upload extends BaseController
 				}
 				
 			}
-			
 			$data = [
 				"code" => 1,
 				"msg" => "上传成功",
