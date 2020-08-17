@@ -414,7 +414,7 @@ class View implements RendererInterface
 				case 'formaction:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
-					return '<?php echo "/".ENTRANCE."/form/index/"."'.$attr['name'].'" ;?>';
+					return '<?php echo "/'.$GLOBALS['self_path'].'".ENTRANCE."/form/index/"."'.$attr['name'].'" ;?>';
 				}
 				case 'url:':
 				{
