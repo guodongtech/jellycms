@@ -5,6 +5,7 @@ use CodeIgniter\Model;
 class IndexModel extends Model
 {
 	protected $sameModelSortIds = array();
+	//获取默认区域
     public function getDefaultArea()
     {
 		$builder = $this->db->table('area');
@@ -14,6 +15,7 @@ class IndexModel extends Model
 							->getRowArray();
         return $result['id'];
     }
+	//获取当前区域下company表
     public function getCompany($area_id)
     {
 		$builder = $this->db->table('company');
@@ -23,6 +25,7 @@ class IndexModel extends Model
 							->getRowArray();
         return $result;
     }
+	//获取当前区域下site表信息
     public function getSite($area_id)
     {
 		$builder = $this->db->table('site');
@@ -32,6 +35,7 @@ class IndexModel extends Model
 							->getRowArray();
         return $result;
     }
+	//获取当前区域下所有栏目
     public function getSorts($area_id)
     {
 		$builder = $this->db->table('sorts');
@@ -41,6 +45,7 @@ class IndexModel extends Model
 							->getResultArray();
         return $result;
     }
+	//获取当前父栏目下所有子栏目
     public function getSortByPid($pid)
     {
 		$builder = $this->db->table('sorts');
@@ -50,6 +55,7 @@ class IndexModel extends Model
 							->getResultArray();
         return $result;
     }
+	//通过urlname获取栏目信息
     public function getSortByUrlname($urlname)
     {
 		$builder = $this->db->table('sorts');
@@ -60,7 +66,7 @@ class IndexModel extends Model
 							->getRowArray();
         return $result;
     }
-	
+	//获取内容详情
 	public function getContent($id)
 	{
 		$builder = $this->db->table('content');
@@ -72,6 +78,7 @@ class IndexModel extends Model
 		$result['content'] = $this->addTags($result['content']);
 		return $result;
 	}
+	//获取当前区域下所有标签
 	public function getTags(){
 		$build = $this->db->table('tags');
 		$result   = $build->select('*')
@@ -81,13 +88,13 @@ class IndexModel extends Model
 							->getResultArray();
 		return $result;
 	}
-
+	//内容详情页添加标签
 	public function addTags($content)
 	{
 		//先匹配到先替换
-		$keywordsList = $this->getTags();
-		if($keywordsList){
-			foreach ($keywordsList as $key => $val) {
+		$tagsList = $this->getTags();
+		if($tagsList){
+			foreach ($tagsList as $key => $val) {
 				$title = $val['name'];
 				$len = strlen($title);
 				$str = '<a href="'.$val['link'].'" title="'.$title.'" target="_blank">'.$title.'</a>';
@@ -97,6 +104,7 @@ class IndexModel extends Model
 		}
 		return $content;
 	}
+	//获取指定分类下content字段
 	public function getPageContent($sort_id)
 	{
 		$builder = $this->db->table('content');
@@ -106,7 +114,7 @@ class IndexModel extends Model
 							->getRowArray();
         return $result;
 	}
-
+	//通过id获取分类信息
 	public function getSortById($id){
 		$builder = $this->db->table('sorts');
 		$result   = $builder->select('sorts.* , model.type as m_type')
@@ -116,7 +124,7 @@ class IndexModel extends Model
 							->getRowArray();
         return $result;
 	}
-	
+	//获取指定分类下信息列表
 	public function getList($sort_id){
 		$builder = $this->db->table('content');
 		$result   = $builder->select('content.*, sorts.id as sort_id, sorts.name as sort_name')
@@ -152,6 +160,7 @@ class IndexModel extends Model
 		}
 		return $result;
 	}
+	//获取指定栏目的model_id
 	public function getModelId($sort_id){
 		$builder = $this->db->table('sorts');
 		$result   = $builder->select('*')
