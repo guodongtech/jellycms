@@ -201,7 +201,6 @@ class View implements RendererInterface
 		if(defined('AUTHTHEME')){
 			$this->viewDirectory = $this->viewDirectory;
 			//拼接模板路径
-			$configData = new \config\config();
 			$this->viewPath = $this->viewPath.$options['theme'].'/'.$options['folder'].'/';
 			$this->viewDirectory = $this->viewDirectory.$options['theme'];
 		}else{

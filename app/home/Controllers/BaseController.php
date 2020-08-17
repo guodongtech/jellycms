@@ -52,7 +52,9 @@ class BaseController extends Controller
 							->getResultArray();
 		foreach($sysConfig as $key=>$value){
 			$GLOBALS[$value['name']] = $value['value'];
-		}	
+		}
+		
+		
 	}
 
 }

@@ -14,52 +14,53 @@ class Index extends BaseController
 	{
 		$this->model = new IndexModel();
 		//获取当前区域信息
-		$area = $this->model->getCurrentArea($_SERVER['HTTP_HOST']);
-		$area_id = $area['id'];
+		$this->area = $this->model->getCurrentArea($_SERVER['HTTP_HOST']);
 		//已绑定移动端域名的，跳转到域名
-		if($area['domain'] != '' && $area['domain'] != $this->model->getHttpType().$_SERVER['HTTP_HOST']){
-			header('Location: '.$area['domain'].$_SERVER['REQUEST_URI']);
+		if($this->area['domain'] != '' && $this->area['domain'] != $this->model->getHttpType().$_SERVER['HTTP_HOST']){
+			header('Location: '.$this->area['domain'].$_SERVER['REQUEST_URI']);
 			exit;
 		}
+		$this->session = \Config\Services::session();
+		//设置area_id
+		$this->session->set(['area_id' =>$this->area['id']]);
+		//全局标签 数据
+		$this->data['company'] = $this->model->getCompany($this->area['id']);
+		$this->data['site'] = $this->model->getSite($this->area['id']);
+	}
+	public function index()
+	{
 		
 		//获取当前区域模板 及设置缓存文件名称
 		$request = \Config\Services::request();
 		$agent = $request->getUserAgent();
 		if ($agent->isMobile())
 		{
-			$cacheTemp = $cacheTemp.'mobile'.$area_id;
-			$this->theme = $area['mobiletheme']; //主题
-			$this->folder = $area['htmlfolder'];//模板存放文件夹
+			$cacheTemp = $cacheTemp.'mobile'.$this->area['id'].$_SERVER['REQUEST_URI'];
+			$this->theme = $this->area['mobiletheme']; //主题
+			$this->folder = $this->area['htmlfolder'];//模板存放文件夹
 		}
 		else
 		{
-			$cacheTemp = $cacheTemp.'pc'.$area_id;
-			$this->theme = $area['pctheme']; //主题
-			$this->folder = $area['htmlfolder'];//模板存放文件夹
-			
-		}
-		$this->session = \Config\Services::session();
-		//开启缓存则先取缓存文件
-		if($GLOBALS['cached']){
-			$this->cacheName = md5($cacheTemp); //缓存文件名
-			if ($output = cache($this->cacheName))
-			{
-				//exit($output);
-			}			
+			$cacheTemp = $cacheTemp.'pc'.$this->area['id'].$_SERVER['REQUEST_URI'];
+			$this->theme = $this->area['pctheme']; //主题
+			$this->folder = $this->area['htmlfolder'];//模板存放文件夹
 		}
 		
-		//设置area_id
-		$this->session->set(['area_id' =>$area_id]);
-		//全局标签 数据
-		$this->data['company'] = $this->model->getCompany($area_id);
-		$this->data['site'] = $this->model->getSite($area_id);
-	}
-	public function index()
-	{	
+		$this->cacheName = md5($cacheTemp); //缓存文件名
+		//开启缓存则先取缓存文件
+		if($GLOBALS['cached']){
+			if ($output = cache($this->cacheName))
+			{
+				//return $output;
+			}
+			$this->options = ['cache'=>$GLOBALS['cache_time'],'cache_name'=>$this->cacheName, 'theme'=>$this->theme, 'folder'=>$this->folder];
+		}else{
+			$this->options = ['theme'=>$this->theme, 'folder'=>$this->folder];
+		}
 		$str =$_SERVER["QUERY_STRING"];
 		if(!$str) {
 			$this->data['home'] = 1;//首页标记
-			return view('index.html',$this->data, ['theme'=>$this->theme, 'folder'=>$this->folder]);
+			return view('index.html',$this->data, $this->options);
 		}
 		
 		//去掉后缀
@@ -106,8 +107,7 @@ class Index extends BaseController
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
-		return view($sort['listtpl'],$this->data, ['theme'=>$this->theme, 'folder'=>$this->folder]);
-		//echo view($sort['listtpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
+		return view($sort['listtpl'],$this->data, $this->options);
 	}
 	//内容页 
 	private function content($id){
@@ -125,8 +125,7 @@ class Index extends BaseController
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
-		//echo view($sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
-		return view($sort['contenttpl'],$this->data, ['theme'=>$this->theme, 'folder'=>$this->folder]);
+		return view($sort['contenttpl'],$this->data, $this->options);
 	}
  
 	//处理路由 其它同类路由在app/home/config/routes.php里有一份处理CI自有模式和伪静态模式路由。
