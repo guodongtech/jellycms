@@ -37,5 +37,5 @@ class Exceptions
 	|
 	| Default: APPPATH.'Views/errors'
 	*/
-	public $errorViewPath = APPPATH . 'Views/errors';
+	public $errorViewPath = APPPATH . '/../../app/errors';
 }

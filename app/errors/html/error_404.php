@@ -76,6 +76,7 @@
 			<?php if (! empty($message) && $message !== '(null)') : ?>
 				<?= esc($message) ?>
 			<?php else : ?>
+				请求的页面未找到<br>
 				Sorry! Cannot seem to find the page you were looking for.
 			<?php endif ?>
 		</p>
