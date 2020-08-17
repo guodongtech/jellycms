@@ -223,23 +223,14 @@ class IpLocation
         if ($location['area'] == " CZ88.NET") { 
             $location['area'] = ""; 
         } 
-        
+
         $country = current(explode('省', $location['country']));
        	$country = current(explode('市', $country));
        	if(mb_substr($country, 0, 3, 'utf-8') == '内蒙古'){
        		$country = '内蒙古';
        	}
-       	if(mb_substr($country, 0, 2, 'utf-8') == '广西'){
-       		$country = '广西';
-       	}
-       	if(mb_substr($country, 0, 2, 'utf-8') == '西藏'){
-       		$country = '西藏';
-       	}
-       	if(mb_substr($country, 0, 2, 'utf-8') == '宁夏'){
-       		$country = '宁夏';
-       	}
-       	if(mb_substr($country, 0, 2, 'utf-8') == '新疆'){
-       		$country = '新疆';
+       	if(in_array(mb_substr($country, 0, 2, 'utf-8'),['广西','西藏','宁夏','新疆','香港','澳门'])){
+       		$country = mb_substr($country, 0, 2, 'utf-8');
        	}
        	return $country;
         // return $location; 

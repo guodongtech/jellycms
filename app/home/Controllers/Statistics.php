@@ -15,6 +15,7 @@ class Statistics extends BaseController
 	}
 	public function index($sort_id, $content_id)
 	{	
+		$ip_server = new \CodeIgniter\IpLocation\IpLocation();
 		$data = [
 			'ip' => $this->request->getIPAddress(),
 			'os' => $this->request->getUserAgent()->getPlatform(),
@@ -23,6 +24,7 @@ class Statistics extends BaseController
 			'start_time' => date('Y-m-d H:i:s',time()),
 			'content_id' => $content_id,
 			'sort_id' => $sort_id,
+			'province' => $ip_server->getlocation($this->request->getIPAddress()),
 		];
 		$insertId = $this->model->addData($data);
 		$script = 'window.onbeforeunload = function(){var id='.$insertId.'; var url="/index.php/Statistics/end/"+id; navigator.sendBeacon(url);};';
