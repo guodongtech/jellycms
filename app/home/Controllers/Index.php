@@ -51,7 +51,7 @@ class Index extends BaseController
 		if($GLOBALS['cached']){
 			if ($output = cache($this->cacheName))
 			{
-				//return $output;
+				return $output;
 			}
 			$this->options = ['cache'=>$GLOBALS['cache_time'],'cache_name'=>$this->cacheName, 'theme'=>$this->theme, 'folder'=>$this->folder];
 		}else{
