@@ -20,6 +20,16 @@ class Login extends Base
     }
     public function index()
     {	
+		/* 	如果绑定了后台域名，但当前域名与绑定域名不一致，则认为已存在安全隐患，
+			为了防止后台被猜解，返回301永久重定向至首页。解除此限制需手动清理或等待浏览器、路由器自动清理缓存。
+		*/
+		//获取"站点信息"配置的域名
+		$resultArea = $this->areaModel->getDefalutArea();
+		$domain = $resultArea['domain'];
+		if($GLOBALS['admin_domain'] != '' && $GLOBALS['admin_domain'] != $_SERVER['HTTP_HOST'] ){
+			header( "Location: $domain", true, 301);
+			exit();
+		}
 		//已登录用户跳转回后台首页
 		if($this->session->id>0){
 			Header("Location: /".ADMINNAME."/home/"); 
