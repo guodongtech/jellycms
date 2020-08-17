@@ -66,10 +66,49 @@ class ParseModel extends Model
 							->where('content.id', $id)
 							->get()
 							->getRowArray();
+		$result['content'] = $this->addTags($result['content']);
 		$urlname = $result['urlname']?$result['urlname']:$result['m_urlname'];
-		$result['link'] = $result['link']==''?url(array($urlname, $result['id'])):$result['link'];		
+		$result['link'] = $result['link']==''?url(array($urlname, $result['id'])):$result['link'];			
 		return $result;
 	}
+	
+	public function getTags(){
+		$build = $this->db->table('tags');
+		$result   = $build->select('*')
+							->where(['area_id'=>session('area_id')])
+							->get()
+							->getResultArray();
+		return $result;
+	}
+
+	public function addTags($content)
+	{
+		/* 这里可以改为读取数据表，然后缓存起来 */
+		$keywords_list = $this->getTags();
+		if($keywords_list){
+			$readnum = 3;
+			foreach ($keywords_list as $key => $val) {
+				$title = $val['name'];
+				$len = strlen($title);
+				$str = '<a href="'.$val['link'].'" target="_blank">'.$title.'</a>';
+				$str_index = mb_strpos($content, $title);
+				$content = preg_replace('/(?!<[^>]*)'.$title.'(?![^<]*>)/', $str, $content, 1);
+				if(is_numeric($str_index)){
+					$readnum += 1;
+					//$content = substr_replace($content,$str,$str_index,$len);
+					//$content = $this->str_replace_limit($title,$str,$content,$this->limit);
+				}
+				//if($readnum == 8) return $content; //匹配到8个关键词就退出
+			}
+		}
+		return $content;
+	}
+	
+	
+	
+	
+	
+	
 	public function getSort($id)
 	{
 		//urlname

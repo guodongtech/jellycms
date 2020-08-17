@@ -69,7 +69,33 @@ class IndexModel extends Model
 							->where(['content.deleted'=>0, 'content.id'=>$id])
 							->get()
 							->getRowArray();
+		$result['content'] = $this->addTags($result['content']);
 		return $result;
+	}
+	public function getTags(){
+		$build = $this->db->table('tags');
+		$result   = $build->select('*')
+							->where(['area_id'=>session('area_id')])
+							->orderBy('sorting','desc')
+							->get()
+							->getResultArray();
+		return $result;
+	}
+
+	public function addTags($content)
+	{
+		//先匹配到先替换
+		$keywordsList = $this->getTags();
+		if($keywordsList){
+			foreach ($keywordsList as $key => $val) {
+				$title = $val['name'];
+				$len = strlen($title);
+				$str = '<a href="'.$val['link'].'" title="'.$title.'" target="_blank">'.$title.'</a>';
+				$str_index = mb_strpos($content, $title);
+				$content = preg_replace('/(?!<[^>]*)'.$title.'(?![^<]*>)/', $str, $content, $GLOBALS['tag_times']);
+			}
+		}
+		return $content;
 	}
 	public function getPageContent($sort_id)
 	{

@@ -46,14 +46,20 @@
                  <div class="layui-form-item">
                      <label class="layui-form-label">名称*</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="name" required="" lay-verify="required" placeholder="请输入名称" class="layui-input">
+                     	<input type="text" name="name" lay-verify="required" placeholder="请输入名称" class="layui-input">
                      </div>
                 </div>
                 
                 <div class="layui-form-item">
                      <label class="layui-form-label">链接*</label>
                      <div class="layui-input-inline">
-                     	<input type="text" name="link" required=""  value="" lay-verify="required|url" placeholder="请输入链接" class="layui-input">
+                     	<input type="text" name="link"  value="" lay-verify="required|url" placeholder="请输入链接" class="layui-input">
+                     </div>
+                </div>
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">排序*</label>
+                     <div class="layui-input-inline">
+                     	<input type="text" name="sorting" lay-verify="required" value="255" class="layui-input">
                      </div>
                 </div>
 	  		 </form>
@@ -91,6 +97,7 @@
 					return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
 				}
 			}},
+			{field:'sorting', title:'排序', width:80},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
 		]],
 		page: true
@@ -130,7 +137,7 @@
 		layer.open({
 			type: 1,
 			skin: 'layui-layer-rim',
-			area: ['346px', '258px'],
+			area: ['346px', '298px'],
 			title :'添加标签',
 			btn: ['提交', '取消'],
 			yes: function(index, layero){
@@ -193,7 +200,7 @@
 				layer.open({
 					type: 1,
 					skin: 'layui-layer-rim',
-					area: ['346px', '258px'],
+					area: ['346px', '298px'],
 					title :'添加标签',
 					btn: ['提交', '取消'],
 					yes: function(index, layero){
