@@ -13,8 +13,32 @@ class IndexModel extends Model
 							->where(['default'=>1])
 							->get()
 							->getRowArray();
-        return $result['id'];
+        return $result;
     }
+	//获取当前区域信息 
+    public function getCurrentArea($host)
+    {
+		$builder = $this->db->table('area');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0])
+							->get()
+							->getResultArray();
+		//判断当前域名是否是已绑定过的域名，如果匹配到，则按域名返回当前区域信息
+		foreach($result as $key=>$value){
+			if($this->getHttpType().$host == trim($value['domain'])){
+				$value['domain'] = trim($value['domain']);//处理掉空格 /等
+				return $result = $value;
+			}
+		}
+		//域名如果没有匹配到，则返回默认区域
+		$result = $this->getDefaultArea();
+        return $result;
+    }
+	function getHttpType()
+	{
+		$httpType = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+		return $httpType;
+	}
 	//获取当前区域下company表
     public function getCompany($area_id)
     {

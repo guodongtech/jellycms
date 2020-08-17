@@ -160,24 +160,6 @@ class View implements RendererInterface
 	{
 		$this->config   = $config;
 		$this->viewPath = rtrim($viewPath, '/ ') . '/';
-		if(defined('AUTHTHEME')){
-			$this->viewDirectory = $this->viewDirectory;
-			//拼接模板路径
-			$configData = new \config\config();
-			$request = \Config\Services::request();
-			$agent = $request->getUserAgent();
-			if ($agent->isMobile())
-			{
-				$this->viewPath = $this->viewPath.$configData->mobileTheme.'/'.$configData->templateFolder.'/';
-			}
-			else
-			{
-				$this->viewPath = $this->viewPath.$configData->theme.'/'.$configData->templateFolder.'/';
-			}
-			$this->viewDirectory = $this->viewDirectory.$config->theme;
-		}else{
-			$this->viewDirectory = $this->viewDirectory;
-		}
 		$this->loader   = is_null($loader) ? Services::locator() : $loader;
 		$this->logger   = is_null($logger) ? Services::logger() : $logger;
 		$this->debug    = is_null($debug) ? CI_DEBUG : $debug;
@@ -216,7 +198,15 @@ class View implements RendererInterface
 		$realPath                    = empty($fileExt) ? $view . '.php' : $view; // allow Views as .html, .tpl, etc (from CI3)
 		$this->renderVars['view']    = $realPath;
 		$this->renderVars['options'] = $options;
-
+		if(defined('AUTHTHEME')){
+			$this->viewDirectory = $this->viewDirectory;
+			//拼接模板路径
+			$configData = new \config\config();
+			$this->viewPath = $this->viewPath.$options['theme'].'/'.$options['folder'].'/';
+			$this->viewDirectory = $this->viewDirectory.$options['theme'];
+		}else{
+			$this->viewDirectory = $this->viewDirectory;
+		}
 		// Was it cached?
 		if (isset($this->renderVars['options']['cache']))
 		{

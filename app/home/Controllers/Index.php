@@ -12,49 +12,54 @@ class Index extends BaseController
 	private $cacheName;//缓存文件名
 	public function __construct()
 	{
-		//缓存文件名 	去除uri里的参数,防止缓存攻击
-		$cacheTemp = explode('&', $_SERVER["QUERY_STRING"]);
-		$cacheTemp = explode('htm', $cacheTemp[0]);
-		$this->config = new \config\config();
+		$this->model = new IndexModel();
+		//获取当前区域信息
+		$area = $this->model->getCurrentArea($_SERVER['HTTP_HOST']);
+		$area_id = $area['id'];
 		//已绑定移动端域名的，跳转到域名
-		if($this->config->mobileDomain != ''){
-			header('Location: '.$this->config->mobileDomain);
+		if($area['domain'] != '' && $area['domain'] != $this->model->getHttpType().$_SERVER['HTTP_HOST']){
+			header('Location: '.$area['domain'].$_SERVER['REQUEST_URI']);
 			exit;
 		}
 		
+		//获取当前区域模板 及设置缓存文件名称
 		$request = \Config\Services::request();
 		$agent = $request->getUserAgent();
 		if ($agent->isMobile())
 		{
-			$cacheTemp[0] = $cacheTemp[0].'mobile';
+			$cacheTemp = $cacheTemp.'mobile'.$area_id;
+			$this->theme = $area['mobiletheme']; //主题
+			$this->folder = $area['htmlfolder'];//模板存放文件夹
 		}
 		else
 		{
-			$cacheTemp[0] = $cacheTemp[0].'pc';
+			$cacheTemp = $cacheTemp.'pc'.$area_id;
+			$this->theme = $area['pctheme']; //主题
+			$this->folder = $area['htmlfolder'];//模板存放文件夹
+			
 		}
-		$this->cacheName = md5($cacheTemp[0]);
-		if ($output = cache($this->cacheName))
-		{
-			//exit($output);
-		}
-		$this->model = new IndexModel();
-		$area_id = $this->data['company'] = $this->model->getDefaultArea();
 		$this->session = \Config\Services::session();
+		//开启缓存则先取缓存文件
+		if($GLOBALS['cached']){
+			$this->cacheName = md5($cacheTemp); //缓存文件名
+			if ($output = cache($this->cacheName))
+			{
+				//exit($output);
+			}			
+		}
+		
 		//设置area_id
 		$this->session->set(['area_id' =>$area_id]);
 		//全局标签 数据
 		$this->data['company'] = $this->model->getCompany($area_id);
 		$this->data['site'] = $this->model->getSite($area_id);
-		//echo view('index.html',$this->data, ['cache'=>$this->config->catchTime,'cache_name'=>$this->cacheName]);
-		//$config = new \Config\Config();
-		//$this->catchTime = $config->catchTime;
 	}
 	public function index()
 	{	
 		$str =$_SERVER["QUERY_STRING"];
 		if(!$str) {
 			$this->data['home'] = 1;//首页标记
-			return view('index.html',$this->data);
+			return view('index.html',$this->data, ['theme'=>$this->theme, 'folder'=>$this->folder]);
 		}
 		
 		//去掉后缀
@@ -101,7 +106,7 @@ class Index extends BaseController
 		$this->data['topsort'] = $parents[0];//顶级分类
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
-		return view($sort['listtpl'],$this->data);
+		return view($sort['listtpl'],$this->data, ['theme'=>$this->theme, 'folder'=>$this->folder]);
 		//echo view($sort['listtpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
 	}
 	//内容页 
@@ -121,14 +126,28 @@ class Index extends BaseController
 		array_pop($parents);//最后一个元素是当前分类，删除
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
 		//echo view($sort['contenttpl'],$this->data, ['cache'=>$this->catchTime,'cache_name'=>$this->cacheName]);
-		return view($sort['contenttpl'],$this->data);
+		return view($sort['contenttpl'],$this->data, ['theme'=>$this->theme, 'folder'=>$this->folder]);
 	}
  
 	//处理路由 其它同类路由在app/home/config/routes.php里有一份处理CI自有模式和伪静态模式路由。
 	private function route($str){
 
 	}
-	
+	/**
+     * 判断是否为https
+     * @return bool 是https返回true;否则返回false
+     */
+    function isHttps() {
+        if ( !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS']) !== 'off') {
+            return true;
+        } elseif ( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+            return true;
+        } elseif ( !empty($_SERVER['HTTP_FRONT_END_HTTPS']) && ($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') {
+            return true;
+        }else{
+            return false;
+        }
+    }
 	
 	
 	

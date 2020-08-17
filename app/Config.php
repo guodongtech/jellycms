@@ -43,7 +43,4 @@ class Config
 	public $adminTemplateFolder = 'html'; //模板真实路径 $homeViewName/$theme/$templateFolder
 	public $adminViewName = 'view'; 
 	public $adminTheme = 'admin'; //后台模板目录在app/admin/view中
-	public $catchTime = 0; //缓存时间s
-	public $catched = 0;//是否开启缓存
-	public $mobileDomain = '';//移动端域名  必须指定协议  http:// https://
 }
