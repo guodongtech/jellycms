@@ -40,10 +40,11 @@ class BaseController extends Controller
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
 		// E.g.:
-		 $this->session = \Config\Services::session();
+		$this->session = \Config\Services::session();
 		//连接数据库
 		$this->db = \Config\Database::connect();
-		
+		$config = new \Config\Config();
+		$GLOBALS['homeViewName'] = $config->homeViewName;
 		//读取系统配置
 		$builder = $this->db->table('config');
 		$sysConfig   = $builder->select('*')

@@ -69,10 +69,11 @@ class Paths
 	 * default this is in `app/Views`. This value
 	 * is used when no value is provided to `Services::renderer()`.
 	 */
-	public $viewDirectory = __DIR__ . '/../../../template/';
+	public $viewDirectory = __DIR__ . '/../../../';
 	public function __construct()
 	{
-
+		$config = new \Config\Config();
+		$this->viewDirectory = $this->viewDirectory.$config->homeViewName;
 	}
 	
 	

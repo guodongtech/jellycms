@@ -1,44 +1,5 @@
 <?php
-
-/**
- * CodeIgniter
- *
- * An open source application development framework for PHP
- *
- * This content is released under the MIT License (MIT)
- *
- * Copyright (c) 2014-2019 British Columbia Institute of Technology
- * Copyright (c) 2019-2020 CodeIgniter Foundation
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
- * @package    CodeIgniter
- * @author     CodeIgniter Dev Team
- * @copyright  2019-2020 CodeIgniter Foundation
- * @license    https://opensource.org/licenses/MIT	MIT License
- * @link       https://codeigniter.com
- * @since      Version 4.0.0
- * @filesource
- */
-
 namespace CodeIgniter\View;
-
 use CodeIgniter\View\Exceptions\ViewException;
 use Config\Services;
 use Psr\Log\LoggerInterface;
@@ -198,8 +159,8 @@ class View implements RendererInterface
 		$realPath                    = empty($fileExt) ? $view . '.php' : $view; // allow Views as .html, .tpl, etc (from CI3)
 		$this->renderVars['view']    = $realPath;
 		$this->renderVars['options'] = $options;
+		//只对 home 生效
 		if(defined('AUTHTHEME')){
-			$this->viewDirectory = $this->viewDirectory;
 			//拼接模板路径
 			$this->viewPath = $this->viewPath.$options['theme'].'/'.$options['folder'].'/';
 			$this->viewDirectory = $this->viewDirectory.$options['theme'];
@@ -227,7 +188,6 @@ class View implements RendererInterface
 		// locateFile will return an empty string if the file cannot be found.
 		if (empty($this->renderVars['file']))
 		{
-			//throw ViewException::forInvalidFile($this->renderVars['view']);
 			exit('模板不存在：'.$this->renderVars['view']);
 		}
 
@@ -335,7 +295,7 @@ class View implements RendererInterface
 				}
 			}
 			$params = '['.trim($tem, ',').']';
-			$str = '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
+			$str = '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		} */
 		//前面已完成中间解析，正式解析标签
 		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company|statistics)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
@@ -448,7 +408,7 @@ class View implements RendererInterface
 					isset($attr['pid'])? $pid=$attr['pid']:$pid = 0;
 					isset($attr['value'])? $value=$attr['value']:$value = 'form';
 					isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
-					return '<?php $model = new \App\Models\ParseModel();  
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel();  
 					foreach($model->getFormlistByFromName("'.$attr['name'].'",$content["id"],$pid = '.$pid.', $num='.$num.') as $key=>$'.$value.'){?>';
 				}
 				case 'formaction:': 
@@ -465,6 +425,11 @@ class View implements RendererInterface
                 {
                 	return '<?php echo "'.$GLOBALS['self_path'].'/'.$matches[4].'";?>';
                 }
+				case 'theme:': 
+				{
+					$config = new \Config\Config();
+					return '<?php echo "'.$GLOBALS['self_path'].'/'.$GLOBALS['homeViewName'].'/'.$this->renderVars['options']['theme'].'/'.$matches[4].'";?>';
+				}
                 case 'company:':
                 {
                 	return '<?php echo $company["'.$matches[4].'"];?>';
@@ -501,9 +466,8 @@ class View implements RendererInterface
 					$str = trim($arr[0]);
 					$attr = $this->getAttrs($matches[4]);
 					isset($attr['value'])? $value=$attr['value']:$value = 'value';
-					return '<?php $model = new \App\Models\ParseModel(); echo $model->getLabel("'.$str.'", "'.$value.'")?>';
+					return '<?php if(!isset($model))  $model = new \App\Models\ParseModel(); echo $model->getLabel("'.$str.'", "'.$value.'")?>';
                 }
-				case 'theme:': return '<?php echo getWebThemePath()."'.$matches[4].'";?>';
 				case 'if:': return '<?php if('.$matches[4].'){?>';
 				case 'elseif:': return '<?php }elseif('.$matches[4].'){?>';
 				case 'else:': return '<?php }else{'.$matches[4].'?>';
@@ -612,17 +576,17 @@ class View implements RendererInterface
 				{
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['id'])) $id = $attr['id'];
-					return '<?php  $model = new \App\Models\ParseModel(); foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
 				}
 				case 'sort:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
 					if(isset($attr['id'])) $id = $attr['id'];
-					return '<?php $model = new \App\Models\ParseModel();  foreach(array($model->getSort('.$id.')) as $key=>$sort){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel();  foreach(array($model->getSort('.$id.')) as $key=>$sort){?>';
 				}
 				case 'position:': 
 				{
-					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPosition($sorts["id"]) as $key=>$position){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getPosition($sorts["id"]) as $key=>$position){?>';
 				}
 				//可指定多个ID id=1,2,3,4
 				case 'list:':
@@ -642,7 +606,7 @@ class View implements RendererInterface
 						}
 					}
 					$params = '['.trim($tem, ',').']';
-					return '<?php $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
 				}
 				case 'pagebar:':
 				{
@@ -660,7 +624,7 @@ class View implements RendererInterface
 					
 					isset($attr['value'])? $value=$attr['value']:$value = 'nav';
 					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
-					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getSortByPid(array('.$pid.'),$num='.$num.') as '.$attr['key'].' => $'.$value.'){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getSortByPid(array('.$pid.'),$num='.$num.') as '.$attr['key'].' => $'.$value.'){?>';
 				}
 				case 'slide:':
 				{
@@ -668,7 +632,7 @@ class View implements RendererInterface
 					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
 					if(isset($attr['gid'])) $gid = $attr['gid'];
 					else $gid = 0; //不设置分组ID,则读当前区域第一个可用分组
-					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getSlide('.$gid.', $num='.$num.') as $key=>$slide){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getSlide('.$gid.', $num='.$num.') as $key=>$slide){?>';
 				}
 				case 'link:':
 				{
@@ -676,7 +640,7 @@ class View implements RendererInterface
 					isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
 					if(isset($attr['gid'])) $gid = $attr['gid'];
 					else $gid = 0; //不设置分组ID,则读当前区域第一个可用分组
-					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getLink('.$gid.', $num='.$num.') as $key=>$link){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getLink('.$gid.', $num='.$num.') as $key=>$link){?>';
 				}
 				case 'pics:':
 				{
@@ -690,7 +654,7 @@ class View implements RendererInterface
 					}else if($from == 'sort'){
 						$id = '$sort["id"]';
 					}
-					return '<?php $model = new \App\Models\ParseModel(); foreach($model->getPics('.$id.', $num='.$num.',"'.$from.'") as $key=>$pics){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getPics('.$id.', $num='.$num.',"'.$from.'") as $key=>$pics){?>';
 				}
 				case 'statistics:':
 				{

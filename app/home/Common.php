@@ -9,12 +9,14 @@
  */
  //前台 url
  function url($parrams){
-	$config = new \Config\Config();
-	if($config->rewriteRule == 'url'){
-		count($parrams)>1?$url = '/?'.implode('/', $parrams).'.'.$config->suffix:$url = '/?'.implode('/', $parrams).'/';
+	if($GLOBALS['url_rule'] == 'short'){
+		count($parrams)>1?$url = '/?'.implode('/', $parrams).$GLOBALS['url_suffix']:$url = '/?'.implode('/', $parrams).'/';
+		return $url;
+	}else if($GLOBALS['url_rule'] == 'common'){
+		count($parrams)>1?$url = '/index.php?'.implode('/', $parrams).$GLOBALS['url_suffix']:$url = '/?'.implode('/', $parrams).'/';
 		return $url;
 	}else{
-		count($parrams)>1?$url = '/'.implode('/', $parrams).'/'.$config->suffix:$url = '/'.implode('/', $parrams).'/';
+		count($parrams)>1?$url = '/'.implode('/', $parrams).'/'.$GLOBALS['url_suffix']:$url = '/'.implode('/', $parrams).'/';
 		return $url;
 	}
  }
@@ -28,23 +30,6 @@ function post(){
 		return $request->getPost();
 	}
 }
- function getWebThemePath(){
-	//拼接模板路径 域名模式待处理
-	$config = new \config\config();
-	$request = \Config\Services::request();
-	$agent = $request->getUserAgent();
-	if ($agent->isMobile())
-	{
-		$themePath = $GLOBALS['self_path'].'/'.$config->homeViewName.'/'.$config->mobileTheme.'/';
-	}
-	else
-	{
-		$themePath = $GLOBALS['self_path'].'/'.$config->homeViewName.'/'.$config->theme.'/';
-	}
-		
-	return $themePath;
-	 
- }
 
     /**
      * 操作成功跳转的快捷方法

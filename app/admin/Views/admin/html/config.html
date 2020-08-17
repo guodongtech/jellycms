@@ -256,23 +256,7 @@
 								<input type="radio" name="message_ver_code" value="0" title="禁用">
 		                     </div>
 		                </div>
-		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">留言审核</label>
-		                     <div class="layui-input-inline">
-		                     	<input type="radio" name="message_verify" value="1" checked="checked" title="启用">
-								<input type="radio" name="message_verify" value="0" title="禁用">
-		                     </div>
-		                </div>
-		                
-		                <div class="layui-form-item">
-		                     <label class="layui-form-label">表单功能</label>
-		                     <div class="layui-input-inline">
-		                     	<input type="radio" name="form_status" value="1" checked="checked" title="启用">
-								<input type="radio" name="form_status" value="0" title="禁用">
-		                     </div>
-		                </div>
-		                
+
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">表单验证码</label>
 		                     <div class="layui-input-inline">
@@ -326,23 +310,23 @@
 							 <label class="layui-form-label">地址模式</label>
 							 <div class="layui-input-block">
 								<div>
-									<input type="radio" name="url_rule" value="1" title="普通模式，如：/index.php/news/1.html">
+									<input type="radio" name="url_rule" value="common" title="普通模式：/index.php?news/1.html">
 								</div>
 								<div>
-									<input type="radio" name="url_rule" value="2" title="伪静态模式，如：/news/1.html">
+									<input type="radio" name="url_rule" value="rewrite" title="伪静态模式：/news/1.html">
 								</div>
 								<div>
-									<input type="radio" name="url_rule" value="3" title="兼容模式，如：/?news/1.html">
+									<input type="radio" name="url_rule" value="short" title="短地址模式：/?news/1.html">
 								</div>
 							 </div>
 						</div>
-
+ 
 						<div class="layui-form-item">
 							 <label class="layui-form-label">URL后缀</label>
-							 <div class="layui-input-block">
-								<input type="radio" name="url_suffix" value="1" title="启用">
-								<input type="radio" name="url_suffix" value="0" checked="checked" title="禁用">
+							 <div class="layui-input-inline">
+								<input type="input"  class="layui-input" name="url_suffix" value=".html">
 							 </div>
+							 <div class="layui-form-mid layui-word-aux">如.html，注意：必须带半角点号'.'</div>
 						</div>
 							
 						<div class="layui-form-item">

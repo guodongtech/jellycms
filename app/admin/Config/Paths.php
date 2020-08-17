@@ -72,7 +72,7 @@ class Paths
 	public $viewDirectory = __DIR__ . '/../Views/';
 	public function __construct()
 	{
-		$config = new \config\config();
+		$config = new \Config\Config();
 		$this->viewDirectory = $this->viewDirectory.$config->adminTheme.'/'.$config->adminTemplateFolder;
 	}
 }

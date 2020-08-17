@@ -9,6 +9,7 @@ class Index extends BaseController
      */
 	private $data;//页面数据
 	private $model;
+	public 	$session;
 	private $cacheName;//缓存文件名
 	public function __construct()
 	{
@@ -29,7 +30,6 @@ class Index extends BaseController
 	}
 	public function index()
 	{
-		
 		//获取当前区域模板 及设置缓存文件名称
 		$request = \Config\Services::request();
 		$agent = $request->getUserAgent();
@@ -64,8 +64,7 @@ class Index extends BaseController
 		}
 		
 		//去掉后缀
-		$str = str_replace(".html","",$str);
-		$str = str_replace(".htm","",$str);
+		$str = str_replace($GLOBALS['url_suffix'],"",$str);
 		$str = trim($str, "/");
 		//目录/ID模式模式处理
 		if(strpos($str, '/')){//目录/ID模式 只取内容ID
