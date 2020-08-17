@@ -57,13 +57,14 @@ class Db extends BaseController
 		$files = directory_map($this->dir, 1);
 		$list = [];
 		foreach($files as $key=>$value){
-			$list[$key]['name'] = $value;
 			$list[$key] = [
 				'name' => $value,
 				'size' => number_format(filesize($this->dir.'/'.$value)/1024,1).'KB',
 				'time' => date('Y-m-d H:i:s', filemtime($this->dir.'/'.$value) )
 			];
 		}
+		$times = array_column($list,'time');
+		array_multisort($times,SORT_DESC,$list);
 		$data = [
 			"code" => 0,
 			"msg" => "",
