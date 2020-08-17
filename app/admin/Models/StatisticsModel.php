@@ -85,27 +85,20 @@ class StatisticsModel extends Model
     public function allIp(){
 		$now = date("Y-m-d H:i:s");
         $pass = date("Y-m-d H:i:s",strtotime("-1 day"));
-        $sql = "SELECT ip,count(ip) as count FROM ".$this->db->prefixTable('statistics')." where start_time between '".$pass."' and '".$now."' GROUP BY ip ORDER BY start_time";
+        $sql = "SELECT province as name,count(province) as value FROM ".$this->db->prefixTable('statistics')." where start_time between '".$pass."' and '".$now."' and province!='' GROUP BY province ORDER BY start_time";
         $res = $this->db->query($sql)->getResultArray();
         // 处理数据
         $list = array();
-        $ip_server = new \CodeIgniter\IpLocation\IpLocation();
-        // echo $ip_server->getlocation('203.100.32.155');die;
-        foreach($res as $k=>$v){
-        	$country = $ip_server->getlocation($v['ip']);
-        	$list[$country]['ip'] = $v['ip'];
-        	$list[$country]['name'] = $country;
-        	$list[$country]['value'] += $v['count'];
-        }
-        $isset_country = array_column($list, 'name');
-        $max_count = max(array_column($list, 'value'));
+        $isset_country = array_column($res, 'name');
+        $max_count = max(array_column($res, 'value'));
         $country_list = ['北京','上海','河北','云南','黑龙江','安徽','新疆','浙江','湖北','甘肃','内蒙古','吉林','贵州','青海','四川','海南','香港','南海诸岛','重庆','河南','辽宁','湖南','山东','江苏','江西','广西','山西','陕西','福建','广东','西藏','宁夏','台湾','澳门','天津'];
         foreach($country_list as $k=>$v){
         	if(!in_array($v,$isset_country)){
         		$list[] = ['name'=>$v,'value'=>0];
         	}
         }
-        $data['list'] = array_values($list);
+        
+        $data['list'] = array_merge($list,$res);
         $data['max_count'] = $max_count;
 		return $data;
 	}
