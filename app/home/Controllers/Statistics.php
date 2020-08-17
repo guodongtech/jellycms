@@ -1,7 +1,6 @@
 <?php 
 namespace App\Controllers;
 use  \App\Models\StatisticsModel;
-
 class Statistics extends BaseController
 {    
     /**
@@ -9,13 +8,15 @@ class Statistics extends BaseController
      * @param string 
      */
 	private $model;
+	private $ipLocation;
 	public function __construct()
 	{
 		$this->model = new StatisticsModel();
+		$this->ipLocation = new \CodeIgniter\IpLocation\IpLocation();
 	}
 	public function index($sort_id, $content_id)
 	{	
-		$ip_server = new \CodeIgniter\IpLocation\IpLocation();
+		 
 		$data = [
 			'ip' => $this->request->getIPAddress(),
 			'os' => $this->request->getUserAgent()->getPlatform(),
@@ -24,10 +25,10 @@ class Statistics extends BaseController
 			'start_time' => date('Y-m-d H:i:s',time()),
 			'content_id' => $content_id,
 			'sort_id' => $sort_id,
-			'province' => $ip_server->getlocation($this->request->getIPAddress()),
+			'province' => $this->ipLocation->getlocation($this->request->getIPAddress()),
 		];
 		$insertId = $this->model->addData($data);
-		$script = 'window.onbeforeunload = function(){var id='.$insertId.'; var url="/index.php/Statistics/end/"+id; navigator.sendBeacon(url);};';
+		$script = 'window.onbeforeunload = function(){var id='.$insertId.'; var url="'.$GLOBALS['self_path'].'/index.php/Statistics/end/"+id; navigator.sendBeacon(url);};';
 		return $script;
 	}
 	public function end($id)

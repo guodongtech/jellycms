@@ -54,7 +54,21 @@ class BaseController extends Controller
 		foreach($sysConfig as $key=>$value){
 			$GLOBALS[$value['name']] = $value['value'];
 		}
-		
+		//绝大多数蜘蛛不会执行JS，此处判断是否是蜘蛛
+		if($this->request->getUserAgent()->isRobot()){
+			$builder = $this->db->table('statistics');
+			$data = [
+				'ip' => $this->request->getIPAddress(),
+				'os' => $this->request->getUserAgent()->getPlatform(),
+				'browser' => $this->request->getUserAgent()->getBrowser(),
+				'spider' => $this->request->getUserAgent()->getRobot(),
+				'start_time' => date('Y-m-d H:i:s',time()),
+				'content_id' => 0,
+				'sort_id' => 0,
+				'query_string' => $_SERVER["QUERY_STRING"],
+			];
+			$builder->insert($data);
+		}
 		
 	}
 

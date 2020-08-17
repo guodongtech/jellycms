@@ -1,8 +1,5 @@
-<?php 
+<?php
 namespace CodeIgniter\IpLocation;
-/**
- * IP 地理位置查询类
- */ 
 class IpLocation
 { 
     /**
