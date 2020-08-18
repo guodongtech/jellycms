@@ -16,7 +16,10 @@ class Statistics extends BaseController
 	}
 	public function index($sort_id, $content_id)
 	{	
-		 
+		//此处忽略蜘蛛
+		if($this->request->getUserAgent()->isRobot()){
+			return;
+		}
 		$data = [
 			'ip' => $this->request->getIPAddress(),
 			'os' => $this->request->getUserAgent()->getPlatform(),
