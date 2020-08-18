@@ -204,6 +204,11 @@ wow.init();
 		var table = layui.table;
 		var carousel = layui.carousel;
 		var $ = layui.$;
+		$.ajaxSetup({
+			xhrFields: {
+				withCredentials: true
+        }
+		});
 		var e = layui.$,
         t = (layui.admin, layui.carousel),
         a = layui.element,
@@ -246,7 +251,7 @@ wow.init();
 	});
 	table.render({
 		elem: '#developers',
-		url:'http://localhost/index.php/push/developers',
+		url:'http://www.jellycms.cn/index.php/push/developers',
 		cellMinWidth: 80,
 		cols: [[
 			{field:'name', title: '姓名',width:120},
@@ -481,7 +486,7 @@ $(document).ready(function (){
 		echart1.resize();
 		echart2.resize();
 		echart3.resize();
-		echart4.resize();
+		//echart4.resize();
 	})
 
 	
