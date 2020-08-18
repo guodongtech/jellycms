@@ -26,20 +26,23 @@
 #safe-tip a{
 	color:#f00
 }
+#safe-tip b{
+	font-size:14px;
+	color:#FF5722;
+}
+#safe-tip b i{
+	margin-right:6px;
+}
 #safe-tip a:hover{
 	text-decoration:underline;
 }
-
+.layui-badge-dot{
+	margin-left:6px;
+}
 </style>
 <div class="layui-fluid animated {$GLOBALS.animate}">
 <div class="layui-row layui-col-space15">
 <div class="layui-col-md8">
-<p class="layui-elem-quote wow bounceInLeft delay2" id="safe-tip" >
-<b>安全提醒</b></br>
-1、请修改<a href="/{echo:ADMINNAME}SysUser/index">系统默认密码</a>，周期性更换<br>
-2、请更改默认<a id="change-admin" href="javascript:void(0)">后台入口文件名</a>，周期性更换<br>
-3、请<a href="/{echo:ADMINNAME}Config/index">绑定后台域名</a>，一个月更新一次<br>
-</p>   
 <div class="layui-row layui-col-space15">
 <div class="layui-col-md6">
 	<div   class="layui-card wow bounceInLeft delay5">
@@ -96,8 +99,8 @@
 <div class="layui-card wow bounceInUp">
 	<div class="layui-tab layui-tab-brief layadmin-latestData">
 		<ul class="layui-tab-title">
-			<li class="layui-this">今日热搜</li>
-			<li>今日热帖</li>
+			<li class="layui-this">最近搜索引擎访问</li>
+			<li>内容访问量</li>
 		</ul>
 		<div class="layui-tab-content">
 			<div class="layui-tab-item layui-show">
@@ -114,6 +117,12 @@
 </div>
 
 <div class="layui-col-md4">
+<p class="layui-elem-quote wow bounceInLeft delay2" id="safe-tip" >
+<b><i class="fa fa-shield" aria-hidden="true"></i>安全提示</b></br>
+1、请修改<a href="/{echo:ADMINNAME}SysUser/index">系统默认密码</a>，周期性更换<br>
+2、请更改默认<a id="change-admin" href="javascript:void(0)">后台入口文件名</a>，周期性更换<br>
+3、请<a href="/{echo:ADMINNAME}Config/index">绑定后台域名</a>，一个月更新一次<br>
+</p>  
 <div class="layui-card wow bounceInLeft delay1">
 	<div class="layui-card-header">版本信息</div>
 	<div class="layui-card-body layui-text">
@@ -125,25 +134,25 @@
 			<tbody>
 				<tr>
 					<td>当前版本</td>
-					<td>
-						<a href="" target="_blank" style="padding-left: 10px;">日志</a>
-						<a href="javascript:;" layadmin-event="update" style="padding-left: 5px;">检查更新</a>
+					<td>v-{echo:$GLOBALS['version']}
+						<a href="https://www.jellycms.cn/index.php/upgradeLog" target="_blank" style="padding-left: 10px;">更新日志</a>
+						<a href="/{echo:ADMINNAME}Upgrade/index" style="padding-left: 5px;">检查更新<span class="layui-badge-dot"></span></a>
 					</td>
 				</tr>
 				<tr>
-					<td>基于框架</td>
-					<td>CI4.0.3</td>
+					<td>版权所有</td>
+					<td>北京国栋科技有限公司</td>
 				</tr>
 				<tr>
 					<td>主要特色</td>
 					<td>零门槛 / 响应式 / 清爽 / 极简</td>
 				</tr>
 				<tr>
-					<td>获取渠道</td>
+					<td>获取资料</td>
 					<td style="padding-bottom: 0;">
 					<div class="layui-btn-container">
-						<a href="" target="_blank" class="layui-btn layui-btn-danger">获取授权</a>
-						<a href="" target="_blank" class="layui-btn">立即下载</a>
+						<a href="https://www.jellycms.cn/index.php/manual" target="_blank" class="layui-btn layui-btn-danger"><i class="fa fa-book" aria-hidden="true"></i>开发手册</a>
+						<a href="https://www.jellycms.cn/index.php/download" target="_blank" class="layui-btn"><i class="fa fa-link" aria-hidden="true"></i>立即下载</a>
 					</div>
 					</td>
 				</tr>
@@ -151,37 +160,9 @@
 		</table>
 	</div>
 </div>
-
-<!--         <div class="layui-card wow bounceIn">
-<div class="layui-card-header">效果报告</div>
-<div class="layui-card-body layadmin-takerates">
-<div class="layui-progress" lay-showPercent="yes">
-<h3>转化率（日同比 28% <span class="layui-edge layui-edge-top" lay-tips="增长" lay-offset="-15"></span>）</h3>
-<div class="layui-progress-bar" lay-percent="65%"></div>
-</div>
-<div class="layui-progress" lay-showPercent="yes">
-<h3>签到率（日同比 11% <span class="layui-edge layui-edge-bottom" lay-tips="下降" lay-offset="-15"></span>）</h3>
-<div class="layui-progress-bar" lay-percent="32%"></div>
-</div>
-</div>
-</div>
-
-<div class="layui-card wow bounceIn">
-<div class="layui-card-header">实时监控</div>
-<div class="layui-card-body layadmin-takerates">
-<div class="layui-progress" lay-showPercent="yes">
-<h3>CPU使用率</h3>
-<div class="layui-progress-bar" lay-percent="58%"></div>
-</div>
-<div class="layui-progress" lay-showPercent="yes">
-<h3>内存占用率</h3>
-<div class="layui-progress-bar layui-bg-red" lay-percent="90%"></div>
-</div>
-</div>
-</div> -->
 	<div class="layui-card wow bounceInUp">
 		<div class="layui-card-header">
-			开发者<i class="layui-icon layui-icon-tips" lay-tips="" lay-offset="5"></i>
+			开发者<i class="layui-icon layui-icon-tips" id="developer-tip" lay-tips="wwwww" lay-offset="5"></i>
 		</div>
 		<div class="layui-card-body layui-text layadmin-text">
 			<table id="developers"></table>
@@ -242,25 +223,25 @@ wow.init();
 		a.render("progress")
 	table.render({
 		elem: '#topSearch',
-		url:'/demo/table/user/',
+		url:'{url:/hot/getRobots}',
 		cellMinWidth: 80,
 		cols: [[
-			{field:'id', width:80, title: 'ID', sort: true},
-			{field:'username', title: '关键词'},
-			{field:'sex', width:180, title: '搜索次数', sort: true},
-			{field:'city', width:120, title: '用户数', sort: true}
+			{field:'spider', title: '蜘蛛', width:180},
+			{field:'start_time', title: '访问时间', sort: true},
+			{field:'ip', title: 'ip地址'},
+			{field:'province', title: '服务器地址'}
 		]]
 	});
 	table.render({
 		elem: '#topCard',
-		url:'/demo/table/user/',
+		url:'{url:/hot/getList}',
 		cellMinWidth: 80,
 		cols: [[
 			{field:'id', width:80, title: 'ID', sort: true},
-			{field:'username', title: '标题'},
-			{field:'sex', width:100, title: '作者'},
-			{field:'city', width:120, title: '分类'},
-			{field:'sign', title: '点击率', width: 100, minWidth: 100, sort: true}
+			{field:'title', title: '标题'},
+			{field:'author', width:100, title: '作者'},
+			{field:'sorts_name', width:120, title: '分类'},
+			{field:'visit', title: '访问量', width: 100, minWidth: 100, sort: true}
 		]]
 	});
 	table.render({
@@ -274,12 +255,15 @@ wow.init();
 		]],
 		page:false
 	});
-
-
+	//layer.tips('只想提示地精准些', '#developer-tip');
+	$('#developer-tip').on('mouseover', function(){
+		var that = this;
+		layer.tips('欢迎加入开发者社区', that); //在元素的事件回调体中，follow直接赋予this即可
+	});
 	$('#change-admin').on('click',function(){
 		layer.open({
 			title:'修改后台地址',
-			content: '<p class="layui-elem-quote wow bounceInLeft delay1">后台地址总长度不能少于10个字符<br>必须以.php结尾, 以字母开头<br>以字母+数字+下划线组合。</p><label class="layui-form-label">新后台地址</label><div class="layui-input-inline"><input type="text" name="new_admin" value="{echo:ADMINNAME}" id="new-admin" lay-verify="required" placeholder="新后台地址" class="layui-input"></div>',
+			content: '<p class="layui-elem-quote wow bounceInDown">后台地址总长度不能少于10个字符<br>必须以.php结尾, 以字母开头<br>以字母+数字+下划线组合。</p><label class="layui-form-label">新后台地址</label><div class="layui-input-inline"><input type="text" name="new_admin" value="{echo:ADMINNAME}" id="new-admin" lay-verify="required" placeholder="新后台地址" class="layui-input"></div>',
 			btn: ['确认修改', '取消'],
 			yes: function(index, layero){
 				$.post('{url:/reAdmin/changeAdmin}',{newName:$('#new-admin').val()},function(data){
