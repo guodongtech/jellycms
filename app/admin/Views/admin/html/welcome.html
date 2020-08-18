@@ -23,6 +23,12 @@
 	border-left: 5px solid #f00;
 	background:#fff;
 }
+#safe-tip a{
+	color:#f00
+}
+#safe-tip a:hover{
+	text-decoration:underline;
+}
 
 </style>
 <div class="layui-fluid animated {$GLOBALS.animate}">
@@ -30,9 +36,9 @@
 <div class="layui-col-md8">
 <p class="layui-elem-quote wow bounceInLeft delay2" id="safe-tip" >
 <b>安全提醒</b></br>
-1、请修改系统默认密码，周期性更换<br>
-2、请更改默认后台入口文件名，周期性更换<br>
-3、请绑定后台域名，一个月更新一次<br>
+1、请修改<a href="/{echo:ADMINNAME}SysUser/index">系统默认密码</a>，周期性更换<br>
+2、请更改默认<a id="change-admin" href="javascript:void(0)">后台入口文件名</a>，周期性更换<br>
+3、请<a href="/{echo:ADMINNAME}Config/index">绑定后台域名</a>，一个月更新一次<br>
 </p>   
 <div class="layui-row layui-col-space15">
 <div class="layui-col-md6">
@@ -212,12 +218,12 @@ var wow = new WOW({
 });
 wow.init();
 !function(){
-
-  var layer = layui.layer
-  var element = layui.element;
-  var table = layui.table;
-  var carousel = layui.carousel;
-        var e = layui.$,
+		var layer = layui.layer
+		var element = layui.element;
+		var table = layui.table;
+		var carousel = layui.carousel;
+		var $ = layui.$;
+		var e = layui.$,
         t = (layui.admin, layui.carousel),
         a = layui.element,
         i = layui.device();
@@ -268,7 +274,30 @@ wow.init();
 		]],
 		page:false
 	});
-  
+
+
+	$('#change-admin').on('click',function(){
+		layer.open({
+			title:'修改后台地址',
+			content: '<p class="layui-elem-quote wow bounceInLeft delay1">后台地址总长度不能少于10个字符<br>必须以.php结尾, 以字母开头<br>以字母+数字+下划线组合。</p><label class="layui-form-label">新后台地址</label><div class="layui-input-inline"><input type="text" name="new_admin" value="{echo:ADMINNAME}" id="new-admin" lay-verify="required" placeholder="新后台地址" class="layui-input"></div>',
+			btn: ['确认修改', '取消'],
+			yes: function(index, layero){
+				$.post('{url:/reAdmin/changeAdmin}',{newName:$('#new-admin').val()},function(data){
+					if(data.code == 1){
+					layer.msg(data.msg);
+						setTimeout(function (){
+							parent.location.href = "{$GLOBALS.self_path}/" + data.newName;
+						}, 1500);	
+					}
+					else{
+						layer.msg(data.msg);
+					}
+				}, 'json');
+			}
+		});
+
+
+	})
 }();
 </script>
   
@@ -471,7 +500,7 @@ $(document).ready(function (){
 		echart4.resize();
 	})
 
-
+	
 	$('#fast-menu li,#message-note li').on('click',function(){
 		var menuid = $(this).attr("menu-id");
 		var menupid = $(this).attr("menu-pid");
