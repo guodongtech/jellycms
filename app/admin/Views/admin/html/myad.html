@@ -1,0 +1,376 @@
+<html lang="zh-CN">
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="mobile-web-app-capable">
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+<meta content="webkit" name="renderer">
+<meta content="#F55D54" name="theme-color">
+<title>{$GLOBALS.systemname}-version{$GLOBALS.version}-{$GLOBALS.syscompany}</title>
+<meta content='{$GLOBALS.sysdescription}' name='description'>
+<link rel="stylesheet" href="{$GLOBALS.self_path}/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="{$GLOBALS.self_path}/static/css/main.css">
+<link rel="stylesheet" href="{$GLOBALS.self_path}/static/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" media="screen" href="{$GLOBALS.self_path}/static/css/animate.min.css">
+</head>
+<body class="guodong-body">
+<style>
+.label-level1{
+	text-align:left;
+}
+
+.label-level2{
+	text-align:left;
+	text-indent:1em;
+}
+
+</style>
+{include:head.html}
+<div class="layui-fluid animated {$GLOBALS.animate}">
+<div class="layui-row">
+
+
+
+	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">广告位列表</li>
+	    <li lay-id="t2">广告新增</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<script type="text/html" id="toolbarDemo">
+				  <div class="layui-btn-container">
+					<button class="layui-btn layui-btn-sm" lay-event="add">广告新增</button>
+				  </div>
+				</script>
+				 
+				<script type="text/html" id="barDemo">
+					<div class="layui-btn-group">
+						<button type="button" class="layui-btn layui-btn-sm" title="编辑" lay-event="edit"><i class="layui-icon"></i></button>
+						<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" title="删除" lay-event="del"><i class="layui-icon"></i></button>
+					</div>
+				</script>
+			</div>
+	  	   <div class="layui-tab-item">
+	  	   		<form action="{url:/myad/edit}" method="post" id="form" class="layui-form" lay-filter="form">
+	  	   			<input type="hidden" name="id" value=""> 
+	  	   			<div class="layui-form-item">
+	                     <label class="layui-form-label">广告标识</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="label" lay-verify="required" placeholder="请输入广告标识" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">广告位名称</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="name" lay-verify="required" placeholder="请输入广告位名称" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">时间限制</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="timeset" value="0" lay-filter="time" title="永不过期" checked="">
+							<input type="radio" name="timeset" value="1" lay-filter="time" title="在设内时间内有效">
+	                     </div>
+	                </div> 
+	                <div class="layui-form-item" id="timechoose" style="display: none">
+	                  <label class="layui-form-label"></label>
+				      <div class="layui-input-inline">
+				        <input type="text" class="layui-input" name='start_time' id="start_time" placeholder="开始时间">
+				      </div>
+				      <div class="layui-input-inline">
+				        <input type="text" class="layui-input" name='end_time' id="end_time" placeholder="结束时间">
+				      </div>
+				    </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">过期显示内容</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="expbody" lay-verify="required" placeholder="请输入过期显示内容" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                
+	            	<div class="layui-form-item">
+						 <label class="layui-form-label">内容类型</label>
+						<div class="layui-input-inline">
+							<select name="type" lay-verify="required" lay-filter="type">
+								<option value="0">选择类型</option>
+								<option value="text">文本</option>
+								<option value="single_img">单图</option>
+								<option value="more_img">多图轮播</option>
+								<option value="flash">flash</option>
+							</select>
+						</div>
+					</div>
+	            <div class="content_type" id='text' style="display: none">
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">文本内容</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="text_content" placeholder="请输入文本内容" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">文本链接</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="text_link" placeholder="请输入文本链接" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">文字颜色</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="text_color" placeholder="请输入文字颜色" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">文字大小</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="text_size" placeholder="请输入文字大小" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	            </div>
+	            <div class="content_type" id="single_img" style="display: none">
+	            	<div class="layui-form-item">
+						<label class="layui-form-label">图片地址</label>
+						<div class="layui-input-inline">
+							<input type="text" name="single_img" placeholder="上传图片" class="layui-input">
+						</div>
+						<button type="button" class="layui-btn jelly-upload" id="single_upload"><i class="layui-icon"></i>上传图片</button> 
+					</div>
+					<div class="layui-form-item" style="display: none" id="single_preview">
+	                     <label class="layui-form-label">预览</label>
+	                     <div class="layui-input-inline">
+	                     	<img class="layui-upload-img">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+					<div class="layui-form-item">
+	                     <label class="layui-form-label">图片链接</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="single_link" placeholder="请输入图片链接" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">宽度</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="single_width" placeholder="请输入图片宽度" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">高度</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="single_height" placeholder="请输入图片高度" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">描述</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="single_desc" placeholder="请输入图片描述" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	            </div>
+	            <div class="content_type" id="more_img"  style="display: none">
+	            	<div class="layui-form-item">
+						<label class="layui-form-label">图片地址</label>
+						<div class="layui-input-inline">
+							<input type="text" name="img_list" placeholder="上传图片" class="layui-input">
+							<div class="layui-form-item" id="more_preview" style="display: none">
+			                     <label class="layui-form-label"></label>
+			                     <div class="layui-input-inline more_img_preview" style="width:265px;">
+			                     	<!-- <img class="layui-upload-img">
+			                     	<span style="float:right">
+			                     	<input type="hidden" name="more_path[]">
+			                     	<input type="text" class="layui-input" name="more_link[]" placeholder="请输入链接" style=" margin-bottom: 14px;">
+			                     	<input type="text" class="layui-input" name="more_desc[]" placeholder="请输入描述">
+			                     	</span> -->
+			                     </div>
+								 <div class="layui-form-mid layui-word-aux"></div>
+			                </div>
+						</div>
+						<button type="button" class="layui-btn jelly-upload" id="more_upload" data-accept='file' data-input=''><i class="layui-icon"></i>上传图片</button> 
+					</div>
+					<div class="layui-form-item">
+	                     <label class="layui-form-label">宽度</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="more_width" placeholder="请输入宽度 例：500px" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">高度</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="more_height" placeholder="请输入高度 例：300px" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	            </div>
+	            <div class="content_type" id="flash"  style="display: none">
+	            	<div class="layui-form-item">
+						<label class="layui-form-label">flash地址</label>
+						<div class="layui-input-inline">
+							<input type="text" name="flash_link" placeholder="上传flash或输入外链" class="layui-input">
+						</div>
+						<button type="button" class="layui-btn jelly-upload" data-accept='file' data-input=''><i class="layui-icon"></i>上传flash</button> 
+					</div>
+					<div class="layui-form-item">
+	                     <label class="layui-form-label">宽度</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="flash_width" placeholder="请输入宽度" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">高度</label>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="flash_height" placeholder="请输入高度" class="layui-input">
+	                     </div>
+						 <div class="layui-form-mid layui-word-aux"></div>
+	                </div>
+	            </div>
+
+
+
+
+
+
+
+
+
+
+
+	                
+		  	   		 <div class="layui-form-item">
+						 <div class="layui-input-inline">
+							<button lay-submit lay-filter="submit" class="layui-btn">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+				    </div>
+	  	   		</form>
+	  	   </div>
+	  </div>
+	</div>
+	 
+
+</div>
+</div>
+<script src="{$GLOBALS.self_path}/static/layui/layui.all.js"></script>
+<script src="{$GLOBALS.self_path}/static/js/jquery-3.4.1.min.js"></script>
+<script src="{$GLOBALS.self_path}/static/js/loadData.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+	!function(){
+	var layer = layui.layer,
+	form = layui.form;
+	var table = layui.table;
+	var $ = layui.jquery;
+	var element = layui.element;
+	form.render();
+	var laydate = layui.laydate;
+	var upload = layui.upload;
+	table.render({
+		elem: '#table',url:'{url:/Myad/getList}',
+		toolbar: '#toolbarDemo',
+		title: '广告列表',
+		layEvent: 'LAYTABLE_TIPS',
+		icon: 'layui-icon-tips',
+		cols: [[
+			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+			{field:'name', title:'名称', width:180},
+			{field:'label', title:'标识', width:120, hide:true},
+			{field:'type', title:'分类', width:120},
+			{field:'start_time', title:'开始时间'},
+			{field:'end_time', title:'结束时间'},
+			{field:'expbody', title:'过期提示语'},
+			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
+		]],
+		// page: true
+	});
+	//日期时间选择器
+	laydate.render({
+	    elem: '#start_time',
+	    type: 'datetime'
+	});
+	laydate.render({
+	    elem: '#end_time',
+	    type: 'datetime'
+	});
+	form.on('radio(time)', function(data){
+	  	if(data.value == 1){
+	  		$("#timechoose").show();
+	  	}else{
+	  		$("#timechoose").hide();
+	  	}
+	}); 
+	form.on('select(type)', function(data){
+	  	if(data.value == 0){
+	  		$(".content_type").hide();
+	  	}else{
+	  		$(".content_type").hide();
+	  		$("#"+data.value).show();
+	  	}
+	});     
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#single_upload',
+		url: '{url:/upload/uploadFile}',
+		exts: 'jpg|png|jpeg',
+		before: function(obj){
+		  //预读本地文件示例，不支持ie8
+		  obj.preview(function(index, file, result){
+			$('#single_preview img').attr('src',result);
+			$('#single_preview').show();
+		  });
+		},
+		done: function(res){
+			//上传完毕回调
+			$('#form input[name="single_img"]').val(res.data.path);
+			layer.msg('上传成功')
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
+
+	// loadData(obj.data, '#form');
+	// form.render();
+	//执行实例
+	var path='';
+	var uploadInst = upload.render({
+		multiple: true,
+		elem: '#more_upload',
+		url: '{url:/upload/uploadFile}',
+		exts: 'jpg|png|jpeg',
+		before: function(obj){
+		  //预读本地文件示例，不支持ie8
+		  obj.preview(function(index, file, result){
+		  	$('#more_preview').show();
+		  	
+		  });
+		},
+		done: function(res,index){
+			//上传完毕回调
+			path = path + res.data.path + ',';
+			$('#form input[name="img_list"]').val(path);
+			$('.more_img_preview').append('<img class="layui-upload-img" src="'+res.data.path+'"> <span style="float:right"> <input type="hidden" name="more_path[]" value="'+res.data.path+'"> <input type="text" class="layui-input" name="more_link[]" placeholder="请输入链接" style=" margin-bottom: 14px;"> <input type="text" class="layui-input" name="more_desc[]" placeholder="请输入描述"> </span>');
+			layer.msg('上传成功')
+		},
+		error: function(){
+			//请求异常回调
+		}
+	})
+
+}();
+</script>
