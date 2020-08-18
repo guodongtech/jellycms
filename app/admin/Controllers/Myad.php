@@ -38,7 +38,7 @@ class Myad extends BaseController
 				$data['path'] = implode(',',$post['more_path']);
 				$data['link'] = implode(',',$post['more_link']);
 				$data['desc'] = implode(',',$post['more_desc']);
-				$str = '<link rel="stylesheet" href="{theme:css/swiper.min.css}"><div class="swiper-container" style="width: "'.$post['more_width'].'";height: "'.$post['more_height'].'";"><div class="swiper-wrapper">';
+				$str = '<link rel="stylesheet" href="{theme:css/swiper.min.css}"><div class="swiper-container" style="width: '.$post['more_width'].';height: '.$post['more_height'].';"><div class="swiper-wrapper">';
 				foreach($post['more_path'] as $k=>$v){
 					$str .= '<div class="swiper-slide"><a href="'.$post['more_link'][$k].'"><img src="'.$v.'" title="'.$post['more_desc'][$k].'" width="'.$post['more_width'].'" height="'.$post['more_height'].'" /></a></div>';	
 				}

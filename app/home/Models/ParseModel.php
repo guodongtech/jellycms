@@ -416,7 +416,18 @@ class ParseModel extends Model
 		return array();//防止前台报错，返回空数组	
 	}	
 	
-	
+	// 获取ad标签的输出内容
+	public function getNormbody($label){
+		$builder = $this->db->table('myad');
+		$result   = $builder->select('*')
+							->where(['deleted'=>0,'label'=>$label])
+							->get()
+							->getRowArray();
+    	if(empty($result) || !isset($result)){
+    		return array();
+    	}
+    	return $result['normbody'];
+    }
 	
 	
 }

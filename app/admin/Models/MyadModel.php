@@ -33,16 +33,5 @@ class MyadModel extends Model
 	// 	$result = $this->db->query($sql)->getResultArray();
 	// 	return $result;
 	// }
-	// 获取ad标签的输出内容
-	public function getNormbody($label){
-		$builder = $this->db->table('myad');
-		$result   = $builder->select('*')
-							->where(['deleted'=>0,'label'=>$label])
-							->get()
-							->getRowArray();
-    	if(empty($result) || !isset($result)){
-    		return array();
-    	}
-    	return $result['normbody'];
-    }
+	
 }
