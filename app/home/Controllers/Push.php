@@ -31,6 +31,4 @@ class Push extends BaseController
 		];
 		echo json_encode($rdata);
 	}
-	 
-
 }
