@@ -39,7 +39,7 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-				<table class="layui-hide" id="table" lay-filter="test"></table>
+				<table class="layui-hide" id="table" lay-filter="table"></table>
 				<script type="text/html" id="toolbarDemo">
 				  <div class="layui-btn-container">
 					<button class="layui-btn layui-btn-sm" lay-event="add">广告新增</button>
@@ -74,7 +74,7 @@
 	                     <label class="layui-form-label">时间限制</label>
 	                     <div class="layui-input-block">
 	                     	<input type="radio" name="timeset" value="0" lay-filter="time" title="永不过期" checked="">
-							<input type="radio" name="timeset" value="1" lay-filter="time" title="在设内时间内有效">
+							<input type="radio" name="timeset" value="1" lay-filter="time" title="在设定时间内有效">
 	                     </div>
 	                </div> 
 	                <div class="layui-form-item" id="timechoose" style="display: none">
@@ -89,7 +89,7 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">过期显示</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="expbody" lay-verify="required" placeholder="请输入过期显示内容" class="layui-input">
+	                     	<input type="text" name="expbody" placeholder="请输入过期显示内容" class="layui-input">
 	                     </div>
 						 <div class="layui-form-mid layui-word-aux"></div>
 	                </div>
@@ -102,7 +102,7 @@
 								<option value="text">文本</option>
 								<option value="single_img">单图</option>
 								<option value="more_img">多图轮播</option>
-								<option value="flash">flash</option>
+								<!-- <option value="flash">flash</option> -->
 							</select>
 						</div>
 					</div>
@@ -124,9 +124,9 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">文字颜色</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="text_color" placeholder="请输入文字颜色" class="layui-input">
+	                     	<input type="text" name="text_color" placeholder="请选择文字颜色" class="layui-input" id="color-form-input">
 	                     </div>
-						 <div class="layui-form-mid layui-word-aux"></div>
+						 <div id="color-form"></div>
 	                </div>
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">文字大小</label>
@@ -216,7 +216,7 @@
 						 <div class="layui-form-mid layui-word-aux"></div>
 	                </div>
 	            </div>
-	            <div class="content_type" id="flash"  style="display: none">
+	            <!-- <div class="content_type" id="flash"  style="display: none">
 	            	<div class="layui-form-item">
 						<label class="layui-form-label">flash地址</label>
 						<div class="layui-input-inline">
@@ -238,7 +238,7 @@
 	                     </div>
 						 <div class="layui-form-mid layui-word-aux"></div>
 	                </div>
-	            </div>
+	            </div> -->
 
 
 
@@ -280,6 +280,7 @@
 	form.render();
 	var laydate = layui.laydate;
 	var upload = layui.upload;
+	var colorpicker = layui.colorpicker;
 	table.render({
 		elem: '#table',url:'{url:/Myad/getList}',
 		toolbar: '#toolbarDemo',
@@ -289,23 +290,60 @@
 		cols: [[
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 			{field:'name', title:'名称', width:180},
-			{field:'label', title:'标识', width:120, hide:true},
-			{field:'type', title:'分类', width:120},
-			{field:'start_time', title:'开始时间'},
-			{field:'end_time', title:'结束时间'},
-			{field:'expbody', title:'过期提示语'},
+			{field:'label', title:'标识', width:180, templet: function(res){
+				return '{ myad:'+res.label+' }';
+			}},
+			{field:'type', title:'分类', width:120,templet: function(res){
+				if(res.type == 'text'){
+					return '文本';
+				}else if(res.type == 'single_img'){
+					return '单图';
+				}else if(res.type == 'more_img'){
+					return '多图轮播';
+				}
+			}},
+			{field:'timeset', title:'期限', width:320,templet: function(res){
+				if(res.timeset == 0){
+					return '永不过期';
+				}else{
+					return res.start_time+'  至  '+res.end_time;
+				}
+			}},
+			{field:'status', title:'状态',event: 'switch', templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status"  lay-skin="switch" lay-text="ON|OFF">';
+				}
+			}},
+			{field:'start_time',hide:true, title:'开始时间'},
+			{field:'end_time',hide:true, title:'结束时间'},
+			{field:'update_time',hide:true, title:'更新时间'},
+			{field:'create_time',hide:true, title:'创建时间'},
+			{normbody:'expbody',hide:true,title:'广告代码'},
+			{field:'expbody', title:'过期提示'},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
 		]],
-		// page: true
+		page: true
 	});
 	//日期时间选择器
 	laydate.render({
 	    elem: '#start_time',
-	    type: 'datetime'
+	    type: 'datetime',
+	    value: new Date(),
 	});
 	laydate.render({
 	    elem: '#end_time',
-	    type: 'datetime'
+	    type: 'datetime',
+	    value: new Date(),
+	});
+	//颜色选择器
+	colorpicker.render({
+	    elem: '#color-form',
+	    color: 'red',
+	    done: function(color){
+	      $('#color-form-input').val(color);
+	    }
 	});
 	form.on('radio(time)', function(data){
 	  	if(data.value == 1){
@@ -371,6 +409,117 @@
 			//请求异常回调
 		}
 	})
+	//监听行工具事件
+	table.on('tool(table)', function(obj){
+		var data = obj.data;
+		if(obj.event === 'del'){
+			layer.confirm('真的删除行么', function(index){
+				$.post('{url:/Myad/del}',{id:obj.data.id},function(data){
+					if(data.code == 1){
+						layer.msg(data.msg)
+						obj.del();
+					}
+					else{
+						layer.msg(data.msg)
+					}
+				}, 'json');
+			});
+		}else if(obj.event === 'edit'){
+				$('#form')[0].reset(); //重置表单
+				loadData(obj.data, '#form')
+				if(obj.data.timeset == 1){
+					$("#timechoose").show();
+				}
+				if(obj.data.type == 'text'){
+					$('#text').show();
+					form.val("form", {
+					  	"text_link": obj.data.link,
+					  	"text_size": obj.data.text_size,
+					  	"text_color": obj.data.text_color,
+					  	"text_content": obj.data.text_content,
+					});
+					$('#single_preview').show();
+				}
+				if(obj.data.type == 'single_img'){
+					$('#single_img').show();
+					$('#single_preview img').attr('src',obj.data.path);
+					form.val("form", {
+					  	"single_width": obj.data.width,
+					  	"single_height": obj.data.height,
+					  	"single_desc": obj.data.desc,
+					  	"single_link": obj.data.link,
+					  	"single_img": obj.data.path,
+					});
+					$('#single_preview').show();
+				}
+				if(obj.data.type == 'more_img'){
+					$('#more_img').show();
+					form.val("form", { 
+					  	"more_width": obj.data.width,
+					  	"more_height": obj.data.height,
+					  	"img_list": obj.data.path,
+					});
+					var more_desc = obj.data.desc.split(',')
+					var more_link = obj.data.link.split(',')
+					var more_path = obj.data.path.split(',')
+					for(var i = 0,len = more_desc.length; i < len; i++){
+					    $('.more_img_preview').append('<img class="layui-upload-img" src="'+more_path[i]+'"> <span style="float:right"> <input type="hidden" name="more_path[]" value="'+more_path[i]+'"> <input type="text" class="layui-input" name="more_link[]" value="'+more_link[i]+'" placeholder="请输入链接" style=" margin-bottom: 14px;"> <input type="text" class="layui-input" name="more_desc[]" value="'+more_desc[i]+'" placeholder="请输入描述"> </span>');
+					}
+					$('#more_preview').show();
+				}
+				form.render();
+				element.tabChange('tab', 't2');
+		}else if(obj.event === 'switch'){
+			var switchName = $(this).find('input[type="checkbox"]').attr("name");
+			var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+			switchValue = Number(switchValue);
+			$.post('{url:/Myad/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+				}
+				else{
+					layer.msg(data.msg)
+				}
+			}, 'json');
+			form.render();
+		}
+	});
+	//头工具栏事件
+	table.on('toolbar(table)', function(obj){
+		switch(obj.event){
+			case 'add':
+				element.tabChange('tab', 't2');
+				$('#form')[0].reset();
+				$('#form input[name="id"]').val('');
+			break;
+		};
+		form.render();
+	});
+	// 表单提交
+	form.on('submit(submit)', function(data){
+	    var url = $("#form").attr('action');
+	    $.ajax({
+	        url:url, //请求的服务端地址
+	        data:data.field,
+	        type:"post",
+	        dataType:"json",
+	        success:function(data){
+				if(data.code == 1){
+					layer.msg(data.msg)
+					setTimeout(function (){
+						window.location.reload();
+					}, 1000);
+				}
+				else{
+					layer.msg(data.msg)
+				}    
+	        },
+	        error:function(){
+	          layer.msg('error'); //错误的处理
+	        }
+	    });
+	   return false;
+	});
 
 }();
 </script>

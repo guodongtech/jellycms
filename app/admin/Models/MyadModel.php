@@ -15,23 +15,30 @@ class MyadModel extends Model
 	protected $skipValidation     = true;
 	protected $protectFields = false;
     // 获取列表
-    public function getList()
+    public function getList($page, $limit)
     {
+    	$offset = ($page-1)*$limit;
 		$builder = $this->db->table('myad');
-		$result   = $builder->select('*')
+		$res   = $builder->select('*')
 							->where(['deleted'=>0])
-							->get()
+							->get($limit, $offset)
 							->getResultArray();
-        return $result;
+
+        $total = $builder->select('*')
+							->where(['deleted'=>0])
+							->countAllResults(false);		
+        $result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
     }
 
  	public function edit($data){
 		return $this->save($data);
 	}
-	// public function checkEdit($data){
-	// 	$sql = "SELECT id FROM ".$this->db->prefixTable('myad')." where name='".$data['name']."' and deleted=0";
-	// 	$result = $this->db->query($sql)->getResultArray();
-	// 	return $result;
-	// }
+	public function checkEdit($data){
+		$sql = "SELECT id FROM ".$this->db->prefixTable('myad')." where (name='".$data['name']."' or label='".$data['label']."') and deleted=0";
+		$result = $this->db->query($sql)->getResultArray();
+		return $result;
+	}
 	
 }

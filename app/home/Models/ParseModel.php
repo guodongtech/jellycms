@@ -420,11 +420,14 @@ class ParseModel extends Model
 	public function getNormbody($label){
 		$builder = $this->db->table('myad');
 		$result   = $builder->select('*')
-							->where(['deleted'=>0,'label'=>$label])
+							->where(['deleted'=>0,'status'=>1,'label'=>$label])
 							->get()
 							->getRowArray();
     	if(empty($result) || !isset($result)){
     		return array();
+    	}
+    	if(strtotime($result['end_time']) < time()){
+    		return $result['expbody'];
     	}
     	return $result['normbody'];
     }
