@@ -131,7 +131,7 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">文字大小</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="text_size" placeholder="请输入文字大小" class="layui-input">
+	                     	<input type="text" name="text_size" placeholder="请输入文字大小 例：14px" class="layui-input">
 	                     </div>
 						 <div class="layui-form-mid layui-word-aux"></div>
 	                </div>
@@ -162,14 +162,14 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">宽度</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="single_width" placeholder="请输入图片宽度" class="layui-input">
+	                     	<input type="text" name="single_width" placeholder="请输入图片宽度 例：300px" class="layui-input">
 	                     </div>
 						 <div class="layui-form-mid layui-word-aux"></div>
 	                </div>
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">高度</label>
 	                     <div class="layui-input-inline">
-	                     	<input type="text" name="single_height" placeholder="请输入图片高度" class="layui-input">
+	                     	<input type="text" name="single_height" placeholder="请输入图片高度 例：200px" class="layui-input">
 	                     </div>
 						 <div class="layui-form-mid layui-word-aux"></div>
 	                </div>
@@ -291,7 +291,7 @@
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 			{field:'name', title:'名称', width:180},
 			{field:'label', title:'标识', width:180, templet: function(res){
-				return '{ myad:'+res.label+' }';
+				return '{'+'myad'+':'+res.label+'}';
 			}},
 			{field:'type', title:'分类', width:120,templet: function(res){
 				if(res.type == 'text'){
