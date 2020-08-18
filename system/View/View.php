@@ -667,7 +667,7 @@ class View implements RendererInterface
                 {
 					$arr = explode(' ', $matches[4]);
 					$str = trim($arr[0]);
-					return '<?php if(!isset($model))  $model = new \App\Models\MyadModel(); echo $model->getNormbody("'.$str.'"); ?>';
+					return '<?php if(!isset($model))  $model = new \App\Models\ParseModel(); echo $model->getNormbody("'.$str.'"); ?>';
                 }
 				default:
 				{
