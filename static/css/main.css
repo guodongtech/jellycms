@@ -210,6 +210,17 @@
 #fast-menu ul li i{
 	font-size:20px;
 }
+.layui-tab-content {
+    padding: 18px;
+}
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after {
+    border: none;
+    border-radius: 1px;
+    border-bottom: 1px solid #5FB878;
+}
+.layui-badge-rim, .layui-colla-content, .layui-colla-item, .layui-collapse, .layui-elem-field, .layui-form-pane .layui-form-item[pane], .layui-form-pane .layui-form-label, .layui-input, .layui-layedit, .layui-layedit-tool, .layui-quote-nm, .layui-select, .layui-tab-bar, .layui-tab-card, .layui-tab-title, .layui-tab-title .layui-this:after, .layui-textarea {
+    border-color: #f5f5f5;
+}
 .layadmin-shortcut li cite {
     top: 8px;
 }

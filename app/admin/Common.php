@@ -9,12 +9,14 @@
  */
  //前台 url
  function url($parrams){
-	$config = new \Config\Config();
-	if($config->rewriteRule == 'url'){
-		count($parrams)>1?$url = '/?'.implode('/', $parrams).'.'.$config->suffix:$url = '/?'.implode('/', $parrams).'/';
+	if($GLOBALS['url_rule'] == 'short'){
+		count($parrams)>1?$url = $GLOBALS['self_path'].'/?'.implode('/', $parrams).$GLOBALS['url_suffix']:$url = $GLOBALS['self_path'].'/?'.implode('/', $parrams).'/';
+		return $url;
+	}else if($GLOBALS['url_rule'] == 'common'){
+		count($parrams)>1?$url = $GLOBALS['self_path'].'/index.php?'.implode('/', $parrams).$GLOBALS['url_suffix']:$url = $GLOBALS['self_path'].'/?'.implode('/', $parrams).'/';
 		return $url;
 	}else{
-		count($parrams)>1?$url = '/'.implode('/', $parrams).'/'.$config->suffix:$url = '/'.implode('/', $parrams).'/';
+		count($parrams)>1?$url = '/'.implode('/', $parrams).'/'.$GLOBALS['url_suffix']:$url = '/'.implode('/', $parrams).'/';
 		return $url;
 	}
  }
