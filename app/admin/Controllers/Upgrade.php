@@ -197,6 +197,23 @@ class Upgrade extends BaseController
 				//执行数据库升级
 				$execute_sql = zip_entry_read($zipfile);
 				$sqlFormat = $this->sql_split($execute_sql, $this->prefix);
+				try {
+	                $counts = count($sqlFormat);
+	                for ($i = 0; $i < $counts; $i++) {
+	                    $sql = trim($sqlFormat[$i]);
+
+	                    if (stristr($sql, 'CREATE TABLE')) {
+	                        $this->db->query($sql);
+	                    } else {
+	                        if(trim($sql) == ''){
+	                        	continue;
+	                        }
+	                        $this->db->query($sql);
+	                    }
+	                }
+	            } catch (\Exception $e) {
+	                return json_encode(['code' => -2, 'msg' => "数据库执行中途失败，请查看官方解决教程"]);
+	            }
 			}
 			zip_entry_close($zipfile);
 		}

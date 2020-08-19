@@ -25,7 +25,12 @@ class Home extends BaseController
 				$Pids[] = $value['id'];
 			}
 		}
+		// 修改信息 安全管理地址信息
+		$sysuser = $this->MenuModel->getMenuInfo('SysUser','index');
+		$syssafe = $this->MenuModel->getMenuInfo('Config','index');
 		$data = [
+			'sysuser' => $sysuser,
+			'syssafe' => $syssafe,
 			'list' => $List,
 			'mlist' => $menuList,
 			'arealist' => $areaList,
@@ -54,7 +59,7 @@ class Home extends BaseController
 		// 待审评论 留言
 		$message_check_count = $this->MessageModel->getMessageCount();
 		$comment_check_count = $this->MessageModel->getCommentCount();
-		$message_menu = $this->MenuModel->getMessageMenu();
+		$message_menu = $this->MenuModel->getMenuInfo('Message','index');
 
 		$data['fast_menu'] = $fast_menu;
 		$data['message_check_count'] = $message_check_count;

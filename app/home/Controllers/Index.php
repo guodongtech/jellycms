@@ -30,6 +30,11 @@ class Index extends BaseController
 	}
 	public function index()
 	{
+		// 黑名单
+		$blackip = explode(',',$GLOBALS['blackip']);
+		if(in_array($this->request->getIPAddress(),$blackip)){
+			echo "该IP已被禁止访问";die;
+		}
 		//获取当前区域模板 及设置缓存文件名称
 		$request = \Config\Services::request();
 		$agent = $request->getUserAgent();

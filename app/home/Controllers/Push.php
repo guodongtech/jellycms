@@ -31,6 +31,26 @@ class Push extends BaseController
 		];
 		echo json_encode($rdata);
 	}
+	public function exchange()
+	{
+		header('Content-Type: text/html;charset=utf-8');
+		header('Access-Control-Allow-Origin:'.$_SERVER['HTTP_ORIGIN']); // *代表允许任何网址请求
+		header('Access-Control-Allow-Methods:POST,GET,OPTIONS,DELETE'); // 允许请求的类型
+		header('Access-Control-Allow-Credentials: true'); // 设置是否允许发送 cookies
+		header('Access-Control-Allow-Headers: Content-Type,Content-Length,Accept-Encoding,X-Requested-with, Origin'); // 设置允许自定义请求头的字段
+		$list = [
+			['field1'=>'title1', 'field2'=>'content1'],
+			['field1'=>'title2', 'field2'=>'content2'],
+			['field1'=>'title3', 'field2'=>'content3'],
+		];
+		$rdata = [
+			'code'=>0,
+			'msg'=>0,
+			"data" => $list,
+		
+		];
+		echo json_encode($rdata);
+	}
 	public function rollImg(){
 		return '<link rel="stylesheet" href="/template/default/css/swiper.min.css">
 				<script src="/template/default/js/swiper.min.js"></script>
@@ -39,22 +59,22 @@ class Push extends BaseController
 				    --swiper-pagination-color: #a8deee;
 				  }
 				</style>
-				<div class="swiper-container" style="width: 565px;height: 200px;">
+				<div class="swiper-container" style="width: 100%;height: 100%;">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide">
 							<a href="http://www.jellycms.cn/" target="_blank">
-								<img src="/static/upload/20200818/1597735358_196e50f4b22bccc30e8b.jpg" title="http://www.jellycms.cn/" width="565px" height="200px" />
+								<img src="/static/upload/20200818/1597735358_196e50f4b22bccc30e8b.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" />
 							</a>
 						</div>
 						<div class="swiper-slide">
-							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735358_e1d128c5ecf66559d84d.jpg" title="http://www.jellycms.cn/" width="565px" height="200px" /></a>
+							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735358_e1d128c5ecf66559d84d.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" /></a>
 						</div>
 						<div class="swiper-slide">
-							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_8a1045190ef18bf9d5c9.jpg" title="http://www.jellycms.cn/" width="565px" height="200px" />
+							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_8a1045190ef18bf9d5c9.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" />
 							</a>
 						</div>
 						<div class="swiper-slide">
-						<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_5fc7817dd6e54e251a1b.jpg" title="http://www.jellycms.cn/" width="565px" height="200px" />
+						<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_5fc7817dd6e54e251a1b.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" />
 						</a>
 						</div>
 					</div>

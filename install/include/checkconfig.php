@@ -6,7 +6,7 @@ class checkConfig
 	private $php_version     = '7.2.0';
 	private $must_extension  = array('mysqli','gd','xml','session','iconv');
 	private $recom_extension = array('zip','curl','OpenSSL','mbstring');
-	private $writeable_dir   = array('app/Config.php','install','version','index.php','admin.php','static/upload','runtime');
+	private $writeable_dir   = array('app/Config.php','install','index.php','admin.php','static/upload','runtime');
 	private $readable_dir    = array('app/config_default.php','install/jelly.sql');
 	private $php_ini         = array('safe_mode' => array('type' => '=','value' => false),'allow_url_fopen' => array('type' => '=','value' => '1'),'memory_limit' => array('type' => '>','value' => '12M'),'asp_tags' => array('type' => '=','value' => false));
 	private $php_function    = array('unlink','mkdir','filemtime','fopen','fwrite','fclose','session_start','assert');
