@@ -169,7 +169,7 @@
 </div>
 	<div class="layui-card wow bounceInUp">
 		<div class="layui-card-header">
-			<i class="title-icon fa fa-user-o" aria-hidden="true"></i>开发者
+			<i class="title-icon fa fa-user-o" aria-hidden="true"></i>开发者<a id="question" href="#" class="layui-icon" style="font-size: 14px;">问题反馈</a>
 		</div>
 		<div class="layui-card-body layui-text layadmin-text">
 			<table id="developers"></table>
@@ -194,7 +194,38 @@
 		</div>
 	</div>
 </div>
-
+<script type="text/html" id="question-form">
+			<div style="padding-right:30px;">
+				 <form action="" method="post" class="layui-form" id="form">
+					<div class="layui-form-item">
+						 <label class="layui-form-label">姓名</label>
+						 <div class="layui-input-block">
+							<input type="text" name="name" lay-verify="required" placeholder="请输入您的姓名" class="layui-input">
+						 </div>
+					</div>
+					<div class="layui-form-item">
+						 <label class="layui-form-label">邮箱</label>
+						 <div class="layui-input-block">
+							<input type="text" name="email" lay-verify="required" placeholder="请输入您的邮箱" class="layui-input">
+						 </div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">内容</label>
+						<div class="layui-input-block">
+							<textarea name="content" placeholder="请输入您要反馈的内容" class="layui-textarea"></textarea>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">评价</label>
+						<input type="hidden" id="assess" name="assess">
+						<div class="layui-input-block">
+							<div><div class="star"></div></div>
+						</div>
+					</div>
+				 </form>
+			</div>
+			
+	  	</script>
 
 </div>
 </div>
@@ -523,7 +554,46 @@ $(document).ready(function (){
 			$('#message-note a').removeAttr('href');
 		}
 	})
+	$("#question").on('click',function(){
+		layer.open({
+			type: 1,
+			skin: 'layui-layer-rim',
+			area: ['450px', '425px'],
+			title :'问题反馈',
+			btn: ['提交', '取消'],
+			maxmin:true,
+			yes: function(index, layero){
+				$.post('http://www.jellycms.com/index.php/push/question',$("#form").serialize(),function(data){
+					if(data.code == 1){
+						layer.msg(data.msg);
+						layer.close(index);
+					}else{
+						layer.msg(data.msg);
+					}
+				}, 'json');
+			},
+			btn2: function(index, layero){
+				layer.close(index);
+			},
+			content: $('#question-form').html(),
+			success: function (layero) {
+			},
+		});
+		layui.use(['rate'], function(){
+		  	var rate = layui.rate;
+		  	//基础效果
+		  	rate.render({
+		    	elem: '.star',
+		    	value:5,
+		    	text:true,
+		    	setText: function(value){
+		    		$("#assess").val(value);
+				}
+		  	})
+		})
+	})
 
+	  	
 });
 </script>
 </body>

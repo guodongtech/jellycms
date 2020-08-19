@@ -51,6 +51,34 @@ class Push extends BaseController
 		];
 		echo json_encode($rdata);
 	}
+	public function question()
+	{
+		header('Content-Type: text/html;charset=utf-8');
+		header('Access-Control-Allow-Origin:'.$_SERVER['HTTP_ORIGIN']); // *代表允许任何网址请求
+		header('Access-Control-Allow-Methods:POST,GET,OPTIONS,DELETE'); // 允许请求的类型
+		header('Access-Control-Allow-Credentials: true'); // 设置是否允许发送 cookies
+		header('Access-Control-Allow-Headers: Content-Type,Content-Length,Accept-Encoding,X-Requested-with, Origin'); // 设置允许自定义请求头的字段
+		if(!post('name') || !post('email') || !post('content')){
+			$rdata = [
+				'code'=>0,
+				'msg'=>'请认真填写哦',
+			];
+			echo json_encode($rdata);die;
+		}
+		$data['name'] = post('name');
+		$data['email'] = post('email');
+		$data['content'] = post('content');
+		$data['assess'] = post('assess');
+		// 将data入库
+
+		// //
+		$rdata = [
+			'code'=>1,
+			'msg'=>'感谢您的反馈',
+		];
+		echo json_encode($rdata);
+	}
+
 	public function rollImg(){
 		return '<link rel="stylesheet" href="/template/default/css/swiper.min.css">
 				<script src="/template/default/js/swiper.min.js"></script>

@@ -54,6 +54,11 @@ class BaseController extends Controller
 		foreach($sysConfig as $key=>$value){
 			$GLOBALS[$value['name']] = $value['value'];
 		}
+		// 黑名单
+		$blackip = explode(',',$GLOBALS['blackip']);
+		if(in_array($this->request->getIPAddress(),$blackip)){
+			echo "该IP已被禁止访问";die;
+		}
 		//绝大多数蜘蛛不会执行JS，此处判断是否是蜘蛛
 		if($this->request->getUserAgent()->isRobot()){
 			$builder = $this->db->table('statistics');
