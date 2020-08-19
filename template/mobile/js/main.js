@@ -1,19 +1,4 @@
-;!function(){
-  var layer = layui.layer
-  ,form = layui.form;
-  
-  $('.weixin').click(function(){
-	layer.open({
-		type: 1, 
-		title: false,
-		content: '<img width="100%" src="{$site.qrcode}" />',
-		success: function(layero, index) {
-			
-		}
-	});  
-  })
-  
-}();
+
 //Swiper5
   var mySwiper = new Swiper ('.swiper-container', {
    // direction: 'herizon', // 垂直切换选项

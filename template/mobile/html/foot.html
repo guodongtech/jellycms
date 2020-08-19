@@ -23,5 +23,22 @@
 <script src="{theme:js/swiper.animate.min.js}"></script>
 <script src="{theme:js/wow.min.js}"></script>
 <script src="{theme:js/main.js}"></script>
+<script>
+;!function(){
+var layer = layui.layer
+,form = layui.form;
+	$('.weixin').click(function(){
+		layer.open({
+			type: 1, 
+			title: false,
+			content: '<img width="100%" src="{$site.qrcode}" />',
+			success: function(layero, index) {
+			}
+		});  
+	})
+}();
 
+
+
+</script>
 
