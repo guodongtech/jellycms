@@ -50,6 +50,10 @@ class ModelField extends BaseController
 		
 		$data = $post;
 		unset($post['content']);
+		// 统一value格式
+		if(is_array(preg_split('/,|\r\n|\n/', $data['value']))){
+			$data['value'] = implode(',',preg_split('/,|\r\n|\n/', $data['value']));
+		}
 		// 校验 输入规则
 		$input_check = $this->model->inputRules($data);
 		if($input_check !== true){

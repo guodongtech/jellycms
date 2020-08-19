@@ -66,9 +66,10 @@
 				<div class="layui-nav-item">
 				 <a href="javascript:;"><img src="{$GLOBALS.self_path}/static/layui/images/icon.jpg" class="layui-nav-img"></a>
 				    <dl class="layui-nav-child">
-					  <dd><a href="javascript:;">修改信息</a></dd>
-					  <dd><a href="javascript:;">安全管理</a></dd>
-					  <dd><a href="javascript:;">清理缓存</a></dd>
+					  <dd><a href="javascript:;" menu-pid="menu{$sysuser['pid']}" menu-id="menu{$sysuser['id']}">修改信息</a></dd>
+					  <dd><a href="javascript:;" menu-pid="menu{$syssafe['pid']}" menu-id="menu{$syssafe['id']}">安全管理</a></dd>
+					  <dd><a href="{url:/login/clearCache/}">清理缓存</a></dd>
+					  <dd><a href="">前台页面</a></dd>
 					  <dd><a href="{url:/login/logout/}">退出登录</a></dd>
 					</dl>
 				
@@ -207,6 +208,14 @@ $(document).ready(function(){
 		$(".middle-nav li").removeClass('active');
 		$(this).addClass('active');
 	});
+	// 修改信息  安全管理
+	$('.layui-nav-child a').on('click',function(){
+		var menuid = $(this).attr("menu-id");
+		var menupid = $(this).attr("menu-pid");
+		parent.$('.'+menupid,parent.document).trigger('click');
+		parent.$('.'+menuid,parent.document).trigger('click');
+	})
+
 	//刷新页面恢复控制台 浏览器关闭失效
 	if($.cookie('currentMain'))$("."+$.cookie('currentMain')).trigger('click');
 	if($.cookie('currentChild'))$(".main-nav li").eq($.cookie('currentChild')).trigger('click');
