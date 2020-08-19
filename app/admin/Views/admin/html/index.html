@@ -143,7 +143,7 @@
 			full:true,
 			area: ['888px', '666px'],
 			title:'应用市场',
-			content: '//www.guodong.tech'
+			content: '//app.guodong.tech'
 		}); 
 		
 		layer.full(app);
@@ -166,8 +166,7 @@
 
 $(document).ready(function(){
 	$(".main-nav li").click(function(){
-		var data_url = $(this).attr('data-url');
-		//$('.main-body iframe').removeClass('active');		
+		var data_url = $(this).attr('data-url');	
 		$('#win-body').attr('src', data_url);
 		$(".main-nav li").removeClass("active");
 		$(this).addClass("active");
