@@ -32,8 +32,7 @@ class Config
 	];
 	public $dbbackup = 'backup/database';
 	public $version = '3.8.1';
-	public $sessionExpiration        = 7200;//session超时时间 秒
-	public $rewriteRule = 'url';//url:普通模式?urlname/id.html ?urlname/;path：伪静态开启伪静态后路由由config/routes.php配置控制/urlname/id.html
+	public $sessionExpiration = 7200;//session超时时间 秒
 	public $appTimezone = 'Asia/Shanghai';
 	public $homeViewName = 'template';//home模板文件夹
 	public $adminTemplateFolder = 'html';
