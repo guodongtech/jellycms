@@ -264,6 +264,11 @@ class ParseModel extends Model
 		}else{
 			$end = $start + $pageNum-1;
 		}
+		if($totalPage == 0){
+			$end = 1;
+		}else if($end > $totalPage){
+			$end = $totalPage;
+		}
 		for($i = $start; $i <= $end; $i++)
 		{
             $active = $i==$page ? "active" : "";
@@ -290,6 +295,9 @@ class ParseModel extends Model
         $string .= "<li class='pager-last ".$last."'><a href='" . $pagebar['last'] . "'>尾页</a></li>";
 		$string .= "</ul></div>";
 		$pagebar['bar'] = $string;
+		if($totalPage == 0){
+			$pagebar['bar'] = '';
+		}
 		return $pagebar;
 	}
 	

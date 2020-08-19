@@ -705,7 +705,24 @@ section.copyright{
 
 }
 
-
+.page-content{
+	display:flex;
+	flex-direction:row;
+	justify-content:space-between;
+}
+.page-content p{
+	width:50%
+}
+.page-content p a{
+    width: 100%;
+    height: 35px;
+    text-align: center;
+    border-right: 1px solid #eee;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	background:#fff;
+}
 footer{
 	position:fixed;
     height: 55px !important;
