@@ -65,7 +65,7 @@ class MockSession extends Session
 	public function regenerate(bool $destroy = false)
 	{
 		$this->didRegenerate              = true;
-		$_SESSION['__ci_last_regenerate'] = time();
+		$_SESSION['__jelly_last_regenerate'] = time();
 	}
 
 	//--------------------------------------------------------------------

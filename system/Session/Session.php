@@ -244,11 +244,11 @@ class Session implements SessionInterface
 				strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') && ($regenerate_time = $this->sessionTimeToUpdate) > 0
 		)
 		{
-			if (! isset($_SESSION['__ci_last_regenerate']))
+			if (! isset($_SESSION['__jelly_last_regenerate']))
 			{
-				$_SESSION['__ci_last_regenerate'] = time();
+				$_SESSION['__jelly_last_regenerate'] = time();
 			}
-			elseif ($_SESSION['__ci_last_regenerate'] < (time() - $regenerate_time))
+			elseif ($_SESSION['__jelly_last_regenerate'] < (time() - $regenerate_time))
 			{
 				$this->regenerate((bool) $this->sessionRegenerateDestroy);
 			}
