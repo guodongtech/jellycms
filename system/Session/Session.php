@@ -430,7 +430,7 @@ class Session implements SessionInterface
 	 */
 	public function regenerate(bool $destroy = false)
 	{
-		$_SESSION['__ci_last_regenerate'] = time();
+		$_SESSION['__jelly_last_regenerate'] = time();
 		session_regenerate_id($destroy);
 	}
 
