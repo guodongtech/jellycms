@@ -21,7 +21,7 @@ class Push extends BaseController
 		header('Access-Control-Allow-Headers: Content-Type,Content-Length,Accept-Encoding,X-Requested-with, Origin'); // 设置允许自定义请求头的字段
 		$list = [
 			['name'=>'zhangteng', 'email'=>'314246439@qq.com', 'description'=>'加入时间：2015年3月18日'],
-			['name'=>'zhaojiabin', 'email'=>'zjb888@qq.com', 'description'=>'加入时间：2016年6月15日'],
+			['name'=>'zhaojiabin', 'email'=>'745320293@qq.com', 'description'=>'加入时间：2016年6月15日'],
 		];
 		$rdata = [
 			'code'=>0,
@@ -65,6 +65,7 @@ class Push extends BaseController
 			];
 			echo json_encode($rdata);die;
 		}
+		// print_r(post());die;
 		$data['name'] = post('name');
 		$data['email'] = post('email');
 		$data['content'] = post('content');
@@ -78,7 +79,93 @@ class Push extends BaseController
 		];
 		echo json_encode($rdata);
 	}
-
+	public function question_html()
+	{
+		// return view('default/html/question.html');
+		header('Content-Type: text/html;charset=utf-8');
+		header('Access-Control-Allow-Origin:'.$_SERVER['HTTP_ORIGIN']); // *代表允许任何网址请求
+		header('Access-Control-Allow-Methods:POST,GET,OPTIONS,DELETE'); // 允许请求的类型
+		header('Access-Control-Allow-Credentials: true'); // 设置是否允许发送 cookies
+		header('Access-Control-Allow-Headers: Content-Type,Content-Length,Accept-Encoding,X-Requested-with, Origin'); // 设置允许自定义请求头的字段
+		return '
+			<link rel="stylesheet" href="/static/layui/css/layui.css">
+			<link rel="stylesheet" href="/static/layui/css/admin.css">
+			<link rel="stylesheet" media="screen" href="/static/css/main.css">
+			<script src="/static/layui/layui.all.js"></script>
+			<script src="/static/js/jquery-3.4.1.min.js"></script>
+			<div class="layui-fluid">
+			<div  id="question-form">
+				<div style="padding-right:30px;">
+					 <form action="" method="post" class="layui-form" id="form" lay-filter="form">
+						<div class="layui-form-item">
+							 <label class="layui-form-label">姓名</label>
+							 <div class="layui-input-block">
+								<input type="text" name="name" lay-verify="required" placeholder="请输入您的姓名" class="layui-input">
+							 </div>
+						</div>
+						<div class="layui-form-item">
+							 <label class="layui-form-label">邮箱</label>
+							 <div class="layui-input-block">
+								<input type="text" name="email" lay-verify="required|email" placeholder="请输入您的邮箱" class="layui-input">
+							 </div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">内容</label>
+							<div class="layui-input-block">
+								<textarea name="content" placeholder="请输入您要反馈的内容" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">紧急</label>
+							<input type="hidden" id="assess" name="assess">
+							<input type="hidden" id="domain" name="domain">
+							<div class="layui-input-block">
+								<div><div class="star"></div></div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">提交</button>
+						      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						    </div>
+						  </div>
+					 </form>
+				</div>
+			</div>
+			</div>
+			<script>
+				var layer = layui.layer
+				var form = layui.form;
+				var $ = layui.$;
+				layui.use(["rate"], function(){
+				  	var rate = layui.rate;
+				  	//基础效果
+				  	rate.render({
+				    	elem: ".star",
+				    	value:1,
+				    	text:true,
+				    	setText: function(value){
+				    		$("#assess").val(value);
+						}
+				  	})
+				})	
+				var domain = window.parent.location.hostname;
+				$("#domain").val(domain);	
+				form.on("submit(form)", function(data){
+					$.post("//www.jellycms.cn/index.php/push/question",$("#form").serialize(),function(data){
+						if(data.code == 1){
+							var index = parent.layer.getFrameIndex(window.name);
+							window.parent.layer.msg(data.msg);
+							window.parent.layer.close(index);
+						}
+						else{
+							window.parent.layer.msg(data.msg)
+						}
+					}, "json");
+				});	
+			</script>
+		';
+	}
 	public function rollImg(){
 		return '<link rel="stylesheet" href="/template/default/css/swiper.min.css">
 				<script src="/template/default/js/swiper.min.js"></script>

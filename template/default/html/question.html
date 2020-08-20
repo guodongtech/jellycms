@@ -1,0 +1,61 @@
+
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+			<link rel="stylesheet" href="/static/layui/css/admin.css">
+			<link rel="stylesheet" href="/static/css/animate.min.css">
+			<link rel="stylesheet" media="screen" href="/static/css/main.css">
+			<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+			<link rel="stylesheet" media="screen" href="/static/css/animate.min.css">
+			<script src="/static/layui/layui.all.js"></script>
+			<script src="/static/js/jquery-3.4.1.min.js"></script>
+</head>
+	<!-- <header>header</header> -->
+<div class="layui-fluid animated {$GLOBALS.animate}">
+
+<div  id="question-form">
+				<div style="padding-right:30px;">
+					 <form action="" method="post" class="layui-form" id="form">
+						<div class="layui-form-item">
+							 <label class="layui-form-label">姓名</label>
+							 <div class="layui-input-block">
+								<input type="text" name="name" lay-verify="required" placeholder="请输入您的姓名" class="layui-input">
+							 </div>
+						</div>
+						<div class="layui-form-item">
+							 <label class="layui-form-label">邮箱</label>
+							 <div class="layui-input-block">
+								<input type="text" name="email" lay-verify="required|email" placeholder="请输入您的邮箱" class="layui-input">
+							 </div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">内容</label>
+							<div class="layui-input-block">
+								<textarea name="content" placeholder="请输入您要反馈的内容" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">紧急</label>
+							<input type="hidden" id="assess" name="assess">
+							<div class="layui-input-block">
+								<div><div class="star"></div></div>
+							</div>
+						</div>
+					 </form>
+				</div>
+			</div>
+	</div>
+	<script>
+		var domain = window.location.hostname;
+		alert(domain)
+		layui.use(["rate"], function(){
+		  	var rate = layui.rate;
+		  	//基础效果
+		  	rate.render({
+		    	elem: ".star",
+		    	value:1,
+		    	text:true,
+		    	setText: function(value){
+		    		$("#assess").val(value);
+				}
+		  	})
+		})			
+	</script>

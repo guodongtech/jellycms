@@ -70,4 +70,12 @@ class Home extends BaseController
 		
 		return view('welcome.html',$data);
 	}
+	// 清理缓存
+	public function clearCache(){
+		$cache_path = WRITEPATH.'cache/';
+		helper('filesystem');
+		@delete_files($cache_path);
+		Header("Location: /".ADMINNAME."/home/"); 
+		exit();
+	}
 }

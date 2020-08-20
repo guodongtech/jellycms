@@ -20,12 +20,7 @@ class Login extends Base
     }
     public function index()
     {	
-		// 后台登陆白名单
-		$whiteip = explode(',',$GLOBALS['whiteip']);
-		if(!in_array($this->request->getIPAddress(),$whiteip) && !empty($whiteip) && $GLOBALS['whiteip']!=''){
-			Header("Location: /"); 
-			exit;
-		}
+		
 		
 		/* 	如果绑定了后台域名，但当前域名与绑定域名不一致，则认为已存在安全隐患，
 			为了防止后台被猜解，返回301永久重定向至首页。解除此限制需手动清理或等待浏览器、路由器自动清理缓存。
@@ -33,6 +28,22 @@ class Login extends Base
 		//获取"站点信息"配置的域名
 		$resultArea = $this->areaModel->getDefalutArea();
 		$domain = $resultArea['domain'];
+
+		// 后台登陆白名单
+		$whiteip = explode(',',$GLOBALS['whiteip']);
+		if($GLOBALS['admin_domain'] == '' || $GLOBALS['admin_domain'] == $_SERVER['HTTP_HOST']){
+			if(!in_array($this->request->getIPAddress(),$whiteip) && !empty($whiteip) && $GLOBALS['whiteip']!=''){
+				Header("Location: /", true, 301); 
+				exit;
+			}
+		}else{
+			if(!in_array($this->request->getIPAddress(),$whiteip) && !empty($whiteip) && $GLOBALS['whiteip']!=''){
+				Header("Location: $domain", true, 301); 
+				exit;
+			}
+		}
+		
+
 		if($GLOBALS['admin_domain'] != '' && $GLOBALS['admin_domain'] != $_SERVER['HTTP_HOST'] ){
 			header( "Location: $domain", true, 301);
 			exit();
@@ -118,11 +129,5 @@ class Login extends Base
 	public function logout(){
 		session_destroy();
 		success("操作成功", '/'.ADMINNAME.'/login/');	
-	}
-	// 清理缓存
-	public function clearCache(){
-		$cache_path = WRITEPATH.'cache/';
-		helper('filesystem');
-		@delete_files($cache_path);
 	}
 }
