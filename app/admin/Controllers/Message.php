@@ -75,6 +75,7 @@ class Message extends BaseController
             'deleted' => 1,
         ];
         if($this->model->edit($data,$table_name)){
+            $this->log($table_name, '[留言信息]删除:'."[ID:".$id."]");
             $rdata = [
                 "code" => 1,
                 "msg" => "操作成功",
@@ -105,6 +106,7 @@ class Message extends BaseController
             $post['switchName'] => (int)$post['switchValue'],
         ];
         if($this->model->edit($data,$table_name)){
+            $this->log($table_name, '[留言信息]修改状态:'."[ID:".$post['id']."]");
             $rdata = [
                 "code" => 1,
                 "msg" => "操作成功",
@@ -141,6 +143,7 @@ class Message extends BaseController
         ];
         $add_res = $this->model->edit($data,$table_name);
         if($add_res>0){
+            $this->log($table_name, '[留言信息]消息回复:'."[ID:".$post['id']."]");
             $data['id'] = $add_res;
             $rdata = [
                 "code" => 1,
@@ -174,6 +177,7 @@ class Message extends BaseController
         ];
         $res = $this->model->edit($data,$table_name);
         if($res>0){
+            $this->log($table_name, '[留言信息]消息审核:'."[ID:".$post['id']."]");
             $rdata = [
                 "code" => 1,
                 "msg" => "操作成功",

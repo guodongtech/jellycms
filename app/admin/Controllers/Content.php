@@ -128,6 +128,7 @@ class Content extends BaseController
 		}
 		if($this->model->edit($data)){
 			$id = $data['id']?$data['id']:$this->db->insertID();
+			$this->log('content', "[内容管理]编辑 [ID:".$id."]");
 			$modelResult = $this->model->getModelId($id);
 			if(!$data['id']){
 				//批量插入扩展字段值
@@ -156,6 +157,7 @@ class Content extends BaseController
 			}
 		}
 		if(count($ids) == $success){
+			$this->log('content', "[内容管理]移动内容到 [sorts_id:".$sorts_id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -192,6 +194,7 @@ class Content extends BaseController
 			$this->model->insertExtendBatch($contentExtend);//批量添加数据
 		}
 		if(count($ids) == $success){
+			$this->log('content', "[内容管理]复制内容到 [sorts_id:".$sorts_id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -215,6 +218,7 @@ class Content extends BaseController
 			}
 		}
 		if(count($ids) == $success){
+			$this->log('content', "[内容管理]批量删除 [id:".implode(",",$ids)."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -244,6 +248,7 @@ class Content extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log('content', "[内容管理]删除 [id:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -273,6 +278,7 @@ class Content extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
+			$this->log('content', '[内容管理]编辑字段值为'.$post['value']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -301,6 +307,7 @@ class Content extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log('content', "[内容管理]修改状态[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

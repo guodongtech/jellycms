@@ -55,6 +55,7 @@ class LinkGroup extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log('link', "[友情链接分组管理]编辑/添加:[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -82,6 +83,7 @@ class LinkGroup extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log('link', "[友情链接分组管理]删除:[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -111,6 +113,7 @@ class LinkGroup extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log('link', "[友情链接分组管理]修改状态:[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

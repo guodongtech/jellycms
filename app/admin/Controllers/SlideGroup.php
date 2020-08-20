@@ -54,6 +54,7 @@ class SlideGroup extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log("slide", "[幻灯片分组]编辑/新增[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -81,6 +82,7 @@ class SlideGroup extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log("slide", "[幻灯片分组]删除[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -110,6 +112,7 @@ class SlideGroup extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log("slide", "[幻灯片分组]修改状态[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

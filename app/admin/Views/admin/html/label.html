@@ -277,6 +277,14 @@
 			{field:'description', title:'描述', templet: function(res){
 				return  res.description 
 			}},
+			{field:'status', title:'状态', width:90, event: 'switch', templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status"  lay-skin="switch" lay-text="ON|OFF">';
+				}
+				
+			}},
 			{field:'content', title:'内容',hide:true},
 			{field:'typetext', title:'类型', width:100, sort: true,templet: function(res){
 				var typetext;
@@ -394,6 +402,19 @@
 		form.render();
 		$('.layui-form-select dl dd.layui-this').trigger('click');//触发单击事件
 		
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/label/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg)
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
+		form.render();
 	}
 });
 

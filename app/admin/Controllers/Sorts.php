@@ -92,6 +92,7 @@ class Sorts extends BaseController
 			}
 		}
 		if(!$error){
+			$this->log("sorts", "[内容栏目]编辑/新增[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作完成",
@@ -130,6 +131,7 @@ class Sorts extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log("sorts", "[内容栏目]删除[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -159,6 +161,7 @@ class Sorts extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log("sorts", "[内容栏目]修改状态[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

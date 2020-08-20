@@ -122,12 +122,7 @@ class Login extends Base
 	// 清理缓存
 	public function clearCache(){
 		$cache_path = WRITEPATH.'cache/';
-		helper('filesystem'); //加载文件系统辅助函数
-		$result = directory_map($cache_path, 1);
-		foreach($result as $k=>$v){
-			if(file_exists($cache_path.$v)){
-				unlink($cache_path.$v);
-			}
-		}
+		helper('filesystem');
+		@delete_files($cache_path);
 	}
 }

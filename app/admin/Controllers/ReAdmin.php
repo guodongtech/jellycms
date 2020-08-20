@@ -15,6 +15,7 @@ class ReAdmin extends BaseController
 		}
 		if(rename(FCPATH.ADMINNAME,FCPATH.$post['newName']))
 		{
+			$this->log("readmin", '修改后台入口');
 			$data = [
 				"code" => 1,
 				"msg" => "修改成功，请牢记当前后台地址，并定期修改",

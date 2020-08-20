@@ -39,7 +39,15 @@ class Form extends BaseController
 			return json_encode($rdata);
 		}
 		//同名检测
-		if($this->model->check($post['name']) && !$post['id']){
+		$check_name = $this->model->check($post['name']);
+		if($check_name && !$post['id']){
+			$rdata = [
+				"code" => 0,
+				"msg" => $post['name'].":表单已存在",
+			];
+			return json_encode($rdata);
+		}
+		if($check_name && $post['id']>0 && $post['id']!=$check_name['id']){
 			$rdata = [
 				"code" => 0,
 				"msg" => $post['name'].":表单已存在",
@@ -47,7 +55,15 @@ class Form extends BaseController
 			return json_encode($rdata);
 		}
 		//同表名检测
-		if($this->model->checkTablename($post['table_name']) && !$post['id']){
+		$check_table = $this->model->checkTablename($post['table_name']);
+		if($check_table && !$post['id']){
+			$rdata = [
+				"code" => 0,
+				"msg" => $post['name'].":表名已存在",
+			];
+			return json_encode($rdata);
+		}
+		if($check_table && $post['id']>0 && $post['id']!=$check_table['id']){
 			$rdata = [
 				"code" => 0,
 				"msg" => $post['name'].":表名已存在",
@@ -82,6 +98,7 @@ class Form extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log('form', "[自定义表单]添加/编辑[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -125,6 +142,7 @@ class Form extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log('form', "[自定义表单]删除[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -162,6 +180,7 @@ class Form extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log('form', "[自定义表单]修改状态[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

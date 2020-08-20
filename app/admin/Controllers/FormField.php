@@ -92,6 +92,7 @@ class FormField extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log('formfield', "[自定义表单字段]编辑/添加[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -119,6 +120,7 @@ class FormField extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log('formfield', "[自定义表单字段]删除[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -148,6 +150,7 @@ class FormField extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log('formfield', "[自定义表单字段]修改必填[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

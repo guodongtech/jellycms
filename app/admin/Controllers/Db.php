@@ -98,6 +98,7 @@ class Db extends BaseController
 				return json_encode($data);
 			}
 		}
+		$this->log('db', "[数据库管理]删除备份文件");
 		$data = [
 			"code" => 1,
 			"msg" => "操作成功",
@@ -156,6 +157,7 @@ class Db extends BaseController
 			$fileName = $this->dir.'/'.$val;
 			$this->parseSQL($fileName);
 		}
+		$this->log('db', "[数据库管理]数据库还原 [ID:".$post['id']."]");
 		$data = [
 			"code" => 1,
 			"msg" => "数据库还原完成",

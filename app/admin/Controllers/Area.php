@@ -65,6 +65,7 @@ class Area extends BaseController
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
 		if($this->model->edit($data)){
+			$this->log('area', '[区域]添加/编辑:'.$data['name']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -93,6 +94,7 @@ class Area extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
+			$this->log('area', '[区域]编辑字段值为'.$post['value']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -130,6 +132,7 @@ class Area extends BaseController
 		}	
 
         if($this->model->edit($data)){
+        	$this->log('area', "[区域]删除: [ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "删除成功",
@@ -175,6 +178,7 @@ class Area extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log('area', "[区域]修改默认状态[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

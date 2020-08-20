@@ -60,6 +60,7 @@ class Auth extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
+			$this->log('auth', '[权限]编辑字段'.$post['field'].'为'.$post['value']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -97,6 +98,7 @@ class Auth extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log('auth', '[权限]添加/编辑:'.$data['name']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -133,6 +135,7 @@ class Auth extends BaseController
 			'deleted' => 1,
 		];
 		$result = $this->model->edit($data);
+		$this->log('auth', "[权限]删除[ID:".$id."]");
 		$rdata = [
 			"code" => 1,
 			"msg" => "操作成功",

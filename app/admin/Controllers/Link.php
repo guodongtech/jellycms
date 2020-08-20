@@ -55,6 +55,7 @@ class Link extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log('link', '[友情链接]添加/编辑:'.$data['name']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -83,6 +84,7 @@ class Link extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
+			$this->log('link', "[友情链接]编辑字段值为:".$post['value']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -110,6 +112,7 @@ class Link extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log('link', "[友情链接]删除:[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -139,6 +142,7 @@ class Link extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log('link', "[友情链接]修改状态:[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

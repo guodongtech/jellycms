@@ -223,6 +223,7 @@ class Upgrade extends BaseController
 		helper('filesystem');
 		delete_files($versionPath);//删除版本记录文件夹里的所有文件
 		write_file($versionPath.'version_'.mt_rand().'.txt', $result['name']);//创建新的版本文件 用随机数防止恶意请求
+		$this->log("upgrade", "[系统升级]");
 		$rdata = [
 			"code" => 1,
 			"msg" => "升级成功",

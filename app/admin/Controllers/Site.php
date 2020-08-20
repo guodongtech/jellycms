@@ -30,6 +30,7 @@ class Site extends BaseController
 		$data = $post;
 		$data['area_id'] = $this->session->area_id;
 		if($this->model->edit($data)){
+			$this->log("site", "[站点信息]编辑");
 			success("操作成功", '/'.ADMINNAME.'/site/index/');				
 		}else{
 			error("操作失败", '/'.ADMINNAME.'/site/index/');

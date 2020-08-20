@@ -85,6 +85,7 @@ class ModelField extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log("model", '[模型字段]编辑/添加:'."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -115,14 +116,15 @@ class ModelField extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log("model", '[模型字段]删除:'."[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
 			];			
 		}else{
 			$rdata = [
-				"code" => 1,
-				"msg" => "操作成功",
+				"code" => 0,
+				"msg" => "操作失败",
 			];			
 		}
 		return json_encode($rdata);		

@@ -61,6 +61,7 @@ class Slide extends BaseController
 		}
 
 		if($this->model->edit($data)){
+			$this->log("slide", "[幻灯片]编辑/新增[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -89,6 +90,7 @@ class Slide extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
+			$this->log("slide", "[幻灯片]编辑字段值为：".$post['value']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -116,6 +118,7 @@ class Slide extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log("slide", "[幻灯片]删除[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -145,6 +148,7 @@ class Slide extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log("slide", "[幻灯片]修改状态[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

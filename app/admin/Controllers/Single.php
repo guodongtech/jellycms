@@ -46,6 +46,7 @@ class Single extends BaseController
 			return error("分类信息不存在", '/'.ADMINNAME.'/single/index/');
 		}
 		if($this->model->edit($data)){
+			$this->log("single", "[专题内容]编辑/新增[ID:".$post['id']."]");
 			return success("操作成功", '/'.ADMINNAME.'/single/index/');				
 		}else{
 			return error("操作失败", '/'.ADMINNAME.'/single/index/');
@@ -67,6 +68,7 @@ class Single extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log("single", "[专题内容]修改状态[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

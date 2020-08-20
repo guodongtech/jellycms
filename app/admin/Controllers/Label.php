@@ -80,6 +80,7 @@ class Label extends BaseController
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
 		if($this->model->edit($data)){
+			$this->log('label', '[自定义标签]添加/编辑:'.$data['name']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -108,6 +109,7 @@ class Label extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log('label', "[定制标签]删除:[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -137,6 +139,7 @@ class Label extends BaseController
 			$post['switchName'] => (int)$post['switchValue'],
 		];
 		if($this->model->edit($data)){
+			$this->log('label', "[定制标签]修改状态:[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

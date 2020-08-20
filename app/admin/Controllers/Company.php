@@ -29,6 +29,7 @@ class Company extends BaseController
 		$data = $post;
 		$data['area_id'] = $this->session->area_id;
 		if($this->model->edit($data)){
+			$this->log('company', "[公司信息]编辑");
 			success("操作成功", '/'.ADMINNAME.'/company/index/');				
 		}else{
 			error("操作失败", '/'.ADMINNAME.'/company/index/');

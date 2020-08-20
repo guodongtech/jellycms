@@ -28,6 +28,7 @@ class Home extends BaseController
 		// 修改信息 安全管理地址信息
 		$sysuser = $this->MenuModel->getMenuInfo('SysUser','index');
 		$syssafe = $this->MenuModel->getMenuInfo('Config','index');
+
 		$data = [
 			'sysuser' => $sysuser,
 			'syssafe' => $syssafe,
@@ -45,6 +46,7 @@ class Home extends BaseController
 			'area_id' => $area_id,
 		);
 		$this->session->set($data);
+		$this->log('home', "[区域]切换区域");
 		$rdata = [
 			"code" => 1,
 			"msg" => "切换区域",

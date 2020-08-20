@@ -18,6 +18,7 @@ class Config extends BaseController
 		$post = post();
 		unset($post['file']);
 		if($this->model->configEdit($post)){
+			$this->log('company', "[配置参数]编辑");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

@@ -77,6 +77,7 @@ class Role extends BaseController
 			}
 		}
 		if($this->model->edit($data)){
+			$this->log("role", '[角色管理]编辑/新增：'.$post['name']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -106,6 +107,7 @@ class Role extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
+			$this->log("role", '[角色管理]编辑字段值为：'.$post['value']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -133,6 +135,7 @@ class Role extends BaseController
 			'deleted' => 1,
 		];
 		if($this->model->edit($data)){
+			$this->log("role", '[角色管理]删除'."[ID:".$id."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
