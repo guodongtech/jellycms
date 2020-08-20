@@ -3,6 +3,7 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 use \App\Models\LoginModel;
 use \App\Models\AreaModel;
+use \App\Models\SiteModel;
 class Login extends Base
 {
 
@@ -15,6 +16,7 @@ class Login extends Base
     {
         $this->model = new LoginModel();
         $this->areaModel = new AreaModel();
+        $this->siteModel = new SiteModel();
 		$this->captcha = new  \CodeIgniter\Captcha\Captcha();
 		$this->session = \Config\Services::session();
     }
@@ -27,7 +29,8 @@ class Login extends Base
 		*/
 		//获取"站点信息"配置的域名
 		$resultArea = $this->areaModel->getDefalutArea();
-		$domain = $resultArea['domain'];
+		$resultSite = $this->siteModel->getSite($resultArea['id']);
+		$domain = $resultSite['domain'];
 
 		// 后台登陆白名单
 		$whiteip = explode(',',$GLOBALS['whiteip']);

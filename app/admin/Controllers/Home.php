@@ -3,6 +3,7 @@ namespace App\Controllers;
 use \App\Models\HomeModel;
 use \App\Models\MenuModel;
 use \App\Models\AreaModel;
+use \App\Models\SiteModel;
 use \App\Models\MessageModel;
 class Home extends BaseController
 {    
@@ -11,6 +12,7 @@ class Home extends BaseController
     {
         $this->model = new HomeModel();
         $this->areaModel = new AreaModel();
+        $this->siteModel = new SiteModel();
         $this->MenuModel = new MenuModel();
         $this->MessageModel = new MessageModel();
     }
@@ -77,5 +79,16 @@ class Home extends BaseController
 		@delete_files($cache_path);
 		Header("Location: /".ADMINNAME."/home/"); 
 		exit();
+	}
+	// 前台
+	public function foreground(){
+		//获取"站点信息"配置的域名
+		$result_site = $this->siteModel->getSite(session('area_id'));
+		$domain = $result_site['domain'];
+		if($GLOBALS['admin_domain'] == '' || $GLOBALS['admin_domain'] == $_SERVER['HTTP_HOST']){
+			Header("Location: /",); exit;
+		}else{
+			Header("Location: $domain"); exit;
+		}
 	}
 }
