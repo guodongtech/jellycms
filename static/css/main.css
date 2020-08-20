@@ -256,6 +256,11 @@
 .layui-form-select dl {
     top: 30px;
 }
+.layui-table-edit{
+	display:inline-block;
+	height:38px;
+	line-height:38px;
+}
 .sys-op{
 	position:absolute;
 	top:0;
