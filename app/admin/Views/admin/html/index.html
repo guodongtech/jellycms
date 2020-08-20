@@ -14,50 +14,6 @@
 <link rel="stylesheet" media="screen" href="{$GLOBALS.self_path}/static/css/main.css">
 <link rel="stylesheet" href="{$GLOBALS.self_path}/static/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
-<style>
-.layadmin-header{
-	display:flex;
-	justify-content:space-between;
-	align-items:center;
-}
-.op-top{
-	display:flex;
-	align-items:center;
-	margin:0;
-}
-.area-select{
-	width:66px !important;
-}
-.layui-form-item .layui-input-inline {
-    margin-right: 0;
-}
-.layui-input, .layui-select, .layui-textarea {
-    height: 30px;
-    line-height: 1.3;
-    line-height: 30px\9;
-    border-width: 1px;
-    border-style: solid;
-    background-color: #fff;
-    border-radius: 2px;
-}
-.layui-form-select dl {
-    top: 30px;
-}
-.sys-op{
-	position:absolute;
-	top:0;
-	right:0;
-	z-index:1;
-	display:flex;
-	align-items:center;
-	justify-content:flex-end;
-	width:50px;
-	top:50%; 
-	margin-top:-15px;
-	height:30px;
-}
-
-</style>
 <body id="console">
 	<!-- <header>header</header> -->
 	<div class="main-content">
@@ -66,7 +22,7 @@
 				<div class="layui-nav-item">
 					<a href="javascript:;"><img src="{$GLOBALS.self_path}/static/layui/images/icon.jpg" class="layui-nav-img"></a>
 					<dl class="layui-nav-child">
-						<dd><a target="_blank" href="{url:/home/foreground}">前台页面</a></dd>
+						<dd><a target="_blank" href="{url:/home/foreground}">打开首页</a></dd>
 						<dd><a href="javascript:;" menu-pid="menu{$sysuser['pid']}" menu-id="menu{$sysuser['id']}">修改信息</a></dd>
 						<dd><a href="javascript:;" menu-pid="menu{$syssafe['pid']}" menu-id="menu{$syssafe['id']}">安全管理</a></dd>
 						<dd><a href="{url:/home/clearCache/}">清理缓存</a></dd>

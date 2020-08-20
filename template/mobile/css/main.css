@@ -871,6 +871,7 @@ footer{
 	flex-direction:row;
 	flex-wrap:wrap;
 	justify-content:space-between;
+	width:100%;
 }
 .productlist ul li {
 	width: 49%;

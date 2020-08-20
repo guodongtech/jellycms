@@ -197,6 +197,78 @@
 .console .red{
 	color: #ff3300!important;
 }
+.layadmin-header{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+.op-top{
+	display:flex;
+	align-items:center;
+	margin:0;
+}
+#safe-tip{
+	border-left: 8px solid #FF5722;
+	background:#fff;
+}
+#safe-tip a{
+	color:#f00
+}
+#safe-tip b{
+	font-size:14px;
+	color:#FF5722;
+}
+#safe-tip b i{
+	margin-right:6px;
+}
+#safe-tip a:hover{
+	text-decoration:underline;
+}
+.layui-badge-dot{
+	margin-left:6px;
+}
+.title-icon {
+	margin-right:8px;
+}
+.get-source i{
+	margin-right:8px;
+	color:#ddd;
+}
+.edit-admin li{
+	list-style:disc;
+	margin-left:6px;
+}
+.area-select{
+	width:66px !important;
+}
+.layui-form-item .layui-input-inline {
+    margin-right: 0;
+}
+.layui-input, .layui-select, .layui-textarea {
+    height: 30px;
+    line-height: 1.3;
+    line-height: 30px\9;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    border-radius: 2px;
+}
+.layui-form-select dl {
+    top: 30px;
+}
+.sys-op{
+	position:absolute;
+	top:0;
+	right:0;
+	z-index:1;
+	display:flex;
+	align-items:center;
+	justify-content:flex-end;
+	width:50px;
+	top:50%; 
+	margin-top:-15px;
+	height:30px;
+}
 #fast-menu ul li{
 	padding:20px;
 }
