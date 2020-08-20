@@ -46,6 +46,10 @@
 	margin-right:8px;
 	color:#ddd;
 }
+.edit-admin li{
+	list-style:disc;
+	margin-left:6px;
+}
 </style>
 <div class="layui-fluid animated {$GLOBALS.animate}">
 <div class="layui-row layui-col-space15">
@@ -126,9 +130,9 @@
 <div class="layui-col-md4">
 <p class="layui-elem-quote wow bounceInLeft delay2" id="safe-tip" >
 <b><i class="fa fa-shield" aria-hidden="true"></i>安全提示</b></br>
-1、请修改<a href="/{echo:ADMINNAME}SysUser/index">系统默认密码</a>，周期性更换<br>
-2、请更改默认<a id="change-admin" href="javascript:void(0)">后台入口文件名</a>，周期性更换<br>
-3、请<a href="/{echo:ADMINNAME}Config/index">绑定后台域名</a>，一个月更新一次<br>
+1、请修改<a href="/{echo:ADMINNAME}SysUser/index">登录密码</a>，建议：周期性更换<br>
+2、请更改<a id="change-admin" href="javascript:void(0)">后台入口文件名</a>，建议：周期性更换<br>
+3、请<a href="/{echo:ADMINNAME}Config/index">绑定后台域名</a>，建议：周期性更换<br>
 </p>  
 <div class="layui-card wow bounceInLeft delay1">
 	<div class="layui-card-header"><i class="title-icon fa fa-book" aria-hidden="true"></i>版本信息</div>
@@ -321,7 +325,7 @@ wow.init();
 	$('#change-admin').on('click',function(){
 		layer.open({
 			title:'修改后台地址',
-			content: '<p class="layui-elem-quote wow bounceInDown">后台地址总长度不能少于10个字符<br>必须以.php结尾, 以字母开头<br>以字母+数字+下划线组合。</p><label class="layui-form-label">新后台地址</label><div class="layui-input-inline"><input type="text" name="new_admin" value="{echo:ADMINNAME}" id="new-admin" lay-verify="required" placeholder="新后台地址" class="layui-input"></div>',
+			content: '<ul class="layui-elem-quote edit-admin wow bounceInDown"><li>后台地址总长度不能少于10个字符</li><li>必须以.php结尾, 以字母开头</li><li>以字母+数字+下划线组合</li></ul><label class="layui-form-label">新后台地址</label><div class="layui-input-inline"><input type="text" name="new_admin" value="{echo:ADMINNAME}" id="new-admin" lay-verify="required" placeholder="新后台地址" class="layui-input"></div>',
 			btn: ['确认修改', '取消'],
 			yes: function(index, layero){
 				$.post('{url:/reAdmin/changeAdmin}',{newName:$('#new-admin').val()},function(data){
