@@ -244,22 +244,8 @@
 .layui-form-item .layui-input-inline {
     margin-right: 0;
 }
-.layui-input, .layui-select, .layui-textarea {
-    height: 30px;
-    line-height: 1.3;
-    line-height: 30px\9;
-    border-width: 1px;
-    border-style: solid;
-    background-color: #fff;
-    border-radius: 2px;
-}
 .layui-form-select dl {
     top: 30px;
-}
-.layui-table-edit{
-	display:inline-block;
-	height:38px;
-	line-height:38px;
 }
 .sys-op{
 	position:absolute;
