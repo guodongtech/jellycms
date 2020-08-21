@@ -59,14 +59,14 @@ class Form extends BaseController
 		if($check_table && !$post['id']){
 			$rdata = [
 				"code" => 0,
-				"msg" => $post['name'].":表名已存在",
+				"msg" => $post['table_name'].":表名已存在",
 			];
 			return json_encode($rdata);
 		}
 		if($check_table && $post['id']>0 && $post['id']!=$check_table['id']){
 			$rdata = [
 				"code" => 0,
-				"msg" => $post['name'].":表名已存在",
+				"msg" => $post['table_name'].":表名已存在",
 			];
 			return json_encode($rdata);
 		}

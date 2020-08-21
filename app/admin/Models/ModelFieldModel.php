@@ -60,5 +60,13 @@ class MOdelFieldModel extends Model
 		// }
 		return true;
 	}
+	public function checkClash($data){
+		$sql = "SHOW COLUMNS FROM ".$this->db->prefixTable('content');
+		$result = $this->db->query($sql)->getResultArray();
+		if(in_array($data['name'],array_column($result, 'Field'))){
+			return false;
+		}
+		return true;
+	}
   
 }

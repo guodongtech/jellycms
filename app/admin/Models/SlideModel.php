@@ -21,13 +21,13 @@ class SlideModel extends Model
 		$builder = $this->db->table('slide');
 		$res   = $builder->select('slide.*, slide_group.name as group_name')
 							->join('slide_group', 'slide_group.id = slide.group_id', 'left')
-							->where(['slide.deleted'=>0,'slide.status'=>1, 'slide.area_id'=>$area_id])
+							->where(['slide.deleted'=>0])
 							->get($limit, $offset)
 							->getResultArray();
 							
 		$total = $builder->select('slide.*, slide_group.name as group_name')
 							->join('slide_group', 'slide_group.id = slide.group_id', 'left')
-							->where(['slide.deleted'=>0,'slide.status'=>1, 'slide.area_id'=>$area_id])
+							->where(['slide.deleted'=>0])
 							->countAllResults(false);					
         $result['list'] = $res;
         $result['total'] = $total;

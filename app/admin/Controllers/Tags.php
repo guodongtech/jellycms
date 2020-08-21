@@ -86,7 +86,7 @@ class Tags extends BaseController
 			'id' => $id,
 			'deleted' => 1,
 		];
-		if($this->model->edit($data)){
+		if($this->model->edit($data,$this->session->area_id)){
 			$this->log("tags", "[文章内链]删除[ID:".$id."]");
 			$rdata = [
 				"code" => 1,

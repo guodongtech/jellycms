@@ -20,13 +20,13 @@ class LinkModel extends Model
 		$builder = $this->db->table('link');
 		$res   = $builder->select('link.*, link_group.name as group_name')
 							->join('link_group', 'link_group.id = link.group_id', 'left')
-							->where(['link.deleted'=>0,'link.status'=>1, 'link.area_id'=>$area_id])
+							->where(['link.deleted'=>0])
 							->get($limit, $offset)
 							->getResultArray();
 							
 		$total = $builder->select('link.*, link_group.name as group_name')
 							->join('link_group', 'link_group.id = link.group_id', 'left')
-							->where(['link.deleted'=>0,'link.status'=>1, 'link.area_id'=>$area_id])
+							->where(['link.deleted'=>0])
 							->countAllResults(false);					
         $result['list'] = $res;
         $result['total'] = $total;

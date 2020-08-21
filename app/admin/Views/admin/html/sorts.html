@@ -437,6 +437,7 @@ treeTable.render({
 			case 'add':
 				element.tabChange('tab', 't2');
 				$('#form')[0].reset();//重置表单
+				$('#form input[name="id"]').val('');
 				ue.setContent(''); //清空编辑器
 			break;
 

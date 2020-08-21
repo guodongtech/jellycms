@@ -19,10 +19,11 @@ class Single extends BaseController
 		];
          return view('single.html', $data);
     }
-    public function single_edit($id)
+    public function single_edit($model_id,$id)
     {
 		$sortInfo = $this->model->getSortInfo($id);
 		$data['sortinfo'] = $sortInfo;
+		$data['model_id'] = $model_id;
         return view('single_edit.html', $data);
     }
     public function getList($model_id)
@@ -36,20 +37,20 @@ class Single extends BaseController
 		];
 		return json_encode($data);
     }
-    public function edit()
+    public function edit($model_id)
     {
 		$post = post();
 		unset($post['file']); //移除LAYUI多余表单
 		$data = $post;
 		$sortInfo = $this->model->getSortInfo($data['id']);
 		if(empty($sortInfo)){
-			return error("分类信息不存在", '/'.ADMINNAME.'/single/index/');
+			return error("分类信息不存在", '/'.ADMINNAME.'/single/index/'.$model_id);
 		}
 		if($this->model->edit($data)){
 			$this->log("single", "[专题内容]编辑/新增[ID:".$post['id']."]");
-			return success("操作成功", '/'.ADMINNAME.'/single/index/');				
+			return success("操作成功", '/'.ADMINNAME.'/single/index/'.$model_id);				
 		}else{
-			return error("操作失败", '/'.ADMINNAME.'/single/index/');
+			return error("操作失败", '/'.ADMINNAME.'/single/index/'.$model_id);
 		}
     }
     public function switch()

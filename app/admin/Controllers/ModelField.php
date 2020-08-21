@@ -59,6 +59,14 @@ class ModelField extends BaseController
 		if($input_check !== true){
 			exit($input_check);
 		}
+		// 校验 字段名是否与model_id对应的栏目表字段冲突
+		if(!$this->model->checkClash($data)){
+			$rdata = [
+				"code" => 0,
+				"msg" => "该字段名与内置表字段冲突，请更换",
+			];
+			return json_encode($rdata);
+		}
 		// 校验 name model_id 是否联合唯一
 		$check = $this->model->checkEdit($data);
 		if(!$post['id']){

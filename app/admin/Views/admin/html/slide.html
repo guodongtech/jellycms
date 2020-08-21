@@ -154,7 +154,7 @@
 	table.render({
 		elem: '#table',url:'{url:/slide/getList}',
 		toolbar: '#toolbarDemo',
-		title: '管理员列表',
+		title: '幻灯片列表',
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
 		cols: [[
@@ -172,6 +172,14 @@
 			}},
 			{field:'link', title:'链接'},
 			{field:'description', title:'描述'},
+			{field:'status', title:'状态', width:90, event: 'switch', templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status"  checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF">';
+				}
+				
+			}},
 			{field:'bgpic', title:'bgpic',hide:true},
 			{field:'bgcolor', title:'bgcolor', hide:true},
 			{field:'sorting', title:'排序', width:80, edit: 'text'},
@@ -307,6 +315,19 @@
 				
 			}
 		});
+		form.render();
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/slide/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg);
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
 		form.render();
 	}
 });

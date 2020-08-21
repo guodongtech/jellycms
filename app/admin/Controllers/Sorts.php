@@ -50,6 +50,11 @@ class Sorts extends BaseController
 			];
 			return json_encode($rdata);
 		}
+		//我也不知道layui为啥给这个file   莫名其妙
+		if(isset($post['file'])){
+			unset($post['file']);
+		}
+		
 		$data = $post;
 		
 		//单个和批量都按批量处理

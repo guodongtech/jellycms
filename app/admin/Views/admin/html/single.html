@@ -76,7 +76,7 @@
 	if(obj.event === 'browse'){
 		window.open(obj.data.link);
 	}else if(obj.event === 'edit'){
-		window.location.href='{url:/single/single_edit/}'+obj.data.id;
+		window.location.href='{url:/single/single_edit/}{$model_id}/'+obj.data.id;
 	}else if(obj.event === 'switch'){
 		var switchName = $(this).find('input[type="checkbox"]').attr("name");
 		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");

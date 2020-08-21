@@ -21,7 +21,7 @@ class SysUserModel extends Model
 		$result   = $builder->select('admin.id,admin.realname,admin.count, admin.last_login_ip, admin.status, admin.create_time, admin.name,role.name as role_name, create_admin.name as c_user')
 							->join('role', 'role.id = admin.role_id', 'left')
 							->join('admin as create_admin', 'create_admin.id = admin.create_user', 'left')
-							->where(['admin.deleted'=>0,'admin.status'=>1, 'role.deleted'=>0,'role.status'=>1])
+							->where(['admin.deleted'=>0,'role.deleted'=>0,'role.status'=>1])
 							->get()
 							->getResultArray();
         return $result;
