@@ -12,9 +12,12 @@ class CheckModel extends Model
 		// area_id
 		$area_id = session('area_id');
 
-		$sql = "SELECT a.role_id,r.rules_id,r.areas_id FROM ".$this->db->prefixTable('admin')." a left join ".$this->db->prefixTable('role')." r on a.role_id=r.id where a.id=".$id;
+		$sql = "SELECT a.role_id,r.rules_id,r.areas_id,a.issystem FROM ".$this->db->prefixTable('admin')." a left join ".$this->db->prefixTable('role')." r on a.role_id=r.id where a.id=".$id;
 		$res = $this->db->query($sql)->getRowArray();
-
+		// 超级管理员放开权限
+		if($res['issystem'] == 1){
+			return true;
+		}
 		if(!in_array($area_id,json_decode($res['areas_id']))){
 			$err['msg'] = "您没有开通该区域权限";
 			$err['code'] = 0;
