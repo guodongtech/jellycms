@@ -329,14 +329,6 @@
 <script>
 //实例化百度编辑器
 var ue = UE.getEditor('container');
-UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-UE.Editor.prototype.getActionUrl = function(action) {
-    if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo') {
-    	return '{url:/Upload/ueUpload}/' + action;
-    } else {
-        return this._bkGetActionUrl.call(this, action);
-    }
-};
 layui.config({
 	base: '{$GLOBALS.self_path}/static/layui/'
 }).extend({

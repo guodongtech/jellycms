@@ -237,7 +237,7 @@ function install_sql()
 	}
 	$mysql_link->query("SET FOREIGN_KEY_CHECKS = 1;");
 	//插入管理员数据
-	$adminSql = 'insert into `'.$db_pre.'admin` (`name`,`password`,`role_id`,`create_time`) values ("'.$admin_user.'","'.md5($admin_pwd).'",1,"'.date('Y-m-d H:i:s').'")';
+	$adminSql = 'insert into `'.$db_pre.'admin` (`name`,`password`,`role_id`,`create_time`,`issystem`,`status`) values ("'.$admin_user.'","'.md5($admin_pwd).'",1,"'.date('Y-m-d H:i:s').',1,1")';
 	if(!$mysql_link->query($adminSql))
 	{
 		showProgress(array('isError' => true,'message' => '创建管理员失败'.$mysql_link->error,'percent' => 0.9));
@@ -270,6 +270,7 @@ function install_sql()
 	//admin.php首页
 	$admin_file = ROOT_PATH.'./admin.php';
 	$admin_content = '<?php
+// Valid PHP Version?
 $minPHPVersion = "7.2";
 if (phpversion() < $minPHPVersion)
 {
@@ -278,6 +279,10 @@ if (phpversion() < $minPHPVersion)
 define("AUTH", true);
 define("ADMINNAME", basename(__FILE__));  //当前脚本名 菜单URL前缀
 define("ENTRANCE", basename(__FILE__));  //当前脚本名 替换ADMINNAME
+// 文件相对于网站根目录的位置地址
+$self_path = substr(htmlentities($_SERVER["PHP_SELF"]), 0, strpos(htmlentities($_SERVER["PHP_SELF"]), ENTRANCE));
+$GLOBALS["self_path"]  = rtrim($self_path,"/");
+
 unset($minPHPVersion);
 define("FCPATH", __DIR__ . DIRECTORY_SEPARATOR);
 $pathsPath = FCPATH . "app/admin/Config/Paths.php";
@@ -286,7 +291,8 @@ chdir(__DIR__);
 require $pathsPath;
 $paths = new Config\Paths();
 $app = require rtrim($paths->systemDirectory, "/ ") . "/bootstrap.php";
-$app->run();';
+$app->run();
+';
 
 	$is_success_admin = file_put_contents($admin_file,$admin_content);
 	if(!$is_success_admin)
@@ -306,6 +312,10 @@ define("AUTHTHEME", true); //自动切换移动端模板
 define("ENTRANCE", basename(__FILE__));  //当前脚本名
 // Path to the front controller (this file)
 define("FCPATH", __DIR__ . DIRECTORY_SEPARATOR);
+// 文件相对于网站根目录的位置地址
+$self_path = substr(htmlentities($_SERVER["PHP_SELF"]), 0, strpos(htmlentities($_SERVER["PHP_SELF"]), ENTRANCE));
+$GLOBALS["self_path"]  = rtrim($self_path,"/");
+
 $pathsPath = FCPATH . "app/home/Config/Paths.php";
 require FCPATH . "app/Config.php"; //引入主配置文件
 chdir(__DIR__);

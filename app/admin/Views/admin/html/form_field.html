@@ -21,8 +21,8 @@
 
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 		<ul class="layui-tab-title">
-			<li lay-id="t1"><a href = "{url:/form/index}">表单列表</a></li>
-			<li class="layui-this" lay-id="t2"><a href = "{url:/formfield/}">表单字段管理</a></li>
+			<li lay-id="t1"><a href = "{url:/Form/index}">表单列表</a></li>
+			<li class="layui-this" lay-id="t2"><a href = "{url:/FormField/}">表单字段管理</a></li>
 		</ul>
 	  <div class="layui-tab-content">
 			<div class="layui-tab-item layui-show">
@@ -122,7 +122,7 @@
 	]
 	});
 	table.render({
-		elem: '#table',url:'{url:/formField/getList}',
+		elem: '#table',url:'{url:/FormField/getList}',
 		toolbar: '#toolbarDemo',
 		title: '字段列表',
 		layEvent: 'LAYTABLE_TIPS',
@@ -156,7 +156,7 @@
 	//console.log(obj)
 	if(obj.event === 'del'){
 		layer.confirm('真的删除行么', function(index){
-			$.post('{url:/formField/del}',{id:obj.data.id},function(data){
+			$.post('{url:/FormField/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
 					layer.msg(data.msg)
 					obj.del();
@@ -176,7 +176,7 @@
 			btn: ['提交', '取消'],
 			yes: function(index, layero){
 				form.on('submit(form)', function(data){
-				$.post('{url:/formField/edit}',$("#form").serialize(),function(data){
+				$.post('{url:/FormField/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
 						layer.msg(data.msg);
 						setTimeout(function (){
@@ -212,7 +212,7 @@
 		var switchName = $(this).find('input[type="checkbox"]').attr("name");
 		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
 		switchValue = Number(switchValue);
-		$.post('{url:/formfield/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+		$.post('{url:/FormField/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
 				layer.msg(data.msg)
 			}
@@ -237,7 +237,7 @@
 					btn: ['提交', '取消'],
 					yes: function(index, layero){
 						form.on('submit(form)', function(data){
-						$.post('{url:/formField/edit}',$("#form").serialize(),function(data){
+						$.post('{url:/FormField/edit}',$("#form").serialize(),function(data){
 							if(data.code == 1){
 								layer.msg(data.msg);
 								setTimeout(function (){

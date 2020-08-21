@@ -86,7 +86,7 @@ class Home extends BaseController
 		$result_site = $this->siteModel->getSite(session('area_id'));
 		$domain = $result_site['domain'];
 		if($GLOBALS['admin_domain'] == '' || $GLOBALS['admin_domain'] == $_SERVER['HTTP_HOST']){
-			Header("Location: /",); exit;
+			Header("Location: /"); exit;
 		}else{
 			Header("Location: $domain"); exit;
 		}

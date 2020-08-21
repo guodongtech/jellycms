@@ -326,7 +326,7 @@
 		var value = obj.value, //得到修改后的值
 		data = obj.data, //得到所在行所有键值
 		field = obj.field; //得到字段
-		$.post('{url:/modelfield/changeValue}',{id:data.id,value:value,field:field},function(data){
+		$.post('{url:/modelField/changeValue}',{id:data.id,value:value,field:field},function(data){
 			if(data.code == 1){
 				layer.msg(data.msg)
 			}
@@ -340,7 +340,7 @@
 	var data = obj.data;
 	if(obj.event === 'del'){
 		layer.confirm('真的删除行么', function(index){
-			$.post('{url:/modelfield/del}',{id:obj.data.id},function(data){
+			$.post('{url:/modelField/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
 					layer.msg(data.msg)
 					obj.del();
@@ -361,7 +361,7 @@
 			maxmin:true,
 			yes: function(index, layero){
 				form.on('submit(form)', function(data){
-				$.post('{url:/modelfield/edit}',$("#form").serialize(),function(data){
+				$.post('{url:/modelField/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
 						layer.msg(data.msg);
 						setTimeout(function (){
@@ -410,7 +410,7 @@
 					btn: ['提交', '取消'],
 					yes: function(index, layero){
 						form.on('submit(form)', function(data){
-						$.post('{url:/modelfield/edit}',$("#form").serialize(),function(data){
+						$.post('{url:/modelField/edit}',$("#form").serialize(),function(data){
 							if(data.code == 1){
 								layer.msg(data.msg);
 								setTimeout(function (){

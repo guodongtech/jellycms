@@ -191,7 +191,7 @@
 		var switchName = $(this).find('input[type="checkbox"]').attr("name");
 		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
 		switchValue = Number(switchValue);
-		$.post('{url:/slidegroup/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+		$.post('{url:/slideGroup/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
 				layer.msg(data.msg)
 			}

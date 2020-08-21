@@ -42,7 +42,7 @@
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 			<ul class="layui-tab-title">
 				<li lay-id="t1"><a href = "{url:/link/index}">友情链接列表</a></li>
-				<li  class="layui-this" lay-id="t2"><a href = "{url:/linkgroup/}">分组管理</a></li>
+				<li  class="layui-this" lay-id="t2"><a href = "{url:/linkGroup/}">分组管理</a></li>
 			</ul>
 			<div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
@@ -109,7 +109,7 @@
 	var upload = layui.upload;
 
 	table.render({
-		elem: '#table',url:'{url:/linkgroup/getList}',
+		elem: '#table',url:'{url:/linkGroup/getList}',
 		toolbar: '#toolbarDemo',
 		title: '管理员列表',
 		layEvent: 'LAYTABLE_TIPS',
@@ -138,7 +138,7 @@
 	//console.log(obj)
 	if(obj.event === 'del'){
 		layer.confirm('真的删除行么', function(index){
-			$.post('{url:/linkgroup/del}',{id:obj.data.id},function(data){
+			$.post('{url:/linkGroup/del}',{id:obj.data.id},function(data){
 				if(data.code == 1){
 					layer.msg(data.msg)
 					obj.del();
@@ -158,7 +158,7 @@
 			btn: ['提交', '取消'],
 			yes: function(index, layero){
 				form.on('submit(form)', function(data){
-				$.post('{url:/linkgroup/edit}',$("#form").serialize(),function(data){
+				$.post('{url:/linkGroup/edit}',$("#form").serialize(),function(data){
 					if(data.code == 1){
 						layer.msg(data.msg);
 						setTimeout(function (){
@@ -195,7 +195,7 @@
 		var switchName = $(this).find('input[type="checkbox"]').attr("name");
 		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
 		switchValue = Number(switchValue);
-		$.post('{url:/linkgroup/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+		$.post('{url:/linkGroup/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
 				layer.msg(data.msg)
 			}
@@ -219,7 +219,7 @@
 					btn: ['提交', '取消'],
 					yes: function(index, layero){
 					form.on('submit(form)', function(data){
-						$.post('{url:/linkgroup/edit}',$("#form").serialize(),function(data){
+						$.post('{url:/linkGroup/edit}',$("#form").serialize(),function(data){
 							if(data.code == 1){
 								layer.msg(data.msg);
 								setTimeout(function (){

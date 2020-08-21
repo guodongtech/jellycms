@@ -21,7 +21,7 @@
 	<div class="layui-tab layui-tab-brief layui-card" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">{$model_name}列表</li>
-	    <a id="add-content" href="{url:/Content/ContentEdit/}{$model_id}/0"><li lay-id="t2" >添加/编辑{$model_name}</li></a>
+	    <a id="add-content" href="{url:/Content/contentEdit/}{$model_id}/0"><li lay-id="t2" >添加/编辑{$model_name}</li></a>
 	  </ul>
 	  <div class="layui-tab-content animated fadeIn" >
 	  	   <div class="layui-tab-item layui-show">
@@ -160,7 +160,7 @@
 				layer.close(index);
 			});
 		}else if(obj.event === 'edit'){
-			window.location.href='{url:/Content/ContentEdit/}{$model_id}/'+obj.data.id;
+			window.location.href='{url:/Content/contentEdit/}{$model_id}/'+obj.data.id;
 		}else if(obj.event === 'browse'){
 			window.open(obj.data.link);
 		}else if(obj.event === 'switch'){
@@ -184,7 +184,7 @@
 		var checkStatus = table.checkStatus(obj.config.id);
 		switch(obj.event){
 			case 'add':
-				window.location.href='{url:/Content/ContentEdit/}{$model_id}/0';
+				window.location.href='{url:/Content/contentEdit/}{$model_id}/0';
 			break;
 			case 'copy':
 				var sorts_id = $('select[name=sorts] option:selected').val();
