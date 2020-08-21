@@ -20,6 +20,10 @@ class Statistics extends BaseController
 		if($this->request->getUserAgent()->isRobot()){
 			return;
 		}
+		if($content_id > 0){
+			$this->model->updateVisit($content_id);
+		}
+		
 		$data = [
 			'ip' => $this->request->getIPAddress(),
 			'os' => $this->request->getUserAgent()->getPlatform(),

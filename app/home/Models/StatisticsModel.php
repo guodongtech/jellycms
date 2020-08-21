@@ -19,6 +19,14 @@ class StatisticsModel extends Model
 		$builder->update($data);
         return 1;
     }
+	//更新内容页访问量
+    public function updateVisit($content_id)
+    {
 
+		$builder = $this->db->table('content');
+		$builder->set('visit', 'visit+1', FALSE);
+		$builder->where('id', $content_id);
+		return $builder->update();
+    }
 }
 
