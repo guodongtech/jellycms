@@ -141,7 +141,8 @@ layui.use(['layer', 'form','table','upload','jquery','element'], function(){
 						top.location.reload();
 					}
 					else{
-						layer.msg(data.msg)
+						parent.layer.closeAll();
+						layer.msg(data.msg);
 					}
 				},'json');
 				layer.close(index);
@@ -220,7 +221,7 @@ layui.use(['layer', 'form','table','upload','jquery','element'], function(){
 		done: function(res){
 			//上传完毕回调
 			table.reload('table');
-			layer.msg('上传成功')
+			layer.msg(res['msg']);
 		},
 		error: function(){
 			//请求异常回调

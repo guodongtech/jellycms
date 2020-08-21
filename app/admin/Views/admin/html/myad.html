@@ -309,7 +309,7 @@
 					return res.start_time+'  至  '+res.end_time;
 				}
 			}},
-			{field:'status', title:'状态',event: 'switch', templet: function(res){
+			{field:'status', title:'状态',width:90,event: 'switch', templet: function(res){
 				if(res.status == 1){
 					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
 				}else{

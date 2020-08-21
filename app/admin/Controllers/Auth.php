@@ -60,7 +60,7 @@ class Auth extends BaseController
 			$post['field'] => $post['value'],
 		];
 		if($this->model->edit($data)){
-			$this->log('auth', '[权限]编辑字段'.$post['field'].'为'.$post['value']."[ID:".$post['id']."]");
+			$this->log('auth', '[权限]编辑字段值为'.$post['value']."[ID:".$post['id']."]");
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",

@@ -30,27 +30,31 @@ class BaseController extends Controller
 			exit;
 		}
 
-		// 加载白名单
-		$config = new \Config\Authconfig();
-		$white = $config->white;
-		// 权限校验
+		/* 权限控制 start*/
+		//请求方式
+		if (isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"] == 'XMLHttpRequest')){
+			$ajax = 1;
+		} else {
+			$ajax = 0;
+		}
+		// 获取控制器方法
 		$this->router = Services::router();
-		$this->checkModel = new CheckModel();
-		// 获取controller
 		$controller = explode('\\',$this->router->controllerName());
 		$controller = end($controller);
 		$action = $this->router->methodName();
-		if($controller != 'Home'){
-			$param = $uriSegments[3];
-		}else{
-			$param = '';
+		// 验证是否录入权限管理系统
+		$this->checkModel = new CheckModel();
+		$auth_id = $this->checkModel->isAuthRight($controller,$action);
+		if($auth_id){
+			// 检查该用户是否拥有此权限
+			$auth_check = $this->checkModel->authCheck($controller,$action,$auth_id);
+			if($auth_check !== true && $ajax == 1){
+				echo json_encode($auth_check);die;
+			}elseif($auth_check !== true && $ajax == 0){
+				error("您没有该权限",'javascript:history.back(-1)');
+			}
 		}
-		// $action =  $this->router->methodName();
-		// 获取参数 目前只支持固定单参
-		$res = $this->checkModel->authCheck($controller,$action,$param,$white);
-		if($res['code'] == 2){
-			//exit($res['msg']);  //暂时不启用。待权限录入结束再开启
-		}
+		/* 权限控制 end*/
 
 		//后台信息
 		$jellyConfig =  new \Config\config();
