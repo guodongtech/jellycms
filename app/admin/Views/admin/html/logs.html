@@ -46,7 +46,7 @@
 	var element = layui.element;
 	var $ = layui.jquery;
 	table.render({
-		elem: '#table',url:'{url:/SysLog/getList}',
+		elem: '#table',url:'{url:/Syslog/getList}',
 		toolbar: '#toolbarDemo',
 		title: '提示',
 		layEvent: 'LAYTABLE_TIPS',
@@ -71,7 +71,7 @@
 			case 'clear':
 		layer.confirm('确定要清空日志吗？', function(index){
 			$.ajax({
-				url:'{url:/SysLog/clear}',
+				url:'{url:/Syslog/clear}',
 				type:'post',
 				data:{
 				},
