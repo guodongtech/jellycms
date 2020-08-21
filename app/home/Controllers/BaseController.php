@@ -61,6 +61,7 @@ class BaseController extends Controller
 		}
 		//绝大多数蜘蛛不会执行JS，此处判断是否是蜘蛛
 		if($this->request->getUserAgent()->isRobot()){
+			$ipLocation = new \CodeIgniter\IpLocation\IpLocation();
 			$builder = $this->db->table('statistics');
 			$data = [
 				'ip' => $this->request->getIPAddress(),
@@ -71,6 +72,7 @@ class BaseController extends Controller
 				'content_id' => 0,
 				'sort_id' => 0,
 				'query_string' => $_SERVER["QUERY_STRING"],
+				'province' => $ipLocation->getlocation($this->request->getIPAddress()),
 			];
 			$builder->insert($data);
 		}
