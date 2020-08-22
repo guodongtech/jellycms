@@ -132,13 +132,15 @@ layui.use(['layer', 'form','table','upload','jquery','element'], function(){
 			});
 		}else if(obj.event === 'recovery'){
 			layer.confirm('危险操作，真的要还原数据吗？', function(index){
-				layer_loading('正在执行数据库还原');
+				layer_loading('正在执行数据库还原,请勿刷新页面');
 				//单个文件转换成数组
 				var files = [obj.data.name];
 				$.post('{url:/db/recovery}',{files:files},function(data){
 					if(data.code == 1){
-						layer.msg(data.msg)
-						top.location.reload();
+						parent.layer.closeAll();
+						layer.msg(data.msg,function(){
+							top.location.reload();
+						})
 					}
 					else{
 						parent.layer.closeAll();

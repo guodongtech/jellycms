@@ -146,7 +146,7 @@ var ue = UE.getEditor('description');
 	//执行实例
 		var uploadInst = upload.render({
 			elem: '#zipup',
-			url: '{url: /upgradeManage/uploadFile}',
+			url: '{url:/upgradeManage/uploadFile}',
 			accept:'file',
 			exts: 'zip',
 			done: function(res){
@@ -165,7 +165,7 @@ var ue = UE.getEditor('description');
 		var data = obj.data;
 		if(obj.event === 'del'){
 			layer.confirm('删除后用户将无法更新至该版本，是否删除', function(index){
-				$.post('{url: /upgradeManage/del}',{id:obj.data.id},function(data){
+				$.post('{url:/upgradeManage/del}',{id:obj.data.id},function(data){
 					if(data.code == 1){
 						layer.msg(data.msg)
 						obj.del();

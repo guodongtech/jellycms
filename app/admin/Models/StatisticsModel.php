@@ -32,11 +32,13 @@ class StatisticsModel extends Model
     }
     // 浏览器
     public function allBrowser(){
-        $sql = "select browser as name,count(browser) as value from ".$this->db->prefixTable('statistics')." where browser!='' group by browser order by value desc";
+        $now = date("Y-m-d H:00:00",strtotime("+1 hour"));
+        $pass = date("Y-m-d H:00:00",strtotime("-23 hour"));
+        $sql = "select browser as name,count(browser) as value from ".$this->db->prefixTable('statistics')." where start_time between '".$pass."' and '".$now."' and browser!='' group by browser order by value desc";
         $res = $this->db->query($sql)->getResultArray();
         $count = array_sum(array_column($res, 'value'));
-        $total = $this->db->table($this->db->prefixTable('statistics'))->countAll();
-        $else_browser = $total-$count;
+        $total = $this->db->query("select count(*) as count from ".$this->db->prefixTable('statistics')." where start_time between '".$pass."' and '".$now."'")->getRowArray();
+        $else_browser = $total['count']-$count;
         $res[] = ['name'=>'其他浏览器','value'=>$else_browser];
         $browser_name = array_column($res, 'name');
         $data['list'] = $res;
@@ -51,16 +53,14 @@ class StatisticsModel extends Model
         $res = $this->db->query($sql)->getResultArray();
         // 处理数据
         $spider_list = array_column($res, 'spider');
-        $list_tmp = array();
         $time_list = array();
         $data = array();
         $list = array();
         foreach($res as $k=>$v){
-        	$list_tmp[$v['spider']][] = $v;
         	$time_list[$v['spider']][$v['time']] = $v['count'];
         	$time_list[$v['spider']][] = $v['time'];
         }
-        foreach($list_tmp as $k=>$v){
+        foreach($time_list as $k=>$v){
         	for($i=0; $i<24; $i++){
 	        	$one_hour = date("Y-m-d H:00:00",strtotime("-".$i." hour"));
 	        	if(!in_array($one_hour, $time_list[$k])){
@@ -71,6 +71,18 @@ class StatisticsModel extends Model
 	        }
 	        $time = array_column(end($list), 'time');
 	        array_multisort($time,SORT_ASC,$list[$k]);
+        }
+        if(empty($res)){
+            for($i=0; $i<24; $i++){
+                $t = $i+1;
+                $one_hour = date("H:00",strtotime("-".$t." hour"));
+                $hour_list[] = $one_hour;
+                $list[] = 0;
+            }
+            $result['hour_list'] = $hour_list;
+            $result['list'] = ['type'=>'line','stack'=>'总量','data'=>$list];
+            $result['spider_list'] = [];
+            return $result;
         }
         $hour_list = array_column(end($list), 'hour');
         foreach($list as $k=>$v){
@@ -90,7 +102,12 @@ class StatisticsModel extends Model
         // 处理数据
         $list = array();
         $isset_country = array_column($res, 'name');
-        $max_count = max(array_column($res, 'value'));
+        if(empty($res)){
+            $max_count = 1;
+        }else{
+            $max_count = max(array_column($res, 'value'));
+        }
+        
         $country_list = ['北京','上海','河北','云南','黑龙江','安徽','新疆','浙江','湖北','甘肃','内蒙古','吉林','贵州','青海','四川','海南','香港','南海诸岛','重庆','河南','辽宁','湖南','山东','江苏','江西','广西','山西','陕西','福建','广东','西藏','宁夏','台湾','澳门','天津'];
         foreach($country_list as $k=>$v){
         	if(!in_array($v,$isset_country)){
