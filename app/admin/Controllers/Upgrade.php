@@ -185,9 +185,10 @@ class Upgrade extends BaseController
 			if(!is_dir(dirname(FCPATH.$fileName))){
 				mkdir(dirname(FCPATH.$fileName), 0755,true);
 			}
+			$size = zip_entry_filesize($zipfile); //文件真实尺寸  配合zip_entry_read
 			//排除.sql和目录
 			if(strpos($fileName, '.') && strpos($fileName, '.sql') == false){
-				$contents = zip_entry_read($zipfile);//取内容
+				$contents = zip_entry_read($zipfile,$size);//取内容
 				//echo md5($contents)."\n";
 				$fp = fopen (FCPATH.$fileName, 'w+');
 				fwrite($fp, $contents);
@@ -195,7 +196,7 @@ class Upgrade extends BaseController
 				//echo md5(file_get_contents(FCPATH.$fileName))."\n";  //内容MD5一致
 			}else{
 				//执行数据库升级
-				$execute_sql = zip_entry_read($zipfile);
+				$execute_sql = zip_entry_read($zipfile,$size);
 				$sqlFormat = $this->sql_split($execute_sql, $this->prefix);
 				try {
 	                $counts = count($sqlFormat);

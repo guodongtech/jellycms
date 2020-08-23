@@ -38,9 +38,13 @@ class UpgradeManage extends BaseController
 				return json_encode($rdata);					
 			}
 			$data['create_time'] = date('Y-m-d H:i:s',time());
-			unset($data['id']);
+		}else{
+		    $data['update_time'] = date('Y-m-d H:i:s',time());
 		}
-		if($this->model->upgradeEdit($data)){
+		if($data['status'] == 1){
+		    $data['start_time'] = date('Y-m-d H:i:s',time());
+		}
+		if($this->model->edit($data)){
 			$rdata = [
 				"code" => 1,
 				"msg" => "操作成功",
@@ -103,8 +107,12 @@ class UpgradeManage extends BaseController
 		}
 		$data = [
 			'id' => $post['id'],
+			'update_time' => date('Y-m-d H:i:s',time()),
 			$post['switchName'] => (int)$post['switchValue'],
 		];
+		if($data['status'] == 1){
+		    $data['start_time'] = date('Y-m-d H:i:s',time());
+		}
 		if($this->model->edit($data)){
 			$rdata = [
 				"code" => 1,
