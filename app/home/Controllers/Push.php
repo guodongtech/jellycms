@@ -20,8 +20,8 @@ class Push extends BaseController
 		header('Access-Control-Allow-Credentials: true'); // 设置是否允许发送 cookies
 		header('Access-Control-Allow-Headers: Content-Type,Content-Length,Accept-Encoding,X-Requested-with, Origin'); // 设置允许自定义请求头的字段
 		$list = [
-			['name'=>'zhangteng', 'email'=>'314246439@qq.com', 'description'=>'加入时间：2015年3月18日'],
-			['name'=>'zhaojiabin', 'email'=>'745320293@qq.com', 'description'=>'加入时间：2016年6月15日'],
+			['name'=>'jelly', 'email'=>'1156283808@qq.com', 'description'=>'加入时间：2015年3月18日'],
+			['name'=>'无双', 'email'=>'745320293@qq.com', 'description'=>'加入时间：2016年6月15日'],
 		];
 		$rdata = [
 			'code'=>0,
