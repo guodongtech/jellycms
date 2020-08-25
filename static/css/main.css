@@ -241,8 +241,8 @@
 .area-select{
 	width:66px !important;
 }
-.layui-form-item .layui-input-inline {
-    margin-right: 0;
+.layui-nav .layui-nav-more {
+    display:none;
 }
 .layui-form-select dl {
     top: 30px;
@@ -438,7 +438,7 @@ span[contenteditable]:empty:before {
     margin-bottom: 5px;
     margin-right: 10px;
 }
-
+ 
 .layui-colorpicker {
     width: 38px;
     height: 38px;
