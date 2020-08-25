@@ -133,7 +133,7 @@ class Message extends BaseController
             return json_encode($rdata);
         }
         $data = [
-            'pid' => $post['pid'],
+            'pid' => $post['pid']?$post['pid']:0,
             'content' => $post['content'],
             'area_id' => session('area_id'),
             'create_user' => session('id'),
@@ -163,7 +163,7 @@ class Message extends BaseController
     {
         $post = post();
         $table_name = $post['table_name'];
-        if(!$post['id'] || !$post['table_name'] || !$post['checked']){
+        if(!$post['id'] || !$post['table_name']){
             $rdata = [
                 "code" => 0,
                 "msg" => "参数不足",
@@ -172,7 +172,6 @@ class Message extends BaseController
         }
         $data = [
             'id' => $post['id'],
-            'checked' => $post['checked'],
             'status' => $post['status'],
         ];
         $res = $this->model->edit($data,$table_name);

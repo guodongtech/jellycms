@@ -8,8 +8,10 @@ class Form extends BaseController
      * @param string 
      */
 	private $model;
+	private $captcha;
 	public function __construct()
 	{
+		$this->captcha = new  \CodeIgniter\Captcha\Captcha();
 		$this->model = new FormModel();
 		$this->session = \Config\Services::session();
 		
@@ -17,7 +19,7 @@ class Form extends BaseController
 	public function index($name)
 	{	
 		//取当前表单
-		$form = $mustField = $this->model->getForm($name);;
+		$form = $mustField = $this->model->getForm($name);
 		if(empty($form)){
 			$rdata = [
 				"code" => 0,
@@ -37,19 +39,27 @@ class Form extends BaseController
 				exit(json_encode($rdata));
 			}			
 		}
+		if($post['code'] && !$this->captcha->validate($post['code'])){
+			$rdata = [
+				"code" => 0,
+				"msg" => "验证码错误",
+			];
+			exit(json_encode($rdata));
+		}
 		unset($post['code']);
 		$fields = $this->model->getFields($name);
-		print_r($fields);
 		foreach($fields as $key=>$value){
 			$data[$value] = $post[$value];
 		}
-		
+
 		//创建表单时 create_time  status ip deleted area_id字段必须创建，不管会不会用到。此处统一
-		$data['create_time'] = time();
+		$data['create_time'] = date("Y-m-d H:i:s",time());
 		$data['area_id'] = session('area_id');
-		$data['status'] = $form['type']; //0：前台不显示；1：前台展示；3：审核中  与form表type关联
+		$data['deleted'] = 0;
+		$data['pid'] = $data['pid']?$data['pid']:0;
+		$data['ip'] = $this->request->getIPAddress();
+		$data['status'] = $form['type']; //0：前台不显示 待审核；1：前台展示；2:审核不通过；  与form表type关联
 		
-		print_r($data);
 		if($this->model->insertData($name, $data)){
 			$rdata = [
 				"code" => 1,
@@ -63,6 +73,9 @@ class Form extends BaseController
 		}
 		echo json_encode($rdata);
 	}
-	 
+	 public function capthcha()
+    {
+		return $this->captcha->generate();
+    }
 
 }

@@ -21,7 +21,7 @@ class UpgradeModel extends Model
 	public function getMax(){
 		$builder = $this->db->table('upgrade_manage');
 		$result   = $builder->select('*')
-							->where(['deleted'=>0])
+							->where(['deleted'=>0,'status'=>1])
 							->orderBy('name', 'DESC')
 							->get()
 							->getRowArray();

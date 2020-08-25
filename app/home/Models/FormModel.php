@@ -39,7 +39,7 @@ class FormModel extends Model
     }
     public function insertData($name, $data)
     {
-		$builder = $this->db->table($name);
+		$builder = $this->db->table('form_'.$name);
 		$result = $builder->insert($data);
         return $result;
     }

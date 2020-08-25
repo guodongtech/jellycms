@@ -406,10 +406,10 @@ class View implements RendererInterface
 				{
 					$attr = $this->getAttrs($matches[4]);
 					isset($attr['pid'])? $pid=$attr['pid']:$pid = 0;
+					isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
 					isset($attr['value'])? $value=$attr['value']:$value = 'form';
 					isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
-					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel();  
-					foreach($model->getFormlistByFromName("'.$attr['name'].'",$content["id"],$pid = '.$pid.', $num='.$num.') as $key=>$'.$value.'){?>';
+					return  '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_=$model->getFormlistByFromName('.$id.',"'.$attr['name'].'",$content["id"],$pid = '.$pid.', $num='.$num.',$page); $pagebar=$data_["pagebar"];foreach($data_["data"] as $key=>$'.$value.'){?>';
 				}
 				case 'formaction:': 
 				{

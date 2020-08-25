@@ -387,21 +387,53 @@ class ParseModel extends Model
 	}
 	
 	//解析表单列表
-	public function getFormlistByFromName($name, $content_id, $pid, $num){
+	public function getFormlistByFromName($id, $name, $content_id, $pid, $num,$page){
+		$page = $page>0?$page:1;
+		$num = isset($num)?$num:5;
 		$formList = $this->getFormList();
 		$formNames = array_column($formList, 'table_name');
 		if(!in_array($name,$formNames)){
 			return array();//防止前台报错，非法访问返回空数组
+		}else{
+			$name = 'form_'.$name;
 		}
 		$where = $content_id?"content_id=".$content_id:"1=1";
 		$builder = $this->db->table($name);
-		$result   = $builder->select('*')
-							->where($where)
-							->where(['deleted'=>0, 'status'=>1, 'pid'=>$pid])
-							->orderBy('id desc')
+		if($pid>0){
+			$result  = $builder->select('*')
+					->where($where)
+					->where(['deleted'=>0, 'status'=>1, 'pid'=>$pid])
+					->orderBy('id desc')
+					->get()
+					->getResultArray();
+		}else{
+			$result  = $builder->select('*')
+					->where($where)
+					->where(['deleted'=>0, 'status'=>1, 'pid'=>$pid])
+					->orderBy('id desc')
+					->get($num,($page-1)*$num)
+					->getResultArray();
+			
+		}
+		$total = $builder->select('*')
+					->where($where)
+					->where(['deleted'=>0, 'status'=>1, 'pid'=>0])
+					->orderBy('id desc')
+					->countAllResults(false);
+		$page = $page; //当前页数
+		$totalPage = ceil($total/$num); //当前页数
+		
+		//urlname
+		$build = $this->db->table('sorts');
+		$res   = $build->select('sorts.*, model.urlname as m_urlname')
+							->join('model', 'model.id = sorts.model_id', 'left')
+							->where(['sorts.id'=>$id])
 							->get()
-							->getResultArray();	
-		return $result;	
+							->getRowArray();
+		$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
+		$data['data'] = $result;
+		$data['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
+		return $data;
 	}
 	
 
