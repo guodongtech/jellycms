@@ -1,0 +1,213 @@
+ <!DOCTYPE html>
+<html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='ie=edge' http-equiv='x-ua-compatible'>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
+<meta content='webkit' name='renderer'>
+<title>{contents:title}-{sorts:name}-{site:title}</title>
+<meta content='{contents:keywords}' name='keywords'>
+<meta content='{contents:description}' name='description'>
+<link rel="stylesheet" media="screen" href="{theme:css/main.css}" />
+<link rel="stylesheet" href="{theme:css/swiper.min.css}">
+<link rel="stylesheet" href="{theme:css/animate.min.css}">
+<link rel="stylesheet" href="{webroot:static/font-awesome-4.7.0/css/font-awesome.min.css}">
+<link rel="stylesheet" href="{webroot:static/layui/css/layui.css}">
+</head>
+<body>
+<style>
+.layui-form-radio img {
+    width:30px;
+    height:30px;
+	border-radius:100%;
+}
+</style>
+{include:head.html}
+<div class="sort-banner" style="background:url('{$GLOBALS.self_path}/static/images/proxy-pic.png')">
+	<div class="sort-banner-content">
+		<div class="sort-banner-left">
+			<span class="animated bounceInDown">{sorts:name}</span>
+			<p class="animated fadeInDown">{sorts:description}</p>
+		</div>
+		<div class="sort-banner-right">
+			<img class="animated fadeInDown" src="{sorts:ico}" />
+		</div>
+	</div>
+</div>
+<div class="position"><a href="/">首页</a>{position:}><a href="[position:link]">[position:name]</a>{/position}</div>
+<div class="content-wrap">
+
+	<div class="content wow fadeInDown">
+		<h2 class="content-title">{contents:title}</h2>
+		<div class="content-infos">
+			<span class="author">{contents:author}</span>
+			<span class="origin"></span>
+			<span class="releaseDate">{contents:create_time}</span>
+			<span class="views_num">访问：{contents:visit}</span>
+		</div>
+		<div class="content-detail">{contents:content}</div>	
+		<div class="article_pages">
+			<div class="pre">上一篇：<a href="{$pre.link}" title="{$pre.title}">{$pre.title}</a></div>
+			<div class="next">下一篇：<a href="{$next.link}" title="{$next.title}">{$next.title}</a></div>
+		</div>
+	</div>
+	
+	<div class="comment-wrap wow fadeInDown">
+		<div class="comment">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+				<legend>发表您的评论：</legend>
+			</fieldset>
+			<form class="layui-form" method="post" action="" lay-filter="example" id="form">
+				<input type="hidden" value={contents:id} name='content_id' />
+				<div class="layui-form-item">
+					<label class="layui-form-label">昵称</label>
+					<div class="layui-input-inline">
+						<input type="text" name="nickname" value='网友' lay-verify="title" autocomplete="off" placeholder="昵称" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">头像</label>
+					<div class="layui-input-inline">
+						<div class="layui-input-inline">
+						  <input type="radio" name="icon" value="{$GLOBALS.self_path}/static/images/icon.jpg" title="<img src='{$GLOBALS.self_path}/static/images/icon.jpg'>" checked="">
+						  <input type="radio" name="icon" value="{$GLOBALS.self_path}/static/images/logo.png" title="<img src='{$GLOBALS.self_path}/static/images/logo.png'>">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">内容</label>
+					<div class="layui-input-block">
+						<textarea placeholder="请输入内容" class="layui-textarea" lay-verify="required" name="content"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">验证码</label>
+					<div class="layui-input-inline">
+						<input type="text" name="code" lay-verify="required"  autocomplete="off" placeholder="验证码" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button type="reset" class="layui-btn layui-btn-normal" >重置</button>
+						<button type="submit" class="layui-btn" lay-submit="" lay-filter="form">立即提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+		  <legend>评论列表</legend>
+		</fieldset>
+		<ul class="comment-list">
+		 {form:name=comment num=3 pid=0 value=form}
+			<li>
+				<div class="user-info">
+					<img src="{$form.icon}">
+					<div>
+						<em>{$form.nickname}</em>
+						<span>{echo:date('m月d日 h: s', $form['create_time'])}</span>
+					</div>
+				</div>
+				<div class="user-message">
+					{$form.content}
+					<ul>
+					{form:name=comment num=3 pid=$form['id'] value=form2}
+						<li>
+							<div class="user-info sub">
+								<img src="{$form2.icon}">
+								<div>
+									<em>{$form2.nickname}</em>
+									<span>{echo:date('m月d日 h: s', $form2['create_time'])}</span>
+								</div>
+							</div>
+							<div class="user-message">
+							{$form2.content}
+							</div>
+						</li>
+					 {/form}	
+					</ul>
+				</div>
+			</li>
+		 {/form}
+		 {if:empty($form)}<li>暂无评论</li>{/if}
+		</ul>
+	</div>
+	
+	<div class="recommend-wrap">
+		<div class="recommend">
+			<h3>——  推荐内容  ——</h3>
+			<ul class="recommend-list">
+			{list:num=3 id=5 where=pic neq '' order=id desc}
+			<li>
+				<div class="item wow zoomIn">
+					<div class="item-pic">
+						<a href="[list:link]" title="[list:title]">
+							<img class="aritcl_img" src="{$list.pic}" alt="">
+						</a>
+					</div>
+					<div class="listcontent">
+						<div class="list-text">
+							<a class="list-title" href="[list:link]" title="[list:title]">
+								<span style="">[list:title]</span>
+							</a>
+							<div class="description">
+							[list:description len=100]...  
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+			{/list}
+			</ul>
+		
+		</div>
+	
+	
+	</div>
+</div>
+<script src="{webroot:static/layui/layui.all.js}"></script>
+<script>
+;!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  //监听提交
+  form.on('submit(form)', function(data){
+	$.ajax({
+	   type: "POST",
+	   url: "{formaction:name=comment}",
+	   data: data.field,
+	   dataType:"json",
+	   success: function(msg){
+			if(msg.code == 1){
+				layer.msg(msg.msg)
+			}
+			else{
+				layer.msg(msg.msg)
+			}
+	   }
+	});
+    return false; //中止layui submit事件。
+  });
+}();
+</script> 
+
+
+
+<!-- {pics:from=content id=2 num=10}
+{$pics.src}
+{/pics} -->
+
+
+
+
+
+
+
+
+
+
+
+
+{include:foot.html}
+</body>
+</html>

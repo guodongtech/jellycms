@@ -54,6 +54,11 @@ class BaseController extends Controller
 		foreach($sysConfig as $key=>$value){
 			$GLOBALS[$value['name']] = $value['value'];
 		}
+		//网站关闭
+		if($GLOBALS['web_status'] == 0){
+			exit($GLOBALS['close_tip']);
+		}
+		
 		// 黑名单
 		$blackip = explode(',',$GLOBALS['blackip']);
 		if(in_array($this->request->getIPAddress(),$blackip)){
