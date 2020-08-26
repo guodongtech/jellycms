@@ -20,7 +20,7 @@ class FormFieldModel extends Model
 		$builder = $this->db->table('form_field');
 		$res   = $builder->select('form_field.*, form.name as form_name')
 							->join('form', 'form.id = form_field.form_id', 'left')
-							->where(['form_field.deleted'=>0])
+							->where(['form_field.deleted'=>0,'form_field.issystem'=>0])
 							->get($limit, $offset)
 							->getResultArray();				
 							
@@ -68,6 +68,14 @@ class FormFieldModel extends Model
 		$builder = $this->db->table('form_field');
 		$result   = $builder->select('*')
 							->where(['form_id'=>$form_id, 'name'=>$name])
+							->get()
+							->getRowArray();
+		return $result;
+	}
+	public function getFieldsById($id){
+		$builder = $this->db->table('form_field');
+		$result   = $builder->select('*')
+							->where(['id'=>$id])
 							->get()
 							->getRowArray();
 		return $result;

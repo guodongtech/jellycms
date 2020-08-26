@@ -415,6 +415,7 @@ class ParseModel extends Model
 		}else{
 			$name = 'form_'.$name;
 		}
+
 		$where = $content_id?"content_id=".$content_id:"1=1";
 		$builder = $this->db->table($name);
 		if($pid>0){
@@ -460,7 +461,7 @@ class ParseModel extends Model
 		if($from == 'content' || $from == 'sorts'){
 			$builder = $this->db->table($from);
 			$res   = $builder->select('*')
-								->where(['id'=>$id])
+								->where(['id'=>$id,'area_id'=>session('area_id')])
 								->get()
 								->getRowArray();
 			$srcs = explode(',', $res['pics']);

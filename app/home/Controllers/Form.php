@@ -51,7 +51,20 @@ class Form extends BaseController
 		foreach($fields as $key=>$value){
 			$data[$value] = $post[$value];
 		}
-
+		// 两个内置表
+		if($name == 'message'){
+			$data['username'] = $post['username'];
+			$data['sex'] = $post['sex'];
+			$data['icon'] = $post['icon'];
+			$data['mobile'] = $post['mobile'];
+			$data['content'] = $post['content'];
+		}
+		if($name == 'comment'){
+			$data['nickname'] = $post['nickname'];
+			$data['icon'] = $post['icon'];
+			$data['content_id'] = $post['content_id'];
+			$data['content'] = $post['content'];
+		}
 		//创建表单时 create_time  status ip deleted area_id字段必须创建，不管会不会用到。此处统一
 		$data['create_time'] = date("Y-m-d H:i:s",time());
 		$data['area_id'] = session('area_id');

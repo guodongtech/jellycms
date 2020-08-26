@@ -60,7 +60,13 @@ class FormField extends BaseController
 				return json_encode($rdata);					
 			}
 		}
-
+		if($check['issystem'] == 1){
+			$rdata = [
+				"code" => 0,
+				"msg" => "系统内置字段不允许编辑",
+			];
+			return json_encode($rdata);	
+		}
 		$fields = array(
 			$data['name']       => array(
 			'type'           => $data['type'],
@@ -119,6 +125,14 @@ class FormField extends BaseController
 			'id' => $id,
 			'deleted' => 1,
 		];
+		$check = $this->model->getFieldsById($id);
+		if($check['issystem'] == 1){
+			$rdata = [
+				"code" => 0,
+				"msg" => "系统内置字段不允许删除",
+			];
+			return json_encode($rdata);	
+		}
 		if($this->model->edit($data)){
 			$this->log('formfield', "[自定义表单字段]删除[ID:".$id."]");
 			$rdata = [
@@ -149,6 +163,14 @@ class FormField extends BaseController
 			'id' => $post['id'],
 			$post['switchName'] => (int)$post['switchValue'],
 		];
+		$check = $this->model->getFieldsById($post['id']);
+		if($check['issystem'] == 1){
+			$rdata = [
+				"code" => 0,
+				"msg" => "系统内置字段不允许编辑",
+			];
+			return json_encode($rdata);	
+		}
 		if($this->model->edit($data)){
 			$this->log('formfield', "[自定义表单字段]修改必填[ID:".$post['id']."]");
 			$rdata = [

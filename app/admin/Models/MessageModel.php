@@ -14,7 +14,7 @@ class MessageModel extends Model
         $res   = $builder->select('f.*,a.name as create_user_name')
                             ->join('admin a', 'f.create_user = a.id', 'left')
                             ->where(['f.deleted'=>0])
-                            ->orderby('f.id asc')
+                            ->orderby('f.id desc')
                             ->get($limit, $offset)
                             ->getResultArray();
         $total = $builder->select('*')

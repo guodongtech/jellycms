@@ -141,9 +141,17 @@ class Message extends BaseController
             'status' => 1,
             'deleted' => 0,
         ];
+        if($table_name == 'message'){
+            $data['icon'] = '/static/images/logo.png';
+            $data['username'] = '官方';
+        }
+        if($table_name == 'comment'){
+            $data['icon'] = '/static/images/logo.png';
+            $data['nickname'] = '官方';
+        }
         $add_res = $this->model->edit($data,$table_name);
         if($add_res>0){
-            $this->log($table_name, '[留言信息]消息回复:'."[ID:".$post['id']."]");
+            $this->log($table_name, '[留言信息]消息回复:'."[PID:".$post['pid']."]");
             $data['id'] = $add_res;
             $rdata = [
                 "code" => 1,

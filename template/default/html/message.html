@@ -77,24 +77,24 @@
 				  <legend>留言列表</legend>
 				</fieldset>
 				<ul class="message-list">
-				{form:name=message num=3}
+				{form:name=message num=5}
 					<li>
 						<div class="user-info">
 							<img src="{$form.icon}">
 							<div>
 								<em>[form:username]</em>
-								<span>[form:create_time style=m月d日 h:s]</span>
+								<span>[form:create_time style=m月d日 h:i]</span>
 							</div>
 						</div>
 						<div class="user-message">
 						[form:content]
 							<ul>
-							{form:name=message num=3 pid=[form:id] value=form2}
+							{form:name=message num=5 pid=[form:id] value=form2}
 								<li>
 									<div class="user-info">
 										<img src="[form2:icon]">
 										<div>
-											<em>[form2:nickname]</em>
+											<em>[form2:username]</em>
 											<span>[form2:create_time style=m月d日 h:i]</span>
 										</div>
 									</div>
@@ -135,7 +135,7 @@
 						  <input type="text" name="mobile" lay-verify="title" autocomplete="off" placeholder="手机号" class="layui-input">
 						</div>
 					  </div>
-					  <div class="layui-form-item">
+					  <!-- <div class="layui-form-item">
 						<label class="layui-form-label">选择框</label>
 						<div class="layui-input-inline">
 						  <select name="interest" lay-filter="aihao">
@@ -147,16 +147,16 @@
 							<option value="4">旅行</option>
 						  </select>
 						</div>
-					  </div>
+					  </div> -->
 					  
-					  <div class="layui-form-item">
+					  <!-- <div class="layui-form-item">
 						<label class="layui-form-label">兴趣</label>
 						<div class="layui-input-block">
 						  <input type="checkbox" name="like[write]" title="写作">
 						  <input type="checkbox" name="like[read]" title="阅读">
 						  <input type="checkbox" name="like[daze]" title="发呆">
 						</div>
-					  </div>
+					  </div> -->
 					  <div class="layui-form-item">
 						<label class="layui-form-label">性别</label>
 						<div class="layui-input-block">
@@ -174,7 +174,7 @@
 					<label class="layui-form-label">验证码</label>
 					<div class="layui-input-inline">
 						<input type="text" name="code" lay-verify="required"  autocomplete="off" placeholder="验证码" class="layui-input">
-					</div>
+					</div><img title="点击刷新" src="{formaction:c=form a=capthcha}" onclick="this.src='{formaction:c=form a=capthcha}?'+Math.round(Math.random()*1000);"/>
 				</div>
 					  <div class="layui-form-item">
 						<div class="layui-input-block">
@@ -205,6 +205,7 @@
 	   dataType:"json",
 	   success: function(msg){
 			if(msg.code == 1){
+				window.location.reload();
 				layer.msg(msg.msg)
 			}
 			else{

@@ -40,6 +40,13 @@ class Form extends BaseController
 		}
 		//同名检测
 		$check_name = $this->model->check($post['name']);
+		if($check_name['issystem'] == 1){
+			$rdata = [
+				"code" => 0,
+				"msg" => "系统表单，不允许操作",
+			];
+			return json_encode($rdata);
+		}
 		if($check_name && !$post['id']){
 			$rdata = [
 				"code" => 0,
@@ -172,6 +179,13 @@ class Form extends BaseController
 			$rdata = [
 				"code" => 0,
 				"msg" => "表单不存在！",
+			];
+			return json_encode($rdata);
+		}
+		if($form['issystem']){
+			$rdata = [
+				"code" => 0,
+				"msg" => "系统表单，无法编辑！",
 			];
 			return json_encode($rdata);
 		}

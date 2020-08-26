@@ -84,7 +84,7 @@
 					<label class="layui-form-label">验证码</label>
 					<div class="layui-input-inline">
 						<input type="text" name="code" lay-verify="required"  autocomplete="off" placeholder="验证码" class="layui-input">
-					</div>
+					</div><img title="点击刷新" src="index.php/form/capthcha" onclick="this.src='index.php/form/capthcha?'+Math.round(Math.random()*1000);"/>
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block">
@@ -99,25 +99,25 @@
 		  <legend>评论列表</legend>
 		</fieldset>
 		<ul class="comment-list">
-		 {form:name=comment num=3 pid=0 value=form}
+		 {form:name=comment num=30 pid=0 value=form}
 			<li>
 				<div class="user-info">
 					<img src="{$form.icon}">
 					<div>
 						<em>{$form.nickname}</em>
-						<span>{echo:date('m月d日 h: s', $form['create_time'])}</span>
+						<span>{echo:date('m月d日 h: i', $form['create_time'])}</span>
 					</div>
 				</div>
 				<div class="user-message">
 					{$form.content}
 					<ul>
-					{form:name=comment num=3 pid=$form['id'] value=form2}
+					{form:name=comment num=30 pid=$form['id'] value=form2}
 						<li>
 							<div class="user-info sub">
 								<img src="{$form2.icon}">
 								<div>
 									<em>{$form2.nickname}</em>
-									<span>{echo:date('m月d日 h: s', $form2['create_time'])}</span>
+									<span>{echo:date('m月d日 h: i', $form2['create_time'])}</span>
 								</div>
 							</div>
 							<div class="user-message">

@@ -88,6 +88,14 @@
 			{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 			{field:'name', title:'表单名', width:120},
 			{field:'table_name', title:'数据表名'},
+			{field:'status', title:'状态', width:90, event: 'switch', templet: function(res){
+				if(res.status == 1){
+					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="status"  lay-skin="switch" lay-text="ON|OFF">';
+				}
+				
+			}},
 			{fixed: 'right', title:'操作', toolbar: '#barDemo', width:105}
 		]],
 		page: true
@@ -151,6 +159,19 @@
 			loadData(obj.data, '#form');
 			form.render();
 		
+	}else if(obj.event === 'switch'){
+		var switchName = $(this).find('input[type="checkbox"]').attr("name");
+		var switchValue = $(this).find('input[type="checkbox"]').is(":checked");
+		switchValue = Number(switchValue);
+		$.post('{url:/form/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
+			if(data.code == 1){
+				layer.msg(data.msg)
+			}
+			else{
+				layer.msg(data.msg)
+			}
+		}, 'json');
+		form.render();
 	}
 });
 
