@@ -16,19 +16,16 @@
 </head>
 <body>
 <header class="active other-page">
-	<div class="header-container">
+	<div class="header-container" style="width:100%;">
 		<div class="header-left"><img src="/static/upload/20200824/1598266703_31cfb380618235447fe4.png"></div>
 		<ul>
 			<li><a  href='/'>首页</a></li>
-						<li><a class="active" href='/?aboutus/'>关于我们</a></li>
-						<li><a  href='/?article/'>新闻动态</a></li>
-						<li><a  href='/?product/'>产品中心</a></li>
-						<li><a  href='/?case/'>服务案例</a></li>
-						<li><a  href='/?job/'>加入我们</a></li>
-						<li><a  href='/?gbook/'>在线留言</a></li>
-						<li><a  href='/?contact/'>联系我们</a></li>
-					</ul>
-		<div class="header-right"><!-- <a href="/">登录</a> --><a href="/" class="reg">开发手册</a></div>
+			<li><a href=''>使用手册</a></li>
+			<li><a class="active" href=''>模板标签</a></li>
+			<li><a href=''>二次开发</a></li>
+			<li><a href=''>数据字典</a></li>
+		</ul>
+		<div class="header-right"><a href="/" class="reg">开发手册</a></div>
 	</div>
 </header>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
@@ -41,7 +38,7 @@
 				<li><h2>基础说明</h2></li>
 
 				<li class="site-tree-noicon layui-this">
-					<a href="/doc/">
+					<a href="/manual">
 						<cite>开始使用</cite>
 						<em>Getting Started</em>
 					</a>
@@ -52,32 +49,7 @@
 					<em>基础支撑</em>
 					</a>
 				</li>
-				<li class="site-tree-noicon ">
-					<a href="/doc/base/element.html">
-					<cite>页面元素</cite>
-					<em>规范 / 公共类 / 属性</em>
-					</a>
-				</li>
-				<li class="site-tree-noicon ">
-					<a href="/doc/base/modules.html">
-					<cite>模块规范</cite>
-					<em>使用 / 扩展</em>
-					</a>
-				</li>
-				<li class="site-tree-noicon ">
-					<a href="/doc/base/faq.html">
-					<cite>常见问题</cite>
-					<em>FAQ</em>
-					</a>
-				</li>
-				<li class="site-tree-noicon ">
-					<a href="/doc/base/changelog.html">
-					<cite>更新日志</cite>
-
-					<span class="layui-badge-dot" style="position: relative; top: -2px; left: -4px;"></span>
-
-					</a>
-				</li>
+				 
 
 				 <li><h2>全局标签</h2></li>
 				 <li><h2>列表页标签</h2></li>
@@ -149,8 +121,7 @@
 				│  └─View.php //模板标签及缓存类
 				│─template //前台模板目录
 				├─admin.php //后台入口 生产环境务必更换此文件名
-				└─index.php //前台入口
-				</pre>
+				└─index.php //前台入口</pre>
 				<p>2. Git 仓库下载</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
 					你也可以通过 <a href="" target="_blank">GitHub</a> 
@@ -176,123 +147,6 @@
 </div>
 <ul class="site-dir"></ul>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<footer>
-	 <div class="footer-top">
-		<div class="footer-top-container">
-			<div class="footer-left wow bounceInLeft">
-				<div class="footer-logo">
-					<img src="/static/upload/20200824/1598266703_31cfb380618235447fe4.png" />
-					<p>CopyRight 2015-2020 All Right Reserved</p>
-				</div>
-				<div class="footer-contactus">
-					<p>联系人：果冻</p>
-					<p>手机：18888888888</p>
-					<p>电话：010-88888888</p>
-					<p>邮箱：admin@guodong.tech</p>
-					<p>地址：北京市朝阳区远洋国际中心</p>
-				</div>
-			</div>
-			<div class="footer-right wow bounceInRight">
-				<div class="footer-nav">
-				 					<div>
-						<h5>关于我们</h5>
-						<ul>
-													</ul>
-					</div>
-									<div>
-						<h5>新闻动态</h5>
-						<ul>
-														<li><a href="/?company/">公司动态</a></li>
-														<li><a href="/?industry/">行业动态</a></li>
-													</ul>
-					</div>
-									<div>
-						<h5>产品中心</h5>
-						<ul>
-														<li><a href="/?website/">果冻CMS</a></li>
-														<li><a href="/?domain/">果冻CRM</a></li>
-													</ul>
-					</div>
-				
-				</div>
-				<div class="qrcode"><img src="/static/upload/20200819/1597822100_12968a3ea78c50d7f90d.png" /><p>手机二维码</p></div>
-			</div>
-			
-		</div>
-		<div class="links wow fadeIn">
-		友情链接：			<a href="https://www.jellycms.cn" target="_blank">JellyCMS</a>
-					<a href="http://www.guodong.tech" target="_blank">国栋科技</a>
-					<a href="http://www.guodong.tech" target="_blank">北京国栋科技有限公司</a>
-					<a href="https://www.jellycms.cn" target="_blank">果冻CMS</a>
-			 </div>
-	 </div>
-
-	 <div class="footer-bottom">
-		<div class="wow bounceInUp">
-			<span>© 2008-2020 https://www.jellycms.cn</span>
-			京ICP备19013673号Page rendered in 0.93 seconds
-	
-		</div>
-		<div class="wow bounceInUp">
-			<span>北京国栋科技有限公司</span>
-			<span>增值电信业务经营许可证</span>
-		</div>
-
-	 </div>
-</footer>
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>
