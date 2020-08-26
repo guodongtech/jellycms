@@ -68,7 +68,17 @@ class ParseModel extends Model
 							->getRowArray();
 		$result['content'] = $this->addTags($result['content']);
 		$urlname = $result['urlname']?$result['urlname']:$result['m_urlname'];
-		$result['link'] = $result['link']==''?url(array($urlname, $result['id'])):$result['link'];			
+		$result['link'] = $result['link']==''?url(array($urlname, $result['id'])):$result['link'];
+		// 扩展字段
+		$builder = $this->db->table('content_ext');
+		$res   = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
+							->join('modelfield', 'content_ext.modelfield_id = modelfield.id', 'left')
+							->where(['content_ext.content_id'=>$result['id'],'modelfield.deleted'=>0,'modelfield.status'=>1])
+							->get()
+							->getResultArray();
+		foreach($res as $k=>$v){
+			$result[$v['name']] = $v['value'];
+		}
 		return $result;
 	}
 	
@@ -191,7 +201,7 @@ class ParseModel extends Model
 							->whereIn('sorts_id', $children)
 							->orderBy($order)
 							->get($num,($page-1)*$num)
-							->getResultArray();			
+							->getResultArray();
 		$countAllResults   = $builder->select('count(1) as count')
 							->where($where)
 							->where(['deleted'=>0,'status'=>1])
@@ -202,7 +212,6 @@ class ParseModel extends Model
 		$total = $countAllResults['count'];//总条数
 		$page = $page; //当前页数
 		$totalPage = ceil($total/$num); //当前页数
-		
 		
 		//为降低模板标签解析复杂度，重新补充分类及模型信息。
 		$ids = array();
@@ -220,8 +229,17 @@ class ParseModel extends Model
  		foreach($result as $key=>$value){
 			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
 			$result[$key]['link'] = $value['link']==''?url(array($urlName, $value['id'])):$value['link'];
+			// content 扩展字段
+			$builder = $this->db->table('content_ext');
+			$ext_res = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
+								->join('modelfield', 'content_ext.modelfield_id = modelfield.id', 'left')
+								->where(['content_ext.content_id'=>$value['id'],'modelfield.deleted'=>0,'modelfield.status'=>1])
+								->get()
+								->getResultArray();
+			foreach($ext_res as $k=>$v){
+				$result[$key][$v['name']] = $v['value'];
+			}
 		}
-		
 		//urlname
 		$build = $this->db->table('sorts');
 		$res   = $build->select('sorts.*, model.urlname as m_urlname')

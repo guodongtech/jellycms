@@ -32,6 +32,12 @@ class Login extends Base
 		$resultSite = $this->siteModel->getSite($resultArea['id']);
 		$domain = $resultSite['domain'];
 
+		// 黑名单
+		$blackip = explode(',',$GLOBALS['blackip']);
+		if(in_array($this->request->getIPAddress(),$blackip)){
+			echo "该IP已被禁止访问";die;
+		}
+
 		// 后台登陆白名单
 		$whiteip = explode(',',$GLOBALS['whiteip']);
 		if($GLOBALS['admin_domain'] == '' || $GLOBALS['admin_domain'] == $_SERVER['HTTP_HOST']){

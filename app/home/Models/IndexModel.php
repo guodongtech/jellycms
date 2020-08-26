@@ -100,6 +100,16 @@ class IndexModel extends Model
 							->get()
 							->getRowArray();
 		$result['content'] = $this->addTags($result['content']);
+		// 扩展数据
+		$builder = $this->db->table('content_ext');
+		$res   = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
+							->join('modelfield', 'content_ext.modelfield_id = modelfield.id', 'left')
+							->where(['content_ext.content_id'=>$result['id'],'modelfield.deleted'=>0,'modelfield.status'=>1])
+							->get()
+							->getResultArray();
+		foreach($res as $k=>$v){
+			$result[$v['name']] = $v['value'];
+		}
 		return $result;
 	}
 	//获取当前区域下所有标签

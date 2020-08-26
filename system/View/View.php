@@ -575,7 +575,7 @@ class View implements RendererInterface
 				case 'content:': 
 				{
 					$attr = $this->getAttrs($matches[4]);
-					if(isset($attr['id'])) $id = $attr['id'];
+					if(isset($attr['id'])) $id = $attr['id']; else $id = '$contents["id"]'; 
 					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
 				}
 				case 'sort:': 
