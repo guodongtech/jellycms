@@ -201,8 +201,8 @@ header.other-page .header-container ul li a{
 }
  
 .manual .left .layui-tree li i {
-    font-size: 18px;
-    color: #000;
+    font-size: 16px;
+    color: #888;
 }
 .layui-code {
 	padding: 0 !important;
