@@ -7,10 +7,10 @@
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
 <title>数据字典-JellyCMS</title>
-<meta content='JellyCMS数据字典' name='keywords'>
-<meta content='JellyCMS数据字典' name='description'>
+<meta content='JellyCMS二次开发' name='keywords'>
+<meta content='JellyCMS二次开发' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
-<link rel="stylesheet" media="screen" href="/static/css/manual.css" />
+<link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
 <link rel="stylesheet" href="/template/default/css/animate.min.css">
 <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
@@ -35,21 +35,9 @@
  
 		<div class="left">
 			<ul class="layui-tree">
-
 				<li><h2>基础说明</h2></li>
-
-				<li class="site-tree-noicon layui-this">
-					<a href="/manual">
-						<cite>开始使用</cite>
-						<em>Getting Started</em>
-					</a>
-				</li>
-				<li class="site-tree-noicon ">
-					<a href="/doc/base/infrastructure.html">
-					<cite>底层方法</cite>
-					<em>基础支撑</em>
-					</a>
-				</li>
+				<li class="site-tree-noicon layui-this"><a href=""><cite>开始使用</cite><em>Getting Started</em></a></li>
+				<li class="site-tree-noicon "><a href=""><cite>底层方法</cite><em>基础支撑</em></a></li>
 				 
 
 				 <li><h2>全局标签</h2></li>
@@ -58,41 +46,7 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">开始使用 - 入门指南</h1>
-			<blockquote class="layui-elem-quote">
-				熟悉JellyCMS的标签设计方案有利于尽快掌握使用JellyCMS建站及二次开发北京国栋科技有限公司开发的其它系统。
-				JellyCMS的标签系统尽可能在易用性
-				和代码美学方面做到最优。JellyCMS的模板标签分为基础调用方案、高级调用方案。无论是IT初学者还是
-				有进阶学习需求的UI/UE/前端/后端工程师在理解及掌握整个信息系统设计实现方案上都有指导性价值。
-			</blockquote>
-			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="scene">业务场景及发展方向</a></legend>
-			</fieldset>
-			<blockquote class="layui-elem-quote">
-				JellyCMS是北京国栋科技有限公司开发的企业信息化解决方案系统的初始系统，
-				面对的业务场景是企业信息展示(PC/移动端/含各类小程序)，我们并不会将JellyCMS做成大而全的系统。
-				她的使命也仅限于企业信息展示。其它业务需求将在其它开源系统中提供，
-				如：JellyCRM/JellySHOP/JellySAFE/JellyALL等。
-				你并不需要担心未来系统的多而乱的问题，我们将在不远的将来开源企业中台
-				管理系统（业务中台、技术中台、数据中台），实现企业所有业务系统的统一，
-				一套系统管理所有子系统。中台系统解决方案
-				的意义在于，无论是谁开发的、无论是用什么语言开发的系统，同样适用。
-			</blockquote>
-			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="fit">适用群体</a></legend>
-			</fieldset>
-			<blockquote class="layui-elem-quote">
-				在此，我们有必要再次强调我们的目标和初衷。北京国栋科技有限公司致力于企业信息化解决方案系统的
-				研发及开源维护，旨在降低企业在信息化系统领域的成本，
-				为具备开发能力的个人及企业提供完整的底层系统链。所有开源系统均遵循MIT协议，可在后台->全局配置->配置参数->系统私有化设置 里进行私有化设置。
-				我们在设计模板系统时未对标签做版权前缀附加。
-				<br>
-				1、有开发能力的个人<br>
-				2、有开发能力企业<br>
-				3、有进阶学习需求的工程师<br>
-				4、IT行业的初学者，系统在研发之初就考虑将系统应用于学习进阶上，为各类工种提供学习条件。
-				我们的后台系统尽可能的使用AJAX技术，但也在部分功能页面使用了传统同步表单及跳转。
-			</blockquote>
+			<h1 class="site-h1">开始使用 - 数据字典</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="get">获取JellyCMS</a></legend>
 			</fieldset>
@@ -102,44 +56,6 @@
 					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
 					目录结构如下：
 				</blockquote>
-				<pre class="layui-code" lay-title="重要目录结构" lay-height="" lay-skin="" lay-encode="">├─app //应用模块
-				│  │─admin //后台应用
-				│  │  ├─Config //模块配置
-				│  │  ├─Controllers //后台模块控制器
-				│  │  ├─Models //后台模型
-				│  │  └─Views//后台模板
-				│  │  └─Common.php //后台自定义函数
-				│  │─home //前台应用
-				│  │  ├─Config //模块配置
-				│  │  ├─Controllers //前台模块控制器
-				│  │  ├─Models //前台模型
-				│  │  └─Common.php //前台自定义函数
-				│  └─Config.php //主配置文件 数据库等配置
-				├─runtime  //运行时目录 目录权限可读 可写 不可执行
-				├─static //资源目录 js images css等
-				│─system //核心系统目录
-				│  ├─View
-				│  └─View.php //模板标签及缓存类
-				│─template //前台模板目录
-				├─admin.php //后台入口 生产环境务必更换此文件名
-				└─index.php //前台入口</pre>
-				<p>2. Git 仓库下载</p>
-				<blockquote class="layui-elem-quote layui-quote-nm">
-					你也可以通过 <a href="" target="_blank">GitHub</a> 
-					或 <a href="" target="_blank">码云</a> 得到JellyCMS的完整开发包，
-					以便于你进行二次开发，或者 Fork layui 为我们贡献方案
-					<br><br>
-					<div class="layui-btn-container">
-						<a class="layui-btn layui-btn-normal" href="" target="_blank" rel="nofollow" style="background-color: #24292E; color: #fff;">GitHub</a>
-						<a class="layui-btn layui-btn-normal" href="" target="_blank" rel="nofollow" style="background-color: #C71D23; color: #fff;">码云</a>
-					</div>
-				</blockquote>
-
-				<p>3. composer 安装</p>
-				<pre lay-skin="notepad">
-					composer
-				</pre>
-				<p>一般用于 composer 管理</p>
 			</div>
 		</div>
 

@@ -136,7 +136,7 @@ header.other-page .header-container ul li a{
 }
 .manual .left{
 	padding-left:8px;
-	width:220px;
+	width:258px;
 	border-right: 1px solid #eee;
 	height:100%;
 	overflow-y:auto;
@@ -153,6 +153,12 @@ header.other-page .header-container ul li a{
 }
 .manual .left .layui-tree {
     line-height: 32px;
+}
+.manual .left ul li {
+    transition:all 0.2s ease-in-out;
+}
+.manual .left ul li:hover {
+    background:#f2f2f2;
 }
 .manual .left .layui-tree li h2 {
     line-height: 36px;
