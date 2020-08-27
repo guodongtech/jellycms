@@ -48,10 +48,12 @@ html,body{
 .manual .right{
 	flex:1;
 	padding-left:18px;
+	padding-bottom:66px;
 	color:#333;
 	padding-right:198px;
 	height:100%;
 	overflow-y:auto;
+	
 }
 .manual .left .layui-tree {
     line-height: 32px;
