@@ -244,7 +244,23 @@ a cite {
 header{
 	position:relative !important;
 }
-
+.label{
+	display:flex;
+	justify-content:space-between;
+	width:100%;
+	align-items:center;
+}
+.label i{
+	height:25px;
+	width:25px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	cursor:pointer;
+}
+.label i:hover{
+	color:#21b384;
+}
 
 
 

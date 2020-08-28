@@ -220,7 +220,6 @@ class UserAgents extends BaseConfig
 		'googlebot-image'            => 'googlebot image',
 		'YoudaoBot'            => 'Youdao',
 		'YodaoBot'            => 'Youdao',
-		'Sogou News Spider'            => 'Sogou',
 		'Sogou web spider'            => 'Sogou',
 		'Sogou inst spider'            => 'Sogou',
 		'Sogou spider2'            => 'Sogou',
