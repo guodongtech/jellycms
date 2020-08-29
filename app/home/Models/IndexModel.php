@@ -225,10 +225,10 @@ class IndexModel extends Model
 						->getRowArray();
 		if(is_array($pre)){
 			$urlname = $pre['urlname']==''?$pre['m_urlname']:$pre['urlname'];
-			if($pre['outlink']==''){
+			if($pre['link']==''){
 				$pre['link']= url(array($urlname,$pre['id']));
 			}else{
-				$pre['link']= $pre['outlink'];
+				$pre['link']= $pre['link'];
 			}			
 		}else{
 			$pre['title'] = '没有了';
@@ -245,10 +245,10 @@ class IndexModel extends Model
 						->getRowArray();
 		if(is_array($next)){
 			$urlname = $next['urlname']==''?$next['m_urlname']:$next['urlname'];
-			if($next['outlink']==''){
+			if($next['link']==''){
 				$next['link']= url(array($urlname,$next['id']));
 			}else{
-				$next['link']= $next['outlink'];
+				$next['link']= $next['link'];
 			}			
 		}else{
 			$next['title'] = '没有了';

@@ -59,8 +59,8 @@
 				<li class="site-tree-noicon"><a href="pagebar.html"><cite>分页标签</cite><em>{pagebar:}</em></a></li>
 				<li><h2>内容页标签</h2></li>
 				<li class="site-tree-noicon"><a href="contents.html"><cite>内容标签</cite><em>{contents:}</em></a></li>
-				<li class="site-tree-noicon"><a href="prevcontent.html"><cite>上一篇内容</cite><em>{prevcontent:}</em></a></li>
-				<li class="site-tree-noicon"><a href="nextcontent.html"><cite>下一篇内容</cite><em>{nextcontent:}</em></a></li>
+				<li class="site-tree-noicon"><a href="prevcontent.html"><cite>上一篇内容</cite><em>{pre:}</em></a></li>
+				<li class="site-tree-noicon"><a href="nextcontent.html"><cite>下一篇内容</cite><em>{next:}</em></a></li>
 			</ul>
 		</div>
 		<div class="right">
@@ -335,6 +335,28 @@
 								</td>
 								<td>附件地址</td>
 							</tr>
+							<tr>
+								<td></td>
+								<td>link</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{pre:link}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pre:link}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>文章地址</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>扩展字段</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{pre:扩展字段名}</span>
+									<i aria-hidden="true"></i>
+									</div>
+								</td>
+								<td>对应后台‘全局配置’->‘模型字段’</td>
+							</tr>
 						</tbody>
 					</table>
 			</div>
@@ -351,13 +373,13 @@
 				</blockquote>
 				<p>2.在模板里添加自定义字段表单项</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					模板位置：\app\admin\Views\admin\html\company.html<br>
+					模板位置：\app\admin\Views\admin\html\content_edit.html<br>
 					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
 					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
 				</blockquote>
 				<p>3.调用自定义字段</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					{company:自定义字段}
+					{pre:自定义字段}
 				</blockquote>
 			</div>
 		</div>

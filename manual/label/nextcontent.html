@@ -59,8 +59,8 @@
 				<li class="site-tree-noicon"><a href="pagebar.html"><cite>分页标签</cite><em>{pagebar:}</em></a></li>
 				<li><h2>内容页标签</h2></li>
 				<li class="site-tree-noicon"><a href="contents.html"><cite>内容标签</cite><em>{contents:}</em></a></li>
-				<li class="site-tree-noicon"><a href="prevcontent.html"><cite>上一篇内容</cite><em>{prevcontent:}</em></a></li>
-				<li class="site-tree-noicon"><a href="nextcontent.html"><cite>下一篇内容</cite><em>{nextcontent:}</em></a></li>
+				<li class="site-tree-noicon"><a href="prevcontent.html"><cite>上一篇内容</cite><em>{pre:}</em></a></li>
+				<li class="site-tree-noicon"><a href="nextcontent.html"><cite>下一篇内容</cite><em>{next:}</em></a></li>
 			</ul>
 		</div>
 		<div class="right">
@@ -78,7 +78,7 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					用于调取网站与公司相关的信息，对应后台的“基础配置>公司信息”
+					用于调取下一篇文章的地址及详情
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -86,7 +86,7 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					{company:字段名}
+					{next:字段名}
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -109,143 +109,253 @@
 								<td>id</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:id}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:id}" title="点击复制"></i>
+									<span class="getlabel">{next:id}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:id}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>公司ID</td>
+								<td>内容ID</td>
 							</tr>
 							<tr>
 								<td></td>
 								<td>area_id</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:area_id}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:area_id}" title="点击复制"></i>
+									<span class="getlabel">{next:area_id}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:area_id}" title="点击复制"></i>
 									</div>
 								</td>
 								<td>区域ID</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>name</td>
+								<td>sorts_id</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:name}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:name}" title="点击复制"></i>
+									<span class="getlabel">{next:sorts_id}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:sorts_id}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>公司名</td>
+								<td>栏目id</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>address</td>
+								<td>subsort_id</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:address}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:address}" title="点击复制"></i>
+									<span class="getlabel">{next:subsort_id}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:subsort_id}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>公司地址</td>
+								<td>副栏目id</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>postcode</td>
+								<td>color</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:postcode}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:postcode}" title="点击复制"></i>
+									<span class="getlabel">{next:color}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:color}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>邮政编码</td>
+								<td>标题颜色</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>contact</td>
+								<td>subtitle</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:contact}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:contact}" title="点击复制"></i>
+									<span class="getlabel">{next:subtitle}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:subtitle}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>联系方式</td>
+								<td>副标题</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>mobile</td>
+								<td>author</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:mobile}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:mobile}" title="点击复制"></i>
+									<span class="getlabel">{next:author}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:author}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>手机号</td>
+								<td>作者</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>phone</td>
+								<td>source</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:phone}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:phone}" title="点击复制"></i>
+									<span class="getlabel">{next:source}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:source}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>座机号</td>
+								<td>来源</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>fax</td>
+								<td>link</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:fax}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:fax}" title="点击复制"></i>
+									<span class="getlabel">{next:link}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:link}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>传真</td>
+								<td>跳转外链接</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>email</td>
+								<td>pic</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:email}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:email}" title="点击复制"></i>
+									<span class="getlabel">{next:pic}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:pic}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>邮箱</td>
+								<td>缩略图地址</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>qq</td>
+								<td>pics</td>
 								<td>
 									<div class="label">
-										<span class="getlabel">{company:qq}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:qq}" title="点击复制"></i>
+										<span class="getlabel">{next:pics}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:pics}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>QQ</td>
+								<td>多图（以半角逗号连接）</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>license</td>
+								<td>content</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:license}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:license}" title="点击复制"></i>
+									<span class="getlabel">{next:content}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:content}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>营业执照</td>
+								<td>内容</td>
 							</tr>
 							<tr>
 								<td></td>
-								<td>other</td>
+								<td>tags</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{company:other}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:other}" title="点击复制"></i>
+									<span class="getlabel">{next:tags}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:tags}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>其它</td>
+								<td>标签（以半角逗号连接）</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>keywords</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:keywords}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:keywords}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>SEO关键字</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>description</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:description}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:description}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>SEO描述</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>top</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:top}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:top}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>是否置顶（等于1时置顶）</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>recommend</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:recommend}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:recommend}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>是否推荐（等于1时推荐）</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>headline</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:headline}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:headline}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>是否头条（等于1时头条）</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>visit</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:visit}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:visit}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>访问次数</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>pictitles</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:pictitles}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:pictitles}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>图片对应标题（以半角逗号连接）</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>otherfile</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:otherfile}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:otherfile}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>附件地址</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>link</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:link}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:link}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>文章地址</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>扩展字段</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:扩展字段名}</span>
+									<i aria-hidden="true"></i>
+									</div>
+								</td>
+								<td>对应后台‘全局配置’->‘模型字段’</td>
 							</tr>
 						</tbody>
 					</table>
@@ -263,13 +373,13 @@
 				</blockquote>
 				<p>2.在模板里添加自定义字段表单项</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					模板位置：\app\admin\Views\admin\html\company.html<br>
+					模板位置：\app\admin\Views\admin\html\content_edit.html<br>
 					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
 					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
 				</blockquote>
 				<p>3.调用自定义字段</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					{company:自定义字段}
+					{next:自定义字段}
 				</blockquote>
 			</div>
 		</div>
