@@ -12,8 +12,9 @@
 	//支持所有基础参数
 	}); 
 	layui.code({
-	  elem: 'pre', //默认值为.layui-code
-	  about:false,
+		elem: 'pre', //默认值为.layui-code
+		about:false,
+		encode: true,
 	});
 	var clipboard = new ClipboardJS('.label i');
     clipboard.on('success', function(e) {
