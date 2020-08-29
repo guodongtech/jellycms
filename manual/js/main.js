@@ -7,6 +7,7 @@
 	//转换静态表格
 	table.init('jellytable', {
 		width:588,
+		limit: 50//显示的数量
 		
 	//支持所有基础参数
 	}); 
