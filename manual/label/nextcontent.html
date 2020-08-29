@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
+<head>
+<meta charset='utf-8'>
+<meta content='ie=edge' http-equiv='x-ua-compatible'>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
+<meta content='webkit' name='renderer'>
+<title>公司信息-模板标签-JellyCMS</title>
+<meta content='公司信息-模板标签' name='keywords'>
+<meta content='公司信息-模板标签' name='description'>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
+<link rel="stylesheet" href="/template/default/css/swiper.min.css">
+<link rel="stylesheet" href="/template/default/css/animate.min.css">
+<link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="manual-wrap">
+<header class="active other-page">
+	<div class="header-container" style="width:100%;">
+		<div class="header-left"><img src="/static/upload/20200824/1598266703_31cfb380618235447fe4.png"></div>
+		<ul>
+			<li><a  href='/'>首页</a></li>
+			<li><a href='/manual/operation'>使用手册</a></li>
+			<li><a class="active" href='/manual/label'>模板标签</a></li>
+			<li><a href='/manual/develop'>二次开发</a></li>
+			<li><a href='/manual/database'>数据字典</a></li>
+			<li><a href='/manual/template'>模板入门</a></li>
+		</ul>
+		<div class="header-right"><a href="https://www.guodong.tech/" class="reg">国栋科技</a></div>
+	</div>
+</header>
+<div class="manual">
+ 
+		<div class="left">
+			<ul class="layui-tree">
+
+				<li><h2>基础说明</h2></li>
+				<li class="site-tree-noicon"><a href="index.html"><cite>开始使用</cite><em>Getting Started</em></a></li>
+				<li><h2>全局标签</h2></li>
+				<li class="site-tree-noicon layui-this"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
+				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
+				<li class="site-tree-noicon"><a href="list.html"><cite>列表标签</cite><em>{list:}</em></a></li>
+				<li class="site-tree-noicon"><a href="contents.html"><cite>内容标签</cite><em>{contents:}</em></a></li>
+				<li class="site-tree-noicon"><a href="link.html"><cite>友情链接</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="slide.html"><cite>轮播/幻灯片</cite><em>{slide:}</em></a></li>
+				<li class="site-tree-noicon"><a href="form.html"><cite>自定义表单</cite><em>{form:}</em></a></li>
+				<li class="site-tree-noicon"><a href="advertisement.html"><cite>广告位</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="pics.html"><cite>多图调用标签</cite><em>{pics:}</em></a></li>
+				<li class="site-tree-noicon"><a href="statistics.html"><cite>统计信息</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="nav.html"><cite>栏目导航</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="label.html"><cite>自定义标签</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="area.html"><cite>区域调用</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="theme.html"><cite>当前主题目录文件</cite><em>{theme:}</em></a></li>
+				<li class="site-tree-noicon"><a href="webroot.html"><cite>网站根目录文件</cite><em>{webroot:}</em></a></li>
+				<li class="site-tree-noicon"><a href="include.html"><cite>模板引入标签</cite><em>{include:}</em></a></li>
+				<li><h2>列表页标签</h2></li>
+				<li class="site-tree-noicon"><a href="list.html"><cite>列表调用</cite><em>{list:}</em></a></li>
+				<li class="site-tree-noicon"><a href="pagebar.html"><cite>分页标签</cite><em>{pagebar:}</em></a></li>
+				<li><h2>内容页标签</h2></li>
+				<li class="site-tree-noicon"><a href="contents.html"><cite>内容标签</cite><em>{contents:}</em></a></li>
+				<li class="site-tree-noicon"><a href="prevcontent.html"><cite>上一篇内容</cite><em>{prevcontent:}</em></a></li>
+				<li class="site-tree-noicon"><a href="nextcontent.html"><cite>下一篇内容</cite><em>{nextcontent:}</em></a></li>
+			</ul>
+		</div>
+		<div class="right">
+			<h1 class="site-h1">公司信息标签 - 模板标签</h1>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="scope">适用范围</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					全站任意地方均可使用
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="effect">标签作用</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					用于调取网站与公司相关的信息，对应后台的“基础配置>公司信息”
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="way">调用方式</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					{company:字段名}
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="fields">可调用字段</a></legend>
+			</fieldset>
+			<div class="site-text">
+				 
+					<table lay-filter="jellytable">
+						<thead>
+							<tr>
+								<th lay-data="{field:'id', width:60,templet: '#id'}">序号</th>
+								<th lay-data="{field:'name', width:98, sort:true}">字段名</th>
+								<th lay-data="{field:'label'}">调用</th>
+								<th lay-data="{field:'note'}">注释</th>
+							</tr> 
+						</thead>
+						<tbody>
+							<tr>
+								<td></td>
+								<td>id</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:id}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:id}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>公司ID</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>area_id</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:area_id}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:area_id}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>区域ID</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>name</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:name}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:name}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>公司名</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>address</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:address}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:address}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>公司地址</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>postcode</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:postcode}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:postcode}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>邮政编码</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>contact</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:contact}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:contact}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>联系方式</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>mobile</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:mobile}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:mobile}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>手机号</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>phone</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:phone}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:phone}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>座机号</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>fax</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:fax}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:fax}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>传真</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>email</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:email}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:email}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>邮箱</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>qq</td>
+								<td>
+									<div class="label">
+										<span class="getlabel">{company:qq}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:qq}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>QQ</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>license</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:license}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:license}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>营业执照</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>other</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{company:other}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{company:other}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>其它</td>
+							</tr>
+						</tbody>
+					</table>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="add">添加自定义字段</a></legend>
+			</fieldset>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				我们添加了常用的公司信息字段，但并不一定能满足你的开发需求。你可以非常轻松地添加自定义字段。
+			</blockquote>
+			<div class="site-text">
+				<p>1.在数据库company表添加自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					推荐使用phpmyadmin或navicat for mysql对数据库进行操作
+				</blockquote>
+				<p>2.在模板里添加自定义字段表单项</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					模板位置：\app\admin\Views\admin\html\company.html<br>
+					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
+					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
+				</blockquote>
+				<p>3.调用自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					{company:自定义字段}
+				</blockquote>
+			</div>
+		</div>
+</div>
+</div>
+<ul class="site-dir"></ul>
+<script type="text/html" id="id">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script src="/index.php/Statistics/index/1/0"></script>
+<script src="/template/default/js/jquery-1.11.3.min.js"></script>
+<script src="/template/default/js/swiper.min.js"></script>
+<script src="/template/default/js/swiper.animate.min.js"></script>
+<script src="/template/default/js/wow.min.js"></script>
+<script src="/static/layui/layui.all.js"></script>
+<script src="/manual/js/clipboard.min.js"></script>
+<script src="/manual/js/main.js"></script>
+</body>
+</html>

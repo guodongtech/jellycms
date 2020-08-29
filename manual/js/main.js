@@ -9,7 +9,6 @@
 		width:666,
 		limit:88,
 		//page:true,
-		
 	//支持所有基础参数
 	}); 
 	layui.code({

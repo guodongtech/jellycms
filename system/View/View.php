@@ -298,7 +298,7 @@ class View implements RendererInterface
 			$str = '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		} */
 		//前面已完成中间解析，正式解析标签
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company|statistics|myad)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company|statistics|myad|pre|next)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 替换循环标签里的变量 如：{nav: pid=[nav:id]}
@@ -669,6 +669,16 @@ class View implements RendererInterface
 					$str = trim($arr[0]);
 					return '<?php if(!isset($model))  $model = new \App\Models\ParseModel(); echo $model->getNormbody("'.$str.'"); ?>';
                 }
+                case 'pre:':
+				{
+					$arr = explode(' ', $matches[4]);
+					$str = trim($arr[0]);
+					return '<?php  echo $pre["'.$str.'"]; ?>';
+				}
+				case 'next:':
+				{
+					return '<?php  echo $next["'.$str.'"]; ?>';
+				}
 				default:
 				{
 					 return $matches[0];

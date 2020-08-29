@@ -254,7 +254,26 @@ class IndexModel extends Model
 			$next['title'] = '没有了';
 			$next['link'] = 'javascript:void(0)';
 		}
-		
+		// pre扩展数据
+		$builder = $this->db->table('content_ext');
+		$pre_res   = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
+							->join('modelfield', 'content_ext.modelfield_id = modelfield.id', 'left')
+							->where(['content_ext.content_id'=>$pre['id'],'modelfield.deleted'=>0,'modelfield.status'=>1])
+							->get()
+							->getResultArray();
+		foreach($pre_res as $k=>$v){
+			$pre[$v['name']] = $v['value'];
+		}
+		// next扩展数据
+		$builder = $this->db->table('content_ext');
+		$next_res   = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
+							->join('modelfield', 'content_ext.modelfield_id = modelfield.id', 'left')
+							->where(['content_ext.content_id'=>$next['id'],'modelfield.deleted'=>0,'modelfield.status'=>1])
+							->get()
+							->getResultArray();
+		foreach($next_res as $k=>$v){
+			$next[$v['name']] = $v['value'];
+		}
 		return $result = array('pre'=>$pre, 'next'=>$next) ;
 	}
 	

@@ -123,10 +123,8 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">头像</label>
 					<div class="layui-input-inline">
-						<div class="layui-input-inline">
-						  <input type="radio" name="icon" value="{$GLOBALS.self_path}/static/images/icon.jpg" title="<img src='{$GLOBALS.self_path}/static/images/icon.jpg'>" checked="">
+						<input type="radio" name="icon" value="{$GLOBALS.self_path}/static/images/icon.jpg" title="<img src='{$GLOBALS.self_path}/static/images/icon.jpg'>" checked="">
 						  <input type="radio" name="icon" value="{$GLOBALS.self_path}/static/images/logo.png" title="<img src='{$GLOBALS.self_path}/static/images/logo.png'>">
-						</div>
 					</div>
 				</div>
 					  <div class="layui-form-item">
@@ -174,7 +172,7 @@
 					<label class="layui-form-label">验证码</label>
 					<div class="layui-input-inline">
 						<input type="text" name="code" lay-verify="required"  autocomplete="off" placeholder="验证码" class="layui-input">
-					</div><img title="点击刷新" src="{formaction:c=form a=capthcha}" onclick="this.src='{formaction:c=form a=capthcha}?'+Math.round(Math.random()*1000);"/>
+					</div><img title="点击刷新" src="index.php/form/capthcha" onclick="this.src='index.php/form/capthcha?'+Math.round(Math.random()*1000);"/>
 				</div>
 					  <div class="layui-form-item">
 						<div class="layui-input-block">
