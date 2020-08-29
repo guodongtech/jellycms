@@ -69,7 +69,8 @@
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
 					全站任意地方均可使用，当list标签作为全局标签时，必须指定分类ID。<br>
-					只有在列表页和内容页可不指定分类ID，不指定分类ID时，此标签将变成列表页标签<br>
+					只有在列表页和内容页可不指定分类ID，不指定分类ID时，此标签将变成列表页标签
+				</blockquote>
 				<pre class="layui-code" lay-title="模板解析类View.php代码" lay-height="" lay-skin="" lay-encode="">//可指定多个ID id=1,2,3,4
 case 'list:':
 {
@@ -90,7 +91,7 @@ case 'list:':
         $params = '['.trim($tem, ',').']';
         return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
 }</pre>
-				</blockquote>
+				
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="effect">标签作用</a></legend>
@@ -104,7 +105,7 @@ case 'list:':
 				<legend><a name="way">调用方式</a></legend>
 			</fieldset>
 			<div class="site-text">
-				<blockquote class="layui-elem-quote layui-quote-nm">
+				
 				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">    //可指定多个ID id=1,2,3,4
     {list:num=5 id=1,2,3 order=id desc where=id>0,status eq 1}
     <li>
@@ -118,7 +119,7 @@ case 'list:':
         </a>
     </li>
     {/list}</pre>
-				</blockquote>
+				
 				<blockquote class="layui-elem-quote layui-quote-nm">
 					order：排序，多个排序条件用半角逗号隔开<br>
 					where：过滤条件，多个过滤条件用半角逗号隔开<br>
