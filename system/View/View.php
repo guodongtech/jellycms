@@ -206,7 +206,7 @@ class View implements RendererInterface
 		//echo number_format($end-$start, 4);//正则匹配的时间 本地7ms左右
 
 		ob_start();
-		////include($this->renderVars['file']); // PHP will be processed
+		//include($this->renderVars['file']); // PHP will be processed
 		$incoming = '?>' . $output;
 		eval($incoming);// PHP will be processed
 		$output = ob_get_contents();
