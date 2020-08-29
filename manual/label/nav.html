@@ -1,14 +1,13 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
 <head>
 <meta charset='utf-8'>
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>模板标签-JellyCMS</title>
-<meta content='关于我们' name='keywords'>
-<meta content='描述' name='description'>
+<title>栏目导航-模板标签-JellyCMS</title>
+<meta content='栏目导航-模板标签' name='keywords'>
+<meta content='栏目导航-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -37,56 +36,323 @@
 			<ul class="layui-tree">
 
 				<li><h2>基础说明</h2></li>
-				<li class="site-tree-noicon layui-this">
-					<a href="/manual">
-						<cite>开始使用</cite>
-						<em>Getting Started</em>
-					</a>
-				</li>
+				<li class="site-tree-noicon"><a href="index.html"><cite>开始使用</cite><em>Getting Started</em></a></li>
 				<li><h2>全局标签</h2></li>
-				<li class="site-tree-noicon "><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
-				<li class="site-tree-noicon "><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
-				<li class="site-tree-noicon "><a href="list.html"><cite>列表标签</cite><em>{list:}</em></a></li>
-				<li class="site-tree-noicon "><a href="contents.html"><cite>内容标签</cite><em>{content:}</em></a></li>
-				<li class="site-tree-noicon "><a href="link.html"><cite>友情链接</cite><em>{link:}</em></a></li>
-				<li class="site-tree-noicon "><a href="slide.html"><cite>轮播/幻灯片</cite><em>{slide:}</em></a></li>
-				<li class="site-tree-noicon "><a href="form.html"><cite>自定义表单</cite><em>{form:}</em></a></li>
-				<li class="site-tree-noicon "><a href="advertisement.html"><cite>广告位</cite><em>{link:}</em></a></li>
-				<li class="site-tree-noicon "><a href="pics.html"><cite>多图调用标签</cite><em>{pics:}</em></a></li>
-				<li class="site-tree-noicon "><a href="statistics.html"><cite>统计信息</cite><em>{link:}</em></a></li>
-				<li class="site-tree-noicon "><a href="nav.html"><cite>栏目导航</cite><em>{link:}</em></a></li>
-				<li class="site-tree-noicon "><a href="label.html"><cite>自定义标签</cite><em>{link:}</em></a></li>
-				<li class="site-tree-noicon "><a href="area.html"><cite>区域调用</cite><em>{link:}</em></a></li>
-				<li class="site-tree-noicon "><a href="theme.html"><cite>当前主题目录文件</cite><em>{theme:}</em></a></li>
-				<li class="site-tree-noicon "><a href="webroot.html"><cite>网站根目录文件</cite><em>{webroot:}</em></a></li>
-				<li class="site-tree-noicon "><a href="include.html"><cite>模板引入标签</cite><em>{include:}</em></a></li>
+				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
+				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
+				<li class="site-tree-noicon layui-this"><a href="list.html"><cite>列表标签</cite><em>{list:}{/list}</em></a></li>
+				<li class="site-tree-noicon"><a href="contents.html"><cite>内容标签</cite><em>{content:}</em></a></li>
+				<li class="site-tree-noicon"><a href="link.html"><cite>友情链接</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="slide.html"><cite>轮播/幻灯片</cite><em>{slide:}</em></a></li>
+				<li class="site-tree-noicon"><a href="form.html"><cite>自定义表单</cite><em>{form:}</em></a></li>
+				<li class="site-tree-noicon"><a href="advertisement.html"><cite>广告位</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="pics.html"><cite>多图调用标签</cite><em>{pics:}</em></a></li>
+				<li class="site-tree-noicon"><a href="statistics.html"><cite>统计信息</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="nav.html"><cite>栏目导航</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="label.html"><cite>自定义标签</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="area.html"><cite>区域调用</cite><em>{link:}</em></a></li>
+				<li class="site-tree-noicon"><a href="theme.html"><cite>当前主题目录文件</cite><em>{theme:}</em></a></li>
+				<li class="site-tree-noicon"><a href="webroot.html"><cite>网站根目录文件</cite><em>{webroot:}</em></a></li>
+				<li class="site-tree-noicon"><a href="include.html"><cite>模板引入标签</cite><em>{include:}</em></a></li>
 				<li><h2>列表页标签</h2></li>
-				<li class="site-tree-noicon "><a href="list.html"><cite>列表调用</cite><em>{list:}</em></a></li>
-				<li class="site-tree-noicon "><a href="pagebar.html"><cite>分页标签</cite><em>{pagebar:}</em></a></li>
+				<li class="site-tree-noicon"><a href="list.html"><cite>列表调用</cite><em>{list:}</em></a></li>
+				<li class="site-tree-noicon"><a href="pagebar.html"><cite>分页标签</cite><em>{pagebar:}</em></a></li>
 				<li><h2>内容页标签</h2></li>
-				<li class="site-tree-noicon "><a href="contents.html"><cite>内容标签</cite><em>{content:}</em></a></li>
+				<li class="site-tree-noicon"><a href="contents.html"><cite>内容标签</cite><em>{content:}</em></a></li>
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">开始使用 - 模板标签</h1>
+			<h1 class="site-h1">栏目导航标签 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">获取JellyCMS</a></legend>
+				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
 			<div class="site-text">
-				<p>1. 官网首页下载</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-					目录结构如下：
+					全站任意地方均可使用，使用时需指定父栏目id
+				</blockquote>
+				<pre class="layui-code" lay-title="模板解析类View.php代码" lay-height="" lay-skin="" lay-encode="">
+					//无限嵌套 可指定多个pid=1,2,3,4
+				case 'nav:':
+				{
+				    $attr = $this->getAttrs($matches[4]);
+				    if(isset($attr['pid'])) 
+				        $pid = $attr['pid'];
+				    else 
+				        $pid = 0;
+				    if(!isset($attr['key'])) 
+				        $attr['key'] = '$key';
+				    else 
+				        $attr['key'] = $attr['key'];
+				    isset($attr['value'])? $value=$attr['value']:$value = 'nav';
+				    isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
+
+				    return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getSortByPid(array('.$pid.'),$num='.$num.') as '.$attr['key'].' => $'.$value.'){?>';
+				}
+			</pre>
+				
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="effect">标签作用</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					用于调取指定一个或多个pid对应的栏目信息
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="way">调用方式</a></legend>
+			</fieldset>
+			<div class="site-text">
+				
+				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">    
+					//可指定多个pid pid=0,1,2   num为显示条数，默认100
+        {nav:pid=0 num=10}
+            <li>
+                <a href='{$GLOBALS.self_path}[nav:link]'>[nav:name]</a>
+            </li>
+        {/nav}
+				</pre>
+				
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					pid：父栏目id，多个pid用半角逗号隔开,即调取该父栏目下的所有子栏目<br>
+					num：调用数量，默认100<br>
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="fields">可调用字段</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<table lay-filter="jellytable">
+					<thead>
+						<tr>
+							<th lay-data="{field:'id', width:60,templet: '#id'}">序号</th>
+							<th lay-data="{field:'name', sort:true}">字段名</th>
+							<th lay-data="{field:'label'}">调用</th>
+							<th lay-data="{field:'note'}">注释</th>
+						</tr> 
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td>id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>area_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:area_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:area_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>区域id</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>model_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:model_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:model_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>模型id</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>pid</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:pid]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:pid]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>父栏目id</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>name</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:name]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:name]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目名称</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>listtpl</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:listtpl]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:listtpl]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>列表页模板文件</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>contenttpl</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:contenttpl]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:contenttpl]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>内容页模板文件</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>outlink</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:outlink]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:outlink]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>外链</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>subname</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:subname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:subname]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>副标题</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>ico</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:ico]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:ico]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目缩略图</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>pic</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:pic]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:pic]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目大图</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>title</td>
+							<td>
+								<div class="label">
+									<span class="getlabel">[nav:title]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:title]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目SEO标题</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>keywords</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:keywords]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:keywords]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目SEO关键字</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>description</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:description]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:description]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目SEO描述</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>urlname</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:urlname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:urlname]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目url名称</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>m_urlname</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:m_urlname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:m_urlname]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>模型url名称</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>content</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[nav:content]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:content]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>专题页面内容</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="add">添加自定义字段</a></legend>
+			</fieldset>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				我们添加了常用的内容字段，但并不一定能满足你的开发需求。你可以非常轻松地添加自定义字段。<br>
+				自定义字段可以使用len,style<br>
+				当然，你也可以在模型扩展字段里添加字段，注意：模型里添加的字段不能于上述content表字段重名。
+			</blockquote>
+			<div class="site-text">
+				<p>1.在数据库sorts表添加自定义字段或者在模型里添加扩展字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					推荐使用phpmyadmin或navicat for mysql对数据库进行操作
+				</blockquote>
+				<p>2.在模板里添加自定义字段表单项</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					模板位置：\app\admin\Views\admin\html\sorts.html<br>
+					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
+					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
+				</blockquote>
+				<p>3.调用自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					[list:自定义字段]
 				</blockquote>
 			</div>
 		</div>
-
-
- 
 </div>
 </div>
 <ul class="site-dir"></ul>
-
+<script type="text/html" id="id">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>
