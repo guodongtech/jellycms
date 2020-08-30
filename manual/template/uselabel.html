@@ -6,9 +6,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>模板入门-JellyCMS</title>
-<meta content='JellyCMS模板入门' name='keywords'>
-<meta content='JellyCMS模板入门' name='description'>
+<title>使用标签-模板入门-JellyCMS</title>
+<meta content='使用标签-JellyCMS模板入门' name='keywords'>
+<meta content='使用标签-JellyCMS模板入门' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -43,21 +43,27 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">开始使用 - 模板入门</h1>
+			<h1 class="site-h1">使用标签 - 模板入门</h1>
 			<blockquote class="layui-elem-quote">
-				熟悉JellyCMS的标签设计方案有利于尽快掌握使用JellyCMS建站及二次开发北京国栋科技有限公司开发的其它系统。
-				JellyCMS的标签系统尽可能在易用性
-				和代码美学方面做到最优。JellyCMS的模板标签分为基础调用方案、高级调用方案。无论是IT初学者还是
-				有进阶学习需求的UI/UE/前端/后端工程师在理解及掌握整个信息系统设计实现方案上都有指导性价值。
+				1.参考官方模板<br>
+				2.参考模板标签手册
 			</blockquote>
 			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">获取JellyCMS</a></legend>
+				<legend><a name="classification">标签分类</a></legend>
 			</fieldset>
 			<div class="site-text">
-				<p>1. 官网首页下载</p>
+				<p>1. 按调用位置划分</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-					目录结构如下：
+					1.全局调用标签：此类标签在任意模板页均可调用<br>
+					2.列表页标签：此类标签只能在列表页使用,但是我们合并了像{sort:}{/sort}{list:}{/list}等，如果不填写id值，我们将自动将当前分类的sortID当作id。<br>
+					3.内容页标签：此类标签只能在内容页使用。如:contents,sorts(也适用于列表页)<br>
+					我们在手册里按照以上三类做了详细分类，你可以这三类位置参考对应分类的标签。
+				</blockquote>
+				<p>2. 按解析最终代码划分</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					1.闭合标签（循环标签）：如{list:xxxx}[参数]{/list}此类标签在模板解析类View.php里被解析成php的foreach($list as $key=>$value){}，
+					在模板里的参数都以[]方式调用，当然你也可以使用{$字段名}(模板类View.php将其转换成了< ?php echo $字段名;}? > ),但这种方式视觉上缺乏代码美感，我们并不赞成使用这种方式<br>
+					2.非闭合标签（非循环标签）：此类标签不需要闭合，如:{site:字段名},模板解析类View.php将此类标签最终替换成< ?php echo $site['字段名'];}? > 
 				</blockquote>
 			</div>
 		</div>

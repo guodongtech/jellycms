@@ -51,29 +51,29 @@
 				有进阶学习需求的UI/UE/前端/后端工程师在理解及掌握整个信息系统设计实现方案上都有指导性价值。
 			</blockquote>
 			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">基本概念</a></legend>
+				<legend>基本概念</legend>
 			</fieldset>
 			<div class="site-text">
-				<p>1. 基本页面模板</p>
+				<p><a name="t1">1. 基本页面模板</a></p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
 					网站的页面分为<br>
 					1.首页<br>
 					2.列表页（新闻列表页、产品列表页、案例列表页、招聘列表页），每种页面表达的侧重点不一样。但部分列表页可以是一致的。<br>
-					3.详情页（新闻详情页、产品详情页、案例详情页、招聘详情页），一般会按每种页面的不同特点做特有功能，如产品详情页可能更类似于淘宝的产品详情<br>
+					3.详情页（新闻详情页、产品详情页、案例详情页、招聘详情页），一般会按每种页面的不同特点做特有功能，如产品详情页可能更类似于淘宝的产品详情。<br>
 					4.单页，也是列表页的一种，在JellyCMS中我们将单页当作列表页，调用方式也于列表页一致。<br>
 					4.留言页，这是一个信息交互的入口，但随着移动互联网的普及，它的功能性越来越弱。<br>
 					5.其它页面（搜索列表页、标签页、地图页），这些页面不太常用<br>
 				</blockquote>
-				<p>2. 页面组合</p>
+				<p><a name="t2">2. 页面组合</a></p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					为了更好的维护模板，会将模板页内容一样的提取出来，定义公共模板部分，一般将页面分为以下几个部分<br>
-					1.头部(common/header.html)，头部模板一般包含网站栏目分类导航、注册登录等<br>
-					2.尾部(common/footer.html)，尾部模板一般包含网站版权信息、联系方式等<br>
-					3.侧边(common/left.html,common/right.html,common/side.html)，一般包含子类导航、推荐信息、联系方式等，首页模板一般没有侧边模板<br>
+					为了更好的维护模板，会将模板页内容一样的提取出来，定义公共模板部分，一般将页面分为以下几个部分。<br>
+					1.头部(common/header.html)，头部模板一般包含网站栏目分类导航、注册登录等。<br>
+					2.尾部(common/footer.html)，尾部模板一般包含网站版权信息、联系方式等。<br>
+					3.侧边(common/left.html,common/right.html,common/side.html)，一般包含子类导航、推荐信息、联系方式等，首页模板一般没有侧边模板。<br>
 					4.模板体<br>
 					<img src="../images/template-structrue.png" />
 				</blockquote>
-				<p>3. 资源规划</p>
+				<p><a name="t3">3. 资源规划</a></p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
 					资源文件包括 js、images、css、font等<br>
 					一般会将此类文件放入模板文件夹下的主题目录，如：template/default/<br>
