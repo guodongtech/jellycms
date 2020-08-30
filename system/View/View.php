@@ -269,7 +269,7 @@ class View implements RendererInterface
 			}
 		}
 		//处理闭合类标签里的参数
-		$closedTag = "form|foreach|if|elseif|else|while|for|content|list|nav|slide|position|pagebar|link|pics|sort";
+		$closedTag = "form|foreach|if|elseif|else|while|for|content|list|nav|slide|position|pagebar|link|pics|sort|area";
 		$closed = explode('|', $closedTag);
 		foreach($closed as $key=>$value){
 
@@ -298,7 +298,7 @@ class View implements RendererInterface
 			$str = '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; ?>'.$str;
 		} */
 		//前面已完成中间解析，正式解析标签
-		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company|statistics|myad|pre|next)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
+		return preg_replace_callback('/{(\/?)(\$|include|theme|webroot|url|echo|widget|formaction|form|foreach|set|sorts|contents|require|if|elseif|else|while|for|js|content|list|nav|slide|position|pagebar|link|label|pics|sort|site|company|statistics|myad|pre|next|area)\s*(:?)([^}]*)}/i', array($this,'translate'), $str);
 	}
     /**
      * @brief 替换循环标签里的变量 如：{nav: pid=[nav:id]}
@@ -650,9 +650,9 @@ class View implements RendererInterface
 					if(isset($attr['id'])){
 						$id = $attr['id'];
 					}else if($from == 'content'){
-						$id = '$content["id"]';
+						$id = '$contents["id"]';
 					}else if($from == 'sort'){
-						$id = '$sort["id"]';
+						$id = '$sorts["id"]';
 					}
 					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getPics('.$id.', $num='.$num.',"'.$from.'") as $key=>$pics){?>';
 				}
@@ -673,11 +673,31 @@ class View implements RendererInterface
 				{
 					$arr = explode(' ', $matches[4]);
 					$str = trim($arr[0]);
-					return '<?php  echo $pre["'.$str.'"]; ?>';
+					$attr = $this->getAttrs($matches[4]);
+					if(isset($attr['style'])){
+						return '<?php echo date("'.$attr['style'].'",strtotime($pre["'.str_replace(".",'["',$str).'"]));?>';
+					}else{
+						return '<?php  echo $pre["'.$str.'"]; ?>';
+					}
+					
 				}
 				case 'next:':
 				{
-					return '<?php  echo $next["'.$str.'"]; ?>';
+					$arr = explode(' ', $matches[4]);
+					$str = trim($arr[0]);
+					$attr = $this->getAttrs($matches[4]);
+					if(isset($attr['style'])){
+						return '<?php echo date("'.$attr['style'].'",strtotime($next["'.str_replace(".",'["',$str).'"]));?>';
+					}else{
+						return '<?php  echo $next["'.$str.'"]; ?>';
+					}
+				}
+				case 'area:':
+				{
+					$attr = $this->getAttrs($matches[4]);
+					isset($attr['num'])? $num=$attr['num']:$num = 5;//如果没设置就显示5
+					isset($attr['isall'])? $isall=$attr['isall']:$isall = false;//默认显示当前区域信息
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getArea('.$isall.','.$num.') as $key=>$area){?>';
 				}
 				default:
 				{

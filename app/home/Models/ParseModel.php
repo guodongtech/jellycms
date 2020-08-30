@@ -494,7 +494,23 @@ class ParseModel extends Model
     	}
     	return $result['normbody'];
     }
-	
+	// 获取区域内容
+	public function getArea($isall,$num){
+		$where = ['deleted'=>0];
+		if($isall === false){
+			$where['id'] = session('area_id');
+		}
+		$builder = $this->db->table('area');
+		$result   = $builder->select('*')
+							->where($where)
+							->get()
+							->getResultArray();
+    	if(empty($result) || !isset($result)){
+    		return array();
+    	}
+
+    	return $result;
+    }
 	
 }
 
