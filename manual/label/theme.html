@@ -78,7 +78,7 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					获取网站当前主题目录
+					调用网站当前主题目录为起点的文件
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -86,7 +86,8 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					{theme:目录名} 目录名可为空，即{theme:}为当前主题目录
+					{theme:目录名/文件名} 目录名可为空也可以为多级目录，即{theme:文件名}调用的是当前主题目录下的文件。<br>
+					如果当前主题为移动端，则{theme:css/main.css}调用的是template/mobile/css/main.css。
 				</blockquote>
 			</div>
 		</div>
