@@ -28,5 +28,11 @@ class StatisticsModel extends Model
 		$builder->where('id', $content_id);
 		return $builder->update();
     }
+	//初始化统计表
+    public function initialStatistics()
+    {
+		$builder = $this->db->table('statistics');
+		return $builder->truncate();
+    }
 }
 

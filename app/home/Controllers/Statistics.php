@@ -35,6 +35,10 @@ class Statistics extends BaseController
 			'province' => $this->ipLocation->getlocation($this->request->getIPAddress()),
 		];
 		$insertId = $this->model->addData($data);
+		if($GLOBALS['stactics_status'] && $insertId > $GLOBALS['max_stactics']*10000){
+			$this->model->initialStatistics();
+		}
+
 		$script = 'window.onbeforeunload = function(){var id='.$insertId.'; var url="'.$GLOBALS['self_path'].'/index.php/Statistics/end/"+id; navigator.sendBeacon(url);};';
 		return $script;
 	}
