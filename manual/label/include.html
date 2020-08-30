@@ -38,7 +38,7 @@
 				<li><h2>基础说明</h2></li>
 				<li class="site-tree-noicon"><a href="index.html"><cite>开始使用</cite><em>Getting Started</em></a></li>
 				<li><h2>全局标签</h2></li>
-				<li class="site-tree-noicon layui-this"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
+				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="list.html"><cite>列表标签</cite><em>{list:}</em></a></li>
 				<li class="site-tree-noicon"><a href="content.html"><cite>内容标签</cite><em>{content:}{/content}</em></a></li>
@@ -53,7 +53,7 @@
 				<li class="site-tree-noicon"><a href="area.html"><cite>区域调用</cite><em>{link:}</em></a></li>
 				<li class="site-tree-noicon"><a href="theme.html"><cite>当前主题目录文件</cite><em>{theme:}</em></a></li>
 				<li class="site-tree-noicon"><a href="webroot.html"><cite>网站根目录文件</cite><em>{webroot:}</em></a></li>
-				<li class="site-tree-noicon"><a href="include.html"><cite>模板引入标签</cite><em>{include:}</em></a></li>
+				<li class="site-tree-noicon layui-this"><a href="include.html"><cite>模板引入标签</cite><em>{include:}</em></a></li>
 				<li><h2>列表页标签</h2></li>
 				<li class="site-tree-noicon"><a href="list.html"><cite>列表调用</cite><em>{list:}</em></a></li>
 				<li class="site-tree-noicon"><a href="pagebar.html"><cite>分页标签</cite><em>{pagebar:}</em></a></li>
@@ -70,7 +70,7 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					全站任意地方均可使用，需要被引入的文件与当前文件必须在同一目录下
+					全站任意地方均可使用，需要被引入的文件与当前文件必须在当前主题下。可以使用多级目录。
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -78,7 +78,7 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					引入模板文件
+					引入模板文件，一般用于公共模板调用，如head.html,foot.html,left.html,right.html
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -86,7 +86,7 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					{include:文件名}
+					{include:目录名/模板名}或{include:模板名}，为避免产生死循环，最多只可嵌套10层。
 				</blockquote>
 			</div>
 		</div>
