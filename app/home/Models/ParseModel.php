@@ -465,9 +465,13 @@ class ParseModel extends Model
 								->get()
 								->getRowArray();
 			$srcs = explode(',', $res['pics']);
+			$pictitles = explode(',', $res['pictitles']);
 			$result = array();
 			foreach($srcs as $key=>$value){
 				$result[]['src'] = $value;
+			}
+			foreach($pictitles as $key=>$value){
+				$result[]['title'] = $value;
 			}
 			$result = array_slice($result,0,$num);
 			return $result;
