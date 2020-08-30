@@ -6,7 +6,7 @@
 	var $ = layui.jquery;
 	//转换静态表格
 	table.init('jellytable', {
-		width:666,
+		width:888,
 		limit:88,
 		//page:true,
 	//支持所有基础参数
