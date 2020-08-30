@@ -5,9 +5,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>无限级栏目导航标签-模板标签-JellyCMS</title>
-<meta content='无限级栏目导航标签-模板标签' name='keywords'>
-<meta content='无限级栏目导航标签-模板标签' name='description'>
+<title>站点信息标签-模板标签-JellyCMS</title>
+<meta content='站点信息标签-模板标签' name='keywords'>
+<meta content='站点信息标签-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -40,7 +40,7 @@
 				<li><h2>全局标签</h2></li>
 				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
-				<li class="site-tree-noicon"><a href="sort.html"><cite>栏目信息</cite><em>{sort:}{/sort}</em></a></li>
+				<li class="site-tree-noicon layui-this"><a href="sort.html"><cite>栏目信息</cite><em>{sort:}{/sort}</em></a></li>
 				<li class="site-tree-noicon"><a href="list.html"><cite>列表标签</cite><em>{list:}{/list}</em></a></li>
 				<li class="site-tree-noicon"><a href="content.html"><cite>内容标签</cite><em>{content:}{/content}</em></a></li>
 				<li class="site-tree-noicon"><a href="link.html"><cite>友情链接</cite><em>{link:}{/link}</em></a></li>
@@ -49,7 +49,7 @@
 				<li class="site-tree-noicon"><a href="advertisement.html"><cite>广告位</cite><em>{myad:}</em></a></li>
 				<li class="site-tree-noicon"><a href="pics.html"><cite>多图调用标签</cite><em>{pics:}{/pics}</em></a></li>
 				<li class="site-tree-noicon"><a href="statistics.html"><cite>统计信息</cite><em>{statistics:}</em></a></li>
-				<li class="site-tree-noicon layui-this"><a href="nav.html"><cite>栏目导航</cite><em>{nav:}{/nav}</em></a></li>
+				<li class="site-tree-noicon"><a href="nav.html"><cite>栏目导航</cite><em>{nav:}{/nav}</em></a></li>
 				<li class="site-tree-noicon"><a href="label.html"><cite>自定义标签</cite><em>{label:}</em></a></li>
 				<li class="site-tree-noicon"><a href="area.html"><cite>区域调用</cite><em>{area:}{/area}</em></a></li>
 				<li class="site-tree-noicon"><a href="theme.html"><cite>当前主题目录文件</cite><em>{theme:}</em></a></li>
@@ -65,86 +65,45 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">无限级栏目导航标签 - 模板标签</h1>
+			<h1 class="site-h1">站点信息标签 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					全站任意地方均可使用，使用时需指定父栏目id
+					全站任意地方均可使用
 				</blockquote>
-				<pre class="layui-code" lay-title="模板解析类View.php代码" lay-height="" lay-skin="" lay-encode="">
-					//无限嵌套 可指定多个pid=1,2,3,4
-				case 'nav:':
-				{
-				    $attr = $this->getAttrs($matches[4]);
-				    if(isset($attr['pid'])) 
-				        $pid = $attr['pid'];
-				    else 
-				        $pid = 0;
-				    if(!isset($attr['key'])) 
-				        $attr['key'] = '$key';
-				    else 
-				        $attr['key'] = $attr['key'];
-				    isset($attr['value'])? $value=$attr['value']:$value = 'nav';
-				    isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
-
-				    return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getSortByPid(array('.$pid.'),$num='.$num.') as '.$attr['key'].' => $'.$value.'){?>';
-				}
-			</pre>
-				
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="effect">标签作用</a></legend>
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					用于调取指定一个或多个pid对应的栏目信息
+					用于调取指定栏目分类信息
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="way">调用方式</a></legend>
 			</fieldset>
 			<div class="site-text">
-				
-				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">    
-					//可指定多个pid pid=0,1,2   num为显示条数，默认100
-        {nav:pid=0 num=10}
-            <li>
-                <a href='[nav:link]'>[nav:name]</a>
-            </li>
-        {/nav}
-        //无限嵌套
-        {nav:pid=0 num=10}
-            <li>
-                <a href='[nav:link]'>[nav:name]</a>
-                {nav:pid=$nav['id'] value=v1}
-                <ul>
-                    <li>
-                        <a href='[v1:link]'>[v1:name]</a>
-                            {nav:pid=$v1['id']}
-                            <ul>
-                                <li>
-                                    <a href='[v2:link]'>[v2:name]</a>
-                                </li>
-                            </ul>
-                            {/nav}
-                    </li>
-                </ul>
-                {/nav}
-            </li>
-        {/nav}
-				</pre>
+				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">    {sort:id=1}
+    <a href ="[sort:link]"><h1 class="wow fadeInDown">关于我们</h1></a>
+        <p>[sort:description]</p>
+        <div class="about-con">
+            <div class="about-left wow zoomIn">
+                <h3>北京国栋科技有限公司 / GUODONG .TECH</h3>
+                <span>80% of the industry leaders</span>
+                <p>[sort:content len=200]</p>
+            </div>
+            <div class="about-right wow zoomIn">
+                <img src="[sort:pic]" />
+            </div>
+        </div>
+    {/sort}	</pre>
 				
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					pid：父栏目id，多个pid用半角逗号隔开,即调取该父栏目下的所有子栏目<br>
-					num：调用数量，默认100<br>
-					value：无限级调用时需要设置，此值的目的是不与顶级数组变量发生冲突，以字母开头，字母+数字组合<br>
-				</blockquote>
-				<p>常用规则</p>
-				<blockquote class="layui-elem-quote layui-quote-nm">
-					[nav:title len=10]<br>
-					[nav:content len=100]去除html标签后的截取长度<br>
+					id：栏目分类ID<br>
+					len：截取长度<br>
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -166,8 +125,8 @@
 							<td>id</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:id]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:id]" title="点击复制"></i>
+								<span class="getlabel">[sort:id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:id]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目ID</td>
@@ -177,8 +136,8 @@
 							<td>area_id</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:area_id]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:area_id]" title="点击复制"></i>
+								<span class="getlabel">[sort:area_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:area_id]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>区域id</td>
@@ -188,8 +147,8 @@
 							<td>model_id</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:model_id]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:model_id]" title="点击复制"></i>
+								<span class="getlabel">[sort:model_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:model_id]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>模型id</td>
@@ -199,8 +158,8 @@
 							<td>pid</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:pid]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:pid]" title="点击复制"></i>
+								<span class="getlabel">[sort:pid]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:pid]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>父栏目id</td>
@@ -210,8 +169,8 @@
 							<td>name</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:name]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:name]" title="点击复制"></i>
+								<span class="getlabel">[sort:name]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:name]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目名称</td>
@@ -221,8 +180,8 @@
 							<td>listtpl</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:listtpl]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:listtpl]" title="点击复制"></i>
+								<span class="getlabel">[sort:listtpl]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:listtpl]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>列表页模板文件</td>
@@ -232,8 +191,8 @@
 							<td>contenttpl</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:contenttpl]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:contenttpl]" title="点击复制"></i>
+								<span class="getlabel">[sort:contenttpl]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:contenttpl]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>内容页模板文件</td>
@@ -243,8 +202,8 @@
 							<td>outlink</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:outlink]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:outlink]" title="点击复制"></i>
+								<span class="getlabel">[sort:outlink]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:outlink]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>外链</td>
@@ -254,8 +213,8 @@
 							<td>subname</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:subname]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:subname]" title="点击复制"></i>
+								<span class="getlabel">[sort:subname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:subname]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>副标题</td>
@@ -265,8 +224,8 @@
 							<td>ico</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:ico]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:ico]" title="点击复制"></i>
+								<span class="getlabel">[sort:ico]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:ico]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目缩略图</td>
@@ -276,8 +235,8 @@
 							<td>pic</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:pic]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:pic]" title="点击复制"></i>
+								<span class="getlabel">[sort:pic]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:pic]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目大图</td>
@@ -287,8 +246,8 @@
 							<td>title</td>
 							<td>
 								<div class="label">
-									<span class="getlabel">[nav:title]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:title]" title="点击复制"></i>
+									<span class="getlabel">[sort:title]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:title]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目SEO标题</td>
@@ -298,8 +257,8 @@
 							<td>keywords</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:keywords]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:keywords]" title="点击复制"></i>
+								<span class="getlabel">[sort:keywords]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:keywords]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目SEO关键字</td>
@@ -309,8 +268,8 @@
 							<td>description</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:description]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:description]" title="点击复制"></i>
+								<span class="getlabel">[sort:description]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:description]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目SEO描述</td>
@@ -320,8 +279,8 @@
 							<td>urlname</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:urlname]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:urlname]" title="点击复制"></i>
+								<span class="getlabel">[sort:urlname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:urlname]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>栏目url名称</td>
@@ -331,8 +290,8 @@
 							<td>m_urlname</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:m_urlname]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:m_urlname]" title="点击复制"></i>
+								<span class="getlabel">[sort:m_urlname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:m_urlname]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>模型url名称</td>
@@ -342,8 +301,8 @@
 							<td>content</td>
 							<td>
 								<div class="label">
-								<span class="getlabel">[nav:content]</span>
-								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[nav:content]" title="点击复制"></i>
+								<span class="getlabel">[sort:content]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[sort:content]" title="点击复制"></i>
 								</div>
 							</td>
 							<td>专题页面内容</td>
@@ -371,7 +330,7 @@
 				</blockquote>
 				<p>3.调用自定义字段</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					[nav:自定义字段]
+					[sort:自定义字段]
 				</blockquote>
 			</div>
 		</div>
