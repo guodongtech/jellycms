@@ -1,14 +1,13 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
 <head>
 <meta charset='utf-8'>
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>模板标签-JellyCMS</title>
-<meta content='关于我们' name='keywords'>
-<meta content='描述' name='description'>
+<title>自定义表单标签-模板标签-JellyCMS</title>
+<meta content='自定义表单标签-模板标签' name='keywords'>
+<meta content='自定义表单标签-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -36,7 +35,8 @@
 		<div class="left">
 			<ul class="layui-tree">
 
-				<li><h2>基础说明</h2></li><li class="site-tree-noicon"><a href="/manual/label"><cite>开始使用</cite><em>Getting Started</em></a></li>
+				<li><h2>基础说明</h2></li>
+				<li class="site-tree-noicon"><a href="index.html"><cite>开始使用</cite><em>Getting Started</em></a></li>
 				<li><h2>全局标签</h2></li>
 				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
@@ -65,25 +65,183 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">开始使用 - 模板标签</h1>
+			<h1 class="site-h1">自定义表单标签 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">获取JellyCMS</a></legend>
+				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
 			<div class="site-text">
-				<p>1. 官网首页下载</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-					目录结构如下：
+					全站任意地方均可使用，使用时需指定form表单的数据表名称
+				</blockquote>
+				<pre class="layui-code" lay-title="模板解析类View.php代码" lay-height="" lay-skin="" lay-encode="">
+case 'form:': 
+{
+    $attr = $this->getAttrs($matches[4]);
+    isset($attr['pid'])? $pid=$attr['pid']:$pid = 0;
+    isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
+    isset($attr['value'])? $value=$attr['value']:$value = 'form';
+    isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
+    return  '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_=$model->getFormlistByFromName('.$id.',"'.$attr['name'].'",$contents["id"],$pid = '.$pid.', $num='.$num.',$page); $pagebar=$data_["pagebar"];foreach($data_["data"] as $key=>$'.$value.'){?>';
+}
+				</pre>
+				
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="effect">标签作用</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					用于调取指定form表单信息
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="way">调用方式</a></legend>
+			</fieldset>
+			<div class="site-text">
+				
+				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">
+{form:name=message num=5}
+    <li>
+        <div class="user-info">
+            <img src="{$form.icon}">
+            <div>
+                <em>[form:username]</em>
+                <span>[form:create_time style=m月d日 h:i]</span>
+            </div>
+        </div>
+        <div class="user-message">
+        [form:content]
+            <ul>
+            {form:name=message num=5 pid=[form:id] value=form2}
+                <li>
+                    <div class="user-info">
+                        <img src="[form2:icon]">
+                        <div>
+                            <em>[form2:username]</em>
+                            <span>[form2:create_time style=m月d日 h:i]</span>
+                        </div>
+                    </div>
+                    <div class="user-message">
+                    [form2:content]
+                    </div>
+                </li>
+            {/form}
+            </ul>
+        </div>
+    </li>
+{/form}
+				</pre>
+				
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					id：栏目id，默认当前所在栏目id<br>
+					name：要调用的form表单数据表名称<br>
+					pid：父级消息id，默认为0，即调用第一级留言或评论信息。若指定pid不为0，则调用该父级消息的回复信息<br>
+					value：无限级调用时需要设置，此值的目的是不与顶级数组变量发生冲突，以字母开头，字母+数字组合<br>
+					num:调用数量，默认5条<br>
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="fields">可调用字段</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<table lay-filter="jellytable">
+					<thead>
+						<tr>
+							<th lay-data="{field:'id', width:60,templet: '#id'}">序号</th>
+							<th lay-data="{field:'name', sort:true}">字段名</th>
+							<th lay-data="{field:'label'}">调用</th>
+							<th lay-data="{field:'note'}">注释</th>
+						</tr> 
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td>id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[form:id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[form:id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>表单数据id</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>area_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[form:area_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[form:area_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>区域id</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[form:id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[form:id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>用户IP</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>checked</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[form:checked]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[form:checked]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>审核（0:待审;1:通过;2:未通过）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>自定义表单字段</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[form:自定义表单字段]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[form:自定义表单字段]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>对应数据库form_field表，可在后台‘扩展功能>自定义表单>表单字段管理’查看字段信息</td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="add">添加自定义字段</a></legend>
+			</fieldset>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				我们添加了常用的内容字段，但并不一定能满足你的开发需求。你可以非常轻松地添加自定义字段。<br>
+			</blockquote>
+			<div class="site-text">
+				<p>1.在数据库‘form_表单名’表添加自定义字段或者在‘表单字段管理’里添加扩展字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					推荐使用phpmyadmin或navicat for mysql对数据库进行操作
+				</blockquote>
+				<p>2.在模板里添加自定义字段表单项</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					模板位置：\app\admin\Views\admin\html\message.html<br>
+					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
+					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
+				</blockquote>
+				<p>3.调用自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					[form:自定义字段]
 				</blockquote>
 			</div>
 		</div>
-
-
- 
 </div>
 </div>
 <ul class="site-dir"></ul>
-
+<script type="text/html" id="id">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>

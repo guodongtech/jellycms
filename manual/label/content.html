@@ -1,14 +1,13 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
 <head>
 <meta charset='utf-8'>
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>模板标签-JellyCMS</title>
-<meta content='关于我们' name='keywords'>
-<meta content='描述' name='description'>
+<title>内容标签-模板标签-JellyCMS</title>
+<meta content='内容标签-模板标签' name='keywords'>
+<meta content='内容标签-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -37,7 +36,7 @@
 			<ul class="layui-tree">
 
 				<li><h2>基础说明</h2></li>
-				<li class="site-tree-noicon"><a href="/manual/label"><cite>开始使用</cite><em>Getting Started</em></a></li>
+				<li class="site-tree-noicon"><a href="index.html"><cite>开始使用</cite><em>Getting Started</em></a></li>
 				<li><h2>全局标签</h2></li>
 				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
@@ -66,25 +65,494 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">开始使用 - 模板标签</h1>
+			<h1 class="site-h1">内容标签 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">获取JellyCMS</a></legend>
+				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
 			<div class="site-text">
-				<p>1. 官网首页下载</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-					目录结构如下：
+					全站任意地方均可使用，当content标签作为全局标签时，必须指定内容ID。<br/>
+					只有在内容页可不指定分类ID，不指定分类ID时，默认为当前内容ID
+				</blockquote>
+				<pre class="layui-code" lay-title="模板解析类View.php代码" lay-height="" lay-skin="" lay-encode="">
+case 'content:': 
+{
+    $attr = $this->getAttrs($matches[4]);
+    if(isset($attr['id'])) $id = $attr['id']; else $id = '$contents["id"]'; 
+    return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach(array($model->getContent('.$id.')) as $key=>$content){?>';
+}
+			</pre>
+				
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="effect">标签作用</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					用于调取指定内容页的详细信息
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="way">调用方式</a></legend>
+			</fieldset>
+			<div class="site-text">
+				
+				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">  
+// 更多调用请看下面的可调用字段
+友情链接：{content:id=4}
+    内容标题：[content:title]
+    区域ID：[content:area_id]
+    栏目ID：[content:sorts_id]
+{/content}
+				</pre>
+				
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					id：内容页id,不指定则默认当前内容页id（需在内容页有效）<br>
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="fields">可调用字段</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<table lay-filter="jellytable">
+					<thead>
+						<tr>
+							<th lay-data="{field:'id', width:60,templet: '#id'}">序号</th>
+							<th lay-data="{field:'name', sort:true}">字段名</th>
+							<th lay-data="{field:'label'}">调用</th>
+							<th lay-data="{field:'note'}">注释</th>
+						</tr> 
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td>id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>文章ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>title</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:title]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:title]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>文章标题</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>area_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:area_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:area_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>区域ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>sorts_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:sorts_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:sorts_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>分类ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>subsort_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:subsort_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:subsort_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>子分类ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>color</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:color]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:color]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>标题颜色</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>subtitle</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:subtitle]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:subtitle]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>子标题</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>filename</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:filename]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:filename]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>附件</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>author</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:author]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:author]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>作者</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>source</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:source]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:source]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>来源</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>link</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:link]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:link]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>链接</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>date</td>
+							<td>
+								<div class="label">
+									<span class="getlabel">[content:date]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:date]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>定时发布时间</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>pic</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:pic]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:pic]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>缩略图</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>pics</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:pics]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:pics]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>多图</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>content</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:content]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:content]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>内容</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>tags</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:tags]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:tags]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>标签</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>keywords</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:keywords]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:keywords]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>关键词</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>description</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:description]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:description]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>描述</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>sorting</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:sorting]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:sorting]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>排序</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>top</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:top]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:top]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>置顶</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>recommend</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:recommend]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:recommend]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>推荐</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>headline</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:headline]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:headline]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>头条</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>visit</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:visit]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:visit]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>访问量</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>like</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:like]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:like]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>点赞量</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>oppose</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:oppose]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:oppose]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>反对量</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>create_user</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:create_user]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:create_user]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>创建者</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>update_user</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:update_user]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:update_user]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>更新者</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>create_time</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:create_time]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:create_time]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>创建时间</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>update_time</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:update_time]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:update_time]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>更新时间</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>otherfile</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:otherfile]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:otherfile]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>其它附件</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>pictitles</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:pictitles]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:pictitles]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片对应标题 </td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>urlname</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:urlname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:urlname]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目url名称 </td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>m_urlname</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:m_urlname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:m_urlname]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>模型url名称 </td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>sortname</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:sortname]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:sortname]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>栏目名称 </td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>扩展字段</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:扩展字段]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:扩展字段]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>扩展字段 </td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>自定义字段</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[content:自定义字段]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[content:自定义字段]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>自定义字段 </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="add">添加自定义字段</a></legend>
+			</fieldset>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				我们添加了常用的内容字段，但并不一定能满足你的开发需求。你可以非常轻松地添加自定义字段。<br>
+				自定义字段可以使用len,style<br>
+			</blockquote>
+			<div class="site-text">
+				<p>1.在数据库content表添加自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					推荐使用phpmyadmin或navicat for mysql对数据库进行操作
+				</blockquote>
+				<p>2.在模板里添加自定义字段表单项</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					模板位置：\app\admin\Views\admin\html\content_edit.html<br>
+					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
+					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
+				</blockquote>
+				<p>3.调用自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					[content:自定义字段]
 				</blockquote>
 			</div>
 		</div>
-
-
- 
 </div>
 </div>
 <ul class="site-dir"></ul>
-
+<script type="text/html" id="id">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>

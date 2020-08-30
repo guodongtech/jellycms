@@ -1,14 +1,13 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
 <head>
 <meta charset='utf-8'>
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>模板标签-JellyCMS</title>
-<meta content='关于我们' name='keywords'>
-<meta content='描述' name='description'>
+<title>轮播/幻灯片标签-模板标签-JellyCMS</title>
+<meta content='轮播/幻灯片-模板标签' name='keywords'>
+<meta content='轮播/幻灯片-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -36,7 +35,8 @@
 		<div class="left">
 			<ul class="layui-tree">
 
-				<li><h2>基础说明</h2></li><li class="site-tree-noicon"><a href="/manual/label"><cite>开始使用</cite><em>Getting Started</em></a></li>
+				<li><h2>基础说明</h2></li>
+				<li class="site-tree-noicon"><a href="index.html"><cite>开始使用</cite><em>Getting Started</em></a></li>
 				<li><h2>全局标签</h2></li>
 				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
@@ -65,25 +65,204 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">开始使用 - 模板标签</h1>
+			<h1 class="site-h1">轮播/幻灯片 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">获取JellyCMS</a></legend>
+				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
 			<div class="site-text">
-				<p>1. 官网首页下载</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-					目录结构如下：
+					全站任意地方均可使用
+				</blockquote>
+				<pre class="layui-code" lay-title="模板解析类View.php代码" lay-height="" lay-skin="" lay-encode="">
+case 'slide:':
+{
+    $attr = $this->getAttrs($matches[4]);
+    isset($attr['num'])? $num=$attr['num']:$num = 100;//如果没设置就显示100
+    if(isset($attr['gid'])) $gid = $attr['gid'];
+    else $gid = 0; //不设置分组ID,则读当前区域第一个可用分组
+    return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); foreach($model->getSlide('.$gid.', $num='.$num.') as $key=>$slide){?>';
+}
+			</pre>
+				
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="effect">标签作用</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					用于调取指定分组下的轮播图信息
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="way">调用方式</a></legend>
+			</fieldset>
+			<div class="site-text">
+				
+				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">    
+	{slide:}
+		<div class="swiper-slide" style="background-image:url('[slide:bgpic]'); background-color:[slide:bgcolor] ">
+			<div class="swiper-slide-content">
+				<div class="slider-text">
+					<h1 class="ani" swiper-animate-effect="bounceInLeft" swiper-animate-duration="0.3s" swiper-animate-delay="0.1s">[slide:name]</h1>
+					<p class="ani" swiper-animate-effect="fadeInLeftBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s">[slide:description]</p>
+				</div>
+				<div class="slider-pic ani" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.2s"><img src="{$slide.pic}"></div>
+			</div>
+		</div>
+	{/slide}
+				</pre>
+				
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					gid：轮播图分组id，默认为0，即默认选中第一个轮播图分组<br>
+					num：调用数量，默认100<br>
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="fields">可调用字段</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<table lay-filter="jellytable">
+					<thead>
+						<tr>
+							<th lay-data="{field:'id', width:60,templet: '#id'}">序号</th>
+							<th lay-data="{field:'name', sort:true}">字段名</th>
+							<th lay-data="{field:'label'}">调用</th>
+							<th lay-data="{field:'note'}">注释</th>
+						</tr> 
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td>id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>轮播图ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>name</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:name]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:name]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片名称</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>area_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:area_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:area_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>区域ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>group_id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:group_id]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:group_id]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>所在分组ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>pic</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:pic]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:pic]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片路径</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>link</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:link]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:link]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>跳转链接</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>description</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:description]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:description]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片描述</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>bgcolor</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:bgcolor]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:bgcolor]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>背景颜色</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>bgpic</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">[slide:bgpic]</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="[slide:bgpic]" title="点击复制"></i>
+								</div>
+							</td>
+							<td>背景图</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="add">添加自定义字段</a></legend>
+			</fieldset>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				我们添加了常用的内容字段，但并不一定能满足你的开发需求。你可以非常轻松地添加自定义字段。<br>
+				自定义字段可以使用len,style<br>
+			</blockquote>
+			<div class="site-text">
+				<p>1.在数据库slide表添加自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					推荐使用phpmyadmin或navicat for mysql对数据库进行操作
+				</blockquote>
+				<p>2.在模板里添加自定义字段表单项</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					模板位置：\app\admin\Views\admin\html\slide.html<br>
+					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
+					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
+				</blockquote>
+				<p>3.调用自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					[slide:自定义字段]
 				</blockquote>
 			</div>
 		</div>
-
-
- 
 </div>
 </div>
 <ul class="site-dir"></ul>
-
+<script type="text/html" id="id">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>
