@@ -1,14 +1,13 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html class='mb-landing' data-server='CN' lang='zh-Hans-CN'>
 <head>
 <meta charset='utf-8'>
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>模板标签-JellyCMS</title>
-<meta content='关于我们' name='keywords'>
-<meta content='描述' name='description'>
+<title>广告位标签-模板标签-JellyCMS</title>
+<meta content='广告位标签-模板标签' name='keywords'>
+<meta content='广告位标签-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -36,17 +35,18 @@
 		<div class="left">
 			<ul class="layui-tree">
 
-				<li><h2>基础说明</h2></li><li class="site-tree-noicon"><a href="/manual/label"><cite>开始使用</cite><em>Getting Started</em></a></li>
+				<li><h2>基础说明</h2></li>
+				<li class="site-tree-noicon"><a href="index.html"><cite>开始使用</cite><em>Getting Started</em></a></li>
 				<li><h2>全局标签</h2></li>
 				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="sort.html"><cite>栏目信息</cite><em>{sort:}{/sort}</em></a></li>
-				<li class="site-tree-noicon"><a href="list.html"><cite>列表标签</cite><em>{list:}{/list}</em></a></li>
+				<li class="site-tree-noicon layui-this"><a href="list.html"><cite>列表标签</cite><em>{list:}{/list}</em></a></li>
 				<li class="site-tree-noicon"><a href="content.html"><cite>内容标签</cite><em>{content:}{/content}</em></a></li>
 				<li class="site-tree-noicon"><a href="link.html"><cite>友情链接</cite><em>{link:}{/link}</em></a></li>
 				<li class="site-tree-noicon"><a href="slide.html"><cite>轮播/幻灯片</cite><em>{slide:}{/slide}</em></a></li>
 				<li class="site-tree-noicon"><a href="form.html"><cite>自定义表单</cite><em>{form:}{/form}</em></a></li>
-				<li class="site-tree-noicon layui-this"><a href="advertisement.html"><cite>广告位</cite><em>{myad:}</em></a></li>
+				<li class="site-tree-noicon"><a href="advertisement.html"><cite>广告位</cite><em>{myad:}</em></a></li>
 				<li class="site-tree-noicon"><a href="pics.html"><cite>多图调用标签</cite><em>{pics:}{/pics}</em></a></li>
 				<li class="site-tree-noicon"><a href="statistics.html"><cite>统计信息</cite><em>{statistics:}</em></a></li>
 				<li class="site-tree-noicon"><a href="nav.html"><cite>栏目导航</cite><em>{nav:}{/nav}</em></a></li>
@@ -59,31 +59,276 @@
 				<li class="site-tree-noicon"><a href="list.html"><cite>列表调用</cite><em>{list:}{/list}</em></a></li>
 				<li class="site-tree-noicon"><a href="pagebar.html"><cite>分页标签</cite><em>{pagebar:}</em></a></li>
 				<li><h2>内容页标签</h2></li>
-				<li class="site-tree-noicon"><a href="contents.html"><cite>内容标签</cite><em>{contents:}</em></a></li>
+				<li class="site-tree-noicon layui-this"><a href="contents.html"><cite>内容标签</cite><em>{contents:}</em></a></li>
 				<li class="site-tree-noicon"><a href="prevcontent.html"><cite>上一篇内容</cite><em>{pre:}</em></a></li>
 				<li class="site-tree-noicon"><a href="nextcontent.html"><cite>下一篇内容</cite><em>{next:}</em></a></li>
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">开始使用 - 模板标签</h1>
+			<h1 class="site-h1">广告位标签 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">获取JellyCMS</a></legend>
+				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
 			<div class="site-text">
-				<p>1. 官网首页下载</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-					目录结构如下：
+					全站任意地方均可使用
+				</blockquote>
+				
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="effect">标签作用</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					用于调取广告位信息
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="way">调用方式</a></legend>
+			</fieldset>
+			<div class="site-text">
+				
+				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">
+					// 更多value值调用请看下方可调用字段
+		    		{myad:标识 value=name} 例：{label:testmyad value=name}即可获取testmyad标签的标签名称
+		    	</pre>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="fields">可调用字段</a></legend>
+			</fieldset>
+			<div class="site-text">
+				<table lay-filter="jellytable">
+					<thead>
+						<tr>
+							<th lay-data="{field:'id', width:60,templet: '#id'}">序号</th>
+							<th lay-data="{field:'name', sort:true}">字段名</th>
+							<th lay-data="{field:'label'}">调用</th>
+							<th lay-data="{field:'note'}">注释</th>
+						</tr> 
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td>id</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=id}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=id}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>广告位ID</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>name</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=name}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=name}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>广告位名称</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>label</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=label}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=label}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>广告位标识</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>type</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=type}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=type}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>广告位类型（文本、单图、多图轮播）</td>
+						</tr><tr>
+							<td></td>
+							<td>timeset</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=timeset}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=timeset}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>期限（等于0为永不过期）</td>
+						</tr><tr>
+							<td></td>
+							<td>start_time</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=start_time}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=start_time}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>开始时间（timeset等于1时有效）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>end_time</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=end_time}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=end_time}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>结束时间（timeset等于1时有效）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>normbody</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=normbody}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=normbody}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>广告内容（包含js及css样式）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>expbody</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=expbody}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=expbody}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>过期显示内容</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>path</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=path}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=path}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片地址（多图以半角逗号连接）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>link</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=link}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=link}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>文本及图片跳转地址（多个地址以半角逗号连接，与path对应）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>desc</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=desc}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=desc}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片描述（多个描述以半角逗号连接，与path对应）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>width</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=width}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=width}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片及轮播图宽度</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>height</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=height}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=height}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>图片及轮播图高度</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>text_size</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=text_size}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=text_size}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>文字大小（仅文本类型有效）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>text_color</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=text_color}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=text_color}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>文字颜色（仅文本类型有效）</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>text_content</td>
+							<td>
+								<div class="label">
+								<span class="getlabel">{myad:标识 value=text_content}</span>
+								<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{myad:标识 value=text_content}" title="点击复制"></i>
+								</div>
+							</td>
+							<td>文本内容（仅文本类型有效）</td>
+						</tr>
+					</tbody>
+				</table>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					广告类型分为text（文本）、single_img（单图）和more_img（多图轮播）三中类型<br/>
+					当类型为多图轮播或单图时，path、link、desc、width、height 才会生效<br/>
+					当类型为文本时，text_size、text_color、text_content 才会生效<br/>
+				</blockquote>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title site-title">
+				<legend><a name="add">添加自定义字段</a></legend>
+			</fieldset>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				我们添加了常用的内容字段，但并不一定能满足你的开发需求。你可以非常轻松地添加自定义字段。
+			</blockquote>
+			<div class="site-text">
+				<p>1.在数据库myad表添加自定义字段或者在模型里添加扩展字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					推荐使用phpmyadmin或navicat for mysql对数据库进行操作
+				</blockquote>
+				<p>2.在模板里添加自定义字段表单项</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					模板位置：\app\admin\Views\admin\html\myad.html<br>
+					此处我们使用是js动态回填，你不必为自定义字段赋值<br>
+					后台表单也无需处理，系统会自动将新添加字段值保存到数据库
+				</blockquote>
+				<p>3.调用自定义字段</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					{myad:标识 value=自定义字段}
 				</blockquote>
 			</div>
 		</div>
-
-
- 
 </div>
 </div>
 <ul class="site-dir"></ul>
-
+<script type="text/html" id="id">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>

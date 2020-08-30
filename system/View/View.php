@@ -665,9 +665,11 @@ class View implements RendererInterface
 				}
 				case 'myad:':
                 {
-					$arr = explode(' ', $matches[4]);
+                	$arr = explode(' ', $matches[4]);
 					$str = trim($arr[0]);
-					return '<?php if(!isset($model))  $model = new \App\Models\ParseModel(); echo $model->getNormbody("'.$str.'"); ?>';
+					$attr = $this->getAttrs($matches[4]);
+					isset($attr['value'])? $value=$attr['value']:$value = 'normbody';
+					return '<?php if(!isset($model))  $model = new \App\Models\ParseModel(); echo $model->getNormbody("'.$str.'", "'.$value.'")?>';
                 }
                 case 'pre:':
 				{

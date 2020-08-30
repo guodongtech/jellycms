@@ -480,7 +480,7 @@ class ParseModel extends Model
 	}	
 	
 	// 获取ad标签的输出内容
-	public function getNormbody($label){
+	public function getNormbody($label,$value){
 		$builder = $this->db->table('myad');
 		$result   = $builder->select('*')
 							->where(['deleted'=>0,'status'=>1,'label'=>$label])
@@ -489,10 +489,13 @@ class ParseModel extends Model
     	if(empty($result) || !isset($result)){
     		return array();
     	}
-    	if(strtotime($result['end_time']) < time()){
+    	if(strtotime($result['start_time']) > time() && $result['timeset'] == 1){
+    		return array();
+    	}
+    	if(strtotime($result['end_time']) < time() && $result['timeset'] == 1){
     		return $result['expbody'];
     	}
-    	return $result['normbody'];
+    	return $result[$value];
     }
 	// 获取区域内容
 	public function getArea($isall,$num){
