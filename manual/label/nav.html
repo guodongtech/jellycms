@@ -5,9 +5,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>栏目导航-模板标签-JellyCMS</title>
-<meta content='栏目导航-模板标签' name='keywords'>
-<meta content='栏目导航-模板标签' name='description'>
+<title>无限级栏目导航标签-模板标签-JellyCMS</title>
+<meta content='无限级栏目导航标签-模板标签' name='keywords'>
+<meta content='无限级栏目导航标签-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -40,7 +40,7 @@
 				<li><h2>全局标签</h2></li>
 				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>{company:字段}</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>{site:字段}</em></a></li>
-				<li class="site-tree-noicon layui-this"><a href="list.html"><cite>列表标签</cite><em>{list:}{/list}</em></a></li>
+				<li class="site-tree-noicon"><a href="list.html"><cite>列表标签</cite><em>{list:}{/list}</em></a></li>
 				<li class="site-tree-noicon"><a href="content.html"><cite>内容标签</cite><em>{content:}{/content}</em></a></li>
 				<li class="site-tree-noicon"><a href="link.html"><cite>友情链接</cite><em>{link:}{/link}</em></a></li>
 				<li class="site-tree-noicon"><a href="slide.html"><cite>轮播/幻灯片</cite><em>{slide:}{/slide}</em></a></li>
@@ -64,7 +64,7 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">栏目导航标签 - 模板标签</h1>
+			<h1 class="site-h1">无限级栏目导航标签 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
@@ -110,7 +110,27 @@
 					//可指定多个pid pid=0,1,2   num为显示条数，默认100
         {nav:pid=0 num=10}
             <li>
-                <a href='{$GLOBALS.self_path}[nav:link]'>[nav:name]</a>
+                <a href='[nav:link]'>[nav:name]</a>
+            </li>
+        {/nav}
+        //无限嵌套
+        {nav:pid=0 num=10}
+            <li>
+                <a href='[nav:link]'>[nav:name]</a>
+                {nav:pid=$nav['id'] value=v1}
+                <ul>
+                    <li>
+                        <a href='[v1:link]'>[v1:name]</a>
+                            {nav:pid=$v1['id']}
+                            <ul>
+                                <li>
+                                    <a href='[v2:link]'>[v2:name]</a>
+                                </li>
+                            </ul>
+                            {/nav}
+                    </li>
+                </ul>
+                {/nav}
             </li>
         {/nav}
 				</pre>
@@ -118,6 +138,12 @@
 				<blockquote class="layui-elem-quote layui-quote-nm">
 					pid：父栏目id，多个pid用半角逗号隔开,即调取该父栏目下的所有子栏目<br>
 					num：调用数量，默认100<br>
+					value：无限级调用时需要设置，此值的目的是不与顶级数组变量发生冲突，以字母开头，字母+数字组合<br>
+				</blockquote>
+				<p>常用规则</p>
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					[nav:title len=10]<br>
+					[nav:content len=100]去除html标签后的截取长度<br>
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -329,7 +355,7 @@
 			</fieldset>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				我们添加了常用的内容字段，但并不一定能满足你的开发需求。你可以非常轻松地添加自定义字段。<br>
-				自定义字段可以使用len,style<br>
+				自定义字段可以使用len<br>
 				当然，你也可以在模型扩展字段里添加字段，注意：模型里添加的字段不能于上述content表字段重名。
 			</blockquote>
 			<div class="site-text">
@@ -345,7 +371,7 @@
 				</blockquote>
 				<p>3.调用自定义字段</p>
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					[list:自定义字段]
+					[nav:自定义字段]
 				</blockquote>
 			</div>
 		</div>
