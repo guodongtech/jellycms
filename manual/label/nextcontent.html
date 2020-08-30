@@ -5,9 +5,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>公司信息-模板标签-JellyCMS</title>
-<meta content='公司信息-模板标签' name='keywords'>
-<meta content='公司信息-模板标签' name='description'>
+<title>下一篇内容-模板标签-JellyCMS</title>
+<meta content='下一篇内容-模板标签' name='keywords'>
+<meta content='下一篇内容-模板标签' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -64,13 +64,13 @@
 			</ul>
 		</div>
 		<div class="right">
-			<h1 class="site-h1">公司信息标签 - 模板标签</h1>
+			<h1 class="site-h1">下一篇内容标签 - 模板标签</h1>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="scope">适用范围</a></legend>
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					全站任意地方均可使用
+					内容详情页可调用
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -194,17 +194,6 @@
 							</tr>
 							<tr>
 								<td></td>
-								<td>link</td>
-								<td>
-									<div class="label">
-									<span class="getlabel">{next:link}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:link}" title="点击复制"></i>
-									</div>
-								</td>
-								<td>跳转外链接</td>
-							</tr>
-							<tr>
-								<td></td>
 								<td>pic</td>
 								<td>
 									<div class="label">
@@ -224,6 +213,17 @@
 									</div>
 								</td>
 								<td>多图（以半角逗号连接）</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>pictitles</td>
+								<td>
+									<div class="label">
+									<span class="getlabel">{next:pictitles}</span>
+									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:pictitles}" title="点击复制"></i>
+									</div>
+								</td>
+								<td>图片对应标题（以半角逗号连接）</td>
 							</tr>
 							<tr>
 								<td></td>
@@ -315,17 +315,6 @@
 							</tr>
 							<tr>
 								<td></td>
-								<td>pictitles</td>
-								<td>
-									<div class="label">
-									<span class="getlabel">{next:pictitles}</span>
-									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:pictitles}" title="点击复制"></i>
-									</div>
-								</td>
-								<td>图片对应标题（以半角逗号连接）</td>
-							</tr>
-							<tr>
-								<td></td>
 								<td>otherfile</td>
 								<td>
 									<div class="label">
@@ -344,7 +333,7 @@
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{next:link}" title="点击复制"></i>
 									</div>
 								</td>
-								<td>文章地址</td>
+								<td>文章地址(站内或站外链接取决于后台对该内容页的配置)</td>
 							</tr>
 							<tr>
 								<td></td>
