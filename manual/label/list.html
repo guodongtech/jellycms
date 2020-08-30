@@ -125,7 +125,7 @@ case 'list:':
 					where：过滤条件，多个过滤条件用半角逗号隔开<br>
 					因模板解析类与含等号的表达式如' = ' ,' < ',' > ',' <= ',' >= ', ' !=  '会冲突，<br>
 					这里使用伪表达式代替。等于:eq(equal) ; 小于:l(less than) ;大于:g(greater than); 小于等于:le ;大于等于:ge ;不等于:neq;<br>
-					常用条件:<br>1.top eq 1:置顶;<br>2.recommend eq 1:推荐;<br>3.头条:headline eq 1;<br>4.pic neq '':有图片信息;<br>
+					常用条件:<br>1.top eq 1:置顶;<br>2.recommend eq 1:推荐;<br>3.headline eq 1:头条;<br>4.pic neq '':有图片信息;<br>
 					num:调用数量，默认5条<br>
 				</blockquote>
 			</div>
@@ -513,7 +513,7 @@ case 'list:':
 					[list:title len=10]<br>
 					[list:content len=100]去除html标签后的截取长度<br>
 					[list:create_time style=Y年m月d日]去除html标签后的截取长度<br>
-					可用时间格式<br>
+					可按下列格式进行组合，间隔符自定义如-  , : 中文等<br>
 					Y - 年，四位数字; 如: "1999"<br>
 					y - 年，二位数字; 如: "99"<br>
 					z - 一年中的第几天; 如: "0" 至 "365"<br>
