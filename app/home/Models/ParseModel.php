@@ -47,7 +47,7 @@ class ParseModel extends Model
 		$builder = $this->db->table('sorts');
 		$result   = $builder->select('sorts.*,model.urlname as m_urlname, model.id as model_id')
 							->join('model', 'model.id = sorts.model_id', 'left')
-							->where(['sorts.deleted'=>0])
+							->where(['sorts.deleted'=>0,'sorts.status'=>1])
 							->whereIn('sorts.pid', $pid)
 							->get($num)
 							->getResultArray();
