@@ -72,7 +72,7 @@
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
 					全站任意地方均可使用，当content标签作为全局标签时，必须指定内容ID。<br/>
-					只有在内容页可不指定分类ID，不指定分类ID时，默认为当前内容ID
+					只有在内容页可不指定ID，不指定ID时，默认为当前内容ID
 				</blockquote>
 				<pre class="layui-code" lay-title="模板解析类View.php代码" lay-height="" lay-skin="" lay-encode="">
 case 'content:': 
@@ -99,7 +99,7 @@ case 'content:':
 				
 				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">  
 // 更多调用请看下面的可调用字段
-友情链接：{content:id=4}
+{content:id=4}
     内容标题：[content:title]
     区域ID：[content:area_id]
     栏目ID：[content:sorts_id]
