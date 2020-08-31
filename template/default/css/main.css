@@ -1800,6 +1800,7 @@ background: url(../images/citybg.png) no-repeat center bottom;
 	background:#fff;
 	padding:60px 100px;
 	box-shadow: 0 0 10px #ddd;
+	margin-bottom:58px;
 }
 .product-list.right{
 	display:flex;
