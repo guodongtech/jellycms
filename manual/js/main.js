@@ -4,6 +4,17 @@
 	var table = layui.table;
 	var element = layui.element;
 	var $ = layui.jquery;
+	//侧边菜单栏
+	$('.site-h1 i').click(function(){
+		$('.manual .left').toggle();
+		//$('.manual .left').toggleClass('bounceOutLeft');
+		$('.manual .right').toggleClass('active');
+		$('.site-h1 i').toggleClass('fa-bars');
+		$('.site-h1 i').toggleClass('fa-outdent');
+	})
+	$('header i.fa').click(function(){
+		$('.header-container ul').toggle();
+	})
 	//转换静态表格
 	table.init('jellytable', {
 		width:888,
