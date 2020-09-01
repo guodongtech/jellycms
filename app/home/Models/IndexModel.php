@@ -57,6 +57,10 @@ class IndexModel extends Model
 							->where(['area_id'=>$area_id])
 							->get()
 							->getRowArray();
+		$result['logo'] = fileUrl($result['logo']);
+		$result['qrcode'] = fileUrl($result['qrcode']);
+		$result['service_code'] = fileUrl($result['service_code']);
+		$result['subscribe_code'] = fileUrl($result['subscribe_code']);
         return $result;
     }
 	//获取当前区域下所有栏目
@@ -88,6 +92,11 @@ class IndexModel extends Model
 							->where(['sorts.urlname'=>$urlname])
 							->get()
 							->getRowArray();
+		$result['ico'] = fileUrl($result['ico']);
+		$result['pic'] = fileUrl($result['pic']);
+		$result['pics'] = $result['pics']==""?"":implode(',',array_map(function ($item){
+            return fileUrl($item);
+        },explode(',',$result['pics'])));
         return $result;
     }
 	//获取内容详情
@@ -100,14 +109,23 @@ class IndexModel extends Model
 							->get()
 							->getRowArray();
 		$result['content'] = $this->addTags($result['content']);
+		$result['filename'] = fileUrl($result['filename']);
+		$result['pic'] = fileUrl($result['pic']);
+		$result['otherfile'] = fileUrl($result['otherfile']);
+		$result['pics'] = $result['pics']==''?'':implode(',',array_map(function ($item){
+	            return fileUrl($item);
+	        },explode(',',$result['pics'])));
 		// 扩展数据
 		$builder = $this->db->table('content_ext');
-		$res   = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
+		$res   = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name,modelfield.type')
 							->join('modelfield', 'content_ext.modelfield_id = modelfield.id', 'left')
 							->where(['content_ext.content_id'=>$result['id'],'modelfield.deleted'=>0,'modelfield.status'=>1])
 							->get()
 							->getResultArray();
 		foreach($res as $k=>$v){
+			if($v['type'] == 'pic' || $v['type'] == 'file'){
+				$result[$v['name']] = fileUrl($v['value']);
+			}
 			$result[$v['name']] = $v['value'];
 		}
 		return $result;
@@ -156,6 +174,11 @@ class IndexModel extends Model
 							->where(['sorts.deleted'=>0, 'sorts.status'=>1, 'sorts.id'=>$id])
 							->get()
 							->getRowArray();
+		$result['ico'] = fileUrl($result['ico']);
+		$result['pic'] = fileUrl($result['pic']);
+		$result['pics'] = $result['pics']==""?"":implode(',',array_map(function ($item){
+            return fileUrl($item);
+        },explode(',',$result['pics'])));
         return $result;
 	}
 	//获取指定分类下信息列表
