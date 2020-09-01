@@ -31,6 +31,10 @@ class ParseModel extends Model
 							->where(['area_id'=>$area_id])
 							->get()
 							->getRowArray();
+		$result['logo'] = fileUrl($result['logo']);
+		$result['qrcode'] = fileUrl($result['qrcode']);
+		$result['service_code'] = fileUrl($result['service_code']);
+		$result['subscribe_code'] = fileUrl($result['subscribe_code']);
         return $result;
     }
     public function getSorts($area_id)
@@ -39,7 +43,14 @@ class ParseModel extends Model
 		$result   = $builder->select('*')
 							->where(['deleted'=>0, 'area_id'=>$area_id])
 							->get()
-							->getResultArray();		
+							->getResultArray();	
+		foreach($result as $k=>$v){
+			$result[$k]['ico'] = fileUrl($v['ico']);
+			$result[$k]['pic'] = fileUrl($v['pic']);
+			$result[$k]['pics'] = $v['pics']==""?"":implode(',',array_map(function ($item){
+	            return fileUrl($item);
+	        },explode(',',$v['pics'])));
+		}	
         return $result;
     }
     public function getSortByPid($pid, $num)
@@ -47,7 +58,7 @@ class ParseModel extends Model
 		$builder = $this->db->table('sorts');
 		$result   = $builder->select('sorts.*,model.urlname as m_urlname, model.id as model_id')
 							->join('model', 'model.id = sorts.model_id', 'left')
-							->where(['sorts.deleted'=>0,'sorts.status'=>1])
+							->where(['sorts.deleted'=>0,'sorts.status'=>1,'sorts.area_id'=>session('area_id')])
 							->whereIn('sorts.pid', $pid)
 							->get($num)
 							->getResultArray();
@@ -69,6 +80,12 @@ class ParseModel extends Model
 		$result['content'] = $this->addTags($result['content']);
 		$urlname = $result['urlname']?$result['urlname']:$result['m_urlname'];
 		$result['link'] = $result['link']==''?url(array($urlname, $result['id'])):$result['link'];
+		$result['filename'] = fileUrl($result['filename']);
+		$result['pic'] = fileUrl($result['pic']);
+		$result['otherfile'] = fileUrl($result['otherfile']);
+		$result['pics'] = $result['pics']==''?'':implode(',',array_map(function ($item){
+	            return fileUrl($item);
+	        },explode(',',$result['pics'])));
 		// 扩展字段
 		$builder = $this->db->table('content_ext');
 		$res   = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
@@ -77,6 +94,9 @@ class ParseModel extends Model
 							->get()
 							->getResultArray();
 		foreach($res as $k=>$v){
+			if($v['type'] == 'pic' || $v['type'] == 'file'){
+				$result[$v['name']] = fileUrl($v['value']);
+			}
 			$result[$v['name']] = $v['value'];
 		}
 		return $result;
@@ -139,8 +159,11 @@ class ParseModel extends Model
 		}	 */		
 		$urlname = $result['urlname']?$result['urlname']:$result['m_urlname'];
 		$result['link'] = $result['link']==''?url(array($urlname)):$result['link'];
-		
-		
+		$result['ico'] = fileUrl($result['ico']);
+		$result['pic'] = fileUrl($result['pic']);
+		$result['pics'] = $result['pics']==""?"":implode(',',array_map(function ($item){
+            return fileUrl($item);
+        },explode(',',$result['pics'])));
 		return $result;
 	}
 	
@@ -229,14 +252,24 @@ class ParseModel extends Model
  		foreach($result as $key=>$value){
 			$urlName = $value['urlname']==''?$value['m_urlname']:$value['urlname'];
 			$result[$key]['link'] = $value['link']==''?url(array($urlName, $value['id'])):$value['link'];
+			$result[$key]['filename'] = fileUrl($value['filename']);
+			$result[$key]['pic'] = fileUrl($value['pic']);
+			$result[$key]['otherfile'] = fileUrl($value['otherfile']);
+			$result[$key]['pics'] = $value['pics']==''?'':implode(',',array_map(function ($item){
+	            return fileUrl($item);
+	        },explode(',',$value['pics'])));
+
 			// content 扩展字段
 			$builder = $this->db->table('content_ext');
-			$ext_res = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name')
+			$ext_res = $builder->select('content_ext.value, content_ext.modelfield_id, modelfield.name, modelfield.type')
 								->join('modelfield', 'content_ext.modelfield_id = modelfield.id', 'left')
 								->where(['content_ext.content_id'=>$value['id'],'modelfield.deleted'=>0,'modelfield.status'=>1])
 								->get()
 								->getResultArray();
 			foreach($ext_res as $k=>$v){
+				if($v['type'] == 'pic' || $v['type'] == 'file'){
+					$result[$key][$v['name']] = fileUrl($v['value']);
+				}
 				$result[$key][$v['name']] = $v['value'];
 			}
 		}
@@ -249,10 +282,10 @@ class ParseModel extends Model
 							->getRowArray();
 		
 		$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
-		$result['data'] = $result;
-		$result['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
+		$results['data'] = $result;
+		$results['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
 		
-		return $result; 
+		return $results; 
 			
 	}
 	//分页条
@@ -336,7 +369,11 @@ class ParseModel extends Model
 		$result   = $builder->select('*')
 							->where(['deleted'=>0,'group_id'=>$gid])
 							->get($num)
-							->getResultArray();					
+							->getResultArray();
+		foreach($result as $k=>$v){
+			$result[$k]['pic'] = fileUrl($v['pic']);
+			$result[$k]['bgpic'] = fileUrl($v['bgpic']);
+		}
         return $result;
     }
     public function getLink($gid, $num)
@@ -357,7 +394,10 @@ class ParseModel extends Model
 		$result   = $builder->select('*')
 							->where(['deleted'=>0,'group_id'=>$gid])
 							->get($num)
-							->getResultArray();							
+							->getResultArray();	
+		foreach($result as $k=>$v){
+			$result[$k]['logo'] = fileUrl($v['logo']);
+		}						
         return $result;
     }
 	public function getPosition($sortId){
@@ -393,7 +433,7 @@ class ParseModel extends Model
 							->getResultArray();	
 		return $result;	
 	}
-	//获取可用表单列表
+	//获取可用标签列表
 	public function getLabel($name, $value){
 		$builder = $this->db->table('label');
 		$result   = $builder->select('*')
@@ -434,6 +474,9 @@ class ParseModel extends Model
 					->getResultArray();
 			
 		}
+		foreach($result as $k=>$v){
+			$result[$k]['icon'] = fileUrl($v['icon']);
+		}
 		$total = $builder->select('*')
 					->where($where)
 					->where(['deleted'=>0, 'status'=>1, 'pid'=>0])
@@ -468,10 +511,8 @@ class ParseModel extends Model
 			$pictitles = explode(',', $res['pictitles']);
 			$result = array();
 			foreach($srcs as $key=>$value){
-				$result[]['src'] = $value;
-			}
-			foreach($pictitles as $key=>$value){
-				$result[]['title'] = $value;
+				$result[$key]['src'] = fileUrl($value);
+				$result[$key]['title'] = $pictitles[$key];
 			}
 			$result = array_slice($result,0,$num);
 			return $result;

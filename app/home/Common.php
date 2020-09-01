@@ -20,6 +20,12 @@
 		return $url;
 	}
  }
+function fileUrl($filepath){
+    if($filepath == ''){
+        return $filepath;
+    }
+    return $GLOBALS['self_path'].$filepath;
+}
 function post(){
 	$args = func_get_args();
 	$request = \Config\Services::request();

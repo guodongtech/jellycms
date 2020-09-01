@@ -23,7 +23,7 @@
 }
 </style>
 {include:head.html}
-<div class="sort-banner" style="background:url('{$GLOBALS.self_path}/static/images/proxy-pic.png')">
+<div class="sort-banner" style="background:url('{sorts:pic}')">
 	<div class="sort-banner-content">
 		<div class="sort-banner-left">
 			<span class="animated bounceInDown">{sorts:name}</span>
@@ -69,8 +69,8 @@
 					<label class="layui-form-label">头像</label>
 					<div class="layui-input-inline">
 						<div class="layui-input-inline">
-						  <input type="radio" name="icon" value="{$GLOBALS.self_path}/static/images/icon.jpg" title="<img src='{$GLOBALS.self_path}/static/images/icon.jpg'>" checked="">
-						  <input type="radio" name="icon" value="{$GLOBALS.self_path}/static/images/logo.png" title="<img src='{$GLOBALS.self_path}/static/images/logo.png'>">
+						  <input type="radio" name="icon" value="{webroot:static/images/icon.jpg}" title="<img src='{webroot:static/images/icon.jpg}'>" checked="">
+						  <input type="radio" name="icon" value="{webroot:static/images/logo.png}" title="<img src='{webroot:static/images/logo.png}'>">
 						</div>
 					</div>
 				</div>
