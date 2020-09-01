@@ -201,7 +201,12 @@ class View implements RendererInterface
 		//解析标签
 		$template = file_get_contents($this->renderVars['file']);
 		$start = microtime(true);
+		// 过滤特殊字符串
+/* 		if (preg_match('/(\$_GET\[)|(\$_POST\[)|(\$_REQUEST\[)|(\$_COOKIE\[)|(\$_SESSION\[)|(file_put_contents)|(file_get_contents)|(fwrite)|(phpinfo)|(base64)|(`)|(shell_exec)|(eval)|(assert)|(system)|(exec)|(passthru)|(pcntl_exec)|(popen)|(proc_open)|(print_r)|(print)|(urldecode)|(chr)|(request)|(__FILE__)|(__DIR__)|(copy)|(call_user_)|(preg_replace)|(array_map)|(array_reverse)|(array_filter)|(getallheaders)|(get_headers)|(decode_string)|(htmlspecialchars)|(session_id)/i', $template)) {
+			exit('模板内有危险函数');
+		} */
 		$output = $this->resolve($template);
+
  		$end = microtime(true);
 		//echo number_format($end-$start, 4);//正则匹配的时间 本地7ms左右
 
