@@ -8,8 +8,8 @@ function Music() {
     Music.prototype = {
         total:70,
         pageSize:10,
-        dataUrl:"http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.search.common",
-        playerUrl:"http://box.baidu.com/widget/flash/bdspacesong.swf",
+        dataUrl:"//tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.search.common",
+        playerUrl:"//box.baidu.com/widget/flash/bdspacesong.swf",
 
         init:function () {
             var me = this;

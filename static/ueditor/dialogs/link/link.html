@@ -73,7 +73,7 @@
         var href =$G('href').value.replace(/^\s+|\s+$/g, '');
         if(href){
             if(!hrefStartWith(href,["http","/","ftp://",'#'])) {
-                href  = "http://" + href;
+                href  = "//" + href;
             }
             var obj = {
                 'href' : href,

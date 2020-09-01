@@ -14926,7 +14926,7 @@ UE.plugins['list'] = function () {
             'dot':''
         },
         listDefaultPaddingLeft : '30',
-        listiconpath : 'http://bs.baidu.com/listicon/',
+        listiconpath : '//bs.baidu.com/listicon/',
         maxListLevel : -1,//-1不限制
         disablePInList:false
     } );
