@@ -665,7 +665,7 @@ class View implements RendererInterface
 				{
 					$sorts_id = '<?php echo $sorts["id"]>0?$sorts["id"]:0; ?>';
 					$content_id = '<?php echo $contents["id"]>0?$contents["id"]:0; ?>';
-					$str = '<script src="/index.php/Statistics/index/'.$sorts_id.'/'.$content_id.'"></script>';
+					$str = '<script src="'.$GLOBALS['self_path'].'/index.php/Statistics/index/'.$sorts_id.'/'.$content_id.'"></script>';
 					return $str;
 				}
 				case 'myad:':

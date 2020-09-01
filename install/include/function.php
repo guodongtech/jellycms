@@ -237,7 +237,7 @@ function install_sql()
 	}
 	$mysql_link->query("SET FOREIGN_KEY_CHECKS = 1;");
 	//插入管理员数据
-	$adminSql = 'insert into `'.$db_pre.'admin` (`name`,`password`,`role_id`,`create_time`,`issystem`,`status`) values ("'.$admin_user.'","'.md5($admin_pwd).'",1,"'.date('Y-m-d H:i:s').',1,1")';
+	$adminSql = 'insert into `'.$db_pre.'admin` (`name`,`password`,`role_id`,`create_time`,`issystem`,`status`) values ("'.$admin_user.'","'.md5($admin_pwd).'",1,"'.date('Y-m-d H:i:s').'",1,1)';
 	if(!$mysql_link->query($adminSql))
 	{
 		showProgress(array('isError' => true,'message' => '创建管理员失败'.$mysql_link->error,'percent' => 0.9));
