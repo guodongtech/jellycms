@@ -70,6 +70,7 @@
         } elseif ('' !== $url && !strpos($url, '://') && 0 !== strpos($url, '/')) {
             $url =$url;
         }
+        $url = $GLOBALS['self_path'].$url;
         $data = [
             'code' => 1,
             'msg'  => $msg,
@@ -98,6 +99,7 @@
         } elseif ('' !== $url && !strpos($url, '://') && 0 !== strpos($url, '/')) {
             $url =$url;
         }
+        $url = $GLOBALS['self_path'].$url;
         $data = [
             'code' => 0,
             'msg'  => $msg,

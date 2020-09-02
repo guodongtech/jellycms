@@ -35,7 +35,7 @@
 			<div class="middle-nav">
 				<ul>	                     
 					{foreach:items=$list key=$k item=$v}
-					<li class="menu{$v['id']}" {if:$v['url'] != ''}data-url="/{echo:ADMINNAME}{$v.url}"{/if}><i class="fa {$v['icon']}" title="{$v.name}"></i><div class="n-tip">{$v.name}</div></li>
+					<li class="menu{$v['id']}" {if:$v['url'] != ''}data-url="{$GLOBALS.self_path}/{echo:ADMINNAME}{$v.url}"{/if}><i class="fa {$v['icon']}" title="{$v.name}"></i><div class="n-tip">{$v.name}</div></li>
 					{/foreach}
 				</ul>
 			</div>
@@ -47,7 +47,7 @@
 		</aside>
 		<div class="main-nav">
 			<div class="gd-logo">
-				<a href="/admin.php/home"><img src="{$GLOBALS.syslogo}" title="{$GLOBALS.systemname}" height="30">{$GLOBALS.systemname}<span class="layui-badge layui-bg-gray">{$GLOBALS.version}</span>	</a>
+				<a href="{url:/home/index}"><img src="{$GLOBALS.self_path}{$GLOBALS.syslogo}" title="{$GLOBALS.systemname}" height="30">{$GLOBALS.systemname}<span class="layui-badge layui-bg-gray">{$GLOBALS.version}</span>	</a>
 				
 				{if:count($arealist)>1}
 				<div class="layui-input-inline sys-op">
@@ -70,7 +70,7 @@
 			<ul id="menu{$v1['id']}">
 			{foreach:items = $mlist key=$k2 item=$v2}
 			{if:$v2['pid'] == $v1['id']}
-				<li class="menu{$v2['id']}" data-url="/{echo:ADMINNAME}{$v2['url']}"><i class="fa {$v2['icon']}"></i>{$v2['name']}</li>
+				<li class="menu{$v2['id']}" data-url="{$GLOBALS.self_path}/{echo:ADMINNAME}{$v2['url']}"><i class="fa {$v2['icon']}"></i>{$v2['name']}</li>
 			{/if}
 			{/foreach}
 			</ul>
@@ -78,7 +78,7 @@
 		</div>
 
 		<div class="main-body">
-			<iframe src ="/admin.php?/home/welcome" id="win-body" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0″ scrolling="auto" allowtransparency="yes">
+			<iframe src ="{url:/home/welcome}" id="win-body" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0″ scrolling="auto" allowtransparency="yes">
 				<p>你的浏览器不支持iframes。</p>
 			</iframe>
 		</div>

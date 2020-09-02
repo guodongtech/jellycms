@@ -14,7 +14,7 @@ class BaseController extends Controller
 	{
 		//禁止直接访问后台控制器
 		if(!defined("AUTH")){
-			Header("Location: '/'");
+			Header("Location: ".$GLOBALS['self_path'].'/');
 			exit;
 		}
 		parent::initController($request, $response, $logger);
@@ -26,7 +26,7 @@ class BaseController extends Controller
 
 		$uriSegments = $request->uri->getSegments();///path/to/page=> ['path', 'to', 'page']
 		if(!session('id') && AUTH){
-			Header("Location: /".ADMINNAME."/login/"); 
+			Header("Location: ".$GLOBALS['self_path'].'/'.ADMINNAME."/login/"); 
 			exit;
 		}
 

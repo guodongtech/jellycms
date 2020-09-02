@@ -77,7 +77,7 @@ class Home extends BaseController
 		$cache_path = WRITEPATH.'cache/';
 		helper('filesystem');
 		@delete_files($cache_path);
-		Header("Location: /".ADMINNAME."/home/"); 
+		Header("Location: ".$GLOBALS['self_path'].'/'.ADMINNAME."/home/"); 
 		exit();
 	}
 	// 前台
@@ -86,7 +86,7 @@ class Home extends BaseController
 		$result_site = $this->siteModel->getSite(session('area_id'));
 		$domain = $result_site['domain'];
 		if($GLOBALS['admin_domain'] == '' || $GLOBALS['admin_domain'] == $_SERVER['HTTP_HOST']){
-			Header("Location: /"); exit;
+			Header("Location: ".$GLOBALS['self_path']); exit;
 		}else{
 			Header("Location: $domain"); exit;
 		}
