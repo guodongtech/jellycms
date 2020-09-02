@@ -348,5 +348,9 @@ header i.fa{
 @media screen and (max-width: 480px) {
 
 }
-
+blockquote img{
+	margin-bottom:18px;
+	display:block;
+	border:1px solid #eee
+}
 
