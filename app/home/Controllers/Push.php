@@ -39,9 +39,7 @@ class Push extends BaseController
 		header('Access-Control-Allow-Credentials: true'); // 设置是否允许发送 cookies
 		header('Access-Control-Allow-Headers: Content-Type,Content-Length,Accept-Encoding,X-Requested-with, Origin'); // 设置允许自定义请求头的字段
 		$list = [
-			['field1'=>'title1', 'field2'=>'content1'],
-			['field1'=>'title2', 'field2'=>'content2'],
-			['field1'=>'title3', 'field2'=>'content3'],
+			['field1'=>'jellycms⑧群', 'field2'=>'933516288'],
 		];
 		$rdata = [
 			'code'=>0,
