@@ -28,7 +28,8 @@
 			<li><a href='/manual/database'>数据字典</a></li>
 			<li><a href='/manual/template'>模板入门</a></li>
 		</ul>
-		<i class="fa fa-bars animated bounceInDown" aria-hidden="true"></i>		<div class="header-right"><a href="https://www.guodong.tech/" class="reg">国栋科技</a></div>
+		<i class="fa fa-bars animated bounceInDown" aria-hidden="true"></i>
+		<div class="header-right"><a href="https://www.guodong.tech/" class="reg">国栋科技</a></div>
 	</div>
 </header>
 <div class="manual">
@@ -37,7 +38,8 @@
 			<ul class="layui-tree">
 
 				<li><h2>基础说明</h2></li>
-				<li class="site-tree-noicon"><a href="index.html"><i class="fa fa-home" aria-hidden="true"></i><cite>前言</cite><em>Introduction</em></a></li>				<li class="site-tree-noicon"><a href="get.html"><cite>获取JellyCMS</cite><em>Getting Started</em></a></li>
+				<li class="site-tree-noicon"><a href="index.html"><i class="fa fa-home" aria-hidden="true"></i><cite>前言</cite><em>Introduction</em></a></li>
+				<li class="site-tree-noicon"><a href="get.html"><cite>获取JellyCMS</cite><em>Getting Started</em></a></li>
 				<li class="site-tree-noicon"><a href="environment.html"><cite>环境要求</cite><em>环境配置</em></a></li>
 				<li class="site-tree-noicon"><a href="install.html"><cite>安装JellyCMS</cite><em>Install</em></a></li>
 
@@ -88,22 +90,42 @@
 				<li class="site-tree-noicon"><a href="upgrade.html"><cite>如何防止模板被盗</cite></a></li>
 			</ul>
 		</div>
-		<div class="right">
-			<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>安装JellyCMS - 使用手册</h1>
-			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">安装JellyCMS</a></legend>
-			</fieldset>
-			<div class="site-text">
-				<p>1. 官网首页下载</p>
-				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-				</blockquote>
-			</div>
- 
+	<div class="right">
+		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>欢迎页面 - 使用手册</h1>
+		<fieldset class="layui-elem-field layui-field-title site-title">
+			<legend><a name="description">功能概述</a></legend>
+		</fieldset>
+		<div class="site-text">
+			<p><a name="base">1. 基本说明</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				我们为内容详情录入规划了基础字段，其它字段按模型的形式进行管理。<br>
+				模型设置分为“单页”和“列表”，单页只有列表页模板，列表页有两个模板“列表页模板”、“详情页模板”<br>
+				模型里负责绑定模板，但为了更加灵活的配置，在栏目分类里可另行设置模板<br>
+				在“内容管理”菜单里，按模型对栏目分类进行统一展示、管理<br>
+				URL名称：为了更便于搜索引擎收录，这里必须设置一个英文名，这样将便于栏目分类里未定义对应字段而不影响URL的生成。<br>
+				栏目分类中的URL名称也尽可能的设置。<br>
+			</blockquote>
 		</div>
-
-
- 
+		<div class="site-text">
+			<p><a name="operation">2. 操作说明</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				入口“全局配置”->模型管理
+			</blockquote>
+		</div>
+		<div class="site-text">
+			<p><a name="display">3. 功能演示</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				<img src="../images/model.png" width="100%" />
+				<img src="../images/modeledit.png" width="100%" />
+			</blockquote>
+		</div>
+		<div class="site-text">
+			<p><a name="other">4. 其它</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				所有删除操作都是将对应表里的"deleted"字段置1作为标记，并未对数据做物理删除。
+			</blockquote>
+		</div>
+	</div>
 </div>
 </div>
 <ul class="site-dir"></ul>

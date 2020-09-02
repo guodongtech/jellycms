@@ -130,7 +130,7 @@
 	table.render({
 		elem: '#table',url:'{url:/model/getList}',
 		toolbar: '#toolbarDemo',
-		title: '管理员列表',
+		title: '模型列表',
 		layEvent: 'LAYTABLE_TIPS',
 		icon: 'layui-icon-tips',
 		cols: [[
@@ -200,7 +200,7 @@
 			skin: 'layui-layer-rim',
 			area: ['360px', '476px'],
 			maxmin:true,
-			title :'添加标签',
+			title :'添加/编辑模型',
 			btn: ['提交', '取消'],
 			yes: function(index, layero){
 				form.on('submit(form)', function(data){
@@ -263,7 +263,7 @@
 					skin: 'layui-layer-rim',
 					area: ['360px', '476px'],
 					maxmin:true,
-					title :'添加标签',
+					title :'添加/编辑模型',
 					btn: ['提交', '取消'],
 					yes: function(index, layero){
 						form.on('submit(form)', function(data){
