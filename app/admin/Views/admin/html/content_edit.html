@@ -348,7 +348,7 @@
 				var pics = $('#form input[name="pics"]').val().split(',');
 				var pictitles = $('#form input[name="pictitles"]').val().split(',');
 				for(var i=0; i<pics.length; i++){
-					$('#form #pics-preview ul').append('<li><img class="layui-upload-img" src="'+ pics[i] +'" /><span contenteditable=true placeholder="图片标题">'+ pictitles[i] +'</span><i class="fa fa-trash-o" aria-hidden="true"></i></li>');
+					$('#form #pics-preview ul').append('<li><img class="layui-upload-img" src="{$GLOBALS.self_path}'+ pics[i] +'" /><span contenteditable=true placeholder="图片标题">'+ pictitles[i] +'</span><i class="fa fa-trash-o" aria-hidden="true"></i></li>');
 				}
 			}
 			initeditor();//初始化所有编辑器
@@ -428,7 +428,7 @@
 			//上传完毕回调
 			pics[pics.length]=res.data.path;
 			$('#form input[name="pics"]').val(pics.toString());
-			$('#form #pics-preview ul').append('<li><img class="layui-upload-img" src="'+ res.data.path +'" /><span contenteditable=true placeholder="图片标题"></span><i class="fa fa-trash-o" aria-hidden="true"></i></li>');
+			$('#form #pics-preview ul').append('<li><img class="layui-upload-img" src="{$GLOBALS.self_path}'+ res.data.path +'" /><span contenteditable=true placeholder="图片标题"></span><i class="fa fa-trash-o" aria-hidden="true"></i></li>');
 			$('.layui-upload-list ul li span').each(function(i){
 				pictitles[i]=$(this).html();
 			})
