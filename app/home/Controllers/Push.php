@@ -172,18 +172,18 @@ class Push extends BaseController
 					<div class="swiper-wrapper">
 						<div class="swiper-slide">
 							<a href="http://www.jellycms.cn/" target="_blank">
-								<img src="/static/upload/20200818/1597735358_196e50f4b22bccc30e8b.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" />
+								<img src="/static/upload/20200818/1597735358_196e50f4b22bccc30e8b.jpg" title="http://www.jellycms.cn/" width="100%" height="100%" />
 							</a>
 						</div>
 						<div class="swiper-slide">
-							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735358_e1d128c5ecf66559d84d.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" /></a>
+							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735358_e1d128c5ecf66559d84d.jpg" title="http://www.jellycms.cn/" width="100%" height="100%" /></a>
 						</div>
 						<div class="swiper-slide">
-							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_8a1045190ef18bf9d5c9.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" />
+							<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_8a1045190ef18bf9d5c9.jpg" title="http://www.jellycms.cn/" width="100%" height="100%" />
 							</a>
 						</div>
 						<div class="swiper-slide">
-						<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_5fc7817dd6e54e251a1b.jpg" title="http://www.jellycms.cn/" width="565px" height="400px" />
+						<a href="http://www.jellycms.cn/" target="_blank"><img src="/static/upload/20200818/1597735359_5fc7817dd6e54e251a1b.jpg" title="http://www.jellycms.cn/" width="100%" height="100%" />
 						</a>
 						</div>
 					</div>
