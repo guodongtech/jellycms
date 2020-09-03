@@ -236,6 +236,9 @@ a cite {
     color: #c2c2c2;
     font-style: normal;
 }
+.manual .left .layui-tree a {
+	display:block;
+}
 .manual .left .layui-tree .layui-this a {
     color: #01AAED;
 }
