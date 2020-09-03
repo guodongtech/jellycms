@@ -31,10 +31,7 @@
 		$('.layui-layer-page').click(function(){
 			layer.closeAll(); 
 		})		
-	})	
-
-
-
+	})
 	//转换静态表格
 	table.init('jellytable', {
 		width:888,
