@@ -6,7 +6,7 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>页面描述-使用手册-JellyCMS</title>
+<title>管理栏目-使用手册-JellyCMS</title>
 <meta content='JellyCMS页面描述' name='keywords'>
 <meta content='JellyCMS页面描述' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
@@ -48,7 +48,7 @@
 				
 				<li><h2>栏目管理</h2></li>
 				<li class="site-tree-noicon"><a href="model.html"><cite>模型管理</cite><em>model</em></a></li>
-				<li class="site-tree-noicon"><a href="categary.html"><cite>管理栏目</cite><em>categary</em></a></li>
+				<li class="site-tree-noicon layui-this"><a href="categary.html"><cite>管理栏目</cite><em>categary</em></a></li>
 				<li class="site-tree-noicon"><a href="setting.html"><cite>栏目设置</cite><em>categary setting</em></a></li>
 
 				<li><h2>内容管理</h2></li>
@@ -64,7 +64,7 @@
 				<li class="site-tree-noicon"><a href="advertisement.html"><cite>广告管理</cite><em>advertisement</em></a></li>
 
 				<li><h2>基础配置</h2></li>
-				<li class="site-tree-noicon layui-this"><a href="sorts.html"><cite>内容栏目</cite><em>栏目管理</em></a></li>
+				<li class="site-tree-noicon"><a href="sorts.html"><cite>内容栏目</cite><em>栏目管理</em></a></li>
 				<li class="site-tree-noicon"><a href="company.html"><cite>公司信息</cite><em>company</em></a></li>
 				<li class="site-tree-noicon"><a href="site.html"><cite>站点信息</cite><em>site</em></a></li>
 				
@@ -91,7 +91,7 @@
 			</ul>
 		</div>
 	<div class="right">
-		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>欢迎页面 - 使用手册</h1>
+		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>管理栏目 - 使用手册</h1>
 		<fieldset class="layui-elem-field layui-field-title site-title">
 			<legend><a name="description">功能概述</a></legend>
 		</fieldset>
@@ -99,30 +99,27 @@
 			<p><a name="base">1. 基本说明</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				我们为内容详情录入规划了基础字段，其它字段按模型的形式进行管理。<br>
-				模型设置分为“单页”和“列表”，单页只有列表页模板，列表页有两个模板“列表页模板”、“详情页模板”<br>
-				模型里负责绑定模板，但为了更加灵活的配置，在栏目分类里可另行设置模板<br>
-				在“内容管理”菜单里，按模型对栏目分类进行统一展示、管理<br>
-				URL名称：为了更便于搜索引擎收录，这里必须设置一个英文名，这样将便于栏目分类里未定义对应字段而不影响URL的生成。<br>
-				栏目分类中的URL名称也尽可能的设置。<br>
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="operation">2. 操作说明</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				入口“全局配置”->模型管理
+				入口“基础配置”->“内容栏目”
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="display">3. 功能演示</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				<img src="../images/model.png" width="100%" />
-				<img src="../images/modeledit.png" width="100%" />
+				<img src="../images/sorts.png" width="100%" />
+				<img src="../images/sortsedit.png" width="100%" />
+				<img src="../images/sortsseo.png" width="100%" />
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="other">4. 其它</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				所有删除操作都是将对应表里的"deleted"字段置1作为标记，并未对数据做物理删除。
+				所有删除操作都是将对应表里的"deleted"字段置1作为标记，并未对数据做物理删除。<br>
+				当前功能关联了区域ID。
 			</blockquote>
 		</div>
 	</div>
