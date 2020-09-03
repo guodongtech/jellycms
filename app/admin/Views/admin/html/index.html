@@ -121,6 +121,20 @@
 
 
 $(document).ready(function(){
+
+{if:$GLOBALS['menu_style']}
+	$(".main-left").mouseenter(function(){
+		$(this).addClass('active');
+	});
+	$(".main-left").mouseleave(function(){
+		$(this).removeClass('active');
+	});
+{else:}
+$('.middle-nav').addClass('simple');
+{/if}	
+	
+	
+	
 	$(".main-nav li").click(function(){
 		var data_url = $(this).attr('data-url');	
 		$('#win-body').attr('src', data_url);

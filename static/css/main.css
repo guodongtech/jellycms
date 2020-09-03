@@ -590,10 +590,10 @@ body#console header{
     align-items: center;
     background: #f2f4f7;
     border-right: 1px solid #e5e7eb;
-
+ 
 }
 .main-left.active{
-    width: 158px;
+    width: 138px;
 }
 .top-nav{
 	display:flex;
@@ -628,12 +628,20 @@ body#console header{
 	justify-content: center;
 	position:relative;
 }
-.main-left.active .middle-nav ul li{
-	align-items:flex-start;
-	padding-left:18px;
-	justify-content: flex-start;
+.main-left .middle-nav ul li .n-tip {
+    display:none;
 }
-.middle-nav ul li .n-tip {
+.main-left.active .middle-nav ul li .n-tip {
+    font-size:12px;
+	padding:0px 8px;
+	color:#333;
+	display:inline-block;
+}
+.main-left.active .middle-nav ul li.active .n-tip {
+	color:#00b831;
+}
+/* 详细模式 */
+.middle-nav.simple ul li .n-tip{
     font-size:12px;
 	padding-left:10px;
 	display:none;
