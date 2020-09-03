@@ -15,8 +15,8 @@
 	$('header i.fa').click(function(){
 		$('.header-container ul').toggle();
 	})
-		var w;
-		var h;	
+	var w;
+	var h;
 	$('img').click(function(){
 		var img = new Image();
 		img.src = $(this).attr('src');
@@ -27,8 +27,12 @@
 			title: '预览', 
 			area:[w + 'px', h + 'px'],
 			content: '<img src="'+$(this).attr('src')+'" />'
-		}); 
-	})
+		});
+		$('.layui-layer-page').click(function(){
+			layer.closeAll(); 
+		})		
+	})	
+
 
 
 	//转换静态表格

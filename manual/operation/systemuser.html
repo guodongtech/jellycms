@@ -6,9 +6,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>页面描述-使用手册-JellyCMS</title>
-<meta content='JellyCMS页面描述' name='keywords'>
-<meta content='JellyCMS页面描述' name='description'>
+<title>系统用户-使用手册-JellyCMS</title>
+<meta content='JellyCMS系统用户' name='keywords'>
+<meta content='JellyCMS系统用户' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -86,33 +86,35 @@
 				<li class="site-tree-noicon"><a href="upgrade.html"><cite>在线更新</cite><em>upgrade</em></a></li>
 				
 				<li><h2>其它</h2></li>
-				<li class="site-tree-noicon"><a href="upgrade.html"><cite>如何防止模板被盗</cite></a></li>
-				<li class="site-tree-noicon"><a href="upgrade.html"><cite>如何防止模板被盗</cite></a></li>
+				<li class="site-tree-noicon"><a href="protecthtml.html"><cite>如何防止模板被盗</cite></a></li>
 			</ul>
 		</div>
 	<div class="right">
-		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>管理栏目 - 使用手册</h1>
+		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>系统角色 - 使用手册</h1>
 		<fieldset class="layui-elem-field layui-field-title site-title">
 			<legend><a name="description">功能概述</a></legend>
 		</fieldset>
 		<div class="site-text">
 			<p><a name="base">1. 基本说明</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				我们为内容详情录入规划了基础字段，其它字段按模型的形式进行管理。<br>
+				系统用户是管理系统的用户。<br>
+				
+				安全提示:<br>
+				系统默认用户信息,用户名：admin；密码：123456。在生产环境务必将密码换成更复杂的方式如数字+大小字母+特殊版本号。<br>
+				将默认后台入中admin.php更名。
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="operation">2. 操作说明</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				入口“基础配置”->“内容栏目”
+				入口“系统管理”->“系统角色”
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="display">3. 功能演示</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				<img src="../images/sorts.png" width="100%" />
-				<img src="../images/sortsedit.png" width="100%" />
-				<img src="../images/sortsseo.png" width="100%" />
+				<img src="../images/admin.png" width="100%" />
+				<img src="../images/adminedit.png" width="100%" />
 			</blockquote>
 		</div>
 		<div class="site-text">
@@ -125,12 +127,12 @@
 </div>
 </div>
 <ul class="site-dir"></ul>
-
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>
 <script src="/template/default/js/swiper.animate.min.js"></script>
 <script src="/template/default/js/wow.min.js"></script>
+<script src="/static/layui/layui.all.js"></script>
 <script src="/manual/js/clipboard.min.js"></script>
 <script src="/manual/js/main.js"></script>
 </body>

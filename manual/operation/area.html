@@ -6,9 +6,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>页面描述-使用手册-JellyCMS</title>
-<meta content='JellyCMS页面描述' name='keywords'>
-<meta content='JellyCMS页面描述' name='description'>
+<title>区域管理-使用手册-JellyCMS</title>
+<meta content='JellyCMS区域管理' name='keywords'>
+<meta content='JellyCMS区域管理' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -84,26 +84,44 @@
 				<li class="site-tree-noicon"><a href="upgrade.html"><cite>在线更新</cite><em>upgrade</em></a></li>
 				
 				<li><h2>其它</h2></li>
-				<li class="site-tree-noicon"><a href="upgrade.html"><cite>如何防止模板被盗</cite></a></li>
-				<li class="site-tree-noicon"><a href="upgrade.html"><cite>如何防止模板被盗</cite></a></li>
+				<li class="site-tree-noicon"><a href="protecthtml.html"><cite>如何防止模板被盗</cite></a></li>
 			</ul>
 		</div>
-		<div class="right">
-			<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>安装JellyCMS - 使用手册</h1>
-			<fieldset class="layui-elem-field layui-field-title site-title">
-				<legend><a name="get">安装JellyCMS</a></legend>
-			</fieldset>
-			<div class="site-text">
-				<p>1. 官网首页下载</p>
-				<blockquote class="layui-elem-quote layui-quote-nm">
-					你可以在我们的 <a href="https://www.jellycms.cn/">官网首页</a> 下载到 JellyCMS 的最新版。
-				</blockquote>
-			</div>
- 
+	<div class="right">
+		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>区域管理 - 使用手册</h1>
+		<fieldset class="layui-elem-field layui-field-title site-title">
+			<legend><a name="description">功能概述</a></legend>
+		</fieldset>
+		<div class="site-text">
+			<p><a name="base">1. 基本说明</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				系统的多站点功能是按区域划分实现的，在区域管理里可绑定当前区域的域名、设置主题目录、模板保护目录<br>
+				模板保护目录是保护模板不被任意下载，因JellyCMS是一个通用系统，模板目录的规律是公开的，
+				但你仍然可以重新设置模板存放目录。<br>
+				因很多功能依赖于区域ID，必须设定默认区域，默认区域只有一个。否则系统前台、后台大部分功能无法正常使用。<br>
+				此处需要注意，JellyCMS不需要单独设置移动端的域名，因为JellyCMS会按照请求终端做出正确判断，以决定使用PC模板还是WAP模板。
+			</blockquote>
 		</div>
-
-
- 
+		<div class="site-text">
+			<p><a name="operation">2. 操作说明</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				入口“系统管理”->“区域管理”
+			</blockquote>
+		</div>
+		<div class="site-text">
+			<p><a name="display">3. 功能演示</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				<img src="../images/area.png" width="100%" />
+				<img src="../images/areaedit.png" width="100%" />
+			</blockquote>
+		</div>
+		<div class="site-text">
+			<p><a name="other">4. 其它</a></p>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				所有删除操作都是将对应表里的"deleted"字段置1作为标记，并未对数据做物理删除。
+			</blockquote>
+		</div>
+	</div>
 </div>
 </div>
 <ul class="site-dir"></ul>

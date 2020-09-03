@@ -6,9 +6,9 @@
 <meta content='ie=edge' http-equiv='x-ua-compatible'>
 <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport'>
 <meta content='webkit' name='renderer'>
-<title>页面描述-使用手册-JellyCMS</title>
-<meta content='JellyCMS页面描述' name='keywords'>
-<meta content='JellyCMS页面描述' name='description'>
+<title>如何防止模板被盗-使用手册-JellyCMS</title>
+<meta content='JellyCMS如何防止模板被盗' name='keywords'>
+<meta content='JellyCMS如何防止模板被盗' name='description'>
 <link rel="stylesheet" href="/static/layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="/manual/css/manual.css" />
 <link rel="stylesheet" href="/template/default/css/swiper.min.css">
@@ -86,38 +86,37 @@
 				<li class="site-tree-noicon"><a href="upgrade.html"><cite>在线更新</cite><em>upgrade</em></a></li>
 				
 				<li><h2>其它</h2></li>
-				<li class="site-tree-noicon layui-this"><a href="upgrade.html"><cite>如何防止模板被盗</cite></a></li>
+				<li class="site-tree-noicon layui-this"><a href="protecthtml.html"><cite>如何防止模板被盗</cite></a></li>
 			</ul>
 		</div>
 	<div class="right">
-		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>管理栏目 - 使用手册</h1>
+		<h1 class="site-h1"><i class="fa fa-bars animated bounceInLeft" aria-hidden="true"></i>如何防止模板被盗 - 使用手册</h1>
 		<fieldset class="layui-elem-field layui-field-title site-title">
 			<legend><a name="description">功能概述</a></legend>
 		</fieldset>
 		<div class="site-text">
 			<p><a name="base">1. 基本说明</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				我们为内容详情录入规划了基础字段，其它字段按模型的形式进行管理。<br>
+				修改模板文件夹，并将主题中的html文件夹重命名。<br>
+				所有资源文件不可放入模板文件夹，否则在前台调用会暴露模板文件夹名称。
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="operation">2. 操作说明</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				入口“基础配置”->“内容栏目”
+				入口“系统管理”->“区域管理”
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="display">3. 功能演示</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				<img src="../images/sorts.png" width="100%" />
-				<img src="../images/sortsedit.png" width="100%" />
-				<img src="../images/sortsseo.png" width="100%" />
+				<img src="../images/areaedit.png" width="100%" />
 			</blockquote>
 		</div>
 		<div class="site-text">
 			<p><a name="other">4. 其它</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				所有删除操作都是将对应表里的"deleted"字段置1作为标记，并未对数据做物理删除。
+				无
 			</blockquote>
 		</div>
 	</div>
