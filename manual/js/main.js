@@ -15,6 +15,22 @@
 	$('header i.fa').click(function(){
 		$('.header-container ul').toggle();
 	})
+		var w;
+		var h;	
+	$('img').click(function(){
+		var img = new Image();
+		img.src = $(this).attr('src');
+		w = img.width > $(window).width()?$(window).width():img.width;
+		h = img.height+45 > $(window).height()?$(window).height():img.height+45;
+		layer.open({
+			type: 1, 
+			title: '预览', 
+			area:[w + 'px', h + 'px'],
+			content: '<img src="'+$(this).attr('src')+'" />'
+		}); 
+	})
+
+
 	//转换静态表格
 	table.init('jellytable', {
 		width:888,
