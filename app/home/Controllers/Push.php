@@ -23,6 +23,8 @@ class Push extends BaseController
 			['name'=>'Jellypa', 'email'=>'1156283808@qq.com', 'description'=>'加入时间：2015年3月18日'],
 			['name'=>'无双', 'email'=>'745320293@qq.com', 'description'=>'加入时间：2016年6月15日'],
 			['name'=>'影子', 'email'=>'474922611@qq.com', 'description'=>'加入时间：2016年8月18日'],
+			['name'=>'66', 'email'=>'2072269491@qq.com', 'description'=>'加入时间：2016年9月18日'],
+			['name'=>'governor', 'email'=>'1291501672@qq.com', 'description'=>'加入时间：2015年11月10日'],
 		];
 		$rdata = [
 			'code'=>0,
