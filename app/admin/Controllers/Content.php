@@ -116,6 +116,13 @@ class Content extends BaseController
 			$extendData[$key]['value'] = is_array($data[$value['name']])?implode(',', $data[$value['name']]):$data[$value['name']];
 			unset($data[$value['name']]); //从表单数据里删除扩展字段
 		}
+		//SEO未设置，则自动填充数据
+		if($data['description'] == ''){
+			$data['description'] = mb_substr(strip_tags($data['content']), 100, $len, 'utf-8');
+		}
+		if($data['keywords'] == ''){
+			$data['keywords'] = $data['title'];
+		}
 		if(!$data['id']){
 			$data['create_user'] = $this->session->id;
 			$data['area_id'] = $this->session->area_id;
@@ -142,7 +149,7 @@ class Content extends BaseController
 			}
 			success("操作成功", '/'.ADMINNAME.'/content/index/'.$modelResult['model_id']);		
 		}else{
-			//return redirect()->back()->withInput();
+			
 		}
 	}
 	public function move(){

@@ -28,7 +28,8 @@
 			<li><a href='/manual/database'>数据字典</a></li>
 			<li><a href='/manual/template'>模板入门</a></li>
 		</ul>
-		<i class="fa fa-bars animated bounceInDown" aria-hidden="true"></i>		<div class="header-right"><a href="https://www.guodong.tech/" class="reg">国栋科技</a></div>
+		<i class="fa fa-bars animated bounceInDown" aria-hidden="true"></i>
+		<div class="header-right"><a href="https://www.guodong.tech/" class="reg">国栋科技</a></div>
 	</div>
 </header>
 <div class="manual">
@@ -37,7 +38,8 @@
 			<ul class="layui-tree">
 
 				<li><h2>基础说明</h2></li>
-				<li class="site-tree-noicon"><a href="index.html"><i class="fa fa-home" aria-hidden="true"></i><cite>前言</cite><em>Introduction</em></a></li>				<li class="site-tree-noicon"><a href="get.html"><cite>获取JellyCMS</cite><em>Getting Started</em></a></li>
+				<li class="site-tree-noicon"><a href="index.html"><i class="fa fa-home" aria-hidden="true"></i><cite>前言</cite><em>Introduction</em></a></li>
+				<li class="site-tree-noicon"><a href="get.html"><cite>获取JellyCMS</cite><em>Getting Started</em></a></li>
 				<li class="site-tree-noicon"><a href="environment.html"><cite>环境要求</cite><em>环境配置</em></a></li>
 				<li class="site-tree-noicon"><a href="install.html"><cite>安装JellyCMS</cite><em>Install</em></a></li>
 
@@ -115,7 +117,7 @@
 		<div class="site-text">
 			<p><a name="other">4. 其它</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				所有删除操作都是将对应表里的"deleted"字段置1作为标记，并未对数据做物理删除。
+				删除操作会将备份文件从磁盘删除，请谨慎处理。
 			</blockquote>
 		</div>
 	</div>
@@ -125,12 +127,12 @@
 </div>
 </div>
 <ul class="site-dir"></ul>
-
 <script src="/index.php/Statistics/index/1/0"></script>
 <script src="/template/default/js/jquery-1.11.3.min.js"></script>
 <script src="/template/default/js/swiper.min.js"></script>
 <script src="/template/default/js/swiper.animate.min.js"></script>
 <script src="/template/default/js/wow.min.js"></script>
+<script src="/static/layui/layui.all.js"></script>
 <script src="/manual/js/clipboard.min.js"></script>
 <script src="/manual/js/main.js"></script>
 </body>

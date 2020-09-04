@@ -292,14 +292,15 @@
 		                     <div class="layui-input-block">
 		                     	<textarea name="blackip" placeholder="多个IP以半角用逗号隔开" class="layui-textarea"></textarea>
 		                     </div> 
-		                </div>
+ <div class="layui-input-block layui-form-mid layui-word-aux">注意： 黑名单会限制前后台访问。</div>
+						</div>
 		                
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">IP白名单</label>
 		                     <div class="layui-input-block">
 		                     	<textarea name="whiteip" placeholder="多个IP以半角用逗号隔开" class="layui-textarea"></textarea>
 		                     </div> 
-		                     <div class="layui-input-block layui-form-mid layui-word-aux">注： 黑名单会限制前后台访问，白名单为后台通行IP，尽量使用固定IP，否则不建议开启白名单</div>
+		                     <div class="layui-input-block layui-form-mid layui-word-aux">注意：白名单为允许后台访问IP，如果无法使用固定IP，不建议设置白名单。如果发生IP地址改变导致的无法登录，请联系JellyCMS官方。</div>
 		                </div>
 		                
 						<div class="layui-form-item">

@@ -26,7 +26,7 @@ html {
 *,
 *:before,
 *:after {
-  box-sizing: inherit;
+  box-sizing:border-box;
 }
 body {
 	margin: 0;
@@ -1054,8 +1054,6 @@ footer{
 	font-weight:bold;
 }
 section.content{
-	//justify-content:flex-start;
-	//flex-direction:initial;
 	padding:20px;
 	background:#fff;
 	line-height:2rem;
@@ -1075,6 +1073,11 @@ section.content{
 	width:100%;
 	text-align:left;
 	align-items:left;
+}
+.content .details{
+    font-size: 16px;
+    line-height: 1.5;
+	width:100%;
 }
 .content .con-info i{
 	margin-right:8px;

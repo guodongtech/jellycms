@@ -208,11 +208,13 @@ class ParseModel extends Model
 	
 	
 	public function getList($id,$params,$page){
-		foreach($id as $k=>$v){
-			$this->getChildrenSorts($v);  //列表标签会递归查询当前ID及其子类的数据，如果只想查指列表ID下的数据，请注释掉此行即可。
-		}
-		$children = $this->childrenSortIds; //当前类及其模型一致的子类
-		$children = array_unique($children);//去重
+		//foreach($id as $k=>$v){
+		//	$this->getChildrenSorts($v);  //列表标签会递归查询当前ID及其子类的数据，如果只想查指列表ID下的数据，请注释掉此行即可。
+		//}
+		//$children = $this->childrenSortIds; //当前类及其模型一致的子类
+		//$children = array_unique($children);//去重
+		//print_r($children);
+		$children = $id;
 		$where = isset($params['where'])?str_replace(',',' and ',$params['where']):'1=1';
 		$page = $page>0?$page:1;
 		$num = isset($params['num'])?$params['num']:5;
@@ -221,14 +223,14 @@ class ParseModel extends Model
 		$result   = $builder->select('id')
 							->where($where)
 							->where(['deleted'=>0,'status'=>1])
-							->whereIn('sorts_id', $children)
+							->whereIn('sorts_id', $id)
 							->orderBy($order)
 							->get($num,($page-1)*$num)
 							->getResultArray();
 		$countAllResults   = $builder->select('count(1) as count')
 							->where($where)
 							->where(['deleted'=>0,'status'=>1])
-							->whereIn('sorts_id', $children)
+							->whereIn('sorts_id', $id)
 							->orderBy($order)
 							->get()
 							->getRowArray();				
