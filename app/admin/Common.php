@@ -63,7 +63,7 @@
      * @return void
      * @throws HttpResponseException
      */
-    function success($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
+    function success($msg = '', $url = null, $data = '', $wait = 1, array $header = [])
     {
         if (is_null($url) && !is_null($_SERVER['HTTP_REFERER'])) {
             $url = $_SERVER['HTTP_REFERER'];
@@ -92,7 +92,7 @@
      * @return void
      * @throws HttpResponseException
      */
-    function error($msg = '', $url = null, $data = '', $wait = 3, array $header = [])
+    function error($msg = '', $url = null, $data = '', $wait = 1, array $header = [])
     {
         if (is_null($url) && !is_null($_SERVER['HTTP_REFERER'])) {
             $url = $_SERVER['HTTP_REFERER'];

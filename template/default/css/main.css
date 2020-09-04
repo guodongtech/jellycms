@@ -1249,6 +1249,7 @@ footer .footer-nav ul{
 	height:178px;
 	margin-top:60px;
 	color:#fff;
+	background-size:100% auto !important;
 }
 .sort-banner-content{
 	width:1200px;

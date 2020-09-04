@@ -113,7 +113,6 @@ class ParseModel extends Model
 
 	public function addTags($content)
 	{
-		/* 这里可以改为读取数据表，然后缓存起来 */
 		$keywords_list = $this->getTags();
 		if($keywords_list){
 			$readnum = 3;
@@ -123,21 +122,16 @@ class ParseModel extends Model
 				$str = '<a href="'.$val['link'].'" target="_blank">'.$title.'</a>';
 				$str_index = mb_strpos($content, $title);
 				$content = preg_replace('/(?!<[^>]*)'.$title.'(?![^<]*>)/', $str, $content, 1);
-				if(is_numeric($str_index)){
-					$readnum += 1;
+				//if(is_numeric($str_index)){
+				//	$readnum += 1;
 					//$content = substr_replace($content,$str,$str_index,$len);
 					//$content = $this->str_replace_limit($title,$str,$content,$this->limit);
-				}
+				//}
 				//if($readnum == 8) return $content; //匹配到8个关键词就退出
 			}
 		}
 		return $content;
 	}
-	
-	
-	
-	
-	
 	
 	public function getSort($id)
 	{
@@ -147,16 +141,7 @@ class ParseModel extends Model
 							->join('model', 'model.id = sorts.model_id', 'left')
 							->where(['sorts.id'=>$id])
 							->get()
-							->getRowArray();
-/* 		//单页内容处理
-		if($result['m_type'] == 1){
-			$builder = $this->db->table('content');
-			$res   = $builder->select('*')
-								->where(['deleted'=>0, 'sorts_id'=>$result['id']])
-								->get()
-								->getRowArray();
-			$result['content'] = $res['content'];
-		}	 */		
+							->getRowArray();	
 		$urlname = $result['urlname']?$result['urlname']:$result['m_urlname'];
 		$result['link'] = $result['link']==''?url(array($urlname)):$result['link'];
 		$result['ico'] = fileUrl($result['ico']);
