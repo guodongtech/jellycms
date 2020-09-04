@@ -11,12 +11,15 @@ class Hot extends BaseController
     }
     public function getRobots()
     {
-		$list = $this->model->getRobots();
+		$get = $this->request->getGet();
+		isset($get['page'])?$page = $get['page']:$page = 1;
+		isset($get['limit'])?$limit = $get['limit']:$limit = 10; //默认单页数
+		$res = $this->model->getRobots($page, $limit, $this->session->area_id);
 		$data = [
 			"code" => 0,
 			"msg" => "",
-			"count" => count($list),
-			"data" => $list,
+			"count" => $res['total'],
+			"data" => $res['list'],
 		];
 		return json_encode($data);
     }

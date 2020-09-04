@@ -15,14 +15,20 @@ class HotModel extends Model
 							->getResultArray();
         return $result;
     }
-    public function getRobots()
+    public function getRobots($page, $limit, $area_id)
     {
+		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('statistics');
-		$result   = $builder->select('spider,start_time,end_time,ip,province')
+		$res   = $builder->select('spider,start_time,end_time,ip,province')
 							->where(['spider !='=>''])
 							->orderBy('start_time', 'desc')
-							->get(10)
+							->get($limit, $offset)
 							->getResultArray();
-        return $result;
+		$total = $builder->select('1')
+							->where(['spider !='=>''])
+							->countAllResults(false);
+        $result['list'] = $res;
+        $result['total'] = $total;
+		return $result;
     }
 }
