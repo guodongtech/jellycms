@@ -35,8 +35,7 @@ class FileModel extends Model
 		$result = directory_map($path, 1);
 		//处理数组元素末尾 /  \  兼容window linux 目录分隔符
 		foreach($result as $key=>$value){
-			$result[$key] = str_replace("/", '', $value);
-			$result[$key] = str_replace("\\", '', $value);
+			$result[$key] = str_replace(DIRECTORY_SEPARATOR, '', $value);
 		}
         return $result;
     }
