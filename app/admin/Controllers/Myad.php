@@ -1,4 +1,11 @@
 <?php 
+/**
+ * @file Myad.php
+ * @brief 模型字段管理
+ * @author 无双
+ * @date 2020-02-08
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\MyadModel;
 class Myad extends BaseController

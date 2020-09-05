@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Slide.php
+ * @brief 轮播图
+ * @author jellypa
+ * @date 2019-02-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\SlideModel;
 use \App\Models\SlideGroupModel;

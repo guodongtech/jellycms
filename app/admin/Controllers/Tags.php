@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Tags.php
+ * @brief 文章内链
+ * @author jellypa
+ * @date 2020-06-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\TagsModel;
 

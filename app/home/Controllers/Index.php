@@ -1,4 +1,12 @@
-<?php namespace App\Controllers;
+<?php 
+/**
+ * @file Form.php
+ * @brief 首页
+ * @author jellypa
+ * @date 2015-01-02
+ * @version 3.8.1
+ */
+namespace App\Controllers;
 use  \App\Models\IndexModel;
 
 class Index extends BaseController
@@ -28,6 +36,12 @@ class Index extends BaseController
 		$this->data['company'] = $this->model->getCompany($this->area['id']);
 		$this->data['site'] = $this->model->getSite($this->area['id']);
 	}
+	/**
+	 * @author jellypa
+	 * @dateTime  2015-01-02
+	 * @brief     前台页面渲染
+	 * @copyright [jellyCMS]
+	 */
 	public function index()
 	{
 		//获取当前区域模板 及设置缓存文件名称
@@ -78,8 +92,13 @@ class Index extends BaseController
 		}
 
 	}
-	
-	//列表页 $params[0] urlname; $params[1] id;$params[2]  页数
+	/**
+	 * @author jellypa
+	 * @dateTime  2015-01-02
+	 * @brief     前台列表页渲染
+	 * @copyright [jellyCMS]
+	 * @param     [array] $params  $params[0] urlname; $params[1] id;$params[2]  页数
+	 */
 	public function list($params){
 		if(count($params) == 1){
 			$sort = $this->model->getSortByUrlname($params[0]);
@@ -108,7 +127,13 @@ class Index extends BaseController
 		$this->data['parentsort'] = end($parents);//父分类 顶级分类无父分类
 		return view($sort['listtpl'],$this->data, $this->options);
 	}
-	//内容页 
+	/**
+	 * @author jellypa
+	 * @dateTime  2015-01-02
+	 * @brief     内容页
+	 * @copyright [jellyCMS]
+	 * @param     [string] $id  内容页id
+	 */
 	private function content($id){
 		//获取content 相关数据
 		$content = $this->model->getContent($id);

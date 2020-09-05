@@ -1,4 +1,11 @@
 <?php 
+/**
+ * @file UeUpload.php
+ * @brief 编辑器重构
+ * @author jellypa
+ * @date 2020-06-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\UeuploadModel;
 class UeUpload extends BaseController

@@ -1,6 +1,13 @@
-<?php namespace App\Controllers;
+<?php 
+/**
+ * @file Form.php
+ * @brief 表单处理
+ * @author jellypa
+ * @date 2015-01-02
+ * @version 3.8.1
+ */
+namespace App\Controllers;
 use  \App\Models\FormModel;
-
 class Form extends BaseController
 {    
     /**
@@ -16,6 +23,13 @@ class Form extends BaseController
 		$this->session = \Config\Services::session();
 		
 	}
+	/**
+	 * @author jellypa
+	 * @dateTime  2015-01-02
+	 * @brief     前台表单提交
+	 * @copyright [jellyCMS]
+	 * @param     [string]     $name [表单名称]
+	 */
 	public function index($name)
 	{	
 		//取当前表单
@@ -86,6 +100,12 @@ class Form extends BaseController
 		}
 		echo json_encode($rdata);
 	}
+	/**
+	 * @author jellypa
+	 * @dateTime  2015-01-02
+	 * @brief     图形验证码
+	 * @copyright jellyCMS
+	 */
 	 public function capthcha()
     {
 		return $this->captcha->generate();

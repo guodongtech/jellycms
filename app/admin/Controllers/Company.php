@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Conpany.php
+ * @brief 公司信息
+ * @author jellypa
+ * @date 2017-06-08
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\CompanyModel;
 

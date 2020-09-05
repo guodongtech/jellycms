@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file SlideGroup.php
+ * @brief 轮播图分组
+ * @author jellypa
+ * @date 2019-02-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\SlideGroupModel;
 use \App\Models\AreaModel;

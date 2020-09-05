@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Syslog.php
+ * @brief 系统日志
+ * @author 无双
+ * @date 2020-06-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\SysLogModel;
 class SysLog extends BaseController

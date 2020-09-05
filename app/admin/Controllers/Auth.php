@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Auth.php
+ * @brief 权限管理
+ * @author 无双
+ * @date 2017-05-08
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use  \App\Models\AuthModel;
 
@@ -9,7 +16,12 @@ class Auth extends BaseController
     {
         $this->model = new AuthModel();
     }
-
+    /**
+	 * @author 无双
+	 * @dateTime  2015-06-08
+	 * @brief     权限管理页面渲染
+	 * @copyright [jellyCMS]
+	 */
     public function index()
     {
 		$list = $this->model->getSelect();
@@ -18,10 +30,17 @@ class Auth extends BaseController
 		];
         return view('auth_index.html', $data);
     }
+
     public function group()
     {
         return view('auth_group.html');
     }
+    /**
+	 * @author 无双
+	 * @dateTime  2015-06-08
+	 * @brief     权限管理table数据
+	 * @copyright [jellyCMS]
+	 */
     public function getList()
     {
 		$list = $this->model->getList();
@@ -44,7 +63,12 @@ class Auth extends BaseController
 		];
 		return json_encode($data);
     }
-	//编辑字段值
+	/**
+	 * @author 无双
+	 * @dateTime  2015-06-08
+	 * @brief     权限管理ajax编辑字段值
+	 * @copyright [jellyCMS]
+	 */
     public function changeValue()
     {
 		$post = post();
@@ -73,6 +97,12 @@ class Auth extends BaseController
 		}
 		return json_encode($rdata);
     }
+    /**
+	 * @author 无双
+	 * @dateTime  2015-06-08
+	 * @brief     权限管理编辑/新增
+	 * @copyright [jellyCMS]
+	 */
     public function edit()
     {
 		$post = post();
@@ -112,6 +142,12 @@ class Auth extends BaseController
 		return json_encode($rdata);
 		
     }
+    /**
+	 * @author 无双
+	 * @dateTime  2015-06-08
+	 * @brief     权限管理数据删除
+	 * @copyright [jellyCMS]
+	 */
     public function del()
     {
 		$id = post('id');

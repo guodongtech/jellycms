@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Config.php
+ * @brief 配置参数
+ * @author jellypa
+ * @date 2017-08-08
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use  \App\Models\ConfigModel;
 class Config extends BaseController

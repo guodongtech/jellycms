@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Role.php
+ * @brief 角色管理
+ * @author jellypa
+ * @date 2020-02-08
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\RoleModel;
 use \App\Models\AuthModel;

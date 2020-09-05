@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Db.php
+ * @brief 数据库管理
+ * @author jellypa
+ * @date 2017-08-06
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use  \App\Models\DbModel;
 class Db extends BaseController

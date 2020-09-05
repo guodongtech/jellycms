@@ -1,4 +1,11 @@
 <?php 
+/**
+ * @file ReAdmin.php
+ * @brief 模型字段管理
+ * @author jellypa
+ * @date 2020-02-08
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 
 class ReAdmin extends BaseController

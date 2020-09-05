@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Message.php
+ * @brief 表单信息
+ * @author 无双
+ * @date 2017-08-06
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\MessageModel;
 use \App\Models\FormModel;

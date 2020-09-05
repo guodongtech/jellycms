@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Site.php
+ * @brief 站点信息
+ * @author jellypa
+ * @date 2019-02-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\SiteModel;
 use \App\Models\FileModel;

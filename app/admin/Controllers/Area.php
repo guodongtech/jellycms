@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Area.php
+ * @brief 区域管理
+ * @author jellypa
+ * @date 2015-06-08
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\AreaModel;
 use \App\Models\FileModel;
@@ -10,7 +17,12 @@ class Area extends BaseController
         $this->model = new AreaModel();
 		$this->FileModel = new FileModel();
     }
-
+    /**
+	 * @author jellypa
+	 * @dateTime  2015-06-08
+	 * @brief     区域管理页面渲染
+	 * @copyright [jellyCMS]
+	 */
     public function index()
     {
 		$areaList = $this->model->getList();
@@ -23,6 +35,12 @@ class Area extends BaseController
         return view('area.html', $data);
 		
     }
+    /**
+	 * @author jellypa
+	 * @dateTime  2015-06-08
+	 * @brief     区域管理table数据
+	 * @copyright [jellyCMS]
+	 */
     public function getList()
     {
 		$list = $this->model->getList();
@@ -34,6 +52,12 @@ class Area extends BaseController
 		];
 		return json_encode($data);
     }
+    /**
+	 * @author jellypa
+	 * @dateTime  2015-06-08
+	 * @brief     区域管理 新增/编辑
+	 * @copyright [jellyCMS]
+	 */
 	public function edit(){
 		$post = $this->request->getPost();
 		if(!$post['name'] || !$post['surname']){
@@ -78,7 +102,12 @@ class Area extends BaseController
 		}
 		return json_encode($rdata);
 	}
-	//编辑字段值
+	/**
+	 * @author jellypa
+	 * @dateTime  2015-06-08
+	 * @brief     区域管理ajax编辑字段值
+	 * @copyright [jellyCMS]
+	 */
     public function changeValue()
     {
 		$post = post();
@@ -107,7 +136,12 @@ class Area extends BaseController
 		}
 		return json_encode($rdata);
     }
-    //删除
+    /**
+	 * @author jellypa
+	 * @dateTime  2015-06-08
+	 * @brief     数据删除
+	 * @copyright [jellyCMS]
+	 */
     public function del()
     {
 		$id = $this->request->getPost('id');
@@ -146,6 +180,12 @@ class Area extends BaseController
 
 		return json_encode($rdata);
     }
+    /**
+	 * @author jellypa
+	 * @dateTime  2015-06-08
+	 * @brief     状态开关
+	 * @copyright [jellyCMS]
+	 */
     public function switch()
     {
 		$post = post();

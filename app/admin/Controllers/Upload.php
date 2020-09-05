@@ -1,4 +1,11 @@
 <?php 
+/**
+ * @file Upgrade.php
+ * @brief 上传
+ * @author jellypa
+ * @date 2015-03-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 class Upload extends BaseController
 {

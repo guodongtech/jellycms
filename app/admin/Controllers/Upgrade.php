@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Upgrade.php
+ * @brief 在线更新
+ * @author jellypa
+ * @date 2020-09-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\SysLogModel;
 use \config;

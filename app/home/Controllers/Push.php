@@ -1,4 +1,5 @@
-<?php namespace App\Controllers;
+<?php 
+namespace App\Controllers;
 //use  \App\Models\DevelopersModel;
 
 class Push extends BaseController

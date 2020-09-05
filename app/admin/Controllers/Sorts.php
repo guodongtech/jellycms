@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file Sorts.php
+ * @brief 栏目管理
+ * @author 无双
+ * @date 2019-02-02
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\SortsModel;
 use \App\Models\ModelModel;

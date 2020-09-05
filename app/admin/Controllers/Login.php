@@ -1,4 +1,11 @@
 <?php 
+/**
+ * @file Login.php
+ * @brief 登录
+ * @author jellypa
+ * @date 2017-08-06
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use CodeIgniter\Controller;
 use \App\Models\LoginModel;

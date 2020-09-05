@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file Hot.php
+ * @author jellypa
+ * @date 2017-05-07
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\HotModel;
 

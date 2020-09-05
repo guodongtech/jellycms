@@ -1,4 +1,11 @@
 <?php 
+/**
+ * @file Home.php
+ * @brief 首页
+ * @author jellypa
+ * @date 2016-03-07
+ * @version 3.8.1
+ */
 namespace App\Controllers;
 use \App\Models\HomeModel;
 use \App\Models\MenuModel;
