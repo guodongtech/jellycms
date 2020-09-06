@@ -20,33 +20,48 @@ canvas{z-index:-1;position:absolute;}
 <script src="{$GLOBALS.self_path}/static/js/jquery.js"></script>
 </head>
 <body class="guodong-body">
-<form method="post" id='form'>
-<dl class="admin_login">
-	<dt>
-		<strong>{$GLOBALS.systemname}内容管理系统</strong>
-		<em>{$GLOBALS.systemname} Content Management System</em>
-	</dt>
-	<dd class="user_icon fa fa-user">
-		<input type="text" placeholder="账号" name="name" lay-verify="required" class="login_txtbx "/>
-	</dd>
-	<dd class="pwd_icon fa fa-lock">
-		<input type="password" placeholder="密码" name="password" lay-verify="required" class="login_txtbx"/>
-	</dd>
-	<dd class="val_icon fa fa-shield">
-		<div class="checkcode">
-			<input type="text" lay-verify="required" name="code" placeholder="验证码" maxlength="4" class="login_txtbx">
-			<img title="点击刷新" src="{url:/login/capthcha/}" onclick="this.src='{url:/login/capthcha/}?'+Math.round(Math.random()*1000);"/>
-		</div>
+	
+	<div class="admin_login">
+		<ul class="login-type">
+			<li id="qrcode"><em><i><img class="small-icon" src="{$GLOBALS.self_path}/static/images/weixin-icon.png" />微信扫码登录</i></em><img class="icon" src="{$GLOBALS.self_path}/static/images/qrcode-icon.png" /></li>
+			<li id="normal"><em><i><img class="small-icon" src="{$GLOBALS.self_path}/static/images/normal.png" />账号密码登录</i></em><img class="icon" src="{$GLOBALS.self_path}/static/images/pc-icon.png" /></li>
+		</ul>
+		<p class="system-name">
+			<strong>{$GLOBALS.systemname}内容管理系统</strong>
+			<em>{$GLOBALS.systemname} Content Management System</em>
+		</p>
+		<ul class="normal login-detail">
+			<form method="post" id='form'>
+				<li class="user_icon fa fa-user">
+					<input type="text" placeholder="账号" name="name" lay-verify="required" class="login_txtbx "/>
+				</li>
+				<li class="pwd_icon fa fa-lock">
+					<input type="password" placeholder="密码" name="password" lay-verify="required" class="login_txtbx"/>
+				</li>
+				<li class="val_icon fa fa-shield">
+					<div class="checkcode">
+						<input type="text" lay-verify="required" name="code" placeholder="验证码" maxlength="4" class="login_txtbx">
+						<img title="点击刷新" src="{url:/login/capthcha/}" onclick="this.src='{url:/login/capthcha/}?'+Math.round(Math.random()*1000);"/>
+					</div>
+				</li>
+				<li>
+					<input type="submit" value="立即登陆" class="submit_btn"/>
+				</li>
+			</form>
+		</ul>
+		<div class="qrcode login-detail">
+			<h3>微信扫码登录</h3>
+			<div class="scan ing">
+				<div><img src="{$GLOBALS.self_path}/static/upload/20200819/1597822100_12968a3ea78c50d7f90d.png" /></div>
+				<div class="demonstration"></div>
+			</div>
 		
-	</dd>
-	<dd>
-		<input type="submit" value="立即登陆" class="submit_btn"/>
-	</dd>
-	<dd>
-		{$GLOBALS.copyright}
-	</dd>
-</dl>
-</form>
+		</div>
+		<div class="copyright">
+			{$GLOBALS.copyright}
+		</div>
+	</div>
+	
 <script src="{$GLOBALS.self_path}/static/layui/layui.all.js"></script>
 <script src="{$GLOBALS.self_path}/static/js/Particleground.js"></script>
 <script>
@@ -58,9 +73,21 @@ canvas{z-index:-1;position:absolute;}
 	if(top.location != self.location){  
 		   window.parent.location.reload()
 	 }
-	
 }();	
 $(document).ready(function() {
+	$('.login-type li').click(function(){
+		$('.login-type li').show();
+		$(this).hide();
+		$('.login-detail').show();
+		$('.'+$(this).attr('id')).hide();
+	})
+	$('.scan').mouseenter(function(){
+		$(this).removeClass('ing');
+	})
+	$('.scan').mouseleave(function(){
+		$(this).addClass('ing');
+	})
+
 	//粒子背景特效
 	$('body').particleground({
 		dotColor: '#5cbdaa',
