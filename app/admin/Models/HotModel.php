@@ -19,7 +19,7 @@ class HotModel extends Model
     {
 		$offset = ($page-1)*$limit;
 		$builder = $this->db->table('statistics');
-		$res   = $builder->select('spider,start_time,end_time,ip,province')
+		$res   = $builder->select('id,spider,start_time,end_time,ip,province,query_string')
 							->where(['spider !='=>''])
 							->orderBy('start_time', 'desc')
 							->get($limit, $offset)

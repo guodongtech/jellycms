@@ -213,10 +213,12 @@ wow.init();
 		url:'{url:/hot/getRobots}',
 		cellMinWidth: 80,
 		cols: [[
+			{field:'id', width:80, title: 'ID', sort: true},
 			{field:'spider', title: '蜘蛛', width:180},
 			{field:'start_time', title: '访问时间', sort: true},
 			{field:'ip', title: 'ip地址'},
-			{field:'province', title: '服务器地址'}
+			{field:'province', title: '服务器地址'},
+			{field:'query_string', title: '受访页面'},
 		]],
 		page:true
 	});
