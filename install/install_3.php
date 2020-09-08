@@ -143,8 +143,7 @@
 							<hr />
 
 							<strong>安装选择</strong>
-							<label><input class="radio" type="radio" name='install_type' value='all' />带测试数据版本【<a href="https://www.jellycms.cn/" target="_blank" style="color:red">下载</a>】</label><br />
-							<label><input class="radio" type="radio" name='install_type' checked="checked" value='simple' />绿色纯净版本</label>
+							<label><input class="radio" type="radio" name='install_type' checked="checked" value='simple' />jellyCMS数据库</label>
 							<hr />
 							<div id='install_state' style='display:none'>
 								<strong>安装进度</strong>
