@@ -89,9 +89,9 @@ class Upgrade extends BaseController
 	public function checkAuth(){
 		$backupPath = $this->upgradeFolder;
 		if(!is_dir($backupPath)){
-			mkdir($backupPath,0644,true);
+			mkdir($backupPath,0744,true);
 		}else{
-			chmod($backupPath,0644);
+			chmod($backupPath,0744);
 		}
 		$rdata = [
 			"code" => 1,
@@ -110,7 +110,7 @@ class Upgrade extends BaseController
 		//设置抓取的url
 		curl_setopt($curl, CURLOPT_URL, $url);
 		//打开文件描述符
-		$fp = fopen ($filePath, 'w+');
+		$fp = fopen($filePath, 'w+');
 		curl_setopt($curl, CURLOPT_FILE, $fp);
 		//执行命令
 		curl_exec($curl);
