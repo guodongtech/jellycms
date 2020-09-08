@@ -16,12 +16,14 @@
 	opacity:1 !important;
 }
 html {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, sans-serif;
-  font-size: 16px;
-  line-height: 1.2;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: -apple-system, sans-serif;
+	font-size: 16px;
+	line-height: 1.2;
+	height:100%;
+	width:100%;
 }
 *,
 *:before,
@@ -29,26 +31,17 @@ html {
   box-sizing: inherit;
 }
 body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  font-size: 0.875rem;
-  background:#f5f5f5;
-  font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	font-size: 0.875rem;
+	background:#f5f5f5;
+	font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+	height:100%;
+	width:100%;
 }
-@media (max-width: 64rem) {
-  body {
-    overflow-x: auto;
-  }
-}
-body.is-content-fixed .ContentRoot {
-  position: fixed;
-  width: 100vw;
-}
- 
- 
-a:active {
+.active {
   color: #1a70d8;
 }
 a:hover, a:focus {
@@ -77,3 +70,149 @@ input {
   border: 0;
   outline: 0;
 }
+.app{
+	background:#fff;
+	width:100%;
+	/* height:100%; */
+	margin:0 auto;
+	margin-top:100px;
+	width:666px;
+ 
+	box-shadow: rgba(100, 100, 100, 0.18) 0px 2px 3px 0px;
+	display:flex;
+	flex-direction:column;
+}
+.app header{
+	width:100%;
+	padding:8px 6px;
+	font-size:14px;
+	background:#fff;
+}
+.app header .app-icon{
+	width:18px;
+	display:inline-block;
+	margin-right:6px;
+}
+.app .toolbar{
+	width:100%;
+	font-size:10px;
+	background:#f5f5f5;
+	height:30px;
+	display:flex;
+	align-items:center;
+}
+.app .toolbar ul{
+	width:100%;
+	height:100%;
+	display:flex;
+	justify-content:flex-start;
+	align-items:center;
+}
+.app .toolbar ul li{
+	padding-left:8px;
+	padding-right:8px;
+	cursor:pointer;
+	user-select:none;
+	height:100%;
+	display:flex;
+	align-items:center;
+	transition:all 0.3s ease-in-out;
+	font-size:12px;
+}
+.app .toolbar ul li:hover{
+	background:#fff;
+}
+.app .group{
+	padding:6px 8px;
+	flex:1;
+}
+.app .group .step{
+	padding:16px 18px;
+}
+.app .h100{
+	height:100%;
+}
+.layui-elem-field legend {
+    margin-left: 20px;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 300;
+}
+.layui-form-label {
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    width: 80px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+	font-size:12px;
+}
+.layui-input-block {
+    margin-left: 80px;
+    min-height: 36px;
+}
+.layui-form-item .layui-inline {
+    margin-bottom: 5px;
+    margin-right: 0px;
+}
+.layui-form-item .layui-input-inline {
+    float: left;
+    width: 179px;
+    margin-right: 10px;
+}
+.site-text{
+	padding:6px 8px;
+}
+.setting.layui-form-item .layui-input-inline {
+    float: left;
+    width: 118px;
+    margin-right: 10px;
+}
+.setting.layui-form-item {
+    margin-bottom: 0;
+    clear: both;
+    *zoom: 1;
+}
+.layui-quote-nm {
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+    background: 0 0;
+}
+.mb0 {
+    margin-bottom: 0px;
+}
+.cookie{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+.c-input{
+	flex:1;
+	padding-right:20px;
+}
+.operate{
+	display:flex;
+	justify-content:space-between;
+}
+.layui-table-cell {
+    height: 32px;
+    line-height: 32px;
+    padding: 0 15px;
+    position: relative;
+    box-sizing: border-box;
+}
+.dialog{
+	width:100%;
+	height:100%;
+	display:flex;
+	justify-content:space-between;
+	flex-direction:column;
+}
+.dialog .layui-form-label {
+    width: 98px;
+}
+
+
+
+
