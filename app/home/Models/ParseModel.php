@@ -447,7 +447,6 @@ class ParseModel extends Model
 		$builder = $this->db->table($name);
 		if($pid>0){
 			$result  = $builder->select('*')
-					->where($where)
 					->where(['deleted'=>0, 'status'=>1, 'pid'=>$pid])
 					->orderBy('id desc')
 					->get()

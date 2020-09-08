@@ -78,20 +78,20 @@ class Upgrade extends BaseController
             // 从配置中取版本号
             $version = $config->version;
             // 创建目录
-            mkdir($versionPath,0644,true);
+            mkdir($versionPath,0744,true);
 			// 写入版本文件
             write_file($versionPath.'version_'.mt_rand().'.txt', $version);//创建新的版本文件 用随机数防止恶意请求
             return $version;
 		}
 		return file_get_contents($versionFile); 
 	}
-	//权限检测 只设置/runtime/upgrade/ 目录的读写权限 0644 没有目录则创建
+	//权限检测 只设置/runtime/upgrade/ 目录的读写权限 0744 没有目录则创建
 	public function checkAuth(){
 		$backupPath = $this->upgradeFolder;
 		if(!is_dir($backupPath)){
-			mkdir($backupPath,0644,true);
+			mkdir($backupPath,0744,true);
 		}else{
-			chmod($backupPath,0644);
+			chmod($backupPath,0744);
 		}
 		$rdata = [
 			"code" => 1,
@@ -110,7 +110,7 @@ class Upgrade extends BaseController
 		//设置抓取的url
 		curl_setopt($curl, CURLOPT_URL, $url);
 		//打开文件描述符
-		$fp = fopen ($filePath, 'w+');
+		$fp = fopen($filePath, 'w+');
 		curl_setopt($curl, CURLOPT_FILE, $fp);
 		//执行命令
 		curl_exec($curl);
@@ -155,7 +155,7 @@ class Upgrade extends BaseController
 			//文件存在则备份 不存在则忽略
 			if(is_file(FCPATH.$file)){
 				if(!is_dir(dirname($this->upgradeFolder.'backup/'.$file))){
-					mkdir(dirname($this->upgradeFolder.'backup/'.$file),0644,true);
+					mkdir(dirname($this->upgradeFolder.'backup/'.$file),0744,true);
 				}
 				if(!copy(FCPATH.$file, $this->upgradeFolder.'backup/'.$file)){
 					$rdata = [

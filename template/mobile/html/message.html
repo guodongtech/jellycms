@@ -218,5 +218,30 @@
 	</div>
 </section>
 {include:foot.html}
+<script>
+;!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  //监听提交
+  form.on('submit(form)', function(data){
+	$.ajax({
+	   type: "POST",
+	   url: "{formaction:name=message}",
+	   data: data.field,
+	   dataType:"json",
+	   success: function(msg){
+			if(msg.code == 1){
+				window.location.reload();
+				layer.msg(msg.msg)
+			}
+			else{
+				layer.msg(msg.msg)
+			}
+	   }
+	});
+    return false; //中止layui submit事件。
+  });
+}();
+</script> 
 </body>
 </html>
