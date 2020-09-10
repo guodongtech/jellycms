@@ -69,17 +69,29 @@
     		}
         }
     }
-    function getCssBg($url)
+	//获取CSS中资源 字体 背景 还可能引入了CSS 引入方式有两种@import "style.css"; /* 或者@import url(style.css)里面也可能有引号
+    function getCssSrc($url)
     {
+		//$cssName = basename($url);
+		$cssPath = dirname($url);
+		$cssSrc = array();
     	$content = getUrl($url);
-		preg_match_all("/url\((.*)\)/U", $content, $cssbg);
-		foreach($cssbg[1] as $key=>$value){
-			$cssbg[1][$key] = str_replace('"', '', $value);
-			$cssbg[1][$key] = str_replace("'", '', $cssbg[1][$key]);
+		preg_match_all("/url\((.*)\)/U", $content, $cssbga);
+		foreach($cssbga[1] as $key=>$value){
+			if(preg_match("/(data:)/",$value))continue;
+			$value = preg_replace('/\?.*/i','',$value);//替换？及以后的字符
+			$cssSrcT = str_replace('"', '', $value);
+			$cssSrc[] = str_replace("'", '', $cssSrcT);
 		}
-
+		return $cssSrc;
     }
-    
+    //相对路径转绝对路径
+	function relativeToAbsolute($url, $relativeUrl){
+		$path = dirname($url);
+		
+		
+		return $absolute;
+	}
  
 	$url = 'http://www.jellycms.cn';
     $html = getUrl($url);//抓取页面
@@ -106,16 +118,16 @@
 	}
 
     //合并结果数组
-    $staticList = array_merge($src[1],$css[1],$cssbg[1]);
-	$staticList = array_unique($staticList); //去掉重复值 
+    $urlList = array_merge($src[1],$css[1],$cssbg[1]);
+	$urlList = array_unique($urlList); //去掉重复值 
     //保存页面html
    // file_put_contents($fileName,preg_replace('/(http:\/\/img.yigouf.com)|(http:\/\/pfghouse.pinfangw.com)|(\/\/script.crazyegg.com)/i','',$html));
+	 
 	
 	
-	
- 
+	$staticList = array();
     //采集静态资源
-    foreach($staticList as $item){
+    foreach($urlList as $item){
         if(strpos($item,'script.crazyegg.com'))continue;
     	if(preg_match("/(\.js)|(\.css)|(\.jpg)|(\.png)|(\.gif)|(\.ico)/i",$item)){
     		if(preg_match(".baidu.",$item))continue;//排除百度代码
@@ -126,13 +138,14 @@
     		}else{
     			$staticUrl = $url.$item;
     		}
+			$staticList[] = $staticUrl;
     		//保存css文件中的背景图片资源
     		if(preg_match("/(\.css)/i",$item)){
-    			getCssBg($staticUrl);
+    			 $staticList = array_merge(getCssSrc($staticUrl),$staticList);
     		}
     	}
     		
     }
-   
+   print_r($staticList);
 
 ?>
