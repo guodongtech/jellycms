@@ -138,24 +138,7 @@
 
 			<p><a name="base">文件列表</a></p>
 			<blockquote class="layui-elem-quote layui-quote-nm">
-				<table lay-filter="downurl">
-					<thead>
-						<tr>
-						  <th lay-data="{field:'urla'}">网址</th>
-						  <th lay-data="{field:'experiencea'}">路径</th>
-						  <th lay-data="{field:'namea'}">文件名</th>
-						  <th lay-data="{field:'status',width:120}">状态</th>
-						</tr> 
-					</thead>
-					<tbody>
-						<tr>
-						  <td>https://www.jellycms.cn/</td>
-						  <td>/</td>
-						  <td>index.html</td>
-						  <td>index.html</td>
-						</tr>
-					</tbody>
-				</table>
+				<table class="layui-hide" id="srclist-table" lay-filter="srclist-table"></table>
 			</blockquote>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				<div class="layui-progress">
@@ -176,6 +159,13 @@
 		<form class="layui-form" action="" id="setting-form">
 		<blockquote class="layui-elem-quote layui-quote-nm">
 			<div class="layui-form-item">
+			<div class="layui-form-item">
+				<label class="layui-form-label">目录样式</label>
+				<div class="layui-input-block">
+					<input type="radio" name="style" value="jellycms" title="Jelleycms目录结构" checked="">
+					<input type="radio" name="style" value="normal" title="普通模式">
+				</div>
+			</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">CSS目录</label>
 					<div class="layui-input-inline">
@@ -258,8 +248,8 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">代码处理</label>
 				<div class="layui-input-block">
-					<input type="radio" name="sex" value="男" title="打包下载" checked="">
-					<input type="radio" name="sex" value="女" title="在线预览">
+					<input type="radio" name="codeoperate" value="package" title="打包下载" checked="">
+					<input type="radio" name="codeoperate" value="preview" title="在线预览">
 				</div>
 			</div>
 		</blockquote>
@@ -293,20 +283,6 @@ layui.use(['layer', 'form', 'table', 'element', 'jquery'], function(){
 		//console.log(this); //当前Tab标题所在的原始DOM元素
 		//console.log(data.index); //得到当前Tab的所在下标
 		//console.log(data.elem); //得到当前的Tab大容器
-		table.init('downurl', {
-			height: 300,
-			limit: 10,
-			page:true,
-			url: '',
-			parseData: function(res){ //res 即为原始返回的数据
-				return {
-				  "code": res.status, //解析接口状态
-				  "msg": res.message, //解析提示文本
-				  "count": res.total, //解析数据长度
-				  "data": res.data.item //解析数据列表
-				};
-			}
-		});
 		return false;
 	});
 	$('.step1 .next').click(function(){
@@ -328,6 +304,37 @@ layui.use(['layer', 'form', 'table', 'element', 'jquery'], function(){
 		$('.step3 .pre').removeClass('layui-btn-disabled');
 		$('.step3 .pre').attr({'disabled':false});
 		element.tabChange('tab', 'step3');
+		layer.msg('请稍候，服务器正在生成资源列表', {
+			icon: 6,
+			time: 200000
+			}, function(){
+				layer.msg('列表加载完成');
+		});  
+		$.ajax({
+			type: "POST",
+			url: "/b.php",
+			data: {urllist: urlData},
+			dataType:'json',
+			success:function(data, textStatus){
+				table.render({
+					elem: '#srclist-table',
+					data:data.data,
+					layEvent: 'LAYTABLE_TIPS',
+					icon: 'layui-icon-tips',
+					cols: [[
+						{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+						{field:'url', title:'url'},
+						{field:'path', width:60, title:'路径'},
+						{field:'name', title:'文件名', width:80},
+						{field:'status', title:'状态', width:80},
+					]],
+					done: function(res, curr, count){
+						layer.closeAll();
+					},
+					page: true
+				});
+			}
+		});
 	})
 	$('.step3 .pre').click(function(){
 		element.tabChange('tab', 'step2');
