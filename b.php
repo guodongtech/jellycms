@@ -95,6 +95,7 @@
 	function relativeToAbsolute($url, $relativeUrl){
 		$path = dirname($url);
 		$pathArray = explode('/', $path);
+		$parseArray = parse_url($url);
 		$relativeArray = explode('/', $relativeUrl);
 		foreach($relativeArray as $key=>$value){
 			if($value == '..'){
@@ -105,7 +106,12 @@
 				unset($relativeArray[$key]);
 			}
 		}
-		$absolute = implode('/', $pathArray).'/'.implode('/', $relativeArray);
+		if($relativeArray[0] == ''){
+			$absolute = $parseArray['scheme'].$parseArray['host'].'/'.implode('/', $relativeArray);
+		}else{
+			$absolute = implode('/', $pathArray).'/'.implode('/', $relativeArray);
+		}
+		
 		return $absolute;
 	}
 
@@ -168,17 +174,17 @@
 	}
 	
 	function getList(){
-			$srcUrlList = array();
-			//$urlList = $_POST['urllist'];
-			$urlList = [
-				['url'=>'http://www.jellycms.cn/'],
-				['url'=>'http://www.jellycms.cn/?aboutus/'],
-			];
-			foreach($urlList as $key=>$value){
-				$srcUrlList= array_merge(getSrcUrlList($value['url']), $srcUrlList);
-			}
-			$list = getAllSrc($srcUrlList);
-	 
+		$srcUrlList = array();
+		//$urlList = $_POST['urllist'];
+		$urlList = [
+			['url'=>'http://www.jellycms.cn/'],
+			['url'=>'http://www.jellycms.cn/?aboutus/'],
+		];
+		foreach($urlList as $key=>$value){
+			$srcUrlList= array_merge(getSrcUrlList($value['url']), $srcUrlList);
+		}
+		$list = getAllSrc($srcUrlList);
+		$list = array_unique($list);
 		foreach($list as $key=>$value){
 			$resList[] = [
 				'url' => $value,

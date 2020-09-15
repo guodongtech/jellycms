@@ -233,6 +233,7 @@ class UserAgents extends BaseConfig
 		'YodaoBot'            => 'Youdao',
 		'twiceler'            => 'twiceler',
 		'ia_archiver'            => 'ia_archiver',
+		'SogouMSE'            => 'Sogou',
 		'sogou spider'            => 'Sogou',
 		'Sogou web spider'            => 'Sogou',
 		'Sogou inst spider'            => 'Sogou',
