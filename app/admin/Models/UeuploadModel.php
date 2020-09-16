@@ -102,7 +102,7 @@ class UeuploadModel extends Model
         }
 
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0644, true)) {
+        if (!file_exists($dirname) && !mkdir($dirname, 0744, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
             return;
         } else if (!is_writeable($dirname)) {
@@ -221,7 +221,7 @@ class UeuploadModel extends Model
         }
 
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0644, true)) {
+        if (!file_exists($dirname) && !mkdir($dirname, 0744, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
             return;
         } else if (!is_writeable($dirname)) {
@@ -292,7 +292,7 @@ class UeuploadModel extends Model
         }
 
         //创建目录失败
-        if (!file_exists($dirname) && !mkdir($dirname, 0644, true)) {
+        if (!file_exists($dirname) && !mkdir($dirname, 0744, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
             return;
         } else if (!is_writeable($dirname)) {
