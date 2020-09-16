@@ -198,6 +198,7 @@ class UserAgents extends BaseConfig
 	public $robots = [
 		'googlebot'            => 'Googlebot',
 		'msnbot'               => 'MSNBot',
+		'baidu'          => 'Baiduspider',
 		'baiduspider'          => 'Baiduspider',
 		'Baiduspider'          => 'Baiduspider',
 		'bingbot'              => 'Bing',
