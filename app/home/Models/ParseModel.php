@@ -212,16 +212,16 @@ class ParseModel extends Model
 							->orderBy($order)
 							->get($num,($page-1)*$num)
 							->getResultArray();
-		$countAllResults   = $builder->select('count(1) as count')
-							->where($where)
-							->where(['deleted'=>0,'status'=>1])
-							->whereIn('sorts_id', $id)
-							->orderBy($order)
-							->get()
-							->getRowArray();				
-		$total = $countAllResults['count'];//总条数
-		$page = $page; //当前页数
-		$totalPage = ceil($total/$num); //当前页数
+		// $countAllResults   = $builder->select('count(1) as count')
+		// 					->where($where)
+		// 					->where(['deleted'=>0,'status'=>1])
+		// 					->whereIn('sorts_id', $id)
+		// 					->orderBy($order)
+		// 					->get()
+		// 					->getRowArray();				
+		// $total = $countAllResults['count'];//总条数
+		// $page = $page; //当前页数
+		// $totalPage = ceil($total/$num); //当前页数
 		
 		//为降低模板标签解析复杂度，重新补充分类及模型信息。
 		$ids = array();
@@ -261,22 +261,87 @@ class ParseModel extends Model
 			}
 		}
 		//urlname
-		$build = $this->db->table('sorts');
-		$res   = $build->select('sorts.*, model.urlname as m_urlname')
-							->join('model', 'model.id = sorts.model_id', 'left')
-							->where(['sorts.id'=>$id])
-							->get()
-							->getRowArray();
+		// $build = $this->db->table('sorts');
+		// $res   = $build->select('sorts.*, model.urlname as m_urlname')
+		// 					->join('model', 'model.id = sorts.model_id', 'left')
+		// 					->where(['sorts.id'=>$id])
+		// 					->get()
+		// 					->getRowArray();
 		
-		$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
+		// $urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
 		$results['data'] = $result;
-		$results['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
+		// $results['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
 		
 		return $results; 
 			
 	}
 	//分页条
-	public function getPageBar($total, $totalPage, $page, $urlname){
+	public function getPageBar($params_arr){
+		if(isset($params_arr['name'])){
+			// form分页
+			$id = $params_arr['id'];
+			$name = $params_arr['name'];
+			$content_id = $params_arr['content_id'];
+			$pid = $params_arr['pid'];
+			$num = $params_arr['num'];
+			$page = $params_arr['page']>0?$params_arr['page']:1;
+			$where = $content_id?"content_id=".$content_id:"1=1"; 
+
+			$formList = $this->getFormList();
+			$formNames = array_column($formList, 'table_name');
+			if(!in_array($name,$formNames)){
+				return array();//防止前台报错，非法访问返回空数组
+			}else{
+				$name = 'form_'.$name;
+			}
+			$builder = $this->db->table($name);
+			$total = $builder->select('*')
+					->where($where)
+					->where(['deleted'=>0, 'status'=>1, 'pid'=>0])
+					->orderBy('id desc')
+					->countAllResults(false);
+			$page = $page; //当前页数
+			$totalPage = ceil($total/$num); //当前页数
+			//urlname
+			$build = $this->db->table('sorts');
+			$res   = $build->select('sorts.*, model.urlname as m_urlname')
+								->join('model', 'model.id = sorts.model_id', 'left')
+								->where(['sorts.id'=>$id])
+								->get()
+								->getRowArray();
+			$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
+		}else{
+			// list分页
+			$id = $params_arr['id'];
+			$params = $params_arr['params'];
+			$page = $params_arr['page']>0?$params_arr['page']:1;
+			$sorts_id = $params_arr['sorts_id'];
+
+			$where = isset($params['where'])?str_replace(',',' and ',$params['where']):'1=1';
+			$page = $page>0?$page:1;
+			$num = isset($params['num'])?$params['num']:5;
+			$order = isset($params['order'])?$params['order']:'id desc';
+			$builder = $this->db->table('content');
+			$countAllResults   = $builder->select('count(1) as count')
+								->where($where)
+								->where(['deleted'=>0,'status'=>1])
+								->whereIn('sorts_id', $id)
+								->orderBy($order)
+								->get()
+								->getRowArray();				
+			$total = $countAllResults['count'];//总条数
+			$page = $page; //当前页数
+			$totalPage = ceil($total/$num); //当前页数
+			$build = $this->db->table('sorts');
+			$res   = $build->select('sorts.*, model.urlname as m_urlname')
+								->join('model', 'model.id = sorts.model_id', 'left')
+								->where(['sorts.id'=>$sorts_id])
+								->get()
+								->getRowArray();
+			
+			$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
+		}
+		
 		$pagebar['current'] = $page;
 		$pagebar['total'] = $total;
 		$pagebar['pre'] = ($page-1)?url(array($urlname.'_'.($page-1))):url(array($urlname));
@@ -463,24 +528,24 @@ class ParseModel extends Model
 		foreach($result as $k=>$v){
 			$result[$k]['icon'] = fileUrl($v['icon']);
 		}
-		$total = $builder->select('*')
-					->where($where)
-					->where(['deleted'=>0, 'status'=>1, 'pid'=>0])
-					->orderBy('id desc')
-					->countAllResults(false);
-		$page = $page; //当前页数
-		$totalPage = ceil($total/$num); //当前页数
+		// $total = $builder->select('*')
+		// 			->where($where)
+		// 			->where(['deleted'=>0, 'status'=>1, 'pid'=>0])
+		// 			->orderBy('id desc')
+		// 			->countAllResults(false);
+		// $page = $page; //当前页数
+		// $totalPage = ceil($total/$num); //当前页数
 		
 		//urlname
-		$build = $this->db->table('sorts');
-		$res   = $build->select('sorts.*, model.urlname as m_urlname')
-							->join('model', 'model.id = sorts.model_id', 'left')
-							->where(['sorts.id'=>$id])
-							->get()
-							->getRowArray();
-		$urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
+		// $build = $this->db->table('sorts');
+		// $res   = $build->select('sorts.*, model.urlname as m_urlname')
+		// 					->join('model', 'model.id = sorts.model_id', 'left')
+		// 					->where(['sorts.id'=>$id])
+		// 					->get()
+		// 					->getRowArray();
+		// $urlname = $res['urlname']?$res['urlname']:$res['m_urlname'];
 		$data['data'] = $result;
-		$data['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
+		// $data['pagebar'] = $this->getPageBar($total,$totalPage, $page, $urlname);
 		return $data;
 	}
 	
