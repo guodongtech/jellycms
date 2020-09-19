@@ -413,8 +413,9 @@ class View implements RendererInterface
 					isset($attr['pid'])? $pid=$attr['pid']:$pid = 0;
 					isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
 					isset($attr['value'])? $value=$attr['value']:$value = 'form';
+					isset($attr['pagename'])? $pagename=$attr['pagename']:$pagename = 'pagebar';
 					isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
-					return  '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_=$model->getFormlistByFromName('.$id.',"'.$attr['name'].'",$contents["id"],$pid = '.$pid.', $num='.$num.',$page); $pagebar=$data_["pagebar"];foreach($data_["data"] as $key=>$'.$value.'){?>';
+					return  '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_=$model->getFormlistByFromName('.$id.',"'.$attr['name'].'",$contents["id"],$pid = '.$pid.', $num='.$num.',$page); $'.$pagename.'=$data_["pagebar"];foreach($data_["data"] as $key=>$'.$value.'){?>';
 				}
 				case 'formaction:': 
 				{
@@ -598,6 +599,7 @@ class View implements RendererInterface
 				{
 					$attr = $this->getAttrs($matches[4]);
 					isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
+					isset($attr['pagename'])? $pagename=$attr['pagename']:$pagename = 'pagebar';
 					unset($attr['id']);
 					//实现属性中符号表达式的问题
 					$old_char=array(' eq ',' l ',' g ',' le ',' ge ', ' neq ');
@@ -611,12 +613,14 @@ class View implements RendererInterface
 						}
 					}
 					$params = '['.trim($tem, ',').']';
-					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $'.$pagename.' = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
 				}
 				case 'pagebar:':
 				{
-					$key = trim($matches[4],"/ ");
-					return '<?php echo $pagebar["'.$key.'"]  ?>';
+					$attr = $this->getAttrs($matches[4]);
+					isset($attr['pagename'])? $pagename=$attr['pagename']:$pagename = 'pagebar';
+					isset($attr['value'])? $key=$attr['value']:$key = 'bar';
+					return '<?php echo $'.$pagename.'["'.$key.'"]  ?>';
 				}
 				//无限嵌套 可指定多个pid=1,2,3,4
 				case 'nav:':
