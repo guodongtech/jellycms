@@ -30,6 +30,7 @@
 				<script type="text/html" id="toolbarDemo">
 					<div class="layui-btn-container">
 						<button class="layui-btn layui-btn-sm" lay-event="add">新建管理员</button>
+						<button class="layui-btn layui-btn-sm" lay-event="wxbind">绑定/换绑微信号</button>
 					</div>
 				</script>
 				<script type="text/html" id="barDemo">
@@ -87,6 +88,15 @@
 						</div>
 					</div>
 					<div class="layui-form-item">
+						<label class="layui-form-label">
+							登录方式
+						</label>
+						<div class="layui-input-block">
+					      	<input type="checkbox" class="is_user_num" name="is_user_num" value="1" title="账号密码">
+					      	<input type="checkbox" class="is_wx_qr" name="is_wx_qr" value="1" title="微信扫码">
+						</div>
+					</div>
+					<div class="layui-form-item">
 						<label class="layui-form-label">用户角色</label>
 						<div class="layui-input-inline">
 							<select name="role_id">
@@ -135,7 +145,29 @@
 			{field:'count', title:'登录次数', width:120},
 			{field:'last_login_ip', title:'最后登录IP', width:120},
 			{field:'c_user', title:'添加用户', width:100},
+			{field:'login_type', title:'登录方式', width:100,hide:true},
 			{field:'create_time', title:'添加时间'},
+			{field:'is_user_num', title:'账号登录', width:90, event: 'switch',templet: function(res){
+				if(res.is_user_num == 1){
+					return '<input type="checkbox" name="is_user_num" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="is_user_num" lay-skin="switch" lay-text="ON|OFF">';
+				}
+			}},
+			{field:'is_wx_qr', title:'微信登录', width:90, event: 'switch',templet: function(res){
+				if(res.is_wx_qr == 1){
+					return '<input type="checkbox" name="is_wx_qr" checked lay-skin="switch" lay-text="ON|OFF">';
+				}else{
+					return '<input type="checkbox" name="is_wx_qr" lay-skin="switch" lay-text="ON|OFF">';
+				}
+			}},
+			{field:'openid', title:'绑定微信登录', width:130, templet: function(res){
+				if(res.openid){
+					return '已绑定';
+				}else{
+					return '未绑定';
+				}
+			}},
 			{field:'status', title:'状态', width:90, event: 'switch',templet: function(res){
 				if(res.status == 1){
 					return '<input type="checkbox" name="status" checked lay-skin="switch" lay-text="ON|OFF">';
@@ -188,10 +220,12 @@ table.on('tool(test)', function(obj){
 		switchValue = Number(switchValue);
 		$.post('{url:/SysUser/switch}',{id:obj.data.id,switchName:switchName,switchValue:switchValue},function(data){
 			if(data.code == 1){
+				table.reload('table');
 				//layer.msg(data.msg)
 			}
 			else{
-				layer.msg(data.msg)
+				layer.msg(data.msg);
+				table.reload('table');
 			}
 		}, 'json');
 		form.render();
@@ -205,8 +239,39 @@ table.on('toolbar(test)', function(obj){
 		case 'add':
 			element.tabChange('tab', 't2');
 			$('#form')[0].reset();
+			$('.is_user_num').attr("checked",'');//新增时默认选中
+			$('.is_wx_qr').removeAttr("checked");//新增时默认不选中
 			$('#form input[name="id"]').val('');
-		break;
+			break;
+		case 'wxbind':
+			var url = "http://www.jellycms.com/static/upload/20200819/1597822100_12968a3ea78c50d7f90d.png";
+			var index = layer.open({
+	       		//type:1 表示页面层
+	            type: 1,
+	            title: '扫描二维码绑定微信',
+	            //是否点击遮罩关闭
+	            shadeClose: true,
+	            //样式类名，可以自定义弹窗样式
+	            skin:'demo_share',
+	            //弹层外区域
+	            shade: 0.3,
+	            maxmin: false, //开启最大化最小化按钮
+	            //宽高
+	            area: 'auto',
+	            //内容
+	            content: "<img src='"+url+"' alt='' width='280' height='280'>",
+	            //弹窗下方的按钮
+	            btn:['确定','取消'],
+	            //绑定第一个按钮的点击事件
+	            btn1: function(index) {
+	            	layer.closeAll();
+	            	table.reload('table');
+	            },
+	            btn2: function(index) {
+					layer.closeAll();
+	            }
+	        });
+			break;
 	};
 	form.render();
 });

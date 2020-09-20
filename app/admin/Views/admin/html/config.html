@@ -28,6 +28,7 @@
 	    <li lay-id="t3">安全配置</li>
 	    <li lay-id="t4">URL规则</li>
 	    <li lay-id="t5">系统私有化设置</li>
+	    <li lay-id="t6">微信快捷登录</li>
 	  </ul>
 		  <div class="layui-tab-content">
 		  	   <div class="layui-tab-item layui-show">
@@ -472,6 +473,48 @@
 		                     </div> 
 							 
 		                </div>
+						<div class="layui-form-item">
+							 <div class="layui-input-block">
+								<button lay-submit lay-filter="submit" class="layui-btn">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							 </div>
+						</div>
+					</form>
+		  	   </div>
+		  	   <div class="layui-tab-item">
+		  	   	   <form action="{url:/config/edit}" method="post" id="console-config" class="layui-form">
+		  	   	   		<div class="layui-form-item">
+			            <div class="layui-form-item">
+		                   <label class="layui-form-label">开发者ID</label>
+		                   <div class="layui-input-inline">
+		                  		<input type="text" name="wx_appid" placeholder="AppID" class="layui-input">
+		                   </div>
+			            </div>
+		                   <label class="layui-form-label">开发者密码</label>
+		                   <div class="layui-input-inline">
+		                  		<input type="text" name="wx_appsecret" placeholder="AppSecret" class="layui-input">
+		                   </div>
+			            </div>
+			            <div class="layui-form-item">
+		                     <label class="layui-form-label">微信登录</label>
+		                     <div class="layui-input-inline">
+								<input type="radio" name="wx_status" value="1" checked="checked" title="开启">
+		                     	<input type="radio" name="wx_status" value="0" title="关闭">
+		                     </div>
+		                </div>
+ 		                <!-- <div class="layui-form-item">
+		                   <label class="layui-form-label">Token</label>
+		                   <div class="layui-input-inline">
+		                  		<input type="text" name="wx_token" value="" placeholder="Token" class="layui-input">
+		                   </div>
+			            </div>
+ 		                <div class="layui-form-item">
+		                   <label class="layui-form-label">密钥</label>
+		                   <div class="layui-input-inline">
+		                  		<input type="text" name="wx_key" placeholder="EncodingAESKey" class="layui-input">
+		                   </div>
+			            </div> -->
+			            
 						<div class="layui-form-item">
 							 <div class="layui-input-block">
 								<button lay-submit lay-filter="submit" class="layui-btn">立即提交</button>

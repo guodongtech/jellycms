@@ -48,10 +48,23 @@ class SysUser extends BaseController
 		//密码为空，清除掉密码字段
 		if($post['password'] && $post['repassword'] && $post['password'] == $post['repassword']){
 			$post['password'] = md5($post['password']);
+			unset($post['repassword']);
 		}else{
 			unset($post['password']);
+			unset($post['repassword']);
 		}
-
+		if(!isset($post['is_user_num']) && !isset($post['is_wx_qr'])){
+			return json_encode(['code'=>0,'msg'=>'至少选择一种登录方式']);
+		}
+		if(!$GLOBALS['wx_status'] && $post['is_wx_qr']){
+			return json_encode(['code'=>0,'msg'=>'系统未开启微信登录，请先配置']);	
+		}
+		if(!isset($post['is_user_num'])){
+			$post['is_user_num'] = 0;
+		}
+		if(!isset($post['is_wx_qr'])){
+			$post['is_wx_qr'] = 0;
+		}
 		if(!$post['name'] || !$post['role_id'] || !$post['realname']){
 			return json_encode(['code'=>0,'msg'=>'参数不足']);
 		}
@@ -67,7 +80,6 @@ class SysUser extends BaseController
 			$data['update_user'] = $this->session->id;
 			$data['update_time'] = date('Y-m-d H:i:s',time());
 		}
-
 		if($this->model->edit($data)){
 			$this->log("sysuser", "[系统用户]编辑/新增[ID:".$post['id']."]");
 			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
@@ -143,13 +155,23 @@ class SysUser extends BaseController
     public function switch()
     {
 		$post = post();
-		$allowSwitch = ['status'];
+		$allowSwitch = ['status','is_user_num','is_wx_qr'];
 		if(!$post['id'] || is_null($post['switchValue']) || !in_array($post['switchName'], $allowSwitch)){
 			$rdata = [
 				"code" => 0,
 				"msg" => "参数不足",
 			];
 			return json_encode($rdata);
+		}
+		$user_info = $this->model->checkUserById($post['id']);
+		if($post['switchName'] == 'is_user_num' && $post['switchValue'] == 0 && $user_info['is_wx_qr'] == 0){
+			return json_encode(['code'=>0,'msg'=>'至少选择一种登录方式']);
+		}
+		if($post['switchName'] == 'is_wx_qr' && $post['switchValue'] == 0 && $user_info['is_user_num'] == 0){
+			return json_encode(['code'=>0,'msg'=>'至少选择一种登录方式']);
+		}
+		if($post['switchName'] == 'is_wx_qr' && $post['switchValue'] == 1 && !$GLOBALS['wx_status']){
+			return json_encode(['code'=>0,'msg'=>'系统未开启微信登录，请先配置']);	
 		}
 		$data = [
 			'id' => $post['id'],
