@@ -27,7 +27,8 @@
 			<li><a href='/manual/database'>数据字典</a></li>
 			<li><a href='/manual/template'>模板入门</a></li>
 		</ul>
-		<i class="fa fa-bars animated bounceInDown" aria-hidden="true"></i>		<div class="header-right"><a href="https://www.guodong.tech/" class="reg">国栋科技</a></div>
+		<i class="fa fa-bars animated bounceInDown" aria-hidden="true"></i>
+		<div class="header-right"><a href="https://www.guodong.tech/" class="reg">国栋科技</a></div>
 	</div>
 </header>
 <div class="manual">
@@ -71,7 +72,7 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					只有在使用{list:}标签展示列表数据时，可调用
+					该标签一般用于对{list:}{/list}或{form:}{/form}标签(目前只有这两个标签可以用到分页)所遍历的数据进行分页，但不依懒于这两个标签
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -79,15 +80,50 @@
 			</fieldset>
 			<div class="site-text">
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					用于列表数据分页
+					用于列表数据分页。
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
 				<legend><a name="way">调用方式</a></legend>
 			</fieldset>
 			<div class="site-text">
+				<pre class="layui-code" lay-title="调用" lay-height="" lay-skin="" lay-encode="">
+
+		{list:num=6 order=id desc where=id>0,status eq 1}
+            <li>
+                <div class="item wow zoomIn">
+                    <div class="item-pic">
+                        <a href="[list:link]" title="[list:title]">
+                            <img class="aritcl_img" src="[list:pic]" alt="">
+                        </a>
+                    </div>
+                    <div class="listcontent">
+                        <div class="list-text">
+                            <a class="list-title" href="[list:link]" title="[list:title]">
+                                <span style="">[list:title]</span>
+                            </a>
+                            <div class="description" title="[list:description]">
+                            [list:description len=68]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {/list}
+            {if:empty($list)}<li>分类无数据</li>{/if}
+            <div class="wow bounceInLeft">{pagebar:num=6 order=id desc where=id>0,status eq 1 pagefield=bar}</div>
+
+				</pre>
+				
 				<blockquote class="layui-elem-quote layui-quote-nm">
-					{pagebar:字段名}
+					pagefield：指定我们要获取的分页条属性，比如bar,next,pre,totle等，下面会有详细列表，默认为bar<br>
+					其他条件（例demo中：num=6 order=id desc where=id>0,status eq 1）需要与list或form标签一致，我们会根据是否有name条件来判断具体为list分页还是form分页<br>
+					如果单纯的获取分页条或分页条属性，其他条件可参考list、form标签的详细介绍
+				</blockquote>
+			</div>
+			<div class="site-text">
+				<blockquote class="layui-elem-quote layui-quote-nm">
+					{pagebar:pagefield=字段名}（这里省略其他条件，但是调用的时候要记得带条件）
 				</blockquote>
 			</div>
 			<fieldset class="layui-elem-field layui-field-title site-title">
@@ -110,7 +146,7 @@
 								<td>current</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:current}</span>
+									<span class="getlabel">{pagebar:pagefield=current}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:current}" title="点击复制"></i>
 									</div>
 								</td>
@@ -121,7 +157,7 @@
 								<td>total</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:total}</span>
+									<span class="getlabel">{pagebar:pagefield=total}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:total}" title="点击复制"></i>
 									</div>
 								</td>
@@ -132,7 +168,7 @@
 								<td>pre</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:pre}</span>
+									<span class="getlabel">{pagebar:pagefield=pre}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:pre}" title="点击复制"></i>
 									</div>
 								</td>
@@ -143,7 +179,7 @@
 								<td>next</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:next}</span>
+									<span class="getlabel">{pagebar:pagefield=next}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:next}" title="点击复制"></i>
 									</div>
 								</td>
@@ -154,7 +190,7 @@
 								<td>first</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:first}</span>
+									<span class="getlabel">{pagebar:pagefield=first}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:first}" title="点击复制"></i>
 									</div>
 								</td>
@@ -165,7 +201,7 @@
 								<td>last</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:last}</span>
+									<span class="getlabel">{pagebar:pagefield=last}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:last}" title="点击复制"></i>
 									</div>
 								</td>
@@ -176,7 +212,7 @@
 								<td>statistics</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:statistics}</span>
+									<span class="getlabel">{pagebar:pagefield=statistics}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:statistics}" title="点击复制"></i>
 									</div>
 								</td>
@@ -187,7 +223,7 @@
 								<td>bar</td>
 								<td>
 									<div class="label">
-									<span class="getlabel">{pagebar:bar}</span>
+									<span class="getlabel">{pagebar:pagefield=bar}</span>
 									<i class="fa fa-file-text-o" aria-hidden="true" data-clipboard-text="{pagebar:bar}" title="点击复制"></i>
 									</div>
 								</td>

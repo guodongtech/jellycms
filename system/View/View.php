@@ -414,7 +414,7 @@ class View implements RendererInterface
 					isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
 					isset($attr['value'])? $value=$attr['value']:$value = 'form';
 					isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
-					return  '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_=$model->getFormlistByFromName('.$id.',"'.$attr['name'].'",$contents["id"],$pid = '.$pid.', $num='.$num.',$page); $pagebar=$data_["pagebar"];foreach($data_["data"] as $key=>$'.$value.'){?>';
+					return  '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_=$model->getFormlistByFromName('.$id.',"'.$attr['name'].'",$contents["id"],$pid = '.$pid.', $num='.$num.',$page);foreach($data_["data"] as $key=>$'.$value.'){?>';
 				}
 				case 'formaction:': 
 				{
@@ -611,12 +611,39 @@ class View implements RendererInterface
 						}
 					}
 					$params = '['.trim($tem, ',').']';
-					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); $pagebar = $data_["pagebar"]; foreach($data_["data"] as $key=>$list){?>';
+					return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $data_ = $model->getList(array('.$id.'),'.$params.',$page); foreach($data_["data"] as $key=>$list){?>';
 				}
 				case 'pagebar:':
 				{
-					$key = trim($matches[4],"/ ");
-					return '<?php echo $pagebar["'.$key.'"]  ?>';
+					$attr = $this->getAttrs($matches[4]);
+					if(isset($attr['name'])){
+						isset($attr['pid'])? $pid=$attr['pid']:$pid = 0;
+						isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
+						isset($attr['value'])? $value=$attr['value']:$value = 'form';
+						isset($attr['num'])? $num=$attr['num']:$id = 5;//默认5条
+						isset($attr['pagefield'])? $pagefield=$attr['pagefield']:$pagefield = 'bar';
+						$params_arr = 'array("id"=>'.$id.',"name"=>"'.$attr['name'].'","contents_id"=>$contents["id"],"pid"=>'.$pid.',"num"=>'.$num.',"page"=>$page)';
+						return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $pagebar=$model->getPageBar('.$params_arr.'); echo $pagebar["'.$pagefield.'"]; ?>';
+					}else{
+						isset($attr['id'])? $id=$attr['id']:$id = '$sorts["id"]';
+						isset($attr['pagefield'])? $pagefield=$attr['pagefield']:$pagefield = 'bar';
+						unset($attr['id']);
+						//实现属性中符号表达式的问题
+						$old_char=array(' eq ',' l ',' g ',' le ',' ge ', ' neq ');
+						$new_char=array(' = ' ,' < ',' > ',' <= ',' >= ', ' !=  ');
+						foreach($attr as $k => $v)
+						{
+							if(!in_array($k,self::$queryExcept))
+							{
+								$v    = preg_replace('%(\$\w+\->\w+\[[\'|\"]\w+[\'|\"]\])%','{$1}',$v);//对变量处理增加花括号
+								$tem .= '"'.$k.'"=>"'.str_replace($old_char,$new_char,$v).'",';
+							}
+						}
+						$params = '['.trim($tem, ',').']';
+						$params_arr = 'array("id"=>['.$id.'],"params"=>'.$params.',"page"=>$page,"sorts_id"=>$sorts["id"])';
+						return '<?php if(!isset($model)) $model = new \App\Models\ParseModel(); $pagebar = $model->getPageBar('.$params_arr.'); echo $pagebar["'.$pagefield.'"]; ?>';
+					}
+					
 				}
 				//无限嵌套 可指定多个pid=1,2,3,4
 				case 'nav:':
