@@ -82,9 +82,9 @@ class SysUser extends BaseController
 		}
 		if($this->model->edit($data)){
 			$this->log("sysuser", "[系统用户]编辑/新增[ID:".$post['id']."]");
-			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
+			return json_encode(['code'=>1,'msg'=>'操作成功','url'=>'/'.ADMINNAME.'/sysUser/index/']);		
 		}else{
-			return json_encode(['code'=>2,'msg'=>'添加失败','url'=>'/'.ADMINNAME.'/sysuser/index/']);		
+			return json_encode(['code'=>2,'msg'=>'添加失败','url'=>'/'.ADMINNAME.'/sysUser/index/']);		
 		}
     }
 	//编辑字段值
