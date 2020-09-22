@@ -14,14 +14,14 @@ class Fangzhan extends BaseController
 	{
 		$this->request = \Config\Services::request();
 		$this->post = $this->request->getPost();
-		$this->post['urllist'][0]['url']= "https://www.jellycms.cn/";
-		$this->post['urllist'][0]['path']='/';
-		$this->post['urllist'][0]['name']='index.html';
+		//$this->post['urllist'][0]['url']= "https://www.jellycms.cn/";
+		//$this->post['urllist'][0]['path']='/';
+		//$this->post['urllist'][0]['name']='index.html';
 	}
 	public function index(){
 		$list = $this->getList();
-		print_r($list);
-		//echo json_encode($list);
+		//print_r($list);
+		echo json_encode($list);
 	}
 	//开始下载
 	function download(){
