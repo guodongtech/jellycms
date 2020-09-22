@@ -40,7 +40,13 @@ class Fangzhan extends BaseController
 		}
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1');
+		//设置userAgent
+		if(isset($this->post['userAgent'])){
+			curl_setopt($ch, CURLOPT_USERAGENT, $this->post['userAgent']);
+		}else{
+			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1');
+		}
+        
         //curl_setopt($ch, CURLOPT_HTTPHEADER, $headerArray);
         $output = curl_exec($ch);
     	//echo '错误:',curl_error($ch),$output,PHP_EOL;
