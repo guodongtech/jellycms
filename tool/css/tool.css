@@ -76,7 +76,7 @@ input {
 	/* height:100%; */
 	margin:0 auto;
 	margin-top:100px;
-	width:888px;
+	/* width:888px; */
  
 	box-shadow: rgba(100, 100, 100, 0.18) 0px 2px 3px 0px;
 	display:flex;
@@ -166,7 +166,7 @@ input {
 }
 .setting.layui-form-item .layui-input-inline {
     float: left;
-    width: 118px;
+    /* width: 118px; */
     margin-right: 10px;
 }
 .setting.layui-form-item {
@@ -212,6 +212,41 @@ input {
 .dialog .layui-form-label {
     width: 98px;
 }
+#setting{
+	display:none;
+}
+.setting{
+	display:flex;
+	justify-content:space-between;
+	
+}
+.setting .userAgent{
+	flex:1;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

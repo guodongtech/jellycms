@@ -10,6 +10,8 @@
 <meta content='仿站工具箱是北京国栋科技有限公司研发的快速仿站小工具，特点是无需安装、在线仿站、配合JellyCMS使用效果更佳。' name='description'>
 <link rel="stylesheet" href="layui/css/layui.css">
 <link rel="stylesheet" media="screen" href="css/tool.css" />
+<link rel="stylesheet" media="screen" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+
 </head>
 <body>
 <div class="app">
@@ -80,7 +82,7 @@
 				<legend>下载准备</legend>
 				<div class="step">
 				<div class="site-text">
-					<form class="layui-form" action="" id="ready-form">
+					<form class="layui-form" action="" id="ready-form" lay-filter="ready-form">
 						<blockquote class="layui-elem-quote layui-quote-nm">
 							<p><a name="base">网址列表</a></p>
 							<textarea placeholder="" name="urllist" id="urllist" class="layui-textarea"></textarea>
@@ -99,18 +101,22 @@
 								<div class="layui-inline">
 									<label class="layui-form-label">模拟设备</label>
 									<div class="layui-input-inline">
-										<select name="fix" lay-verify="required" lay-search="">
+										<select name="fix" lay-verify="required" id="user-agent" lay-filter="user-agent">
 											<option data-v="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36" value="1">电脑Chrome</option>
 											<option data-v="Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1" value="2">手机Chrome</option>
 											<option data-v="Mozilla/5.0 (linux; android 7.1.1; mi 6 build/nmf26x; wv) applewebkit/537.36 (khtml, like gecko) version/4.0 chrome/53.0.2785.49 mobile mqqbrowser/6.2 tbs/043632 safari/537.36 micromessenger/6.6.1200(0x26060031) nettype/wifi language/zh_cn" value="3">手机微信</option>
 											<option data-v="Mozilla/5.0 (Linux; Android 5.1; OPPO R9tm Build/LMY47I; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/53.0.2785.49 Mobile MQQBrowser/6.2 TBS/043128 Safari/537.36 V1_AND_SQ_7.0.0_676_YYB_D PA QQ/7.0.0.3135 NetType/4G WebP/0.3.0 Pixel/1080" value="4">手机QQ</option>
 											<option data-v="Mozilla/5.0 (linux; u; android 6.0.1; zh-cn; mi 5 build/mxb48t) applewebkit/537.36 (khtml, like gecko) version/4.0 chrome/40.0.2214.89 ucbrowser/11.6.4.950 uws/2.11.0.39 mobile safari/537.36 ucbs/2.11.0.39 nebula nebulasdk/1.7.0 alipaydefined(nt:wifi,ws:360|0|3.0) aliapp(ap/10.1.10.1226101) alipayclient/10.1.10.1226101 language/zh-hans usestatusbar/true" value="5">手机支付宝</option>
-											<option data-v="" value="6">自定义UserAgent</option>
+											<option data-v="Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)" value="6">百度蜘蛛</option>
+											<option data-v="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" value="7">谷歌蜘蛛</option>
+											<option data-v="Sogou web spider/4.0(+http://www.sogou.com/docs/help/webmasters.htm#07)" value="8">搜狗蜘蛛</option>
+											<option data-v="Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider" value="9">360蜘蛛</option>
+											<option data-v="" value="10">自定义UserAgent</option>
 										</select>
 									</div>
 								</div>
-								<div class="layui-inline">
-									<input type="tel" name="v" value="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36" lay-verify="required" autocomplete="off" class="layui-input">
+								<div class="layui-inline userAgent">
+									<input type="text" id="userAgent" name="userAgent" value="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36" lay-verify="required" autocomplete="off" class="layui-input">
 								</div>
 							</div>
 						</blockquote>
@@ -142,7 +148,7 @@
 			</blockquote>
 			<blockquote class="layui-elem-quote layui-quote-nm">
 				<div class="layui-progress">
-					<div class="layui-progress-bar" lay-percent="40%"></div>
+					<div class="layui-progress-bar" lay-percent="0%"></div>
 				</div>
 			</blockquote>
 			<div class="operate step3">
@@ -154,9 +160,9 @@
 	</div> 
 
 
-<script type="text/html" id="setting">
+<div id="setting">
 	<div class="dialog">
-		<form class="layui-form" action="" id="setting-form">
+		<form class="layui-form" action="" id="setting-form" lay-filter="setting-form">
 		<blockquote class="layui-elem-quote layui-quote-nm">
 			<div class="layui-form-item">
 			<div class="layui-form-item">
@@ -197,13 +203,13 @@
 				<div class="layui-inline">
 					<label class="layui-form-label">FLASH目录</label>
 					<div class="layui-input-inline">
-						<input type="tel" name="backgroundpath" value="/static/flash/" lay-verify="required" autocomplete="off" class="layui-input">
+						<input type="tel" name="flashpath" value="/static/flash/" lay-verify="required" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">字体目录</label>
 					<div class="layui-input-inline">
-						<input type="text" name="jspath" lay-verify="required" value="/static/font/" autocomplete="off" class="layui-input">
+						<input type="text" name="fontpath" lay-verify="required" value="/static/font/" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 			</div>
@@ -212,7 +218,7 @@
 					<label class="layui-form-label">目标编码</label>
 					<div class="layui-input-inline">
 						<select name="contentType">
-							<option value="AUTO">自动检测</option>
+							<option value="AUTO" selected>自动检测</option>
 							<option value="ASCII">ASCII</option>
 							<option value="UTF-8">UTF-8</option>
 							<option value="UNICODE">UNICODE</option>
@@ -225,8 +231,8 @@
 				<div class="layui-inline">
 					<label class="layui-form-label">编码转换</label>
 					<div class="layui-input-inline">
-						<select name="contentType">
-							<option value="no">保留目标编码</option>
+						<select name="saveType">
+							<option value="ORIGINAL">保留目标编码</option>
 							<option value="ASCII">ASCII</option>
 							<option value="UTF-8">UTF-8</option>
 							<option value="UNICODE">UNICODE</option>
@@ -255,7 +261,7 @@
 		</blockquote>
 		</form>
 	</div>
-</script>
+</div>
 
 
 
@@ -309,11 +315,14 @@ layui.use(['layer', 'form', 'table', 'element', 'jquery'], function(){
 			time: 200000
 			}, function(){
 				layer.msg('列表加载完成');
-		});  
+		});
+		//获取表单区域所有值
+		var setting = form.val("setting-form");
+		var ready = form.val("ready-form");
 		$.ajax({
 			type: "POST",
-			url: "/b.php",
-			data: {urllist: urlData},
+			url: "/index.php/fangzhan",
+			data: {urllist: urlData, setting:setting, ready:ready},
 			dataType:'json',
 			success:function(data, textStatus){
 				table.render({
@@ -324,15 +333,17 @@ layui.use(['layer', 'form', 'table', 'element', 'jquery'], function(){
 					cols: [[
 						{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
 						{field:'url', title:'url'},
-						{field:'path', width:60, title:'路径'},
-						{field:'name', title:'文件名', width:80},
-						{field:'status', title:'状态', width:80},
+						{field:'path', width:260, title:'路径'},
+						{field:'name', title:'文件名', width:180},
+						{field:'status', title:'状态', width:66},
 					]],
 					done: function(res, curr, count){
 						layer.closeAll();
 					},
 					page: true
 				});
+				$('.step3 .start-down').removeClass('layui-btn-disabled');
+				$('.step3 .start-down').attr({'disabled':false});
 			}
 		});
 	})
@@ -365,7 +376,7 @@ layui.use(['layer', 'form', 'table', 'element', 'jquery'], function(){
 			type: 2,
 			title:'设置',
 			area: ['660px', '400px'],
-			content: 'http://localhost/a.php',
+			content: '',
 			success: function(layero, index){
 			 var body = layer.getChildFrame('body', index);
 			 var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
@@ -430,7 +441,10 @@ layui.use(['layer', 'form', 'table', 'element', 'jquery'], function(){
 		]],
 		page: true
 	});
-	
+	form.on('select(user-agent)', function(data){
+		var userAgent = $("#user-agent option:selected").attr('data-v');
+		$('#userAgent').val(userAgent);
+	})
 	
 	//监听行工具事件
 	table.on('tool(url-table)', function(obj){
