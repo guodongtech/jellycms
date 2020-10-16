@@ -14,18 +14,34 @@ class Fangzhan extends BaseController
 	{
 		$this->request = \Config\Services::request();
 		$this->post = $this->request->getPost();
-		//$this->post['urllist'][0]['url']= "https://www.jellycms.cn/";
-		//$this->post['urllist'][0]['path']='/';
-		//$this->post['urllist'][0]['name']='index.html';
 	}
 	public function index(){
 		$list = $this->getList();
-		//print_r($list);
-		echo json_encode($list);
+		$result = json_encode($list);
+		//记录需要采集的数据
+		//文件夹按时间生成
+		$baseFolder = WRITEPATH.'..'.DIRECTORY_SEPARATOR.'imitate'.DIRECTORY_SEPARATOR;
+		$folder = uniqid();
+		$fileName = 'resource.txt';
+		$path = $baseFolder.$folder.DIRECTORY_SEPARATOR;
+		$file = $path.$fileName;
+		if(!is_dir($path)){
+			mkdir($path, 0644, true);
+		}
+		file_put_contents($file, $result);
+		echo $result;
 	}
 	//开始下载
-	function download(){
-		
+	function test(){
+		$baseFolder = WRITEPATH.'..'.DIRECTORY_SEPARATOR.'imitate'.DIRECTORY_SEPARATOR;
+		$folder = uniqid();
+		$fileName = 'resource.txt';
+		$path = $baseFolder.$folder.DIRECTORY_SEPARATOR;
+		$file = $path.$fileName;
+		if(!is_dir($path)){
+			mkdir($path, 0644, true);
+		}
+		file_put_contents ( $file, '1111');
 	}
     function getUrl($url)
     {
